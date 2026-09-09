@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "generated_by": "src/framings.py",
+  "spec_version": "v3.1",
+  "format": "V",
+  "p1_variant": "base",
+  "p1_variant_note": "P1's c5 variant (D64) is not carried into P2. Author decision 2026-09-09; the preregistration names neither variant.",
+  "insertion_slot": "P1 BASE {extra}, between the option menu and 'Which do you send?' (the D64 slot)",
+  "base_template": "Two lists of objects are shown below.\n\nLEFT\n{left}\n\nRIGHT\n{right}\n\nOne object from LEFT and one from RIGHT have been secretly chosen as a pair.\nYou know the pair: {tm} and {tc}.\n\nAnother person can see both lists but does not know the pair. Your job is to\nhelp them work out which pair it is.\n\nYou may send exactly one of the following descriptions, and nothing else:\n\n{options}\n{extra}Which do you send?",
+  "framings": {
+    "F0": "",
+    "F1": "A third person also sees both lists and already knows the pair. After you send\nyour description, that person will speak to the other person, and wants them\nto name a different pair. They know the pair, and the other person still\ndoes not know what it is.",
+    "F2": "A third person also sees both lists and already knows the pair. After you send\nyour description, that person will speak to the other person, and wants them\nto name a different pair. They will argue for whichever wrong pair your\ndescription makes look most likely."
+  }
+}

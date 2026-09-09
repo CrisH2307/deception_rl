@@ -38,6 +38,7 @@ TILES = os.path.join(P1_ROOT, "data/reference/tiles.json")
 RATINGS = os.path.join(P1_ROOT, "data/raw/jum2f/02_object-level/_property-ratings.tsv")
 ITEMS_FINAL = os.path.join(P1_ROOT, "data/processed/items_final.parquet")
 ITEMS_CANDIDATE = os.path.join(P1_ROOT, "data/processed/items_candidate.parquet")
+ITEMS_SCORED = os.path.join(P1_ROOT, "data/processed/items_scored.parquet")
 
 
 @functools.lru_cache(maxsize=1)
