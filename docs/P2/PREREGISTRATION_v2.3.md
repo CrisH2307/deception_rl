@@ -25,6 +25,11 @@ its counts, `reports/T2_k2_gate.md` and `reports/T2_frozen_set_counts.md`) and P
 | 5 | `sigma` still unmeasured. The target stays provisional and says so. | §5 |
 | 6 | One decision needs a number that does not exist. Named, and stopped on. | §6 |
 
+The design's single point of failure is named in §1.4: **D108**. Reasons 2 and 3 for
+rejecting pooling are downstream of it, so if D108 is wrong they fall together with the
+`size`-only choice. Its falsifier is stated there, along with why that falsifier is
+exploratory here and cannot re-choose this paper's confirmatory set.
+
 ---
 
 ## 1. Arm B's unit of analysis: per tile, `size` confirmatory
@@ -70,7 +75,9 @@ signal. Availability was never the argument for `size`.
 
 ### 1.2 Why pooling is rejected
 
-Three independent reasons; the first alone is sufficient.
+Three reasons; the first alone is sufficient. They are **not** independent of each
+other: reasons 2 and 3 are downstream of reason 1, which makes reason 1 a single point
+of failure. That is set out in §1.4 rather than glossed here.
 
 1. **D108 is a measured negative result, and pooling would override it with nothing.**
    Paper 1 measured that `moves` sits below its own marginal null at all four rungs
@@ -117,15 +124,69 @@ rather than stay behind:
 > pooled primary is therefore chosen with knowledge that it passes, and that
 > is disclosed rather than finessed.
 
-**Its final sentence is now counterfactual, and that is worth stating plainly rather
-than editing the paragraph.** The paragraph was written to disclose a hazard: choosing
-a unit of analysis because it is the one that clears the target. The decision went the
-other way. `size`-only was chosen at `n = 108`, which does **not** clear 400, over a
-pooled primary at `n = 460`, which does. The hazard the disclosure guards against did
-not materialise, in the direction that would have been self-serving. The paragraph is
-carried unchanged because a disclosure edited after the fact to match the outcome is
-worth nothing, and because a future reader is entitled to see that the pooled option
-was known to pass at the moment it was declined.
+### Annotation to the paragraph above, added 2026-09-09. Beside it, not inside it.
+
+The quoted paragraph is preserved byte-for-byte and is not edited. Three things a
+reader needs that the paragraph itself cannot carry, because it was written before the
+decision it anticipated:
+
+1. **Its final sentence was overtaken.** "A pooled primary is therefore chosen with
+   knowledge that it passes" describes a decision that was not taken. Section 1 of this
+   document decided the opposite: per-tile, `size` confirmatory, pooling rejected.
+
+2. **It is preserved verbatim on purpose.** A disclosure edited after the fact to match
+   its own outcome is worth nothing. Its value as a record of what was known, and when,
+   survives only if it is not touched, so the correction goes beside it and the
+   paragraph keeps its original wording including the sentence that turned out false.
+   It is annotated here rather than at its origin in `v2.2` section 4 because D148
+   forbids editing an earlier version in place; the versions are read together, as
+   every header states.
+
+3. **The disclosure's logic now runs the other way, and this is the part that protects
+   the reader.** It was written to guard against choosing pooled *because* pooled
+   passes. What happened instead: `size`-only at `n = 108`, which fails its own 400
+   benchmark, was chosen over pooled at `n = 460`, which clears it. Choosing against
+   the analyst's interest is evidence that the choice was made on the merits and not on
+   the count. Without this note a reader meeting `n = 108` reads the underpowering as
+   carelessness, when it is the cost of declining an option that was known to pass and
+   known to be wrong on D108. The shortfall is a disclosed limitation (section 3.3,
+   section 4), not an oversight.
+
+### 1.4 D108 is a load-bearing dependency, and it is a single point of failure
+
+Reasons 2 and 3 above are downstream of reason 1, so the three are not independent in
+the way a list of three implies. Reason 2's dilution arithmetic assumes the secondary
+tiles carry no effect, which is D108's claim. Reason 3 is a structural obstacle to
+pooling but not a reason to prefer `size` over any other single tile. **If D108 is
+wrong, `size`-only, the `4.26x` dilution figure, and the no-pooling conclusion fall
+together.** Recorded here so a reviewer can see the dependency without reconstructing
+it, and so it is not mistaken for a hedge: the design rests on one inherited
+measurement, and that is a fact about the design.
+
+**What D108 measured, and on what base.** Paper 1, `.claude/rules/30-data-decisions.md`:
+`moves` sits below its own marginal null at all four ladder rungs, which Paper 1
+attributes to residual position sensitivity rather than content, and `hold` carries
+approximately nothing. The base is Paper 1's frozen 1,000-item set, its four-rung
+ladder (L1 to L4), and Paper 1's coordinate, which is `post_norm` and the consistency
+measures built on it. It is a measurement, not an assumption, and it is Paper 1's
+own published negative result about which tile constructions support the task (D105).
+
+**The falsifier, stated so it is recognisable if it appears.** D108 would be displaced
+by a measurement on Arm B's own coordinate showing that `manmade`, `moves` or `hold`
+carries adversary-relevant content: specifically, excess `ΔA` on a secondary tile
+(`A_observed - A_null`, section 3.3) that is distinguishable from zero and comparable
+in magnitude to the same model's excess on `size`, under the same framing contrast and
+the same scoring rule. Arm B produces exactly this quantity on its secondary tiles as
+a byproduct of running.
+
+**The falsifier's status here is exploratory, and that is binding.** Per v2.0 section
+10, every secondary-tile quantity is exploratory. A secondary tile clearing the bar
+above therefore **cannot** re-choose this paper's confirmatory set: it would be a
+post-hoc unit-of-analysis change made after seeing the data, which is the move v2.1
+section 1.1 and `v2.2` section 3 both already declined. It can inform a future paper's
+design, and it should be reported when it occurs precisely so that future design has
+it. The asymmetry is deliberate: D108 was available before this design was fixed, and
+its falsifier will not be.
 
 ---
 
