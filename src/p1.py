@@ -74,6 +74,20 @@ def fit_grid(tile, means, clues):
     return G.reshape(n, M * C, K)
 
 
+def artifact_hash(path):
+    """sha256 of a frozen P1 artifact, for the chain of custody.
+
+    P1 gitignores `data/**`, so P2 cannot pin these by commit. Hashing them into
+    P2's reports is the available substitute.
+    """
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
 def load_items(path=ITEMS_FINAL, tile=None, n=None):
     """Frozen P1 item table, optionally one tile / first `n` rows."""
     df = pd.read_parquet(path)
@@ -91,6 +105,9 @@ def main():
                   + "  ".join(f"{k}={v}" for k, v in df['tile'].value_counts().items()))
         else:
             print(f"  {name:16s} MISSING at {p}")
+    for name, path in [("items_final", ITEMS_FINAL), ("items_candidate", ITEMS_CANDIDATE)]:
+        if os.path.exists(path):
+            print(f"  sha256 {name:16s} {artifact_hash(path)}")
     for tid, (F, opts) in sorted(tile_fits().items()):
         print(f"  tile {tid:8s} |O|={len(opts)}  fit range "
               f"[{F.min():.4e}, {F.max():.4f}]")

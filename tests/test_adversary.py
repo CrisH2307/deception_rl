@@ -9,6 +9,7 @@ compared with the closed form the module uses.
 Run: python3 tests/test_adversary.py
 """
 import math
+import pathlib
 import sys
 
 import numpy as np
@@ -76,6 +77,8 @@ def test_4_best_response_is_beta_tau_independent():
         logL = b.log_posterior
         for tau in (0.5, 1.0, 2.0):
             for beta in (0.25, 1.0, 4.0):
+                # R1 is a claim about every tau, so this test is one of the two
+                # legitimate appendix callers (spec section 5.1).
                 s = logL / tau                                   # (n,|H|,|O|)
                 z = logsumexp(s, axis=1)                         # (n,|O|)
                 # P(h*|o,d) denominator: Z + L_d^{1/tau}(e^{beta/tau} - 1)
@@ -222,25 +225,49 @@ def test_v3_tau1_identity_fails_off_tau1():
     off = 0
     for tile, sub, b in batches():
         for tau in (0.5, 2.0):
-            off += int((adv.optimal_option(b, 0.0, tau)
+            off += int((adv.optimal_option(b, 0.0, tau, appendix=True)
                         != adv.optimal_option(b, 0.0, 1.0)).sum())
     assert off > 0, "tau!=1 reproduced the tau=1 oracle everywhere; check section 5.1"
     print(f"     ({off} beta=0 argmax disagreements at tau in {{0.5, 2}}, as section 5.1 predicts)")
 
 
 def test_v3_bisection_matches_closed_form():
-    """Section 6.3's closed-form root and the bisected value agree to EPS_BETA."""
-    worst = 0.0
+    """Section 6.3's closed-form root vs the bisected value.
+
+    They are not equal and must not be forced to be. The closed form solves
+    V_o = V_o' exactly; the bisection converges on P1's D51 tie band, so it
+    fires when the two options separate by TAU_MAIN *relative*. The test asserts
+    the causal account of the difference rather than widening a tolerance to
+    hide it: identical robustness classification, an exact root at the closed
+    form, and a separation of exactly one tie band at the bisected value.
+    """
+    from p1 import TAU_MAIN
+    worst_beta = worst_cf = worst_bis = 0.0
     for tile, sub, b in batches():
         bis = adv.beta_critical_batch(b)
-        cf = adv._crossings(b, 1.0).min(axis=1)
-        cf = np.where(np.isfinite(cf), np.log(cf), np.inf)
-        assert (np.isfinite(bis) == np.isfinite(cf)).all(), f"{tile}: robustness disagrees"
+        x = adv._crossings(b, 1.0).min(axis=1)
+        cf = np.where(np.isfinite(x), np.log(x), np.inf)
+        assert (np.isfinite(bis) == np.isfinite(cf)).all(), \
+            f"{tile}: closed form and bisection disagree on which items are robust"
         f = np.isfinite(bis)
-        if f.any():
-            worst = max(worst, float(np.abs(bis[f] - cf[f]).max()))
-    assert worst <= adv.EPS_BETA, f"bisection vs closed form: max gap {worst:.3e}"
-    print(f"     (max |bisection - closed form| = {worst:.3e}, tolerance {adv.EPS_BETA:.0e})")
+        if not f.any():
+            continue
+        worst_beta = max(worst_beta, float(np.abs(bis[f] - cf[f]).max()))
+        c, log_a, lb = adv._curve(b, 1.0)
+        for beta, keep in ((cf, "cf"), (bis, "bis")):
+            lv = c - np.logaddexp(log_a, lb + np.where(f, beta, 0.0)[:, None])
+            t2 = np.sort(lv, axis=1)
+            rel = (1.0 - np.exp(t2[:, -2] - t2[:, -1]))[f]
+            if keep == "cf":
+                worst_cf = max(worst_cf, float(rel.max()))
+            else:
+                worst_bis = max(worst_bis, float(rel.max()))
+    assert worst_cf < 1e-12, \
+        f"closed-form root is not a root: top-two gap {worst_cf:.3e}"
+    assert worst_bis < 2 * TAU_MAIN, \
+        f"bisection fired outside the tie band: separation {worst_bis:.3e}"
+    print(f"     (closed-form root exact to {worst_cf:.1e} relative; bisection "
+          f"fires within {worst_bis:.1e} <= one D51 band; max beta gap {worst_beta:.1e})")
 
 
 def test_v3_beta_c_is_the_flip_point():
@@ -251,7 +278,6 @@ def test_v3_beta_c_is_the_flip_point():
         f = np.isfinite(bc) & (bc > 1e-6)
         if not f.any():
             continue
-        lo = adv.optimal_option(b, 0.0)  # placeholder to keep shapes aligned
         for sign, want_equal in ((-1.0, True), (1.0, False)):
             probe = bc + sign * 1e-4
             got = np.array([
@@ -280,6 +306,42 @@ def test_v3_scalar_contracts_match_batch():
             one, many = adv.beta_critical(row), float(adv.beta_critical_batch(b)[k])
             assert (math.isinf(one) and math.isinf(many)) or abs(one - many) < adv.EPS_BETA
             assert adv.v_beta(row, 0, math.inf) == 0.0
+
+
+def test_v31_spec_version_matches_the_spec_file():
+    """CLAUDE.md chain of custody: the implementation names a spec version and
+    that version is the one in the spec file's header."""
+    import re
+    head = pathlib.Path("docs/spec/adversary-game-v1.md").read_text()[:200]
+    m = re.search(r"^# Adversary Game Specification (v[\d.]+)", head, re.M)
+    assert m, "spec file has no parseable version header"
+    assert m.group(1) == adv.SPEC_VERSION, \
+        f"spec file is {m.group(1)}, adversary.py claims {adv.SPEC_VERSION}"
+
+
+def test_v31_tau_guard():
+    """tau != 1 raises unless the caller opts in (spec section 8.1)."""
+    df = p1.load_items(tile="manmade").iloc[:5]
+    b = adv.build_batch(df)
+    for fn, kw in ((adv.log_v_beta, dict(beta=1.0, tau=0.5)),
+                   (adv.optimal_option, dict(beta=1.0, tau=2.0)),
+                   (adv.beta_critical_batch, dict(tau=0.5))):
+        try:
+            fn(b, **kw)
+        except ValueError as e:
+            assert "appendix=True" in str(e), str(e)
+            continue
+        raise AssertionError(f"{fn.__name__} accepted {kw} without the guard")
+    adv.optimal_option(b, 1.0, 0.5, appendix=True)          # opt-in works
+    adv.optimal_option(b, 1.0)                              # tau=1 unaffected
+    row = df.iloc[0]
+    for fn, kw in ((adv.v_beta, dict(o=0, beta=1.0, tau=0.5)),
+                   (adv.beta_critical, dict(tau=0.5))):
+        try:
+            fn(row, **kw)
+        except ValueError:
+            continue
+        raise AssertionError(f"scalar {fn.__name__} bypassed the guard")
 
 
 def test_v3_rejects_bad_arguments():

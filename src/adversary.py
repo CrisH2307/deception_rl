@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import p1  # noqa: E402
 from p1 import lex_obayes, TAU_MAIN  # noqa: E402  (P1's frozen D51 tie-break)
 
+SPEC_VERSION = "v3.1"   # docs/spec/adversary-game-v1.md; asserted by the test suite
 EPS_BETA = 1e-9    # spec section 8.2, bisection tolerance on beta
 EPS_TIE = 1e-12    # spec section 8.2, absolute tie tolerance
 BETA_GRID = (0.0, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0)   # spec section 8.2
@@ -113,24 +114,14 @@ def _build(df, tile):
 
 
 # ------------------------------------------------------------------ the game
-def log_v_beta(batch, beta, tau=1.0):
+def log_v_beta(batch, beta, tau=1.0, *, appendix=False):
     """(n, |O|) log V_beta(o), the adversary-worst-case correct-accusation
     log-probability. `beta = inf` returns -inf (V_inf = 0 exactly); use
     `optimal_option` for the limiting argmax, which is argmax margin."""
-    _check(beta, tau)
+    _check(beta, tau, appendix)
     if beta == math.inf:
         return np.full(batch.log_l_star.shape, -np.inf)
-    c = batch.log_l_star / tau                                    # log C_o
-    b = batch.log_m / tau                                         # log B_o
-    z = logsumexp(batch.log_posterior / tau, axis=1)               # log Z_tau
-    # log A_o = log(Z_tau - M^{1/tau}); the sum over the 99 non-decoy
-    # hypotheses, each strictly positive, so A_o > 0 and log1p is well posed.
-    with np.errstate(divide="ignore"):
-        log_a = z + np.log1p(-np.exp(np.minimum(b - z, 0.0)))
-    if not np.isfinite(log_a).all():
-        raise AssertionError(
-            f"{int((~np.isfinite(log_a)).sum())} degenerate A_o (a single rival "
-            "holds all posterior mass to float64 precision). Surfaced, not clipped.")
+    c, log_a, b = _curve(batch, tau)
     return c - np.logaddexp(log_a, b + beta / tau)
 
 
@@ -169,14 +160,14 @@ def _select(score, fit_star):
     return lex_obayes(rel, fit_star, TAU_MAIN)[0]
 
 
-def optimal_option(batch, beta, tau=1.0):
+def optimal_option(batch, beta, tau=1.0, *, appendix=False):
     """(n,) argmax_o V_beta(o) under the spec's tie-break.
 
     At `beta = inf` this is argmax_o margin(o) (spec section 5.2), reached by a
     separate code path, never by a large finite beta.
     """
-    _check(beta, tau)
-    score = margin_batch(batch) / tau if beta == math.inf else log_v_beta(batch, beta, tau)
+    _check(beta, tau, appendix)
+    score = margin_batch(batch) / tau if beta == math.inf else log_v_beta(batch, beta, tau, appendix=appendix)
     return _select(score, batch.fit_star)
 
 
@@ -193,14 +184,14 @@ def _abc(batch, tau):
     return z - b, b, c
 
 
-def _crossings(batch, tau):
+def _crossings(batch, tau, appendix=False):
     """(n, |O|) the x >= 1 at which each rival overtakes o*_0, else inf.
 
     Closed form of spec section 6.3: the pairwise equality is linear in
     x = exp(beta/tau), so each rival has at most one root.
     """
     a, b, c = _abc(batch, tau)
-    o0 = optimal_option(batch, 0.0, tau)
+    o0 = optimal_option(batch, 0.0, tau, appendix=appendix)
     r = batch.rows
     a0, b0, c0 = a[r, o0, None], b[r, o0, None], c[r, o0, None]
     num = c * a0 - c0 * a
@@ -211,43 +202,64 @@ def _crossings(batch, tau):
     return np.where(np.isfinite(x) & (x >= 1.0), x, np.inf)
 
 
-def beta_critical_batch(batch, tau=1.0):
+def _curve(batch, tau):
+    """(log C_o, log A_o, log B_o) of spec section 6.3, hoisted out of the
+    bisection loop: they are constant in beta, and the logsumexp over |H| that
+    produces log Z_tau is the expensive part."""
+    c = batch.log_l_star / tau
+    b = batch.log_m / tau
+    z = logsumexp(batch.log_posterior / tau, axis=1)
+    with np.errstate(divide="ignore"):
+        log_a = z + np.log1p(-np.exp(np.minimum(b - z, 0.0)))
+    if not np.isfinite(log_a).all():
+        raise AssertionError(
+            f"{int((~np.isfinite(log_a)).sum())} degenerate A_o (a single rival "
+            "holds all posterior mass to float64 precision). Surfaced, not clipped.")
+    return c, log_a, b
+
+
+def beta_critical_batch(batch, tau=1.0, *, appendix=False):
     """(n,) beta_c, by bisection to EPS_BETA. inf for adversary-robust items.
 
-    Robustness and the bracket come from the closed form of section 6.3 (exact,
-    and it settles margin ties that the beta -> inf argmax alone would miss);
-    the returned value is bisected on the monotone indicator, per T1. The two
-    are cross-checked in `tests/test_adversary.py`.
-    """
-    _check(0.0, tau)
-    x = _crossings(batch, tau).min(axis=1)
-    beta_c = np.where(np.isfinite(x), tau * np.log(x), np.inf)
-    live = np.isfinite(beta_c)
-    if not live.any():
-        return beta_c
+    The indicator bisected on is `optimal_option(beta) != o*_0`, which is
+    section 6.1's definition verbatim: the argmax it names is the tie-broken
+    argmax, not a raw strict comparison. That matters. Two options whose V_beta
+    curves have converged to within float64 can never satisfy a strict `>`, so
+    a strict indicator does not converge on them (3 such items per 2,000 on the
+    `size` tile of the candidate pool); the tie-broken argmax resolves them the
+    same way every other function in this module does, which is also what makes
+    `divergence_set` consistent with `beta_critical` as section 9 requires.
 
-    o0 = optimal_option(batch, 0.0, tau)
+    Robustness is decided by the beta -> inf selector (argmax margin, spec
+    section 5.2), never by probing a large finite beta. The closed-form root of
+    section 6.3 is not on this path; it is the independent cross-check in
+    `tests/test_adversary.py`.
+    """
+    _check(0.0, tau, appendix)
+    c, log_a, b = _curve(batch, tau)
+    o0 = _select(c - np.logaddexp(log_a, b), batch.fit_star)
 
     def diverged(bet):
-        lv = log_v_beta(batch, 0.0, tau) if np.all(bet == 0) else _lv_at(batch, bet, tau)
-        best = lv[batch.rows, o0].copy()
-        lv = lv.copy()
-        lv[batch.rows, o0] = -np.inf
-        return lv.max(axis=1) > best
+        lv = c - np.logaddexp(log_a, b + bet[:, None] / tau)
+        return _select(lv, batch.fit_star) != o0
 
-    lo = np.zeros(len(batch))
-    hi = np.maximum(beta_c * 2.0, 1.0)                  # closed-form bracket
-    hi = np.where(live, hi, 1.0)
-    for _ in range(64):
+    live = optimal_option(batch, math.inf, tau, appendix=appendix) != o0
+    if not live.any():
+        return np.full(len(batch), np.inf)
+
+    hi = np.ones(len(batch))
+    for _ in range(70):
         need = live & ~diverged(hi)
         if not need.any():
             break
         hi = np.where(need, hi * 2.0, hi)
     else:
-        raise AssertionError("bisection bracket did not close in 64 doublings")
+        raise AssertionError(
+            f"{int(need.sum())} items still undiverged at beta = {hi.max():.3e} "
+            "though the beta -> infinity limit says they flip. Not clamped.")
 
-    span = np.where(live, hi, 0.0)
-    for _ in range(int(np.ceil(np.log2(max(span.max(), 1.0) / EPS_BETA))) + 2):
+    lo = np.zeros(len(batch))
+    for _ in range(int(np.ceil(np.log2(hi.max() / EPS_BETA))) + 2):
         mid = 0.5 * (lo + hi)
         d = diverged(mid)
         hi = np.where(live & d, mid, hi)
@@ -255,21 +267,22 @@ def beta_critical_batch(batch, tau=1.0):
     return np.where(live, hi, np.inf)
 
 
-def _lv_at(batch, beta_vec, tau):
-    """log V_beta with a per-item beta (bisection carries one beta per item)."""
-    c = batch.log_l_star / tau
-    b = batch.log_m / tau
-    z = logsumexp(batch.log_posterior / tau, axis=1)
-    with np.errstate(divide="ignore"):
-        log_a = z + np.log1p(-np.exp(np.minimum(b - z, 0.0)))
-    return c - np.logaddexp(log_a, b + beta_vec[:, None] / tau)
-
-
-def _check(beta, tau):
+def _check(beta, tau, appendix):
     if beta < 0:
         raise ValueError(f"beta must be >= 0, got {beta}")
     if tau <= 0:
         raise ValueError(f"tau must be > 0, got {tau}")
+    if tau != 1.0 and not appendix:
+        raise ValueError(
+            f"tau = {tau} requires appendix=True. tau is fixed at 1 in every Arm "
+            "A/B/C main result (spec section 8.1): it is the unique value at "
+            "which V_0(o) collapses to L(h*|o) and the game nests P1's frozen "
+            "oracle exactly. Off tau = 1 that nesting is gone, measured: the "
+            "beta = 0 argmax disagrees with the frozen oracle on 127 of 2,000 "
+            "item-tau cells at tau in {0.5, 2}. Only spec section 5.1's "
+            "appendix robustness protocol may pass appendix=True, and it must "
+            "use the tau-local reference argmax_o V_0(o), not o*_0. Do not "
+            "remove this guard to make a call site work.")
 
 
 # ------------------------------------------- section 9 contracts (scalar API)
@@ -279,14 +292,14 @@ def _one(item):
     return build_batch(pd.DataFrame([dict(item)]))
 
 
-def v_beta(item, o, beta, tau=1.0):
+def v_beta(item, o, beta, tau=1.0, *, appendix=False):
     """Scientist utility V_beta(o) for one item and option (spec sections 3, 5).
 
     Returns a probability in [0, 1]; 0.0 at beta = inf, which is the exact
     limit, not a truncation. The limiting *argmax* is argmax margin, not the
     argmax of this value; see `optimal_option`.
     """
-    return float(np.exp(log_v_beta(_one(item), beta, tau)[0, o]))
+    return float(np.exp(log_v_beta(_one(item), beta, tau, appendix=appendix)[0, o]))
 
 
 def adversary_best_response(item, o):
@@ -294,12 +307,12 @@ def adversary_best_response(item, o):
     return int(best_response_batch(_one(item))[0, o])
 
 
-def beta_critical(item, tau=1.0):
+def beta_critical(item, tau=1.0, *, appendix=False):
     """beta_c(i) (spec section 6.1). math.inf for adversary-robust items."""
-    return float(beta_critical_batch(_one(item), tau)[0])
+    return float(beta_critical_batch(_one(item), tau, appendix=appendix)[0])
 
 
-def divergence_set(items, beta, tau=1.0):
+def divergence_set(items, beta, tau=1.0, *, appendix=False):
     """D(beta) = { i : beta_c(i) <= beta } (spec section 7).
 
     Empty at beta == 0 unconditionally (spec section 7.1): a boundary-tied item
@@ -313,7 +326,7 @@ def divergence_set(items, beta, tau=1.0):
     out = []
     for tile, sub in df.groupby("tile", sort=False):
         b = build_batch(sub.reset_index(drop=True))
-        out.extend(np.asarray(b.item_id)[beta_critical_batch(b, tau) <= beta + EPS_BETA])
+        out.extend(np.asarray(b.item_id)[beta_critical_batch(b, tau, appendix=appendix) <= beta + EPS_BETA])
     return out
 
 
@@ -335,3 +348,8 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def tile_k(tile):
+    """|O| for a tile, from P1's frozen tiles.json."""
+    return len(p1.tile_fits()[tile][1])
