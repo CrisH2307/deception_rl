@@ -15,6 +15,11 @@ Their content hashes at the time of this run:
 |---|---|
 | `data/processed/items_final.parquet` | `ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289` |
 | `data/processed/items_candidate.parquet` | `ac7d13189b26a58c963e3f3ac5c1d7d4330fcd304e95bd454b2c7e66a4b42774` |
+| `data/processed/items_scored.parquet` | `de739750ff85b0aafb6efeff3f5128a784703919aec9548d2dec3adc3632e659` |
+
+`items_scored.parquet` was not an input to T1; it is added here on 2026-09-09 so
+all three frozen inputs are hashed in one place. T2's K2 gate reads `fit_cost`
+from it (`reports/T2_k2_gate.md` records the same hash).
 
 P1 code is imported, not vendored, from `$P1_ROOT` (default
 `/Users/crishuynh/Documents/SoftwareProject/deception`, commit `50d0745`):
