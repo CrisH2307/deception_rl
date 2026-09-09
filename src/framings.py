@@ -8,8 +8,11 @@ the shared content cannot drift. `F1` and `F2` are that string with one constant
 block spliced into P1's `{extra}` slot, the position D64's condition-5 insert
 occupies. Nothing else moves.
 
-Two author decisions this module records, neither derivable from the spec or the
-preregistration (2026-09-09, asked and answered before any text was written):
+Two author decisions govern this module, neither derivable from the spec or the
+preregistration. Both were put to the author and answered on 2026-09-09, before
+any framing text was written. They are recorded in `docs/P2/DECISIONS.md` with
+the alternatives that were offered and not chosen, quoted verbatim in
+`src/p2_decisions.py`, and asserted here at import by `dec.bind`:
 
   1. `F0` is P1's `base` variant only. The `c5` variant is not carried into P2,
      so a rendering is (item x permutation x framing) and not x variant.
@@ -32,6 +35,7 @@ import pandas as pd
 
 import adversary
 import p1
+import p2_decisions as dec
 
 import render_items                                             # noqa: E402
 from decisions import D64_COND5_INSERT, assert_verbatim         # noqa: E402
@@ -43,6 +47,12 @@ OUT_REPORT = "reports/T3_framings.md"
 # `variant="base"` sets `extra` to a bare newline, so every F0 prompt ends with
 # this exact string. Derived from P1's template, never typed independently.
 ANCHOR = "\n\nWhich do you send?"
+
+# The two values P2-D1 and P2-D2 govern, declared here and checked against
+# `docs/P2/DECISIONS.md` by `dec.bind` below. Changing either without changing
+# the decision log fails at import.
+VARIANT = "base"                                    # P2-D1
+RENDERING_AXES = ("item", "permutation", "framing")  # P2-D1: no variant axis
 assert render_items.BASE.endswith("{options}\n{extra}Which do you send?")
 assert render_items.BASE.format(left="", right="", tm="", tc="", options="x",
                                 extra="\n").endswith("x" + ANCHOR)
@@ -78,6 +88,11 @@ F2_BLOCK = _PRESENCE + (
 
 FRAMINGS = {"F0": "", "F1": F1_BLOCK, "F2": F2_BLOCK}
 
+# D100, Paper 2 side. Binds this module to `docs/P2/DECISIONS.md` P2-D1 and
+# P2-D2. A drift in the variant, the splice position, the framing set or the
+# rendering axes fails here, before any prompt can be built from it.
+dec.bind(VARIANT, ANCHOR, tuple(FRAMINGS), RENDERING_AXES)
+
 # T3's four banned words, on top of P1's own lists.
 T3_BANNED = [r"\bmargin\w*\b", r"\bmaximi[sz]\w*\b", r"\boptimal\w*\b",
              r"\bbayes\w*\b"]
@@ -92,7 +107,7 @@ def render(words, it, perm, framing, tiles):
     """
     base = render_items.render(words, it["means"], it["clues"],
                                it["target_means"], it["target_clue"],
-                               tiles[it["tile"]]["options"], perm, "V", "base")
+                               tiles[it["tile"]]["options"], perm, "V", VARIANT)
     return splice(base, FRAMINGS[framing])
 
 
@@ -447,11 +462,14 @@ def main():
         "spec_version": adversary.SPEC_VERSION,
         "format": "V",
         "p1_variant": "base",
-        "p1_variant_note": "P1's c5 variant (D64) is not carried into P2. "
-                           "Author decision 2026-09-09; the preregistration "
-                           "names neither variant.",
-        "insertion_slot": "P1 BASE {extra}, between the option menu and "
-                          "'Which do you send?' (the D64 slot)",
+        "governing_record": "docs/P2/DECISIONS.md, P2-D1 (variant) and P2-D2 "
+                            "(insertion slot). Bound at import by "
+                            "src/p2_decisions.py. This file is a deliverable, "
+                            "not the record: read the log.",
+        "p1_variant_note": dec.P2D1_TEXT.replace("\n", " "),
+        "f0_replication_target": dec.P2_F0_REPLICATION_TARGET,
+        "rendering_axes": list(dec.P2_RENDERING_AXES),
+        "insertion_slot": dec.P2D2_TEXT.replace("\n", " "),
         "base_template": render_items.BASE,
         "framings": FRAMINGS,
     }

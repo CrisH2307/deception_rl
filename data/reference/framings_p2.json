@@ -4,8 +4,15 @@
   "spec_version": "v3.1",
   "format": "V",
   "p1_variant": "base",
-  "p1_variant_note": "P1's c5 variant (D64) is not carried into P2. Author decision 2026-09-09; the preregistration names neither variant.",
-  "insertion_slot": "P1 BASE {extra}, between the option menu and 'Which do you send?' (the D64 slot)",
+  "governing_record": "docs/P2/DECISIONS.md, P2-D1 (variant) and P2-D2 (insertion slot). Bound at import by src/p2_decisions.py. This file is a deliverable, not the record: read the log.",
+  "p1_variant_note": "`F0` is Paper 1's Format V `base` rendering only. Paper 1's `c5` variant, the D64 condition-5 insert, is not carried into Paper 2. A Paper 2 rendering is (item x permutation x framing) and not x variant. `F0`'s replication target is Paper 1's condition 4.",
+  "f0_replication_target": "Paper 1 condition 4 (Format V, base variant)",
+  "rendering_axes": [
+    "item",
+    "permutation",
+    "framing"
+  ],
+  "insertion_slot": "The `F1` and `F2` framing block goes in Paper 1's `{extra}` slot, after the option menu and immediately before `Which do you send?`. That is the position D64's condition-5 insert occupies, and D104's PMI neutral prompt already excludes the slot, so the scoring normalisation is identical under `F0`, `F1` and `F2`.",
   "base_template": "Two lists of objects are shown below.\n\nLEFT\n{left}\n\nRIGHT\n{right}\n\nOne object from LEFT and one from RIGHT have been secretly chosen as a pair.\nYou know the pair: {tm} and {tc}.\n\nAnother person can see both lists but does not know the pair. Your job is to\nhelp them work out which pair it is.\n\nYou may send exactly one of the following descriptions, and nothing else:\n\n{options}\n{extra}Which do you send?",
   "framings": {
     "F0": "",

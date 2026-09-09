@@ -17,9 +17,17 @@ import pandas as pd
 
 sys.path.insert(0, "src")
 
-import framings as fr    # noqa: E402
-import p1                # noqa: E402
-import render_items      # noqa: E402
+import framings as fr        # noqa: E402
+import p1                    # noqa: E402
+import p2_decisions as dec   # noqa: E402
+
+# Import order is load-bearing and is the hazard itself: `decisions` and
+# `render_items` live in Paper 1's tree, which only reaches `sys.path` once
+# `p1` has been imported. Alphabetising these two above `p1` raises
+# ModuleNotFoundError today, and would silently resolve to a Paper 2 file of the
+# same name if one existed. `test_p2_binding_module_does_not_shadow_paper1`.
+import decisions             # noqa: E402
+import render_items          # noqa: E402
 
 RENDERED = os.path.join(p1.P1_ROOT, "data/processed/items_rendered.parquet")
 
@@ -146,6 +154,71 @@ def test_frozen_json_matches_the_module():
     assert d["base_template"] == render_items.BASE
     assert d["p1_variant"] == "base"
     assert d["format"] == "V"
+
+
+# ------------------------------------------------- D100, the Paper 2 bindings
+def test_p2_decision_log_quotes_the_constants():
+    """`docs/P2/DECISIONS.md` is the source. The constants must still match it,
+    including the alternatives that were offered and not chosen."""
+    assert dec.check_log("docs/P2/DECISIONS.md")
+
+
+def test_p2_binding_rejects_drift():
+    """The bind is only a tripwire if its negative case fires. Perturb each of
+    the four governed values in turn and require the import-time check to fail."""
+    good = (fr.VARIANT, fr.ANCHOR, tuple(fr.FRAMINGS), fr.RENDERING_AXES)
+    dec.bind(*good)                                          # the live values pass
+    drifted = [
+        ("variant", ("c5", good[1], good[2], good[3])),
+        ("variant", ("", good[1], good[2], good[3])),
+        ("slot anchor", (good[0], "\n\nWhich do you send", good[2], good[3])),
+        ("slot anchor", (good[0], "\nWhich do you send?", good[2], good[3])),
+        ("framing ids", (good[0], good[1], ("F0", "F1"), good[3])),
+        ("framing ids", (good[0], good[1], ("F0", "F1", "F2", "F3"), good[3])),
+        ("rendering axes", (good[0], good[1], good[2],
+                            ("item", "permutation", "variant", "framing"))),
+    ]
+    for what, args in drifted:
+        try:
+            dec.bind(*args)
+        except AssertionError:
+            continue
+        raise AssertionError(f"bind accepted a drifted {what}: {args}")
+
+
+def test_framings_renders_with_the_governed_variant():
+    """P2-D1 is structural, not a comment: the value reaching P1's renderer is
+    the one the log governs, and there is no variant axis."""
+    assert fr.VARIANT == dec.P2D1_VARIANT == "base"
+    assert "variant" not in fr.RENDERING_AXES
+    assert fr.RENDERING_AXES == dec.P2_RENDERING_AXES
+    words, tiles, items, V = ctx()
+    r = V.iloc[0]
+    seen = {}
+    real = render_items.render
+
+    def spy(*a, **kw):
+        seen["variant"] = a[-1] if len(a) >= 9 else kw.get("variant")
+        return real(*a, **kw)
+
+    render_items.render = spy
+    try:
+        fr.render(words, items.loc[r["item_id"]], tuple(r["option_order"]),
+                  "F1", tiles)
+    finally:
+        render_items.render = real
+    assert seen["variant"] == dec.P2D1_VARIANT, seen
+
+
+def test_p2_binding_module_does_not_shadow_paper1():
+    """`src/p2_decisions.py` is not called `decisions.py` for a reason. A bare
+    `import decisions` must still reach Paper 1's frozen module: a Paper 2 file
+    of that name silently replaces it, no-op `assert_verbatim` included."""
+    assert os.path.realpath(decisions.__file__).startswith(
+        os.path.realpath(p1.P1_ROOT)), decisions.__file__
+    assert decisions.assert_verbatim is dec.assert_verbatim
+    assert not os.path.exists("src/decisions.py"), (
+        "src/decisions.py shadows Paper 1's frozen module; see docs/P2/DECISIONS.md")
 
 
 if __name__ == "__main__":
