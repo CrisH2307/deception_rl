@@ -8,8 +8,9 @@ follows `PREREGISTRATION_v2.1.md`.
 Written as a separate file per Paper 1's **D148**: earlier versions are never edited
 in place, and they are read together. This version **records the outcome of a
 preregistered kill gate and applies its preregistered consequence.** It changes no
-threshold, no hypothesis and no analysis rule. Everything below in sections 2 and 3
-is descriptive or a disclosed defect; neither overrides section 1.
+threshold, no hypothesis and no analysis rule. Sections 2 and 3 are descriptive or a
+disclosed defect and neither overrides section 1. Section 4 hands an open
+unit-of-analysis question to T5 without deciding it.
 
 ---
 
@@ -62,11 +63,25 @@ section 8.2's provisional target, the admissible responses are a larger sample d
 without reference to `beta_c`, or a stated power limitation. Never a
 `beta_c`-enriched set.
 
-Reuse of the frozen set is not selection on `beta_c`: nothing in that set was chosen
-with any knowledge of the quantity, which did not exist when the set was drawn. Its
-finite-`beta_c` rate of 0.4600 against the pool's 0.1823 is fully accounted for by
-P1's 50% conflict quota (`0.50 * 0.9040 + 0.50 * 0.0160 = 0.4600`), a quota fixed for
-P1's own reasons in `final_items.py` Step 5.
+**Scope of the prohibition, fixed here so it is not over-applied.** It bites on a new
+draw that reaches for finite `beta_c` deliberately. It does not bite on the frozen
+set's existing enrichment, whose finite-`beta_c` rate is 0.4600 against the pool's
+0.1823. That enrichment is **benign**, for two independent reasons, either sufficient:
+
+1. **Provenance.** Nothing in the frozen set was chosen with any knowledge of
+   `beta_c`, which did not exist as a quantity when the set was drawn. The gap is
+   fully accounted for by P1's 50% conflict quota
+   (`0.50 * 0.9040 + 0.50 * 0.0160 = 0.4600`), fixed for P1's own reasons in
+   `final_items.py` Step 5.
+2. **Estimand.** Selection on the dependent variable corrupts a **prevalence**
+   estimate. Prevalence is Arm A's question and Arm A measures it on the 200,000
+   candidate pool, not on the item set (section 7.1; T6 Step 1). Arm B measures
+   **movement within** the divergence set, conditional on membership, where
+   enrichment costs the estimate nothing and buys it power.
+
+It follows that a larger draw under P1's own recipe is also outside the prohibition,
+since that recipe references `beta_c` nowhere. This paragraph records the enrichment
+as benign; it is **not** a defect and must not be carried as one.
 
 ---
 
@@ -127,12 +142,55 @@ preregistration, written before its data, not a repair to this one.
 
 ---
 
-## 4. What this amendment does not do
+## 4. Handoff to T5: the unit of analysis for Arm B. Not decided here.
+
+**The question.** Is Arm B's primary analysis **per tile**, or **pooled across tiles
+with tile as a stratum**? This is a unit-of-analysis question, it belongs in the
+preregistration, and it is handed to T5 rather than settled by the session that
+produced the counts that bear on it.
+
+**The two live paths.**
+
+1. **Reuse P1's frozen 1,000-item set with a pooled primary.** Available now, no new
+   draw, no new artifact, and the Paper 1 comparison is exact rather than merely
+   preserved. The frozen set carries 460 finite-`beta_c` items pooled, 108 on the
+   `size` tile.
+2. **A larger redraw under P1's own recipe** (`final_items.py` Step 5: 50/50
+   conflict/non-conflict per tile, `fit_cost` deciles on the conflict half,
+   `decision_margin` deciles on the non-conflict half). This path is
+   **pre-authorized** by section 1.3's "a larger sample drawn without reference to
+   `beta_c`": the recipe references `beta_c` nowhere. Projected cost, arithmetic in
+   `reports/T2_frozen_set_counts.md` section 5: **3,487 items, roughly 871 per
+   tile**, to put 400 finite-`beta_c` items on every tile. Every tile is feasible
+   against P1's own selection gates; `manmade` is the binding one at 69% of its
+   qualifying conflict items.
+
+**The ordering, recorded verbatim so the choice is disclosed rather than finessed:**
+
+> The argument that |O| is not the driver, and therefore that singling out the
+> size tile is unmotivated, was established on 2026-09-09 from pool data
+> (manmade 0.0387 vs moves 0.1790 at identical |O|=3) BEFORE the frozen-set
+> counts were run. The counts subsequently showed pooled finite-beta_c = 460
+> (clears the 400 target) and size-tile = 108 (cannot clear it from a
+> 250-item tile at any selection rule). Both facts are on the record. A
+> pooled primary is therefore chosen with knowledge that it passes, and that
+> is disclosed rather than finessed.
+
+**Neither path is adopted here.** Section 8.2's 400 remains provisional in either
+case: it rests on a `sigma` nothing has measured, and section 8.2's own commitment to
+report realized power once `sigma` is estimable from `F0` is unchanged by anything in
+this document.
+
+---
+
+## 5. What this amendment does not do
 
 - It does not change K1, K2, K3, any threshold, any hypothesis, or any exclusion rule.
 - It does not override the fired gate, in any form, on any subset statistic.
-- It does not adopt a fallback sample. Section 1.1 records only that the redraw does
-  not happen and that the pre-specified fallback is the frozen set; the fallback's
-  own design is a separate decision, taken outside the session that produced the
-  counts.
+- It does not adopt a fallback sample, and it does not choose between section 4's
+  two paths. Section 1.1 records only that the redraw does not happen and that the
+  pre-specified fallback is the frozen set; the fallback's own design, and Arm B's
+  unit of analysis, are T5's decisions.
+- It does not record the frozen set's finite-`beta_c` enrichment as a defect. Section
+  1.3 records it as benign, with both reasons.
 - It does not relieve T6 of running K1 and emitting the gate record.

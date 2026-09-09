@@ -16,7 +16,7 @@ Context: K2 fired (`reports/T2_k2_gate.md`, `rho_Spearman = -0.9036`), so the `b
 
 Pool rates are quoted from `PREREGISTRATION_v2.1` section 1.2 (T1's benchmark over the full 200,000-candidate pool), not recomputed here.
 
-### Why the frozen set sits above the pool, and why that is not selection on `beta_c`
+### The enrichment is benign, for two independent reasons
 
 P1's draw is **50% conflict by construction**: `final_items.py` Step 5 fills a fixed quota of 125 conflict and 125 non-conflict items per tile. The pool is 0.1865 conflict. Conflict items are where the adversary bites (finite-`beta_c` rate 0.9040 against 0.0160 on non-conflict items), so a set built half of them carries a higher finite-`beta_c` rate mechanically:
 
@@ -24,7 +24,11 @@ P1's draw is **50% conflict by construction**: `final_items.py` Step 5 fills a f
 0.50 * 0.9040  +  0.50 * 0.0160  =  0.4600      observed 0.4600
 ```
 
-The enrichment is entirely P1's conflict quota, which was fixed for P1's own reasons before `beta_c` existed as a quantity. Nothing in the frozen set was selected with any knowledge of `beta_c`, so reusing it does not select on the dependent variable. A *new* draw that reached for the same enrichment deliberately would.
+**Reason 1, provenance.** The enrichment is entirely P1's conflict quota, which was fixed for P1's own reasons before `beta_c` existed as a quantity. Nothing in the frozen set was selected with any knowledge of `beta_c`, so reusing it does not select on the dependent variable.
+
+**Reason 2, estimand.** Selection on the dependent variable corrupts a **prevalence** estimate. Prevalence is Arm A's question, and Arm A measures it on the 200,000-candidate pool, not on the item set (preregistration v2.0 section 7.1; T6 Step 1). Arm B measures **movement within** the divergence set, conditional on membership, so enrichment costs that estimate nothing and buys it power. The two reasons are independent: either alone would settle it.
+
+Recorded as benign, not as a defect. The prohibition it might look like it violates is on a *new draw* reaching for finite `beta_c` deliberately, which would enrich the analysis set by the very criterion that defines it. Inheriting an enrichment that fell out of an unrelated quota is not that, and neither is a larger draw under P1's own recipe.
 
 ## 3. The `size` tile against the preregistered target
 
@@ -64,6 +68,28 @@ The complementary direction, for the same reason the pooled K2 coefficient came 
 | `size` (\|O\| = 6) | 250 | 108 | 0 |
 
 Among conflict items the finite-`beta_c` rate is 0.9040 (452 of 500); among non-conflict items it is 0.0160 (8 of 500).
+
+## 5. Projection: N required to reach 400 per tile under P1's own recipe
+
+Arithmetic only. This is a projection from the rates measured above, not a sample and not a design. The recipe held fixed is P1's, unchanged: `final_items.py` Step 5's 50/50 conflict/non-conflict split per tile, `fit_cost` deciles within the conflict half, `decision_margin` deciles within the non-conflict half. `beta_c` enters nowhere in it, which is what makes the projection admissible at all.
+
+Under that recipe a tile's finite-`beta_c` rate is the rate measured above, so the tile size needed for 400 such items is `ceil(400 / r_t)`. The 95% interval carries the binomial uncertainty in `r_t` itself, which is estimated from 250 items per tile and is the dominant error here.
+
+| tile | `r_t` measured | items/tile for 400 | 95% interval | conflict items needed | qualifying conflicts in pool | feasible |
+|---|---:|---:|---:|---:|---:|---:|
+| `manmade` | 0.4560 | **878** | 773 to 1,015 | 439 | 639 | yes |
+| `moves` | 0.4880 | **820** | 728 to 939 | 410 | 3,162 | yes |
+| `hold` | 0.4640 | **863** | 761 to 995 | 432 | 2,741 | yes |
+| `size` | 0.4320 | **926** | 811 to 1,080 | 463 | 6,753 | yes |
+| **total** | | **3,487** | 3,073 to 4,029 | 1,744 | 13,295 | |
+
+So **3,487 items, roughly 871 per tile**, to put 400 finite-`beta_c` items on every tile, against P1's 1,000. The `size` tile alone needs 926.
+
+**Feasibility.** The conflict half is the binding side: it is the scarcer stratum in the pool and it carries almost all the finite-`beta_c` items. The 'qualifying conflicts in pool' column counts pool items passing P1's own selection gates (`resample_stability >= 0.95` and `family_agree`) on that tile, which is the ceiling a draw under P1's recipe could reach without relaxing anything P1 fixed.
+
+Every tile clears, but not with the same room. `manmade` is the binding one: it would take **69%** of its qualifying conflict items at the point estimate and **79%** at the interval's upper end, against 7% or less on the other three. At that utilisation the draw is close to a census of the tile's qualifying conflicts, so P1's within-conflict `fit_cost` deciles stay fillable only because they are equal-count by construction; a decile-level shortfall would surface as `final_items.py`'s 'unfillable strata' rather than silently. Stated as a fact about the arithmetic, not as an objection to any path.
+
+**What this projection is not.** It does not say the redraw should happen, how large it should be, or whether 400 per tile is the right target. `SIZE_TARGET` is preregistration section 8.2's provisional figure, resting on a `sigma` nothing has measured; if `sigma` moves, every number in this table moves with it. The unit-of-analysis question underneath it (per-tile primary, or pooled with tile as a stratum) is a preregistration matter and is handed to T5 in `docs/P2/PREREGISTRATION_v2.2.md` section 4, not decided here.
 
 ## Chain of custody
 

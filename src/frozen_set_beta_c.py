@@ -45,6 +45,22 @@ def pool_conflict_rate():
     return float((pd.read_parquet("data/pool_beta_c.parquet")["fit_cost"] > 0).mean())
 
 
+def qualifying_pool():
+    """{tile: conflict items in the 200k pool passing P1's own selection gates}.
+
+    P1's gates, verbatim from `final_items.py` Step 5:
+    `resample_stability >= 0.95` and `family_agree`. This is the ceiling a draw
+    under P1's recipe could reach on the conflict half without relaxing anything
+    P1 fixed. Read from the frozen scored artifact, not recomputed.
+    """
+    import pandas as pd
+    s = pd.read_parquet(p1.ITEMS_SCORED,
+                        columns=["tile", "conflict", "resample_stability",
+                                 "family_agree"])
+    keep = (s["resample_stability"] >= 0.95) & s["family_agree"] & s["conflict"]
+    return s[keep]["tile"].value_counts().to_dict()
+
+
 def main():
     t0 = time.perf_counter()
     df = p1.load_items()
@@ -82,8 +98,7 @@ def main():
     w("\nPool rates are quoted from `PREREGISTRATION_v2.1` section 1.2 (T1's "
       "benchmark over the full 200,000-candidate pool), not recomputed here.\n")
 
-    w("\n### Why the frozen set sits above the pool, and why that is not "
-      "selection on `beta_c`\n")
+    w("\n### The enrichment is benign, for two independent reasons\n")
     p_conf = conflict.mean()
     r_conf, r_non = fin[conflict].mean(), fin[~conflict].mean()
     pred = p_conf * r_conf + (1 - p_conf) * r_non
@@ -96,11 +111,22 @@ def main():
       f"a higher finite-`beta_c` rate mechanically:\n\n"
       f"```\n{p_conf:.2f} * {r_conf:.4f}  +  {1 - p_conf:.2f} * {r_non:.4f}"
       f"  =  {pred:.4f}      observed {fin.mean():.4f}\n```\n")
-    w("\nThe enrichment is entirely P1's conflict quota, which was fixed for "
-      "P1's own reasons before `beta_c` existed as a quantity. Nothing in the "
-      "frozen set was selected with any knowledge of `beta_c`, so reusing it "
-      "does not select on the dependent variable. A *new* draw that reached for "
-      "the same enrichment deliberately would.\n")
+    w("\n**Reason 1, provenance.** The enrichment is entirely P1's conflict "
+      "quota, which was fixed for P1's own reasons before `beta_c` existed as a "
+      "quantity. Nothing in the frozen set was selected with any knowledge of "
+      "`beta_c`, so reusing it does not select on the dependent variable.\n")
+    w("\n**Reason 2, estimand.** Selection on the dependent variable corrupts a "
+      "**prevalence** estimate. Prevalence is Arm A's question, and Arm A "
+      "measures it on the 200,000-candidate pool, not on the item set "
+      "(preregistration v2.0 section 7.1; T6 Step 1). Arm B measures "
+      "**movement within** the divergence set, conditional on membership, so "
+      "enrichment costs that estimate nothing and buys it power. The two "
+      "reasons are independent: either alone would settle it.\n")
+    w("\nRecorded as benign, not as a defect. The prohibition it might look "
+      "like it violates is on a *new draw* reaching for finite `beta_c` "
+      "deliberately, which would enrich the analysis set by the very criterion "
+      "that defines it. Inheriting an enrichment that fell out of an unrelated "
+      "quota is not that, and neither is a larger draw under P1's own recipe.\n")
 
     w("\n## 3. The `size` tile against the preregistered target\n\n")
     m = df["tile"].values == "size"
@@ -147,6 +173,77 @@ def main():
       f"{int(conflict.sum()):,}); among non-conflict items it is "
       f"{fin[~conflict].mean():.4f} ({int(fin[~conflict].sum()):,} of "
       f"{int((~conflict).sum()):,}).\n")
+
+    w("\n## 5. Projection: N required to reach 400 per tile under P1's own recipe\n")
+    w("\nArithmetic only. This is a projection from the rates measured above, "
+      "not a sample and not a design. The recipe held fixed is P1's, unchanged: "
+      "`final_items.py` Step 5's 50/50 conflict/non-conflict split per tile, "
+      "`fit_cost` deciles within the conflict half, `decision_margin` deciles "
+      "within the non-conflict half. `beta_c` enters nowhere in it, which is "
+      "what makes the projection admissible at all.\n")
+    w(f"\nUnder that recipe a tile's finite-`beta_c` rate is the rate measured "
+      f"above, so the tile size needed for {SIZE_TARGET} such items is "
+      f"`ceil({SIZE_TARGET} / r_t)`. The 95% interval carries the binomial "
+      f"uncertainty in `r_t` itself, which is estimated from 250 items per "
+      f"tile and is the dominant error here.\n\n")
+    w(f"| tile | `r_t` measured | items/tile for {SIZE_TARGET} | 95% interval "
+      f"| conflict items needed | qualifying conflicts in pool | feasible |\n")
+    w("|---|---:|---:|---:|---:|---:|---:|\n")
+    qual = qualifying_pool()
+    total, total_lo, total_hi = 0, 0, 0
+    for t in TILES:
+        m = df["tile"].values == t
+        r = fin[m].mean()
+        se = np.sqrt(r * (1 - r) / int(m.sum()))
+        n_t = int(np.ceil(SIZE_TARGET / r))
+        n_hi = int(np.ceil(SIZE_TARGET / max(r - 1.96 * se, 1e-9)))
+        n_lo = int(np.ceil(SIZE_TARGET / min(r + 1.96 * se, 1.0)))
+        need_c = int(np.ceil(n_t / 2))
+        have_c = qual[t]
+        total += n_t
+        total_lo += n_lo
+        total_hi += n_hi
+        w(f"| `{t}` | {r:.4f} | **{n_t:,}** | {n_lo:,} to {n_hi:,} | "
+          f"{need_c:,} | {have_c:,} | "
+          f"{'yes' if need_c <= have_c else '**NO**'} |\n")
+    w(f"| **total** | | **{total:,}** | {total_lo:,} to {total_hi:,} | "
+      f"{int(np.ceil(total / 2)):,} | {sum(qual.values()):,} | |\n")
+    w(f"\nSo **{total:,} items, roughly {total // 4:,} per tile**, to put "
+      f"{SIZE_TARGET} finite-`beta_c` items on every tile, against P1's 1,000. "
+      f"The `size` tile alone needs {int(np.ceil(SIZE_TARGET / fin[df['tile'].values == 'size'].mean())):,}.\n")
+    w("\n**Feasibility.** The conflict half is the binding side: it is the "
+      "scarcer stratum in the pool and it carries almost all the finite-"
+      "`beta_c` items. The 'qualifying conflicts in pool' column counts pool "
+      "items passing P1's own selection gates "
+      "(`resample_stability >= 0.95` and `family_agree`) on that tile, which is "
+      "the ceiling a draw under P1's recipe could reach without relaxing "
+      "anything P1 fixed.\n")
+    tight = min(TILES, key=lambda t: qual[t] / np.ceil(
+        np.ceil(SIZE_TARGET / fin[df["tile"].values == t].mean()) / 2))
+    m = df["tile"].values == tight
+    r = fin[m].mean()
+    se = np.sqrt(r * (1 - r) / int(m.sum()))
+    need = np.ceil(np.ceil(SIZE_TARGET / r) / 2)
+    need_hi = np.ceil(np.ceil(SIZE_TARGET / max(r - 1.96 * se, 1e-9)) / 2)
+    w(f"\nEvery tile clears, but not with the same room. `{tight}` is the "
+      f"binding one: it would take **{need / qual[tight]:.0%}** of its "
+      f"qualifying conflict items at the point estimate and "
+      f"**{need_hi / qual[tight]:.0%}** at the interval's upper end, against "
+      f"{min(np.ceil(np.ceil(SIZE_TARGET / fin[df['tile'].values == t].mean()) / 2) / qual[t] for t in TILES if t != tight):.0%} "
+      f"or less on the other three. At that utilisation the draw is close to a "
+      f"census of the tile's qualifying conflicts, so P1's within-conflict "
+      f"`fit_cost` deciles stay fillable only because they are equal-count by "
+      f"construction; a decile-level shortfall would surface as "
+      f"`final_items.py`'s 'unfillable strata' rather than silently. Stated as "
+      "a fact about the arithmetic, not as an objection to any path.\n")
+    w("\n**What this projection is not.** It does not say the redraw should "
+      "happen, how large it should be, or whether 400 per tile is the right "
+      "target. `SIZE_TARGET` is preregistration section 8.2's provisional "
+      "figure, resting on a `sigma` nothing has measured; if `sigma` moves, "
+      "every number in this table moves with it. The unit-of-analysis question "
+      "underneath it (per-tile primary, or pooled with tile as a stratum) is a "
+      "preregistration matter and is handed to T5 in "
+      "`docs/P2/PREREGISTRATION_v2.2.md` section 4, not decided here.\n")
 
     w("\n## Chain of custody\n\n")
     w(f"Spec version `{adv.SPEC_VERSION}`. `beta_c` by "
