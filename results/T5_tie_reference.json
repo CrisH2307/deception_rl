@@ -1,0 +1,223 @@
+{
+  "purpose": "Reference for the Arm B tie rate (P2-D6), fixed before T7 runs.",
+  "rule": "pmi",
+  "prompt_form": "template",
+  "primary_reference": "c5: cond4 vs cond5, one sentence inserted in the same {extra} slot P2-D2 uses, option order fixed. Perturbation-matched in slot, kind and direction.",
+  "secondary_reference": "permutation: perm 0 vs perm 1 within cond4, option order varies and text is fixed. The opposite perturbation, and plausibly the stronger one, so it bounds rather than matches.",
+  "delta_A_zero_is_not_same_option": "A is a deterministic function of the chosen option but is not injective over an option set. Same option implies delta-A = 0; the converse fails. The references calibrate the SAME-OPTION rate, and the A-invisibility figures below say how far the two can diverge.",
+  "a_invisibility": {
+    "divergence_set": {
+      "n_items": 460,
+      "n_items_with_an_A_tied_option_pair": 65,
+      "share_items_with_an_A_tied_option_pair": 0.14130434782608695,
+      "n_unordered_option_pairs": 3024,
+      "n_A_tied_option_pairs": 67,
+      "share_option_pairs_invisible_to_A": 0.022156084656084655
+    },
+    "size_tile_confirmatory": {
+      "n_items": 108,
+      "n_items_with_an_A_tied_option_pair": 48,
+      "share_items_with_an_A_tied_option_pair": 0.4444444444444444,
+      "n_unordered_option_pairs": 1620,
+      "n_A_tied_option_pairs": 50,
+      "share_option_pairs_invisible_to_A": 0.030864197530864196
+    }
+  },
+  "references": {
+    "divergence_set": {
+      "CTRL": {
+        "c5_same_option_rate": 0.8760869565217392,
+        "c5_n_pairs": 920,
+        "permutation_same_option_rate": 0.7086956521739131,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.16739130434782612
+      },
+      "B2": {
+        "c5_same_option_rate": 0.7374727668845316,
+        "c5_n_pairs": 918,
+        "permutation_same_option_rate": 0.6717391304347826,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.06573363644974894
+      },
+      "B4": {
+        "c5_same_option_rate": 0.5880434782608696,
+        "c5_n_pairs": 920,
+        "permutation_same_option_rate": 0.5478260869565217,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.04021739130434787
+      },
+      "L1": {
+        "c5_same_option_rate": 0.8868335146898803,
+        "c5_n_pairs": 919,
+        "permutation_same_option_rate": 0.45,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.43683351468988024
+      },
+      "L2": {
+        "c5_same_option_rate": 0.9239130434782609,
+        "c5_n_pairs": 920,
+        "permutation_same_option_rate": 0.6021739130434782,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.32173913043478264
+      },
+      "L3": {
+        "c5_same_option_rate": 0.9043478260869565,
+        "c5_n_pairs": 920,
+        "permutation_same_option_rate": 0.49782608695652175,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.40652173913043477
+      },
+      "L4": {
+        "c5_same_option_rate": 0.633695652173913,
+        "c5_n_pairs": 920,
+        "permutation_same_option_rate": 0.5260869565217391,
+        "permutation_n_pairs": 460,
+        "c5_minus_permutation": 0.1076086956521739
+      }
+    },
+    "size_tile_confirmatory": {
+      "CTRL": {
+        "c5_same_option_rate": 0.7037037037037037,
+        "c5_n_pairs": 216,
+        "permutation_same_option_rate": 0.4722222222222222,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.2314814814814815
+      },
+      "B2": {
+        "c5_same_option_rate": 0.8037383177570093,
+        "c5_n_pairs": 214,
+        "permutation_same_option_rate": 0.42592592592592593,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.3778123918310834
+      },
+      "B4": {
+        "c5_same_option_rate": 0.6296296296296297,
+        "c5_n_pairs": 216,
+        "permutation_same_option_rate": 0.4537037037037037,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.17592592592592593
+      },
+      "L1": {
+        "c5_same_option_rate": 0.8611111111111112,
+        "c5_n_pairs": 216,
+        "permutation_same_option_rate": 0.28703703703703703,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.5740740740740742
+      },
+      "L2": {
+        "c5_same_option_rate": 0.8518518518518519,
+        "c5_n_pairs": 216,
+        "permutation_same_option_rate": 0.3425925925925926,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.5092592592592593
+      },
+      "L3": {
+        "c5_same_option_rate": 0.8101851851851852,
+        "c5_n_pairs": 216,
+        "permutation_same_option_rate": 0.2777777777777778,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.5324074074074074
+      },
+      "L4": {
+        "c5_same_option_rate": 0.7407407407407407,
+        "c5_n_pairs": 216,
+        "permutation_same_option_rate": 0.5092592592592593,
+        "permutation_n_pairs": 108,
+        "c5_minus_permutation": 0.2314814814814814
+      }
+    }
+  },
+  "instrument_check_permutation_minus_c5": {
+    "CTRL": {
+      "difference": -0.2314814814814815,
+      "lo": -0.38425925925925924,
+      "hi": -0.07407407407407407,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    },
+    "B2": {
+      "difference": -0.375,
+      "lo": -0.5138888888888888,
+      "hi": -0.2314814814814815,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    },
+    "B4": {
+      "difference": -0.17592592592592593,
+      "lo": -0.33796296296296297,
+      "hi": -0.004629629629629539,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    },
+    "L1": {
+      "difference": -0.5740740740740742,
+      "lo": -0.7268518518518519,
+      "hi": -0.41203703703703703,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    },
+    "L2": {
+      "difference": -0.5092592592592593,
+      "lo": -0.6574074074074074,
+      "hi": -0.3611111111111111,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    },
+    "L3": {
+      "difference": -0.5324074074074074,
+      "lo": -0.6717427248677248,
+      "hi": -0.3884424603174583,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    },
+    "L4": {
+      "difference": -0.2314814814814814,
+      "lo": -0.39814814814814814,
+      "hi": -0.06481481481481477,
+      "alpha": 0.002380952380952381,
+      "n_items": 108,
+      "n_renderings": 108,
+      "excludes_zero": true,
+      "direction": "below",
+      "bootstrap_draws": 10000,
+      "seed": 20260910
+    }
+  },
+  "decision_rule": {
+    "unit": "matched rendering pair (item x permutation), aggregated to an item-level mean before resampling",
+    "statistic": "framing same-option rate minus the model's c5 same-option rate, on the size-tile confirmatory set",
+    "interval": "cluster bootstrap over items, 10,000 resamples, seed 20260910, at 1 - alpha with alpha = 0.05/21",
+    "alpha": 0.002380952380952381,
+    "why_bootstrap": "Each item contributes two renderings, so a binomial interval on the pairs would treat 108 items as 216 independent draws."
+  }
+}

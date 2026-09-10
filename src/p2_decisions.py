@@ -140,6 +140,78 @@ def bind_armb_statistic(statistic, alpha, p0, mean_is_confirmatory):
                                "docs/P2/DECISIONS.md")) from None
 
 
+# ------------------------------------- P2-D7, the declined redraw variant (b)
+P2D7_TEXT = (
+    "Redraw variant (b), enlarging the `size` tile, is declined. `PREREGISTRATION_v2.3.md`\n"
+    "section 6 gated it on `sigma` for `ΔA`; `v2.4` section 3.2 removed `sigma` from the\n"
+    "confirmatory power curve but moved the gate rather than clearing it, since sizing an\n"
+    "enlargement now requires a target tie rate, which is equally unmeasured. There is no\n"
+    "new quantity to authorize an enlargement on. Arm B runs on Paper 1's frozen 1,000,\n"
+    "`size`-tile analysis set, `n = 108`, with realized power reported rather than assumed."
+)
+P2D7_REJECTED = ("Authorize an enlargement sized against the `sigma` analogue.",
+                 "Leave it open pending a tie-rate estimate.")
+# P2-D4 left this open; P2-D7 closes it. Any enlargement would change
+# P2D4_ITEMS_SHA256, so `bind_armb` is already where a violation lands.
+P2D7_ENLARGEMENT_AUTHORIZED = False
+
+# --------------------------------------- P2-D8, the tie rate's reference
+P2D8_TEXT = (
+    "The Arm B tie rate is calibrated against Paper 1's condition-4-versus-condition-5\n"
+    "same-option rate, which is perturbation-matched to the framing contrast in slot, in\n"
+    "kind and in which factor varies. The permutation-to-permutation rate is rejected as\n"
+    "the primary reference and retained as a bound, because it varies option order rather\n"
+    "than text and sits 0.18 to 0.57 below the `c5` rate on every model. The reference\n"
+    "values are tabulated in `PREREGISTRATION_v2.5.md` section 2.2 and T7 uses them rather\n"
+    "than recomputing them. The statistic is the framing same-option rate minus the model's\n"
+    "`c5` rate, with a cluster bootstrap over items, 10,000 resamples, seed 20260910, at\n"
+    "`1 - alpha` with `alpha = 0.05/21`. The tie rate does not enter the 21-test family: it\n"
+    "forms a second family of 21 corrected separately, because rejecting H-B requires the\n"
+    "conjunction of both halves and a conjunction's error is bounded by the smaller of its\n"
+    "parts. A tie rate indistinguishable from the reference does not support H-B; the cell\n"
+    "is reported inconclusive and its sign test carries no claim."
+)
+P2D8_REJECTED = ("Calibrate against the permutation-to-permutation rate.",
+                 "Merge the tie rate into the 21-test family, giving 42 tests at `0.05/42`.",
+                 "Report the tie rate with an interval and no reference.")
+# The tabulated reference, size tile, pmi/template. T7 reads these; it does not
+# recompute them, and a recomputation that disagrees fails at `bind_armb_tie`.
+P2D8_C5_REFERENCE = {"CTRL": 0.7037037037037037, "B2": 0.8037383177570093,
+                     "B4": 0.6296296296296297, "L1": 0.8611111111111112,
+                     "L2": 0.8518518518518519, "L3": 0.8101851851851852,
+                     "L4": 0.7407407407407407}
+P2D8_BOOT_N = 10_000
+P2D8_BOOT_SEED = 20260910
+P2D8_TIE_IN_MAIN_FAMILY = False
+
+
+def bind_armb_tie(reference, boot_n, boot_seed, tie_in_main_family):
+    """Assert an Arm B tie-rate run against P2-D8. Call at import.
+
+    The reference is tabulated in the preregistration precisely so T7 does not
+    recompute it; passing a recomputed table that differs fails here rather than
+    silently recalibrating the comparison mid-analysis.
+    """
+    for model, want in P2D8_C5_REFERENCE.items():
+        got = reference.get(model)
+        if got is None or abs(float(got) - want) > 5e-4:
+            raise AssertionError(
+                f"P2-D8: c5 reference for {model} is {got!r}, preregistered "
+                f"{want:.4f}. The table in PREREGISTRATION_v2.5.md section 2.2 is "
+                "the source; T7 uses it rather than recomputing it.")
+    checks = (("P2-D8 bootstrap resamples", boot_n, P2D8_BOOT_N),
+              ("P2-D8 bootstrap seed", boot_seed, P2D8_BOOT_SEED),
+              ("P2-D8 tie rate in the main family", bool(tie_in_main_family),
+               P2D8_TIE_IN_MAIN_FAMILY))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -204,7 +276,8 @@ def check_log(path=LOG):
     text = open(path).read()
     for label, const in (("P2-D1", P2D1_TEXT), ("P2-D2", P2D2_TEXT),
                          ("P2-D3", P2D3_TEXT), ("P2-D4", P2D4_TEXT),
-                         ("P2-D5", P2D5_TEXT), ("P2-D6", P2D6_TEXT)):
+                         ("P2-D5", P2D5_TEXT), ("P2-D6", P2D6_TEXT),
+                         ("P2-D7", P2D7_TEXT), ("P2-D8", P2D8_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -213,7 +286,8 @@ def check_log(path=LOG):
                 "Fix whichever one drifted. The log is the source.")
     for label, rejected in (("P2-D1", P2D1_REJECTED), ("P2-D2", P2D2_REJECTED),
                             ("P2-D3", P2D3_REJECTED), ("P2-D4", P2D4_REJECTED),
-                            ("P2-D5", P2D5_REJECTED), ("P2-D6", P2D6_REJECTED)):
+                            ("P2-D5", P2D5_REJECTED), ("P2-D6", P2D6_REJECTED),
+                            ("P2-D7", P2D7_REJECTED), ("P2-D8", P2D8_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -237,10 +311,15 @@ def main():
           f"alpha={P2D6_ALPHA:.6f}; mean is confirmatory="
           f"{P2D6_MEAN_IS_CONFIRMATORY}")
     print(f"level confound  P2-D5: raw single-framing A carries no claim")
+    print(f"tie reference   P2-D8: c5 same-option, {len(P2D8_C5_REFERENCE)} models, "
+          f"boot seed {P2D8_BOOT_SEED}; in main family={P2D8_TIE_IN_MAIN_FAMILY}")
+    print(f"redraw (b)      P2-D7: declined, enlargement authorized="
+          f"{P2D7_ENLARGEMENT_AUTHORIZED}")
     print("rejected        " + ", ".join(
         f"{len(r)} on P2-D{i}" for i, r in enumerate(
             (P2D1_REJECTED, P2D2_REJECTED, P2D3_REJECTED, P2D4_REJECTED,
-             P2D5_REJECTED, P2D6_REJECTED), start=1))
+             P2D5_REJECTED, P2D6_REJECTED, P2D7_REJECTED,
+             P2D8_REJECTED), start=1))
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

@@ -267,14 +267,14 @@ counted and visible, rather than contributing a spurious signed magnitude.
 
 ## 4. What is not decided here
 
-- **Redraw variant (b), enlarging the `size` tile.** Still not authorized. v2.3
-  section 6 left it gated on `sigma`, and section 3.2 above removes `sigma` from the
-  confirmatory power curve, so the stated blocker has moved rather than cleared:
-  sizing an enlargement now requires a target tie rate, which is equally unmeasured.
-  A `sigma` analogue has since been computed (`reports/T5_sigma_prior.md`), and it
-  is a prior over a different manipulation on a different coordinate, not a
-  measurement of `sigma` for `ΔA`. **No enlargement is designed, sized or scheduled,
-  and this remains an explicit author decision.**
+- **Redraw variant (b), enlarging the `size` tile.** **DECLINED by author decision
+  on 2026-09-10, P2-D7, `PREREGISTRATION_v2.5.md` section 1.** It is no longer open.
+  When this section was written it was still an open author decision, for the reason
+  recorded here: v2.3 section 6 gated it on `sigma`, and section 3.2 above removes
+  `sigma` from the confirmatory power curve, so the stated blocker moved rather than
+  cleared, since sizing an enlargement now requires a target tie rate that is equally
+  unmeasured. P2-D7 closes it on exactly that ground: there is no new quantity to
+  authorize an enlargement on. Arm B runs at `n = 108` with realized power reported.
 - **K1 and K2.** Settled. Neither is referenced as live.
 - **Arm A and Arm C.** Untouched.
 - **The 21-test family, `alpha`, and D74's SESOI on the mean.** Unchanged.

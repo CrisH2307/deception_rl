@@ -7,6 +7,7 @@ states, which is checkable against the frozen artifact rather than trusted.
 
 Run: python3 tests/test_armb_binding.py
 """
+import os
 import sys
 
 import numpy as np
@@ -111,6 +112,56 @@ def test_sign_power_is_sigma_free_and_matches_the_prereg():
         got = sp.power(n_eff, p1)
         assert abs(got - want) < 5e-4, f"power({n_eff}, {p1}) = {got:.4f}, prereg says {want}"
     assert sp.detectable(108) == 0.691, "detectable p1 at n=108 drifted"
+
+
+def test_p2d8_reference_table_is_the_source_not_a_recomputation():
+    """T7 must use the tabulated c5 reference. A recomputed table that disagrees
+    fails at the binding rather than silently recalibrating the comparison."""
+    dec.bind_armb_tie(dec.P2D8_C5_REFERENCE, dec.P2D8_BOOT_N,
+                      dec.P2D8_BOOT_SEED, False)
+    drifted = dict(dec.P2D8_C5_REFERENCE)
+    drifted["L1"] = drifted["L1"] - 0.05
+    for args in ((drifted, dec.P2D8_BOOT_N, dec.P2D8_BOOT_SEED, False),
+                 ({k: v for k, v in list(dec.P2D8_C5_REFERENCE.items())[:3]},
+                  dec.P2D8_BOOT_N, dec.P2D8_BOOT_SEED, False),
+                 (dec.P2D8_C5_REFERENCE, 1000, dec.P2D8_BOOT_SEED, False),
+                 (dec.P2D8_C5_REFERENCE, dec.P2D8_BOOT_N, 1, False),
+                 (dec.P2D8_C5_REFERENCE, dec.P2D8_BOOT_N,
+                  dec.P2D8_BOOT_SEED, True)):
+        try:
+            dec.bind_armb_tie(*args)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"P2-D8 accepted drift: {args[1:]}")
+
+
+def test_p2d8_reference_matches_what_the_script_emits():
+    """The preregistered table must be what `src/tie_reference.py` computed, or
+    the document and the artifact have drifted apart."""
+    import json
+    path = "results/T5_tie_reference.json"
+    if not os.path.exists(path):
+        raise AssertionError(f"{path} missing; run python3 src/tie_reference.py")
+    rows = json.load(open(path))["references"]["size_tile_confirmatory"]
+    for model, want in dec.P2D8_C5_REFERENCE.items():
+        got = rows[model]["c5_same_option_rate"]
+        assert abs(got - want) < 1e-9, (
+            f"P2-D8 tabulates {want} for {model}; the script emits {got}")
+    # the permutation rate must sit below c5 on every model, which is the
+    # measured ground on which it was rejected as the primary reference
+    for model, r in rows.items():
+        assert r["c5_minus_permutation"] > 0, (
+            f"{model}: permutation rate is not below c5, so P2-D8's stated "
+            "reason for rejecting it as the primary reference no longer holds")
+
+
+def test_p2d7_declines_the_enlargement():
+    """P2-D7 closes variant (b). n stays at P2-D4's 108 and no enlargement is
+    authorized, so the item hash is still the binding surface."""
+    assert dec.P2D7_ENLARGEMENT_AUTHORIZED is False
+    assert dec.P2D4_N_CONFIRMATORY == 108
+    dec.bind_armb("size", dec.P2D4_ITEMS_SHA256, False)
 
 
 if __name__ == "__main__":

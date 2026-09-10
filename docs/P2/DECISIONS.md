@@ -336,6 +336,101 @@ Power figures are emitted by `src/sign_power.py` into `results/T5_sign_power.jso
 
 ---
 
+## P2-D7. Redraw variant (b) is declined, not deferred
+
+**Status:** adopted. Author decision.
+**Decided:** 2026-09-10. Full reasoning in `PREREGISTRATION_v2.5.md` section 1.
+**Binds:** any Arm B analysis script, through `P2D4_ITEMS_SHA256`.
+**Constant:** `P2D7_TEXT`, `P2D7_ENLARGEMENT_AUTHORIZED`.
+
+**Decision text.**
+
+> Redraw variant (b), enlarging the `size` tile, is declined. `PREREGISTRATION_v2.3.md`
+> section 6 gated it on `sigma` for `ΔA`; `v2.4` section 3.2 removed `sigma` from the
+> confirmatory power curve but moved the gate rather than clearing it, since sizing an
+> enlargement now requires a target tie rate, which is equally unmeasured. There is no
+> new quantity to authorize an enlargement on. Arm B runs on Paper 1's frozen 1,000,
+> `size`-tile analysis set, `n = 108`, with realized power reported rather than assumed.
+
+**Why it needed deciding.** P2-D4 left variant (b) neither adopted nor rejected, and
+v2.4 changed the quantity it was waiting on. Leaving it open after its blocker moved
+would have carried an item that no measurement was going to close.
+
+**Alternatives offered and not chosen.**
+
+1. **Authorize an enlargement sized against the `sigma` analogue.** Rejected. The
+   analogue in `reports/T5_sigma_prior.md` is a prior over a different manipulation on a
+   different coordinate, its own report says so, and under P2-D6 the confirmatory test
+   does not use `sigma` at all.
+2. **Leave it open pending a tie-rate estimate.** Rejected. The tie rate is not
+   observable until F1 or F2 is scored, so this defers the decision past the point where
+   it could change the design.
+
+**Consequences.** `n = 108` against section 8.2's benchmark of 400. Under P2-D6 that
+benchmark no longer governs the confirmatory test, but the information shortfall is real
+and is not repaired by the change of statistic: at a 30% tie rate the sign test reaches
+80% power only at `p1 = 0.721`. A modest directional effect will not be detected, and
+that is reported as realized power. What it buys: no new artifact, manifest, gate or
+hash, an exact comparison to a published Paper 1 result on identical items, and no draw
+sized against an unmeasured quantity.
+
+---
+
+## P2-D8. The Arm B tie rate is calibrated against Paper 1's `c5` same-option rate
+
+**Status:** adopted.
+**Decided:** 2026-09-10, during the T5 session. Full reasoning in
+`PREREGISTRATION_v2.5.md` section 2.
+**Binds:** any Arm B confirmatory analysis script.
+**Constant:** `P2D8_TEXT`, `P2D8_C5_REFERENCE`, `P2D8_BOOT_SEED`, `P2D8_BOOT_N`.
+
+**Decision text.**
+
+> The Arm B tie rate is calibrated against Paper 1's condition-4-versus-condition-5
+> same-option rate, which is perturbation-matched to the framing contrast in slot, in
+> kind and in which factor varies. The permutation-to-permutation rate is rejected as
+> the primary reference and retained as a bound, because it varies option order rather
+> than text and sits 0.18 to 0.57 below the `c5` rate on every model. The reference
+> values are tabulated in `PREREGISTRATION_v2.5.md` section 2.2 and T7 uses them rather
+> than recomputing them. The statistic is the framing same-option rate minus the model's
+> `c5` rate, with a cluster bootstrap over items, 10,000 resamples, seed 20260910, at
+> `1 - alpha` with `alpha = 0.05/21`. The tie rate does not enter the 21-test family: it
+> forms a second family of 21 corrected separately, because rejecting H-B requires the
+> conjunction of both halves and a conjunction's error is bounded by the smaller of its
+> parts. A tie rate indistinguishable from the reference does not support H-B; the cell
+> is reported inconclusive and its sign test carries no claim.
+
+**Why it needed deciding.** v2.4 made the tie rate primary but stated no value as
+supporting H-B, so half the inference had no `alpha`, no null and no family. An exact
+interval is precision, not calibration: a tie rate of 0.9 is equally consistent with
+model insensitivity and with F1/F2 being too weak to move anything.
+
+**Alternatives offered and not chosen.**
+
+1. **Calibrate against the permutation-to-permutation rate.** Rejected on a measured
+   gap. Reordering is the stronger perturbation, so the permutation rate bounds
+   surface-driven change rather than matching it, and it would set a bar almost any tie
+   rate clears.
+2. **Merge the tie rate into the 21-test family, giving 42 tests at `0.05/42`.**
+   Rejected. It over-corrects a conjunction, buys no protection the conjunction does not
+   already give, and treats as independent two halves that partition the same items.
+3. **Report the tie rate with an interval and no reference.** Rejected. That is the
+   state v2.4 left, and it is what this decision exists to fix.
+
+**Consequences.** The instrument's resolution is a bootstrap half-width of 0.1412 to
+0.1667, so a gap below roughly 0.15 is not resolvable, stated here rather than
+discovered in T7. Checked before adoption by running it on the two references against
+each other: it separates them on all seven models at the corrected `alpha`. A third
+outcome, a tie rate materially **above** the reference, is preregistered as not
+supporting H-B either, with an entropy diagnostic on `p_{m,F}` reusing v2.0 section
+3.3's own quantity, and with F0-versus-F1 length noted as a live confound for that
+outcome specifically. Separately measured and reported: `ΔA = 0` is not the same event
+as "same option", since `A` is not injective, on 48 of 108 confirmatory items and 50 of
+1,620 option pairs; the comparison therefore runs on the same-option rate and the tie
+rate is reported beside it.
+
+---
+
 ## Standing checks
 
 | check | where |
