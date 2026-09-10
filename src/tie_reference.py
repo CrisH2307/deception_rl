@@ -143,19 +143,41 @@ def paired_indicator(ch, model, keep, vary):
     return w.index.get_level_values("item_id").values, same
 
 
-def main():
-    df, cols, A, ext = H.item_axis()
-    ids, tiles = df["item_id"].values, df["tile"].values
-    D = np.isfinite(cols["beta_c"])
-    SZ = D & (tiles == "size")
+def load_choices():
+    """P1's Format V choice rows from both frozen files, P1's own filters applied.
+
+    The ladder file has no `prompt_form` column and its prompts are the templated
+    rendering, so it is labelled rather than dropped. Exposed as a function
+    because a second caller that re-inlined this block would be a duplication bug.
+    """
     ch = pd.concat([pd.read_parquet(p) if "prompt_form" in
                     pd.read_parquet(p).columns else
                     pd.read_parquet(p).assign(prompt_form="template")
                     for p in (H.LADDER, H.T26)], ignore_index=True)
-    ch = ch[(ch["format"] == "V") & (ch["n_tied"] == 1)
-            & (ch["unscored_reason"].fillna("").astype(str) == "")]
+    return ch[(ch["format"] == "V") & (ch["n_tied"] == 1)
+              & (ch["unscored_reason"].fillna("").astype(str) == "")]
 
-    sets = {"divergence_set": D, "size_tile_confirmatory": SZ}
+
+def item_sets():
+    """`(df, cols, A, ids, {name: mask})`. The domain is `isfinite(beta_c)`.
+
+    Never `ext_i > 0`: the two are equivalent mathematically and differ on one
+    frozen item in float64 (`T7.md`, note 1). Exposed for the same reason
+    `load_choices` is.
+    """
+    df, cols, A, ext = H.item_axis()
+    ids, tiles = df["item_id"].values, df["tile"].values
+    D = np.isfinite(cols["beta_c"])
+    SZ = D & (tiles == "size")
+    return df, cols, A, ids, {"divergence_set": D, "size_tile_confirmatory": SZ}
+
+
+def main():
+    df, cols, A, ids, sets = item_sets()
+    tiles = df["tile"].values
+    D, SZ = sets["divergence_set"], sets["size_tile_confirmatory"]
+    ch = load_choices()
+
     out = {
         "purpose": "Reference for the Arm B tie rate (P2-D6), fixed before T7 runs.",
         "rule": RULE, "prompt_form": FORM,

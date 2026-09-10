@@ -164,6 +164,96 @@ def test_p2d7_declines_the_enlargement():
     dec.bind_armb("size", dec.P2D4_ITEMS_SHA256, False)
 
 
+def test_p2d10_rates_bind_and_reject_drift():
+    """P2-D10 rules the same-option rate primary. A run that resolves H-B's
+    no-movement half on the tie rate must fail at the binding.
+
+    The tie rate is not wrong, it is the wrong half: it is an upper bound on the
+    same-option rate, so calibrating it against a same-option reference biases
+    the comparison toward "no movement" by exactly the blind spot.
+    """
+    dec.bind_armb_rates(dec.P2D10_PRIMARY_RATE, dec.P2D10_SIGN_TEST_DENOMINATOR,
+                        dec.P2D9_C5_IS_ACTIVE)
+    for args in (("tie", "non_tie", True),
+                 ("tie_rate", "non_tie", True),
+                 ("delta_A_zero", "non_tie", True),
+                 ("same_option", "same_option", True),
+                 ("same_option", "all", True),
+                 ("same_option", "non_tie", False)):
+        try:
+            dec.bind_armb_rates(*args)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"P2-D10/P2-D9 accepted drift: {args}")
+
+
+def test_p2d10_nesting_is_the_reason_the_two_rates_differ():
+    """Same option implies `ΔA = 0`, so same-option rate <= tie rate.
+
+    P2-D10 rests on that inequality. Recomputed on the frozen geometry rather
+    than quoted, because if `A` were injective the decision would be empty.
+    """
+    import json
+    path = "results/T5_tie_reference.json"
+    inv = json.load(open(path))["a_invisibility"]["size_tile_confirmatory"]
+    assert inv["n_A_tied_option_pairs"] > 0, (
+        "no A-tied option pairs, so the tie rate and the same-option rate cannot "
+        "differ and P2-D10 is deciding nothing")
+    assert inv["n_items_with_an_A_tied_option_pair"] == 48
+    assert inv["n_items"] == dec.P2D4_N_CONFIRMATORY
+
+
+def test_p2d9_c5_is_active_against_a_deterministic_no_effect_rate():
+    """P2-D9 says the reference moved choices. Check it against what the script
+    emits, and against the no-effect rate the decision rests on."""
+    import json
+    path = "results/T5_c5_effect.json"
+    if not os.path.exists(path):
+        raise AssertionError(f"{path} missing; run python3 src/c5_effect.py")
+    d = json.load(open(path))
+    assert d["no_effect_same_option_rate"] == dec.P2D9_NO_EFFECT_SAME_OPTION_RATE
+    rows = d["sets"]["size_tile_confirmatory"]
+    assert len(rows) == len(dec.P2D8_C5_REFERENCE)
+    for model, want in dec.P2D8_C5_REFERENCE.items():
+        r = rows[model]
+        assert abs(r["same_option_rate"] - want) < 1e-9, (
+            f"{model}: c5_effect gives {r['same_option_rate']}, P2-D8 tabulates {want}")
+        assert r["excludes_no_effect"], (
+            f"{model}: the c5 change rate does not exclude the no-effect rate, so "
+            "P2-D9's 'active comparator' no longer holds")
+        assert r["ci_lo"] > 0.0
+    lo, hi = dec.P2D9_C5_CHANGE_RATE_RANGE
+    got = [r["change_rate"] for r in rows.values()]
+    assert abs(min(got) - lo) < 1e-9 and abs(max(got) - hi) < 1e-9
+
+
+def test_p2d11_ceiling_composes_and_binds():
+    """P2-D11's bound must be a bound: `n_eff_max` below the unrestricted n, and
+    sign power at it below sign power at n. If it did not bind, the decision
+    would be stating a ceiling that is not there."""
+    import json
+    import sign_power as sp
+    path = "results/T5_detection_ceiling.json"
+    if not os.path.exists(path):
+        raise AssertionError(f"{path} missing; run python3 src/detection_ceiling.py")
+    d = json.load(open(path))
+    assert d["limit_3_information"]["n_benchmark_v2_0_section_8_2"] == \
+        dec.P2D11_N_BENCHMARK
+    for model, r in d["per_model"].items():
+        n_eff = r["n_eff_max_at_that_boundary"]
+        assert 0 < n_eff < dec.P2D4_N_CONFIRMATORY, f"{model}: {n_eff} does not bind"
+        assert r["framing_change_rate_needed"] > r["c5_change_rate"], (
+            f"{model}: the movement half fires below the c5 change rate, so the "
+            "first limit is not binding")
+        assert sp.power(n_eff, 0.70) <= sp.power(dec.P2D4_N_CONFIRMATORY, 0.70)
+        assert sp.power(n_eff, 0.5) <= sp.ALPHA + 1e-12
+    for k, (a, b) in dec.P2D11_CEILING.items():
+        got_lo, got_hi = d["ranges"][k]
+        assert abs(got_lo - a) < 1e-9 and abs(got_hi - b) < 1e-9, (
+            f"P2-D11 states {k} of {a} to {b}; the script emits {got_lo} to {got_hi}")
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):
