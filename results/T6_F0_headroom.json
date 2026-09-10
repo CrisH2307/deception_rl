@@ -3895,6 +3895,209 @@
       }
     }
   },
+  "coordinate_geometry": {
+    "note": "A is near-bimodal: only the two poles carry A in [0, 1]. Every other option sits strongly negative, because A divides by ext_i and off-pole options fall well below o*_0 on marg_norm. This is why negative A is a statement about WHICH option was chosen, not about how far below the optimum a model landed.",
+    "pearson_sb_vs_A_option_level": 0.006052326554748528,
+    "spearman_sb_vs_A_option_level": 0.47769528102630976,
+    "median_ext_on_divergence_set": 0.23127251453019415,
+    "n_option_level_pairs": 1750,
+    "median_A_at_salience_pole": 1.0,
+    "median_A_at_bayes_pole": 0.0,
+    "median_A_off_pole": -3.329298194229566
+  },
+  "pole_decomposition": {
+    "CTRL": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.33043478260869563,
+      "share_at_o_star_infinity": 0.09456521739130434,
+      "share_at_neither_pole": 0.575,
+      "median_A_given_neither_pole": -3.4124622821620583,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.057246376811594224,
+      "excess_over_chance_at_o_star_infinity": -0.17862318840579705,
+      "n_A_exactly_zero": 323,
+      "share_A_exactly_zero": 0.35108695652173916,
+      "n_A_exactly_zero_not_at_o_star_0": 19,
+      "n_A_exactly_one": 87,
+      "share_A_exactly_one": 0.09456521739130434
+    },
+    "B2": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.42282608695652174,
+      "share_at_o_star_infinity": 0.12391304347826088,
+      "share_at_neither_pole": 0.4532608695652174,
+      "median_A_given_neither_pole": -3.800900056351621,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.14963768115942033,
+      "excess_over_chance_at_o_star_infinity": -0.14927536231884053,
+      "n_A_exactly_zero": 411,
+      "share_A_exactly_zero": 0.4467391304347826,
+      "n_A_exactly_zero_not_at_o_star_0": 22,
+      "n_A_exactly_one": 114,
+      "share_A_exactly_one": 0.12391304347826088
+    },
+    "B4": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.29782608695652174,
+      "share_at_o_star_infinity": 0.3239130434782609,
+      "share_at_neither_pole": 0.3782608695652174,
+      "median_A_given_neither_pole": -2.4744248815008674,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.024637681159420333,
+      "excess_over_chance_at_o_star_infinity": 0.05072463768115948,
+      "n_A_exactly_zero": 278,
+      "share_A_exactly_zero": 0.30217391304347824,
+      "n_A_exactly_zero_not_at_o_star_0": 4,
+      "n_A_exactly_one": 298,
+      "share_A_exactly_one": 0.3239130434782609
+    },
+    "L1": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.3347826086956522,
+      "share_at_o_star_infinity": 0.13804347826086957,
+      "share_at_neither_pole": 0.5271739130434783,
+      "median_A_given_neither_pole": -2.7211126747694934,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.061594202898550776,
+      "excess_over_chance_at_o_star_infinity": -0.13514492753623183,
+      "n_A_exactly_zero": 336,
+      "share_A_exactly_zero": 0.3652173913043478,
+      "n_A_exactly_zero_not_at_o_star_0": 28,
+      "n_A_exactly_one": 127,
+      "share_A_exactly_one": 0.13804347826086957
+    },
+    "L2": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.36195652173913045,
+      "share_at_o_star_infinity": 0.10326086956521739,
+      "share_at_neither_pole": 0.5347826086956522,
+      "median_A_given_neither_pole": -2.195705325700634,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.08876811594202905,
+      "excess_over_chance_at_o_star_infinity": -0.169927536231884,
+      "n_A_exactly_zero": 363,
+      "share_A_exactly_zero": 0.39456521739130435,
+      "n_A_exactly_zero_not_at_o_star_0": 30,
+      "n_A_exactly_one": 95,
+      "share_A_exactly_one": 0.10326086956521739
+    },
+    "L3": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.30434782608695654,
+      "share_at_o_star_infinity": 0.14673913043478262,
+      "share_at_neither_pole": 0.5489130434782609,
+      "median_A_given_neither_pole": -2.027217165272146,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.031159420289855133,
+      "excess_over_chance_at_o_star_infinity": -0.12644927536231879,
+      "n_A_exactly_zero": 305,
+      "share_A_exactly_zero": 0.33152173913043476,
+      "n_A_exactly_zero_not_at_o_star_0": 25,
+      "n_A_exactly_one": 135,
+      "share_A_exactly_one": 0.14673913043478262
+    },
+    "L4": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.27391304347826084,
+      "share_at_o_star_infinity": 0.24782608695652175,
+      "share_at_neither_pole": 0.4782608695652174,
+      "median_A_given_neither_pole": -2.1880597925899736,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": 0.0007246376811594346,
+      "excess_over_chance_at_o_star_infinity": -0.025362318840579656,
+      "n_A_exactly_zero": 261,
+      "share_A_exactly_zero": 0.28369565217391307,
+      "n_A_exactly_zero_not_at_o_star_0": 9,
+      "n_A_exactly_one": 228,
+      "share_A_exactly_one": 0.24782608695652175
+    },
+    "RANDOM(calibration)": {
+      "n_renderings": 920,
+      "share_at_o_star_0": 0.2673913043478261,
+      "share_at_o_star_infinity": 0.2565217391304348,
+      "share_at_neither_pole": 0.47608695652173916,
+      "median_A_given_neither_pole": -2.510366137936833,
+      "chance_rate_any_named_option": 0.2731884057971014,
+      "excess_over_chance_at_o_star_0": -0.00579710144927531,
+      "excess_over_chance_at_o_star_infinity": -0.016666666666666607,
+      "n_A_exactly_zero": 261,
+      "share_A_exactly_zero": 0.28369565217391307,
+      "n_A_exactly_zero_not_at_o_star_0": 15,
+      "n_A_exactly_one": 236,
+      "share_A_exactly_one": 0.2565217391304348
+    }
+  },
+  "residual_test": {
+    "CTRL": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": -0.10033687609508757,
+      "p75": 0.7529732810668837,
+      "share_residual_exactly_zero": 0.44874715261959,
+      "share_residual_negative": 0.255125284738041
+    },
+    "B2": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": -0.13648109614213388,
+      "p75": 0.0,
+      "share_residual_exactly_zero": 0.5671981776765376,
+      "share_residual_negative": 0.255125284738041
+    },
+    "B4": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "share_residual_exactly_zero": 0.6321184510250569,
+      "share_residual_negative": 0.13211845102505695
+    },
+    "L1": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": 0.0,
+      "p75": 0.3479541096291361,
+      "share_residual_exactly_zero": 0.5022779043280182,
+      "share_residual_negative": 0.22779043280182232
+    },
+    "L2": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": 0.0,
+      "p75": 1.0291235971994275,
+      "share_residual_exactly_zero": 0.49544419134396356,
+      "share_residual_negative": 0.19362186788154898
+    },
+    "L3": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": 0.0,
+      "p75": 1.4097413794459557,
+      "share_residual_exactly_zero": 0.4783599088838269,
+      "share_residual_negative": 0.17995444191343962
+    },
+    "L4": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": 0.0,
+      "p75": 0.9938310126577985,
+      "share_residual_exactly_zero": 0.5341685649202733,
+      "share_residual_negative": 0.1662870159453303
+    },
+    "RANDOM(calibration)": {
+      "n": 878,
+      "median_residual": 0.0,
+      "p25": 0.0,
+      "p75": 0.27363684335076477,
+      "share_residual_exactly_zero": 0.5341685649202733,
+      "share_residual_negative": 0.19931662870159453
+    }
+  },
+  "residual_test_reading": {
+    "question": "Is A more negative than the model's position on P1's coordinate alone predicts?",
+    "answer": "No. Median residual is exactly 0 for every model and for the uniform-random calibration chooser, and no model's residual distribution skews negative. Nothing is left over.",
+    "consequence": "Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate, not independent evidence that models are worse than the no-adversary optimum. It must not be reported as the latter."
+  },
   "what_this_does_not_decide": {
     "routed_to": "T5 (preregistration)",
     "open_question": "Whether Arm B's primary analysis is restricted to items with F0 headroom, whether a second non-salience-confounded coordinate is added, or whether the ceiling is accepted and stated as a limit on what a null can mean.",

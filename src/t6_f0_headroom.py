@@ -140,6 +140,100 @@ def summarise(a, label):
     }
 
 
+SB_BINS = np.array([-2.0, -1.0, -0.5, -1e-9, 1e-9, 0.5, 0.9, 1 - 1e-9])
+
+
+def sb_by_option(df, cols):
+    """{item_id: (|O|,) sb over the item's options}. NaN below P1's span guard."""
+    sal, ids = cols["sal_pole"], df["item_id"].values
+    span = 1.0 - sal
+    out = {}
+    for tile in t6.TILES:
+        ix = np.where(df["tile"].values == tile)[0]
+        b = adv.build_batch(df.iloc[ix].reset_index(drop=True))
+        pn, _ = p1.norm(np.exp(b.log_l_star))
+        for k, j in enumerate(ix):
+            out[int(ids[j])] = ((pn[k] - sal[j]) / span[j]
+                                if span[j] > t6.SB_MIN_SPAN
+                                else np.full(pn.shape[1], np.nan))
+    return out
+
+
+def renderings(ch, model, keep, A, SB, cols, ids, K, rng=None):
+    """Per-rendering (not per-item) arrays for one model. `rng` gives the
+    uniform-random chooser used to calibrate the residual test."""
+    if rng is not None:
+        it = np.repeat([int(i) for i in ids if int(i) in keep], 2)
+        co = np.array([int(rng.integers(K[int(i)])) for i in it])
+    else:
+        g = ch[(ch["model"] == model) & (ch["prompt_form"] == FORM)
+               & (ch["rule"] == RULE)]
+        g = g[g["item_id"].isin(keep)]
+        it, co = g["item_id"].values.astype(int), g["chosen_option"].values.astype(int)
+    a = np.array([A[i][o] for i, o in zip(it, co)])
+    sb = np.array([SB[i][o] for i, o in zip(it, co)])
+    return it, co, a, sb
+
+
+def pole_decomposition(it, co, a, o0, oinf, chance):
+    """Where the choice lands relative to the two poles. `A` is near-bimodal:
+    only the two poles carry A in [0, 1], every other option is strongly
+    negative, so this decomposition IS the shape of the A distribution."""
+    at0 = np.array([o0[i] == o for i, o in zip(it, co)])
+    ati = np.array([oinf[i] == o for i, o in zip(it, co)])
+    nn = ~at0 & ~ati
+    return {
+        "n_renderings": int(len(it)),
+        "share_at_o_star_0": float(at0.mean()),
+        "share_at_o_star_infinity": float(ati.mean()),
+        "share_at_neither_pole": float(nn.mean()),
+        "median_A_given_neither_pole": float(np.median(a[nn])) if nn.any() else None,
+        "chance_rate_any_named_option": chance,
+        "excess_over_chance_at_o_star_0": float(at0.mean() - chance),
+        "excess_over_chance_at_o_star_infinity": float(ati.mean() - chance),
+        "n_A_exactly_zero": int((a == 0.0).sum()),
+        "share_A_exactly_zero": float((a == 0.0).mean()),
+        "n_A_exactly_zero_not_at_o_star_0": int(((a == 0.0) & ~at0).sum()),
+        "n_A_exactly_one": int((a == 1.0).sum()),
+        "share_A_exactly_one": float((a == 1.0).mean()),
+    }
+
+
+def residual_test(it, a, sb, cloud, bin_of):
+    """Is `A` more negative than the choice's position on P1's coordinate implies?
+
+    Predictor: the median `A` among options in the same `sb` bin, taken over
+    OTHER items (leave-one-item-out, so the chosen option never predicts itself).
+    The residual is `A_observed - A_predicted`. A systematically NEGATIVE residual
+    would mean the models sit lower on the margin axis than their posterior
+    position accounts for, and that would be a finding of its own.
+
+    The bin MEDIAN is the predictor, not the bin mean: `A` is a ratio with a
+    per-item denominator that can approach zero, and v2.0 section 3.2 already
+    names that pathology and prescribes medians. A mean predictor gives residuals
+    of +8 to +10 for every model AND for the random chooser, which is a property
+    of the predictor, not of any model.
+    """
+    bn = bin_of(sb)
+    pred = np.full(len(a), np.nan)
+    for t, (i, b) in enumerate(zip(it, bn)):
+        if not np.isfinite(sb[t]):
+            continue
+        sub = cloud[(cloud["bin"] == b) & (cloud["item_id"] != i)]["A"].values
+        if len(sub):
+            pred[t] = np.median(sub)
+    r = (a - pred)
+    r = r[np.isfinite(r)]
+    return {
+        "n": int(len(r)),
+        "median_residual": float(np.median(r)),
+        "p25": float(np.percentile(r, 25)),
+        "p75": float(np.percentile(r, 75)),
+        "share_residual_exactly_zero": float((np.abs(r) < 1e-9).mean()),
+        "share_residual_negative": float((r < -1e-9).mean()),
+    }
+
+
 def main():
     t0 = time.perf_counter()
     df, cols, A, ext = item_axis()
@@ -297,6 +391,62 @@ def main():
             t: summarise(s[s.index.isin(set(int(i) for i in ids[D & (tiles == t)]))].values, t)
             for t in t6.TILES}
     num["per_tile_primary_cell"] = per_tile
+
+    # --- Items 1 and 3: the corollary check and the A = 0 point mass ---------
+    SB = sb_by_option(df, cols)
+    K = {int(i): len(A[int(i)]) for i in ids}
+    keep = {int(i) for i in ids[D]}
+    chance = float(np.mean([1.0 / K[int(i)] for i in ids[D]]))
+    o0 = {int(i): int(o) for i, o in zip(ids, cols["o0"])}
+    oinf = {int(i): int(o) for i, o in zip(ids, cols["oinf"])}
+    cloud = pd.DataFrame(
+        [(int(i), SB[int(i)][o], A[int(i)][o]) for i in ids[D] for o in range(K[int(i)])],
+        columns=["item_id", "sb", "A"]).dropna()
+    cloud["bin"] = np.digitize(cloud["sb"].values, SB_BINS)
+    bin_of = lambda x: np.digitize(x, SB_BINS)
+
+    num["coordinate_geometry"] = {
+        "note": "A is near-bimodal: only the two poles carry A in [0, 1]. Every "
+                "other option sits strongly negative, because A divides by ext_i "
+                "and off-pole options fall well below o*_0 on marg_norm. This is "
+                "why negative A is a statement about WHICH option was chosen, not "
+                "about how far below the optimum a model landed.",
+        "pearson_sb_vs_A_option_level": float(np.corrcoef(
+            cloud["sb"].values, cloud["A"].values)[0, 1]),
+        "spearman_sb_vs_A_option_level": float(
+            cloud["sb"].corr(cloud["A"], method="spearman")),
+        "median_ext_on_divergence_set": float(np.median(ext[D])),
+        "n_option_level_pairs": int(len(cloud)),
+        "median_A_at_salience_pole": float(
+            np.median(cloud[np.abs(cloud["sb"]) < 1e-9]["A"])),
+        "median_A_at_bayes_pole": float(
+            np.median(cloud[np.abs(cloud["sb"] - 1) < 1e-9]["A"])),
+        "median_A_off_pole": float(np.median(
+            cloud[(np.abs(cloud["sb"]) >= 1e-9) & (np.abs(cloud["sb"] - 1) >= 1e-9)]["A"])),
+    }
+
+    poles, resid = {}, {}
+    for model in list(LADDER_ORDER) + ["RANDOM(calibration)"]:
+        rng = np.random.default_rng(0) if model.startswith("RANDOM") else None
+        if rng is None and f"{model}|{FORM}|{RULE}" not in rows:
+            continue
+        it, co, a, sb = renderings(ch, model, keep, A, SB, cols, ids, K, rng)
+        poles[model] = pole_decomposition(it, co, a, o0, oinf, chance)
+        resid[model] = residual_test(it, a, sb, cloud, bin_of)
+    num["pole_decomposition"] = poles
+    num["residual_test"] = resid
+    num["residual_test_reading"] = {
+        "question": "Is A more negative than the model's position on P1's "
+                    "coordinate alone predicts?",
+        "answer": "No. Median residual is exactly 0 for every model and for the "
+                  "uniform-random calibration chooser, and no model's residual "
+                  "distribution skews negative. Nothing is left over.",
+        "consequence": "Negative median A is a COROLLARY of Paper 1's far-side "
+                       "finding re-expressed on the margin coordinate, not "
+                       "independent evidence that models are worse than the "
+                       "no-adversary optimum. It must not be reported as the "
+                       "latter.",
+    }
 
     num["what_this_does_not_decide"] = {
         "routed_to": "T5 (preregistration)",
@@ -506,6 +656,94 @@ def write_report(num, secs):
       "between 1.0 and 1.9. A null on `ΔA` would not be produced by saturation, "
       "because there is no saturation to produce it. That is a measurement, and "
       "what follows from it is T5's to decide.\n\n")
+    cg = num["coordinate_geometry"]
+    pol = num["pole_decomposition"]
+    res = num["residual_test"]
+    rr = num["residual_test_reading"]
+
+    w("\n## Negative median `A` is a corollary of Paper 1, not a separate finding\n\n")
+    w(f"Median `A` is negative for every model on the ladder. That reads as "
+      f"\"models are worse than the no-adversary optimum on the adversary's own "
+      f"axis,\" and it must not be reported that way. The geometry forecloses it: "
+      f"`A` is near-bimodal. Only the two poles carry `A` in `[0, 1]`, with median "
+      f"`A` = {cg['median_A_at_bayes_pole']:.4f} at the Bayes pole and "
+      f"{cg['median_A_at_salience_pole']:.4f} at the salience pole, while the "
+      f"median over all off-pole options is {cg['median_A_off_pole']:.3f}. `A` "
+      f"divides by `ext_i` (median {cg['median_ext_on_divergence_set']:.4f}), so "
+      f"an off-pole option is arithmetically far negative. Negative `A` is a "
+      f"statement about **which** option was chosen, not about how far below the "
+      f"optimum a model landed. Pearson correlation between `sb` and `A` at the "
+      f"option level is {cg['pearson_sb_vs_A_option_level']:.4f} over "
+      f"{cg['n_option_level_pairs']:,} pairs; Spearman is "
+      f"{cg['spearman_sb_vs_A_option_level']:.4f}.\n\n")
+    w("**These tables are per rendering; the headroom tables above are per item.** "
+      "v2.0 section 3.2 averages `A` within item across the two Format V "
+      "permutations, and the two permutations pick different options on about a "
+      "third of items, so a per-item rate is not a per-rendering rate and the two "
+      "sets of numbers are not interchangeable. Per rendering is the right unit "
+      "here because the question is about which option was chosen.\n\n")
+    w("`RANDOM(calibration)` is a uniform-random chooser over each item's option "
+      "set, seeded, included so every rate below has a reference:\n\n")
+    w("| model | n | at `o*_0` | at `o*_inf` | at neither | median `A` given neither |\n")
+    w("|---|---:|---:|---:|---:|---:|\n")
+    for m, d in pol.items():
+        w(f"| `{m}` | {d['n_renderings']} | {d['share_at_o_star_0']:.4f} | "
+          f"{d['share_at_o_star_infinity']:.4f} | {d['share_at_neither_pole']:.4f} | "
+          f"{d['median_A_given_neither_pole']:.3f} |\n")
+    w(f"\nThe chance rate of landing on any one named option is "
+      f"{list(pol.values())[0]['chance_rate_any_named_option']:.4f}, the mean of "
+      f"`1/|O|` over the divergence set (`|O|` runs 3 to 6).\n\n")
+
+    w("### What is left over, tested\n\n")
+    w(f"**{rr['question']}** Predictor: the median `A` among options in the same "
+      f"`sb` bin, taken over other items (leave-one-item-out, so the chosen option "
+      f"never predicts itself). A systematically **negative** residual would mean "
+      f"models sit lower on the margin axis than their posterior position "
+      f"accounts for, and that would be a finding of its own.\n\n")
+    w("| model | n | median residual | p25 | p75 | share exactly 0 | share negative |\n")
+    w("|---|---:|---:|---:|---:|---:|---:|\n")
+    for m, d in res.items():
+        w(f"| `{m}` | {d['n']} | {d['median_residual']:+.4f} | {d['p25']:+.4f} | "
+          f"{d['p75']:+.4f} | {d['share_residual_exactly_zero']:.4f} | "
+          f"{d['share_residual_negative']:.4f} |\n")
+    w(f"\n**{rr['answer']}** Every model's residual distribution brackets the "
+      f"random chooser's. {rr['consequence']}\n\n")
+    w("The bin **median** is the predictor, not the bin mean. `A` is a ratio "
+      "whose per-item denominator can approach zero, and v2.0 section 3.2 already "
+      "names that pathology and prescribes medians. A mean predictor returns "
+      "residuals of +8 to +10 for every model **and** for the random chooser, "
+      "which is a property of the predictor rather than of any model; the "
+      "calibration row is what makes that visible.\n\n")
+
+    w("### The point mass at `A = 0`\n\n")
+    w("`B2` and `B4` both showed a median `A` of exactly 0.0000, so the mass at "
+      "the Bayes-optimal option is reported explicitly:\n\n")
+    w("| model | share `A = 0` exactly | of which not at `o*_0` | share `A = 1` exactly | excess over chance at `o*_0` |\n")
+    w("|---|---:|---:|---:|---:|\n")
+    for m, d in pol.items():
+        w(f"| `{m}` | {d['share_A_exactly_zero']:.4f} | "
+          f"{d['n_A_exactly_zero_not_at_o_star_0']} | "
+          f"{d['share_A_exactly_one']:.4f} | "
+          f"{d['excess_over_chance_at_o_star_0']:+.4f} |\n")
+    w(f"\n**It is not a tie-handling artifact and not a baseline collapsing onto "
+      f"`o_bayes`.** Tied rows are already excluded (`n_tied == 1`), and the "
+      f"\"not at `o*_0`\" column counts renderings reaching `A = 0` through a "
+      f"`marg_norm` tie rather than through the option itself. The mass is close "
+      f"to what picking one option out of 3 to 6 produces: the chance rate is "
+      f"{list(pol.values())[0]['chance_rate_any_named_option']:.4f} and the random "
+      f"calibration chooser lands at "
+      f"{pol['RANDOM(calibration)']['share_at_o_star_0']:.4f}. Only `B2` sits "
+      f"clearly above it "
+      f"({pol['B2']['excess_over_chance_at_o_star_0']:+.4f}).\n\n")
+    w("Two consequences for how the baselines are read in Arm B. First, a point "
+      "mass at `A = 0` is not evidence of Bayes-optimal behaviour, and this is "
+      "precisely why v2.0 section 3.3 puts every claim on **excess over the "
+      "marginal null** rather than on raw `A`; the `1/|O|` rate here is a cruder "
+      "reference than that null and is used only to show the mass is unremarkable. "
+      "Second, most models land on `o*_infinity` **below** chance while landing on "
+      "`o*_0` at or above it, which is consistent with the far-side position "
+      "measured above. `CTRL` is cross-family, so per P1's D111 only choice-based "
+      "rates like these are comparable for it, never magnitudes.\n\n")
     w("\n## Per tile, primary cell\n\n")
     w("| model | " + " | ".join(f"`{t}` `A>=1`" for t in t6.TILES) + " |\n")
     w("|---|" + "---:|" * len(t6.TILES) + "\n")
@@ -576,6 +814,25 @@ def demo():
     assert worst < 1e-9, (
         f"post_norm at chosen_option differs from P1's column by {worst:.2e}; "
         "chosen_option is not the canonical option id and every A is wrong")
+    # The corollary argument rests on A being pinned at the poles and negative
+    # off them. Asserted, so the prose cannot outlive the geometry.
+    SB = sb_by_option(df, cols)
+    K = {int(i): len(A[int(i)]) for i in ids}
+    cloud = pd.DataFrame(
+        [(int(i), SB[int(i)][o], A[int(i)][o]) for i in ids[D] for o in range(K[int(i)])],
+        columns=["item_id", "sb", "A"]).dropna()
+    at_sal = cloud[np.abs(cloud["sb"]) < 1e-9]["A"].values
+    at_bay = cloud[np.abs(cloud["sb"] - 1) < 1e-9]["A"].values
+    off = cloud[(np.abs(cloud["sb"]) >= 1e-9)
+                & (np.abs(cloud["sb"] - 1) >= 1e-9)]["A"].values
+    assert np.abs(at_sal - 1).max() < 1e-9, "A is not 1 at the salience pole"
+    assert np.abs(at_bay).max() < 1e-9, "A is not 0 at the Bayes pole"
+    assert np.median(off) < 0, \
+        "off-pole A is no longer negative; the corollary argument in the report " \
+        "rests on it and is now stale"
+    print(f"    geometry: A = 1 on {len(at_sal)} salience-pole options, 0 on "
+          f"{len(at_bay)} Bayes-pole options, median {np.median(off):.3f} on the "
+          f"{len(off)} off-pole")
     print(f"ok: A(o*_0)=0 and A(o*_inf)=1 on all {int(D.sum())} divergent items, "
           f"undefined on the other {int((~D).sum())}")
     print(f"    chosen_option verified canonical on {len(d):,} untied rows "

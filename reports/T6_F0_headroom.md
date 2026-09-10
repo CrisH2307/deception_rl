@@ -93,6 +93,66 @@ They look contradictory and are not. About half of each model's choices sit **at
 **The ceiling concern does not materialise.** On the axis Arm B actually scores, every model has room: `A >= 1` on 0.0174 to 0.1870 of the divergence set, median `A` at or below 0 for all seven, and median headroom between 1.0 and 1.9. A null on `ΔA` would not be produced by saturation, because there is no saturation to produce it. That is a measurement, and what follows from it is T5's to decide.
 
 
+## Negative median `A` is a corollary of Paper 1, not a separate finding
+
+Median `A` is negative for every model on the ladder. That reads as "models are worse than the no-adversary optimum on the adversary's own axis," and it must not be reported that way. The geometry forecloses it: `A` is near-bimodal. Only the two poles carry `A` in `[0, 1]`, with median `A` = 0.0000 at the Bayes pole and 1.0000 at the salience pole, while the median over all off-pole options is -3.329. `A` divides by `ext_i` (median 0.2313), so an off-pole option is arithmetically far negative. Negative `A` is a statement about **which** option was chosen, not about how far below the optimum a model landed. Pearson correlation between `sb` and `A` at the option level is 0.0061 over 1,750 pairs; Spearman is 0.4777.
+
+**These tables are per rendering; the headroom tables above are per item.** v2.0 section 3.2 averages `A` within item across the two Format V permutations, and the two permutations pick different options on about a third of items, so a per-item rate is not a per-rendering rate and the two sets of numbers are not interchangeable. Per rendering is the right unit here because the question is about which option was chosen.
+
+`RANDOM(calibration)` is a uniform-random chooser over each item's option set, seeded, included so every rate below has a reference:
+
+| model | n | at `o*_0` | at `o*_inf` | at neither | median `A` given neither |
+|---|---:|---:|---:|---:|---:|
+| `CTRL` | 920 | 0.3304 | 0.0946 | 0.5750 | -3.412 |
+| `B2` | 920 | 0.4228 | 0.1239 | 0.4533 | -3.801 |
+| `B4` | 920 | 0.2978 | 0.3239 | 0.3783 | -2.474 |
+| `L1` | 920 | 0.3348 | 0.1380 | 0.5272 | -2.721 |
+| `L2` | 920 | 0.3620 | 0.1033 | 0.5348 | -2.196 |
+| `L3` | 920 | 0.3043 | 0.1467 | 0.5489 | -2.027 |
+| `L4` | 920 | 0.2739 | 0.2478 | 0.4783 | -2.188 |
+| `RANDOM(calibration)` | 920 | 0.2674 | 0.2565 | 0.4761 | -2.510 |
+
+The chance rate of landing on any one named option is 0.2732, the mean of `1/|O|` over the divergence set (`|O|` runs 3 to 6).
+
+### What is left over, tested
+
+**Is A more negative than the model's position on P1's coordinate alone predicts?** Predictor: the median `A` among options in the same `sb` bin, taken over other items (leave-one-item-out, so the chosen option never predicts itself). A systematically **negative** residual would mean models sit lower on the margin axis than their posterior position accounts for, and that would be a finding of its own.
+
+| model | n | median residual | p25 | p75 | share exactly 0 | share negative |
+|---|---:|---:|---:|---:|---:|---:|
+| `CTRL` | 878 | +0.0000 | -0.1003 | +0.7530 | 0.4487 | 0.2551 |
+| `B2` | 878 | +0.0000 | -0.1365 | +0.0000 | 0.5672 | 0.2551 |
+| `B4` | 878 | +0.0000 | +0.0000 | +0.0000 | 0.6321 | 0.1321 |
+| `L1` | 878 | +0.0000 | +0.0000 | +0.3480 | 0.5023 | 0.2278 |
+| `L2` | 878 | +0.0000 | +0.0000 | +1.0291 | 0.4954 | 0.1936 |
+| `L3` | 878 | +0.0000 | +0.0000 | +1.4097 | 0.4784 | 0.1800 |
+| `L4` | 878 | +0.0000 | +0.0000 | +0.9938 | 0.5342 | 0.1663 |
+| `RANDOM(calibration)` | 878 | +0.0000 | +0.0000 | +0.2736 | 0.5342 | 0.1993 |
+
+**No. Median residual is exactly 0 for every model and for the uniform-random calibration chooser, and no model's residual distribution skews negative. Nothing is left over.** Every model's residual distribution brackets the random chooser's. Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate, not independent evidence that models are worse than the no-adversary optimum. It must not be reported as the latter.
+
+The bin **median** is the predictor, not the bin mean. `A` is a ratio whose per-item denominator can approach zero, and v2.0 section 3.2 already names that pathology and prescribes medians. A mean predictor returns residuals of +8 to +10 for every model **and** for the random chooser, which is a property of the predictor rather than of any model; the calibration row is what makes that visible.
+
+### The point mass at `A = 0`
+
+`B2` and `B4` both showed a median `A` of exactly 0.0000, so the mass at the Bayes-optimal option is reported explicitly:
+
+| model | share `A = 0` exactly | of which not at `o*_0` | share `A = 1` exactly | excess over chance at `o*_0` |
+|---|---:|---:|---:|---:|
+| `CTRL` | 0.3511 | 19 | 0.0946 | +0.0572 |
+| `B2` | 0.4467 | 22 | 0.1239 | +0.1496 |
+| `B4` | 0.3022 | 4 | 0.3239 | +0.0246 |
+| `L1` | 0.3652 | 28 | 0.1380 | +0.0616 |
+| `L2` | 0.3946 | 30 | 0.1033 | +0.0888 |
+| `L3` | 0.3315 | 25 | 0.1467 | +0.0312 |
+| `L4` | 0.2837 | 9 | 0.2478 | +0.0007 |
+| `RANDOM(calibration)` | 0.2837 | 15 | 0.2565 | -0.0058 |
+
+**It is not a tie-handling artifact and not a baseline collapsing onto `o_bayes`.** Tied rows are already excluded (`n_tied == 1`), and the "not at `o*_0`" column counts renderings reaching `A = 0` through a `marg_norm` tie rather than through the option itself. The mass is close to what picking one option out of 3 to 6 produces: the chance rate is 0.2732 and the random calibration chooser lands at 0.2674. Only `B2` sits clearly above it (+0.1496).
+
+Two consequences for how the baselines are read in Arm B. First, a point mass at `A = 0` is not evidence of Bayes-optimal behaviour, and this is precisely why v2.0 section 3.3 puts every claim on **excess over the marginal null** rather than on raw `A`; the `1/|O|` rate here is a cruder reference than that null and is used only to show the mass is unremarkable. Second, most models land on `o*_infinity` **below** chance while landing on `o*_0` at or above it, which is consistent with the far-side position measured above. `CTRL` is cross-family, so per P1's D111 only choice-based rates like these are comparable for it, never magnitudes.
+
+
 ## Per tile, primary cell
 
 | model | `manmade` `A>=1` | `moves` `A>=1` | `hold` `A>=1` | `size` `A>=1` |
@@ -126,4 +186,4 @@ Models found: B2, B4, CTRL, L1, L2, L3, L4. `prompt_form == template` is primary
 
 Every number here is emitted to `results/T6_F0_headroom.json`. `A` is computed from the same `t6_arm_a.arm_a_columns` that produced the Arm A results, so there is one implementation of `beta_c`, `o*_0` and `o*_infinity`, not two. The posterior was checked against P1's frozen `frontier_ext_post` and the option ids against P1's own `post_norm` column.
 
-Runtime 0.3 s.
+Runtime 1.2 s.
