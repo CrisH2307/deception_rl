@@ -1003,6 +1003,43 @@ def write_report(rec, num, frame, figs, secs):
       "rates, and the share of items above the grid endpoint. It is a labelling "
       f"rule, not a recomputation, and it is emitted to `{NUMBERS}` under "
       "`rate_claim_rule` so a downstream task does not have to re-derive it.\n\n")
+    of = num["step3"]["conventions"]["o_star_infinity_is_o_fit"]
+    sp = num["step3"]["spike_at_one"]
+    w("---\n\n## Primary findings\n\n")
+    w(f"1. **The kill gate passes.** `|D(infinity)| / N` = "
+      f"{rec['pooled_existence_rate']:.4f} on the 200,000-candidate pool against a "
+      f"threshold of {K1_THRESHOLD:.2f}. The adversary effect exists in this "
+      f"signal space and the reporting grid reaches it. Arms B and C may run.\n\n")
+    w(f"2. **Robustness against an informed adversary requires abandoning Bayesian "
+      f"discrimination entirely and reverting to the salient signal.** "
+      f"`o*_infinity` is P1's `o_fit` on **{of['n']} of {of['n_total']}** divergent "
+      f"items in the frozen set ({of['share']:.4f}) and on "
+      f"{num['step3']['pool_robustness_check']['conventions']['o_star_infinity_is_o_fit']['share']:.4f} "
+      f"of the pool's {num['step3']['pool_robustness_check']['n_divergence_set_pool']:,}. "
+      f"Measured on P1's own frontier coordinate the price of robustness is "
+      f"exactly the whole salience-to-Bayes interval, on every item where that "
+      f"coordinate is defined. The Scientist who buys margin walks from the Bayes "
+      f"pole to the salience pole and stops there.\n\n")
+    w(f"   The {sp['n']}-item spike at a normalised price of exactly 1 is the "
+      f"extreme tail of the same phenomenon: there the robust option is the item's "
+      f"**lowest**-posterior option, {sp['per_tile'].get('manmade', 0)} of "
+      f"{sp['n']} on `manmade`, at mean `fit_cost` {sp['mean_fit_cost']:.4f} "
+      f"against {sp['mean_fit_cost_rest']:.4f} on the rest of the divergence "
+      f"set.\n\n")
+    w("   **The relation to Paper 1, stated narrowly.** Paper 1's finding is about "
+      "where language models sit relative to the salience-Bayes interval. This is "
+      "about where the normative optimum moves inside it, on the same coordinate, "
+      "with no model involved. The two are adjacent, not the same claim, and "
+      "nothing in this report measures a model.\n\n")
+    w(f"3. **The price of robustness is {num['step3']['conventions']['p1_post_norm']['mean_of_per_item_ratios']:.4f} "
+      f"of the item's own posterior range** on P1's `post_norm`, the primary DV "
+      f"(Step 3).\n\n")
+    w("4. **Existence and magnitude come apart across tiles.** The per-tile "
+      f"existence rate spans a factor of "
+      f"{s4['existence_vs_magnitude']['existence_rate_max_over_min']:.1f}; the "
+      f"median budget needed once an item diverges spans "
+      f"{s4['existence_vs_magnitude']['median_beta_c_max_over_min_pool']:.2f} "
+      "(Step 4, exploratory).\n\n")
     w("---\n\n## Step 1. K1, the kill gate\n\n")
     w("**Status: reproduction check.** K1's statistic was computed by T1 as a "
       "byproduct and disclosed in v2.1 section 1.2 before T6 ran. This run "

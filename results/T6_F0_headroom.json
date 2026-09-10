@@ -1,0 +1,3904 @@
+{
+  "task": "T6 follow-up, F0 headroom on the A axis",
+  "status": "MEASUREMENT ONLY. No remedy designed, no exclusion rule proposed, no preregistered quantity changed. Routed to T5.",
+  "spec_version": "v3.1",
+  "condition": "cond4",
+  "condition_note": "P1's cond4 is the `base` rendering, the slot P2-D2 puts the framing block in. F0 is byte-identical to P1's prompt where content is shared (v2.0 section 2), so this is a read of frozen P1 output and introduces no new scoring.",
+  "primary_rule": "pmi",
+  "primary_prompt_form": "template",
+  "item_base": "divergence set of P1's frozen 1,000",
+  "n_divergence_set": 460,
+  "n_o_star_inf_equals_o_fit": 452,
+  "n_o_star_inf_differs_from_o_fit": 8,
+  "exception_item_ids": [
+    158759,
+    178393,
+    166955,
+    86698,
+    156112,
+    104227,
+    121778,
+    11489
+  ],
+  "exception_tiles": {
+    "manmade": 3,
+    "moves": 5,
+    "hold": 0,
+    "size": 0
+  },
+  "ext_domain_mismatch": {
+    "n_robust_with_ext_above_zero": 1,
+    "max_ext_among_robust": 2.220446049250313e-16,
+    "min_ext_on_divergence_set": 0.00020929758342247418,
+    "item_ids": [
+      24130
+    ],
+    "why_it_matters": "v2.0 section 3.2 states `ext_i > 0` if and only if `beta_c(i) < infinity`, and defines A's domain by that equivalence. It holds mathematically. On this frozen set the two float tests disagree on the item(s) above, where a rival beats o*_0's margin by less than P1's D51 tie-break tolerance so the tie-break keeps o*_0 and beta_c is infinite while `1 - marg_norm(o*_0)` is a positive 2e-16. An implementation that takes A's domain from the float sign of ext_i divides by that and hands Arm B a finite A of order 1e16 for an adversary-robust item. This script takes the domain from beta_c. FLAGGED FOR T7: same hazard, same item, and it is not caught by the section 6 ext floor, which is applied after the domain is fixed."
+  },
+  "ext_floor": 0.02,
+  "n_below_ext_floor": 14,
+  "n_below_ext_floor_by_tile": {
+    "manmade": 2,
+    "moves": 2,
+    "hold": 3,
+    "size": 7
+  },
+  "attrition": [
+    {
+      "source": "results_2 ladder",
+      "rows": 48000,
+      "after_cond4": 24000,
+      "after_format_V": 24000,
+      "after_n_tied_1": 23991,
+      "after_unscored": 23991,
+      "dropped_tied": 9,
+      "dropped_unscored": 0
+    },
+    {
+      "source": "results_3 t26",
+      "rows": 60000,
+      "after_cond4": 30000,
+      "after_format_V": 30000,
+      "after_n_tied_1": 29998,
+      "after_unscored": 29998,
+      "dropped_tied": 2,
+      "dropped_unscored": 0
+    }
+  ],
+  "models_found": [
+    "B2",
+    "B4",
+    "CTRL",
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "salience_reference": {
+    "definition": "A_i(o_fit), where a salience-driven chooser lands",
+    "n": 460,
+    "n_exactly_1": 452,
+    "share_exactly_1": 0.9826086956521739,
+    "median": 1.0,
+    "min": 0.0,
+    "max": 1.0,
+    "on_the_exceptions": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "note": "A_i(o*_infinity) = 1 by construction, so A_i(o_fit) = 1 on every item where the two coincide. The exceptions are where the axis separates salience from the adversary target at all."
+  },
+  "A_upper_bound": {
+    "max_A_over_all_options_on_divergence_set": 1.0,
+    "note": "A <= 1 by construction (v2.0 section 3.2). Any `A > 1` count below is structurally zero and is not evidence about models. The 'far side of salience' question therefore cannot be asked on the A axis and is asked on P1's own coordinate instead; see `salience_pole_on_p1_coordinate`."
+  },
+  "salience_pole_on_p1_coordinate": {
+    "definition": "sb_i = (post_norm_i - post_norm_i(o_fit)) / (1 - post_norm_i(o_fit)); 0 at the salience pole, 1 at the Bayes pole, negative on the far side of salience",
+    "guard": 0.02,
+    "n_defined_on_divergence_set": 439,
+    "n_removed_by_guard": 21
+  },
+  "cells": {
+    "B2|raw|mean": {
+      "model": "B2",
+      "prompt_form": "raw",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 14,
+          "share_at_or_above_1": 0.030434782608695653,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.725552980850728,
+          "mean_A": -4.181463984637436,
+          "median_headroom": 1.7255529808507277,
+          "mean_headroom": 5.181463984637436,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.7255529808507277,
+            "75": 3.57144260830438,
+            "95": 14.528810785868064
+          },
+          "n_headroom_at_or_below_0": 14
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 4,
+          "share_at_or_above_1": 0.037037037037037035,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.3036077470163656,
+          "mean_A": -8.161302648015528,
+          "median_headroom": 3.3036077470163656,
+          "mean_headroom": 9.161302648015528,
+          "headroom_percentiles": {
+            "5": 0.5444166059745789,
+            "25": 1.9314218788912079,
+            "50": 3.3036077470163656,
+            "75": 6.987404700097503,
+            "95": 24.395090190401657
+          },
+          "n_headroom_at_or_below_0": 4
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 14,
+          "share_at_or_above_1": 0.030973451327433628,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.7338020355063528,
+          "mean_A": -4.211880677333166,
+          "median_headroom": 1.7338020355063528,
+          "mean_headroom": 5.211880677333165,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.7338020355063528,
+            "75": 3.5558331188600634,
+            "95": 14.540789412515224
+          },
+          "n_headroom_at_or_below_0": 14
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.4629208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.462920847328758,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 0.875,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 14,
+          "share_at_or_above_1": 0.03139013452914798,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6943104645690943,
+          "mean_A": -2.009224387027313,
+          "median_headroom": 1.6943104645690943,
+          "mean_headroom": 3.009224387027313,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6943104645690943,
+            "75": 3.445416544834614,
+            "95": 11.175240045226086
+          },
+          "n_headroom_at_or_below_0": 14
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 259,
+          "share_at_or_past_salience_pole": 0.5899772209567198,
+          "n_strictly_past_salience_pole": 258,
+          "share_strictly_past_salience_pole": 0.5876993166287016,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -0.5092204323014385,
+          "mean_sb": -2.381944221907115
+        }
+      }
+    },
+    "B2|raw|pmi": {
+      "model": "B2",
+      "prompt_form": "raw",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 12,
+          "share_at_or_above_1": 0.02608695652173913,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.2828454106011622,
+          "mean_A": -10.56459323571252,
+          "median_headroom": 1.2828454106011622,
+          "mean_headroom": 11.56459323571252,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.2828454106011622,
+            "75": 3.8656506974624447,
+            "95": 17.136169438269825
+          },
+          "n_headroom_at_or_below_0": 12
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 4,
+          "share_at_or_above_1": 0.037037037037037035,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.7373681595610115,
+          "mean_A": -13.561642902585012,
+          "median_headroom": 3.7373681595610115,
+          "mean_headroom": 14.561642902585012,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.7338123363028866,
+            "50": 3.7373681595610115,
+            "75": 7.033987953478668,
+            "95": 29.97129333990342
+          },
+          "n_headroom_at_or_below_0": 4
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 12,
+          "share_at_or_above_1": 0.02654867256637168,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.2905749095377716,
+          "mean_A": -10.207322279465037,
+          "median_headroom": 1.2905749095377717,
+          "mean_headroom": 11.207322279465037,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.2905749095377717,
+            "75": 3.8487191357917374,
+            "95": 16.248367128425535
+          },
+          "n_headroom_at_or_below_0": 12
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -30.75040226369523,
+          "median_headroom": 1.0,
+          "mean_headroom": 31.75040226369523,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 0.875,
+            "50": 1.0,
+            "75": 10.443784694005899,
+            "95": 151.22073976508744
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 11,
+          "share_at_or_above_1": 0.02466367713004484,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.23009803033027698,
+          "mean_A": -2.2630683129788225,
+          "median_headroom": 1.2300980303302769,
+          "mean_headroom": 3.2630683129788225,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.2300980303302769,
+            "75": 3.501522003715638,
+            "95": 13.310857158345147
+          },
+          "n_headroom_at_or_below_0": 11
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 207,
+          "share_at_or_past_salience_pole": 0.4715261958997722,
+          "n_strictly_past_salience_pole": 207,
+          "share_strictly_past_salience_pole": 0.4715261958997722,
+          "n_exactly_at_salience_pole": 0,
+          "share_exactly_at_salience_pole": 0.0,
+          "median_sb": 0.11555252080996477,
+          "mean_sb": -1.6568045620728271
+        }
+      }
+    },
+    "B2|raw|sum": {
+      "model": "B2",
+      "prompt_form": "raw",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.05652173913043478,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.3562073783261941,
+          "mean_A": -2.983274015169182,
+          "median_headroom": 1.356207378326194,
+          "mean_headroom": 3.9832740151691826,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.356207378326194,
+            "75": 3.3487453487249734,
+            "95": 12.03301480193603
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 15,
+          "share_at_or_above_1": 0.1388888888888889,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.590628886639511,
+          "mean_A": -4.152883225501311,
+          "median_headroom": 2.590628886639511,
+          "mean_headroom": 5.152883225501309,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 2.590628886639511,
+            "75": 5.619746549979045,
+            "95": 16.158330011824635
+          },
+          "n_headroom_at_or_below_0": 15
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 25,
+          "share_at_or_above_1": 0.05530973451327434,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.3545428036714918,
+          "mean_A": -2.9739273238693547,
+          "median_headroom": 1.354542803671492,
+          "mean_headroom": 3.973927323869355,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5464895985686309,
+            "50": 1.354542803671492,
+            "75": 3.3033458197045276,
+            "95": 11.935536226869703
+          },
+          "n_headroom_at_or_below_0": 25
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 1,
+          "share_at_or_above_1": 0.125,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.4988301622037623,
+          "mean_A": -3.5113620736094355,
+          "median_headroom": 4.498830162203762,
+          "mean_headroom": 4.511362073609435,
+          "headroom_percentiles": {
+            "5": 0.17500000000000002,
+            "25": 0.5,
+            "50": 4.498830162203762,
+            "75": 5.680580412492034,
+            "95": 11.395096703593156
+          },
+          "n_headroom_at_or_below_0": 1
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 24,
+          "share_at_or_above_1": 0.053811659192825115,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.34921232062249546,
+          "mean_A": -1.6472444799052555,
+          "median_headroom": 1.3492123206224953,
+          "mean_headroom": 2.6472444799052557,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.3492123206224953,
+            "75": 3.17936920493102,
+            "95": 9.274000773765009
+          },
+          "n_headroom_at_or_below_0": 24
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 263,
+          "share_at_or_past_salience_pole": 0.5990888382687927,
+          "n_strictly_past_salience_pole": 263,
+          "share_strictly_past_salience_pole": 0.5990888382687927,
+          "n_exactly_at_salience_pole": 0,
+          "share_exactly_at_salience_pole": 0.0,
+          "median_sb": -0.41788300947439183,
+          "mean_sb": -2.060647295434477
+        }
+      }
+    },
+    "B2|template|mean": {
+      "model": "B2",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017391304347826087,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.97077260199424,
+          "mean_A": -6.502050999583058,
+          "median_headroom": 1.97077260199424,
+          "mean_headroom": 7.502050999583057,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.97077260199424,
+            "75": 4.4878046181912294,
+            "95": 16.945657210473836
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 1,
+          "share_at_or_above_1": 0.009259259259259259,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.4879555392338606,
+          "mean_A": -15.632218763593281,
+          "median_headroom": 3.4879555392338606,
+          "mean_headroom": 16.632218763593283,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.634309611697403,
+            "50": 3.4879555392338606,
+            "75": 8.22378455657517,
+            "95": 30.72547951858251
+          },
+          "n_headroom_at_or_below_0": 1
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017699115044247787,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.9867304828930226,
+          "mean_A": -6.571327639445966,
+          "median_headroom": 1.9867304828930226,
+          "mean_headroom": 7.571327639445967,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.9867304828930226,
+            "75": 4.479717330027507,
+            "95": 17.22881626379995
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.5879208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.587920847328758,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017937219730941704,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.9262024086522949,
+          "mean_A": -2.966858615440649,
+          "median_headroom": 1.9262024086522949,
+          "mean_headroom": 3.9668586154406484,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.9262024086522949,
+            "75": 4.223987635842855,
+            "95": 14.527549940917757
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 255,
+          "share_at_or_past_salience_pole": 0.5808656036446469,
+          "n_strictly_past_salience_pole": 254,
+          "share_strictly_past_salience_pole": 0.5785876993166287,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -0.5842792652857107,
+          "mean_sb": -2.5532322207195017
+        }
+      }
+    },
+    "B2|template|pmi": {
+      "model": "B2",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 29,
+          "share_at_or_above_1": 0.06304347826086956,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -10.630168529328955,
+          "median_headroom": 1.0,
+          "mean_headroom": 11.630168529328955,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 4.313857124192444,
+            "95": 15.0020993447767
+          },
+          "n_headroom_at_or_below_0": 29
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.24074074074074073,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.427383639520539,
+          "mean_A": -9.021064803241151,
+          "median_headroom": 2.4273836395205395,
+          "mean_headroom": 10.021064803241151,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.42230936131008284,
+            "50": 2.4273836395205395,
+            "75": 5.472496787015565,
+            "95": 14.907085619865548
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 29,
+          "share_at_or_above_1": 0.06415929203539823,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.548267518613678e-15,
+          "mean_A": -10.280705893558572,
+          "median_headroom": 1.0000000000000036,
+          "mean_headroom": 11.280705893558572,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0000000000000036,
+            "75": 4.313857124192444,
+            "95": 14.639233629851729
+          },
+          "n_headroom_at_or_below_0": 29
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -30.374807450355515,
+          "median_headroom": 1.0,
+          "mean_headroom": 31.374807450355515,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 7.440215813967618,
+            "95": 151.22073976508744
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 25,
+          "share_at_or_above_1": 0.05605381165919283,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.454237007408793,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.454237007408793,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 4.223987635842855,
+            "95": 13.275083019208687
+          },
+          "n_headroom_at_or_below_0": 25
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 214,
+          "share_at_or_past_salience_pole": 0.4874715261958998,
+          "n_strictly_past_salience_pole": 212,
+          "share_strictly_past_salience_pole": 0.48291571753986334,
+          "n_exactly_at_salience_pole": 2,
+          "share_exactly_at_salience_pole": 0.004555808656036446,
+          "median_sb": 3.1566580899771154e-15,
+          "mean_sb": -1.481106099837746
+        }
+      }
+    },
+    "B2|template|sum": {
+      "model": "B2",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.05652173913043478,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6163881693746582,
+          "mean_A": -3.5061731223446357,
+          "median_headroom": 1.6163881693746582,
+          "mean_headroom": 4.506173122344636,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.6163881693746582,
+            "75": 3.475682377459461,
+            "95": 12.797432397769729
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 13,
+          "share_at_or_above_1": 0.12037037037037036,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.1713310986195224,
+          "mean_A": -5.178506344029671,
+          "median_headroom": 2.1713310986195222,
+          "mean_headroom": 6.178506344029671,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 2.1713310986195222,
+            "75": 4.603098701370931,
+            "95": 14.912437478329004
+          },
+          "n_headroom_at_or_below_0": 13
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.05752212389380531,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6285711670578611,
+          "mean_A": -3.522425374999784,
+          "median_headroom": 1.6285711670578609,
+          "mean_headroom": 4.522425374999783,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.6285711670578609,
+            "75": 3.4562344886705336,
+            "95": 13.035867296572022
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.5879208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.587920847328758,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.05829596412556054,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6163881693746582,
+          "mean_A": -2.01591556175578,
+          "median_headroom": 1.6163881693746582,
+          "mean_headroom": 3.01591556175578,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.6163881693746582,
+            "75": 3.4387905717068996,
+            "95": 10.265617742946082
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 269,
+          "share_at_or_past_salience_pole": 0.6127562642369021,
+          "n_strictly_past_salience_pole": 268,
+          "share_strictly_past_salience_pole": 0.6104783599088838,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -0.7758690272842333,
+          "mean_sb": -2.4476736927142047
+        }
+      }
+    },
+    "B4|raw|mean": {
+      "model": "B4",
+      "prompt_form": "raw",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 22,
+          "share_at_or_above_1": 0.04782608695652174,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.3582193856026833,
+          "mean_A": -4.447305341418308,
+          "median_headroom": 1.3582193856026832,
+          "mean_headroom": 5.447305341418308,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.3582193856026832,
+            "75": 2.9295276605580782,
+            "95": 14.570547692252164
+          },
+          "n_headroom_at_or_below_0": 22
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 5,
+          "share_at_or_above_1": 0.046296296296296294,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.2715267609588874,
+          "mean_A": -12.292573224764519,
+          "median_headroom": 2.271526760958887,
+          "mean_headroom": 13.292573224764519,
+          "headroom_percentiles": {
+            "5": 0.6750000000000003,
+            "25": 1.1327825280675623,
+            "50": 2.271526760958887,
+            "75": 7.025757666960802,
+            "95": 30.119759928363486
+          },
+          "n_headroom_at_or_below_0": 5
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 22,
+          "share_at_or_above_1": 0.048672566371681415,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.3653931407674448,
+          "mean_A": -4.481320996180956,
+          "median_headroom": 1.365393140767445,
+          "mean_headroom": 5.481320996180956,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.365393140767445,
+            "75": 2.881197229221562,
+            "95": 14.676849037029053
+          },
+          "n_headroom_at_or_below_0": 22
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.5254208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.525420847328758,
+          "headroom_percentiles": {
+            "5": 0.675,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 22,
+          "share_at_or_above_1": 0.04932735426008968,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.31957732716052495,
+          "mean_A": -1.8248989639092585,
+          "median_headroom": 1.319577327160525,
+          "mean_headroom": 2.824898963909259,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.319577327160525,
+            "75": 2.7368981086300823,
+            "95": 9.50110066416967
+          },
+          "n_headroom_at_or_below_0": 22
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 199,
+          "share_at_or_past_salience_pole": 0.4533029612756264,
+          "n_strictly_past_salience_pole": 197,
+          "share_strictly_past_salience_pole": 0.44874715261959,
+          "n_exactly_at_salience_pole": 2,
+          "share_exactly_at_salience_pole": 0.004555808656036446,
+          "median_sb": 0.34745120394193124,
+          "mean_sb": -1.8320546552604466
+        }
+      }
+    },
+    "B4|raw|pmi": {
+      "model": "B4",
+      "prompt_form": "raw",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 27,
+          "share_at_or_above_1": 0.058695652173913045,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.20035845665548002,
+          "mean_A": -3.413688001461679,
+          "median_headroom": 1.2003584566554801,
+          "mean_headroom": 4.413688001461679,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.6704284855678102,
+            "50": 1.2003584566554801,
+            "75": 2.901705726513708,
+            "95": 9.58330850573791
+          },
+          "n_headroom_at_or_below_0": 27
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 13,
+          "share_at_or_above_1": 0.12037037037037036,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -7.217229232118261,
+          "median_headroom": 1.0,
+          "mean_headroom": 8.21722923211826,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 3.819798309643599,
+            "95": 19.376583431501754
+          },
+          "n_headroom_at_or_below_0": 13
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 27,
+          "share_at_or_above_1": 0.059734513274336286,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.19340660372116386,
+          "mean_A": -3.4097468674413647,
+          "median_headroom": 1.193406603721164,
+          "mean_headroom": 4.409746867441365,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.6739695442178575,
+            "50": 1.193406603721164,
+            "75": 2.874515329566961,
+            "95": 9.229428544807863
+          },
+          "n_headroom_at_or_below_0": 27
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.4988301622037623,
+          "mean_A": -3.6363620736094355,
+          "median_headroom": 4.498830162203762,
+          "mean_headroom": 4.636362073609435,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 0.5,
+            "50": 4.498830162203762,
+            "75": 5.680580412492034,
+            "95": 11.720096703593155
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.05829596412556054,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.2052954576325388,
+          "mean_A": -1.5656840045204428,
+          "median_headroom": 1.2052954576325388,
+          "mean_headroom": 2.565684004520443,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.6729217456459065,
+            "50": 1.2052954576325388,
+            "75": 2.878362996512274,
+            "95": 8.724615885725125
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 238,
+          "share_at_or_past_salience_pole": 0.5421412300683371,
+          "n_strictly_past_salience_pole": 237,
+          "share_strictly_past_salience_pole": 0.5398633257403189,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -0.07657416865769053,
+          "mean_sb": -1.949709153608844
+        }
+      }
+    },
+    "B4|raw|sum": {
+      "model": "B4",
+      "prompt_form": "raw",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 40,
+          "share_at_or_above_1": 0.08695652173913043,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.171543985157667,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.171543985157666,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 2.3624194460099157,
+            "95": 11.126930482353927
+          },
+          "n_headroom_at_or_below_0": 40
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 11,
+          "share_at_or_above_1": 0.10185185185185185,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5262668649034303,
+          "mean_A": -7.735769983603513,
+          "median_headroom": 1.5262668649034303,
+          "mean_headroom": 8.735769983603513,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.5262668649034303,
+            "75": 5.592273558255966,
+            "95": 17.948656451567714
+          },
+          "n_headroom_at_or_below_0": 11
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 40,
+          "share_at_or_above_1": 0.08849557522123894,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.651994045594563,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.6519940455945625,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 2.2484612380959197,
+            "95": 10.695221014634853
+          },
+          "n_headroom_at_or_below_0": 40
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.9536073170298867,
+          "mean_A": -32.526115570473046,
+          "median_headroom": 4.953607317029887,
+          "mean_headroom": 33.526115570473046,
+          "headroom_percentiles": {
+            "5": 0.675,
+            "25": 3.3214031477990935,
+            "50": 4.953607317029887,
+            "75": 12.47125041132888,
+            "95": 151.22073976508744
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 39,
+          "share_at_or_above_1": 0.08744394618834081,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -1.3354930849482656,
+          "median_headroom": 1.0,
+          "mean_headroom": 2.335493084948266,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 2.2326171103472667,
+            "95": 8.867130190508847
+          },
+          "n_headroom_at_or_below_0": 39
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 209,
+          "share_at_or_past_salience_pole": 0.4760820045558087,
+          "n_strictly_past_salience_pole": 204,
+          "share_strictly_past_salience_pole": 0.4646924829157175,
+          "n_exactly_at_salience_pole": 5,
+          "share_exactly_at_salience_pole": 0.011389521640091117,
+          "median_sb": 4.38444275514616e-15,
+          "mean_sb": -1.3685150750445754
+        }
+      }
+    },
+    "B4|template|mean": {
+      "model": "B4",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 27,
+          "share_at_or_above_1": 0.058695652173913045,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5956375982786912,
+          "mean_A": -5.609259688093068,
+          "median_headroom": 1.5956375982786912,
+          "mean_headroom": 6.609259688093068,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.5956375982786912,
+            "75": 3.8043408336303455,
+            "95": 15.68971690432254
+          },
+          "n_headroom_at_or_below_0": 27
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.8573063912482666,
+          "mean_A": -16.519855309816403,
+          "median_headroom": 4.857306391248267,
+          "mean_headroom": 17.519855309816407,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 2.2231153800008943,
+            "50": 4.857306391248267,
+            "75": 10.790071902286517,
+            "95": 40.90375820744776
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 27,
+          "share_at_or_above_1": 0.059734513274336286,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5974904828391614,
+          "mean_A": -5.666053295894206,
+          "median_headroom": 1.5974904828391614,
+          "mean_headroom": 6.666053295894205,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.5974904828391614,
+            "75": 3.793018963961668,
+            "95": 15.841772708293263
+          },
+          "n_headroom_at_or_below_0": 27
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.4004208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.400420847328758,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 27,
+          "share_at_or_above_1": 0.06053811659192825,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.551348015988598,
+          "mean_A": -2.232097986579777,
+          "median_headroom": 1.551348015988598,
+          "mean_headroom": 3.2320979865797774,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.551348015988598,
+            "75": 3.59220960348724,
+            "95": 12.738412816035968
+          },
+          "n_headroom_at_or_below_0": 27
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 244,
+          "share_at_or_past_salience_pole": 0.5558086560364465,
+          "n_strictly_past_salience_pole": 242,
+          "share_strictly_past_salience_pole": 0.55125284738041,
+          "n_exactly_at_salience_pole": 2,
+          "share_exactly_at_salience_pole": 0.004555808656036446,
+          "median_sb": -0.15879222622885023,
+          "mean_sb": -2.216690605645393
+        }
+      }
+    },
+    "B4|template|pmi": {
+      "model": "B4",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 86,
+          "share_at_or_above_1": 0.18695652173913044,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.1903254242121055,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.190325424212104,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.5915552589104505,
+            "95": 10.3946610083898
+          },
+          "n_headroom_at_or_below_0": 86
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 5,
+          "share_at_or_above_1": 0.046296296296296294,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.7316570524016648,
+          "mean_A": -9.651055805338135,
+          "median_headroom": 2.7316570524016646,
+          "mean_headroom": 10.651055805338135,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 2.7316570524016646,
+            "75": 5.955078074997811,
+            "95": 21.364637077923973
+          },
+          "n_headroom_at_or_below_0": 5
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 83,
+          "share_at_or_above_1": 0.1836283185840708,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.145190674217115,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.145190674217115,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.5156117598486953,
+            "95": 10.372651760731252
+          },
+          "n_headroom_at_or_below_0": 83
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 3,
+          "share_at_or_above_1": 0.375,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -5.046432260736491,
+          "mean_A": -5.740438798929024,
+          "median_headroom": 6.046432260736491,
+          "mean_headroom": 6.740438798929024,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.0,
+            "50": 6.046432260736491,
+            "75": 7.448313895659045,
+            "95": 20.09237726175105
+          },
+          "n_headroom_at_or_below_0": 3
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 82,
+          "share_at_or_above_1": 0.18385650224215247,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -1.4111247913949638,
+          "median_headroom": 1.0,
+          "mean_headroom": 2.4111247913949643,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.552460071896601,
+            "95": 9.213925780478098
+          },
+          "n_headroom_at_or_below_0": 82
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 239,
+          "share_at_or_past_salience_pole": 0.5444191343963554,
+          "n_strictly_past_salience_pole": 230,
+          "share_strictly_past_salience_pole": 0.5239179954441914,
+          "n_exactly_at_salience_pole": 9,
+          "share_exactly_at_salience_pole": 0.02050113895216401,
+          "median_sb": -1.1509015081516628e-15,
+          "mean_sb": -1.8759600762475954
+        }
+      }
+    },
+    "B4|template|sum": {
+      "model": "B4",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 39,
+          "share_at_or_above_1": 0.08478260869565217,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.2113404057679022,
+          "mean_A": -4.545756876862267,
+          "median_headroom": 1.2113404057679023,
+          "mean_headroom": 5.545756876862266,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.6261822750429351,
+            "50": 1.2113404057679023,
+            "75": 3.365490319372471,
+            "95": 15.347678028998963
+          },
+          "n_headroom_at_or_below_0": 39
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 3,
+          "share_at_or_above_1": 0.027777777777777776,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.909733392408241,
+          "mean_A": -13.779439804453675,
+          "median_headroom": 3.909733392408241,
+          "mean_headroom": 14.779439804453675,
+          "headroom_percentiles": {
+            "5": 0.5444166059745809,
+            "25": 1.7921842258799443,
+            "50": 3.909733392408241,
+            "75": 9.249453966564346,
+            "95": 36.01514737701317
+          },
+          "n_headroom_at_or_below_0": 3
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 39,
+          "share_at_or_above_1": 0.08628318584070796,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.203377265153784,
+          "mean_A": -4.296167237336277,
+          "median_headroom": 1.203377265153784,
+          "mean_headroom": 5.296167237336277,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.6362419648716638,
+            "50": 1.203377265153784,
+            "75": 3.2428873010906285,
+            "95": 14.758321573855008
+          },
+          "n_headroom_at_or_below_0": 39
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -5.046432260736491,
+          "mean_A": -18.647571510080663,
+          "median_headroom": 6.046432260736491,
+          "mean_headroom": 19.647571510080663,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 0.5,
+            "50": 6.046432260736491,
+            "75": 12.47125041132888,
+            "95": 80.29352095232106
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 37,
+          "share_at_or_above_1": 0.08295964125560538,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.19340660372116386,
+          "mean_A": -1.875953180451479,
+          "median_headroom": 1.193406603721164,
+          "mean_headroom": 2.875953180451479,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.6247376481312121,
+            "50": 1.193406603721164,
+            "75": 3.1190164789938946,
+            "95": 11.01444436301421
+          },
+          "n_headroom_at_or_below_0": 37
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 228,
+          "share_at_or_past_salience_pole": 0.5193621867881549,
+          "n_strictly_past_salience_pole": 222,
+          "share_strictly_past_salience_pole": 0.5056947608200456,
+          "n_exactly_at_salience_pole": 6,
+          "share_exactly_at_salience_pole": 0.01366742596810934,
+          "median_sb": -4.972585671899618e-16,
+          "mean_sb": -1.7614952880748478
+        }
+      }
+    },
+    "CTRL|template|mean": {
+      "model": "CTRL",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 53,
+          "share_at_or_above_1": 0.11521739130434783,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.06663361711753124,
+          "mean_A": -5.551423940194932,
+          "median_headroom": 1.0666336171175312,
+          "mean_headroom": 6.551423940194932,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0666336171175312,
+            "75": 2.9097913219106415,
+            "95": 10.84742358082204
+          },
+          "n_headroom_at_or_below_0": 53
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 10,
+          "share_at_or_above_1": 0.09259259259259259,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6860708055139835,
+          "mean_A": -7.275153327161297,
+          "median_headroom": 1.6860708055139835,
+          "mean_headroom": 8.275153327161297,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.6860708055139835,
+            "75": 5.296424374953803,
+            "95": 15.23890696716612
+          },
+          "n_headroom_at_or_below_0": 10
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 53,
+          "share_at_or_above_1": 0.1172566371681416,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.008844799125193209,
+          "mean_A": -5.040608480170332,
+          "median_headroom": 1.0088447991251932,
+          "mean_headroom": 6.040608480170332,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0088447991251932,
+            "75": 2.815598428406492,
+            "95": 10.281601779785989
+          },
+          "n_headroom_at_or_below_0": 53
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -4.933247495495714,
+          "mean_A": -34.412497431584825,
+          "median_headroom": 5.933247495495714,
+          "mean_headroom": 35.412497431584825,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 3.3214031477990935,
+            "50": 5.933247495495714,
+            "75": 18.715386793379636,
+            "95": 153.48152592693225
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 52,
+          "share_at_or_above_1": 0.11659192825112108,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.06663361711753124,
+          "mean_A": -1.3597211120994062,
+          "median_headroom": 1.0666336171175312,
+          "mean_headroom": 2.359721112099406,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0666336171175312,
+            "75": 2.826435866656692,
+            "95": 9.210088812232375
+          },
+          "n_headroom_at_or_below_0": 52
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 246,
+          "share_at_or_past_salience_pole": 0.5603644646924829,
+          "n_strictly_past_salience_pole": 236,
+          "share_strictly_past_salience_pole": 0.5375854214123007,
+          "n_exactly_at_salience_pole": 10,
+          "share_exactly_at_salience_pole": 0.022779043280182234,
+          "median_sb": -8.878321856333217e-15,
+          "mean_sb": -1.9138634241376955
+        }
+      }
+    },
+    "CTRL|template|pmi": {
+      "model": "CTRL",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 29,
+          "share_at_or_above_1": 0.06304347826086956,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.8943382623511487,
+          "mean_A": -11.595094564737968,
+          "median_headroom": 1.8943382623511487,
+          "mean_headroom": 12.595094564737968,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.8943382623511487,
+            "75": 5.185538900583611,
+            "95": 20.382345020162195
+          },
+          "n_headroom_at_or_below_0": 29
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 3,
+          "share_at_or_above_1": 0.027777777777777776,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.604655162310393,
+          "mean_A": -15.542837363318105,
+          "median_headroom": 4.604655162310393,
+          "mean_headroom": 16.542837363318103,
+          "headroom_percentiles": {
+            "5": 0.9587921785126114,
+            "25": 1.7995452424857428,
+            "50": 4.604655162310393,
+            "75": 8.332956374140078,
+            "95": 36.21477060976732
+          },
+          "n_headroom_at_or_below_0": 3
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 29,
+          "share_at_or_above_1": 0.06415929203539823,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.8741110954541813,
+          "mean_A": -11.143344685630368,
+          "median_headroom": 1.8741110954541813,
+          "mean_headroom": 12.143344685630368,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.8741110954541813,
+            "75": 5.096382354229117,
+            "95": 17.66718530945312
+          },
+          "n_headroom_at_or_below_0": 29
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -10.866494990991429,
+          "mean_A": -37.11896273431748,
+          "median_headroom": 11.866494990991429,
+          "mean_headroom": 38.11896273431748,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 11.866494990991429,
+            "75": 28.37571051433106,
+            "95": 153.48152592693225
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 28,
+          "share_at_or_above_1": 0.06278026905829596,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.7785558409452608,
+          "mean_A": -2.9389984386905295,
+          "median_headroom": 1.7785558409452606,
+          "mean_headroom": 3.938998438690529,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.7785558409452606,
+            "75": 4.830690217050506,
+            "95": 14.557686290620005
+          },
+          "n_headroom_at_or_below_0": 28
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 253,
+          "share_at_or_past_salience_pole": 0.5763097949886105,
+          "n_strictly_past_salience_pole": 237,
+          "share_strictly_past_salience_pole": 0.5398633257403189,
+          "n_exactly_at_salience_pole": 16,
+          "share_exactly_at_salience_pole": 0.03644646924829157,
+          "median_sb": -0.10007569787221925,
+          "mean_sb": -2.580321549058925
+        }
+      }
+    },
+    "CTRL|template|sum": {
+      "model": "CTRL",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 51,
+          "share_at_or_above_1": 0.1108695652173913,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -5.755926192688873,
+          "median_headroom": 1.0,
+          "mean_headroom": 6.755926192688873,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.712285510020199,
+            "95": 11.704911391560652
+          },
+          "n_headroom_at_or_below_0": 51
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 10,
+          "share_at_or_above_1": 0.09259259259259259,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6503978079383064,
+          "mean_A": -7.180593413382142,
+          "median_headroom": 1.6503978079383064,
+          "mean_headroom": 8.180593413382141,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.6503978079383064,
+            "75": 5.2433365869827515,
+            "95": 15.23890696716612
+          },
+          "n_headroom_at_or_below_0": 10
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 51,
+          "share_at_or_above_1": 0.11283185840707964,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -5.210794480683761,
+          "median_headroom": 1.0,
+          "mean_headroom": 6.210794480683761,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.6515195806884755,
+            "95": 10.950614084150509
+          },
+          "n_headroom_at_or_below_0": 51
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -8.614115737632575,
+          "mean_A": -36.55586792097776,
+          "median_headroom": 9.614115737632575,
+          "mean_headroom": 37.55586792097776,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 9.614115737632575,
+            "75": 28.37571051433106,
+            "95": 153.48152592693225
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 50,
+          "share_at_or_above_1": 0.11210762331838565,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -1.4786986994132443,
+          "median_headroom": 1.0,
+          "mean_headroom": 2.4786986994132443,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.641829182442623,
+            "95": 10.565644218439129
+          },
+          "n_headroom_at_or_below_0": 50
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 220,
+          "share_at_or_past_salience_pole": 0.5011389521640092,
+          "n_strictly_past_salience_pole": 210,
+          "share_strictly_past_salience_pole": 0.4783599088838269,
+          "n_exactly_at_salience_pole": 10,
+          "share_exactly_at_salience_pole": 0.022779043280182234,
+          "median_sb": 0.0,
+          "mean_sb": -1.7864846688196088
+        }
+      }
+    },
+    "L1|template|mean": {
+      "model": "L1",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 20,
+          "share_at_or_above_1": 0.043478260869565216,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6860070911608765,
+          "mean_A": -16.11663180568496,
+          "median_headroom": 1.6860070911608764,
+          "mean_headroom": 17.11663180568496,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6860070911608764,
+            "75": 4.188383353606975,
+            "95": 14.758961414591285
+          },
+          "n_headroom_at_or_below_0": 20
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 9,
+          "share_at_or_above_1": 0.08333333333333333,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.8979016183826948,
+          "mean_A": -10.925735082144,
+          "median_headroom": 1.8979016183826949,
+          "mean_headroom": 11.925735082143998,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.8979016183826949,
+            "75": 5.613491201014474,
+            "95": 26.339035488394686
+          },
+          "n_headroom_at_or_below_0": 9
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 20,
+          "share_at_or_above_1": 0.04424778761061947,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6943104645690943,
+          "mean_A": -16.357184212027548,
+          "median_headroom": 1.6943104645690943,
+          "mean_headroom": 17.357184212027548,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6943104645690943,
+            "75": 4.124722905732481,
+            "95": 14.759347482635105
+          },
+          "n_headroom_at_or_below_0": 20
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.5254208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.525420847328758,
+          "headroom_percentiles": {
+            "5": 0.675,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 20,
+          "share_at_or_above_1": 0.04484304932735426,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.647988503789314,
+          "mean_A": -2.383144776594246,
+          "median_headroom": 1.647988503789314,
+          "mean_headroom": 3.383144776594246,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.647988503789314,
+            "75": 3.9010791558922167,
+            "95": 11.935888822265522
+          },
+          "n_headroom_at_or_below_0": 20
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 272,
+          "share_at_or_past_salience_pole": 0.6195899772209568,
+          "n_strictly_past_salience_pole": 270,
+          "share_strictly_past_salience_pole": 0.6150341685649203,
+          "n_exactly_at_salience_pole": 2,
+          "share_exactly_at_salience_pole": 0.004555808656036446,
+          "median_sb": -0.9587261426697893,
+          "mean_sb": -2.6421764781380364
+        }
+      }
+    },
+    "L1|template|pmi": {
+      "model": "L1",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 10,
+          "share_at_or_above_1": 0.021739130434782608,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6152090172641054,
+          "mean_A": -10.4154704317375,
+          "median_headroom": 1.6152090172641054,
+          "mean_headroom": 11.415470431737498,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6152090172641054,
+            "75": 3.858401830738583,
+            "95": 16.245352327464573
+          },
+          "n_headroom_at_or_below_0": 10
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 7,
+          "share_at_or_above_1": 0.06481481481481481,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.35673474410624,
+          "mean_A": -13.762185781754352,
+          "median_headroom": 3.35673474410624,
+          "mean_headroom": 14.762185781754354,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.5649727498946857,
+            "50": 3.35673474410624,
+            "75": 7.6143723906304475,
+            "95": 25.567126589207316
+          },
+          "n_headroom_at_or_below_0": 7
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 10,
+          "share_at_or_above_1": 0.022123893805309734,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6152090172641054,
+          "mean_A": -10.551735140668137,
+          "median_headroom": 1.6152090172641054,
+          "mean_headroom": 11.551735140668137,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6152090172641054,
+            "75": 3.8205512044267342,
+            "95": 16.300787583590328
+          },
+          "n_headroom_at_or_below_0": 10
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.2976020985327292,
+          "mean_A": -2.7165143771562836,
+          "median_headroom": 2.297602098532729,
+          "mean_headroom": 3.7165143771562836,
+          "headroom_percentiles": {
+            "5": 0.675,
+            "25": 1.0,
+            "50": 2.297602098532729,
+            "75": 4.116131330516147,
+            "95": 10.738140202727621
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 9,
+          "share_at_or_above_1": 0.020179372197309416,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5367868669796921,
+          "mean_A": -2.2624900804910997,
+          "median_headroom": 1.5367868669796922,
+          "mean_headroom": 3.2624900804910997,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5367868669796922,
+            "75": 3.6725544403506785,
+            "95": 12.200703613199922
+          },
+          "n_headroom_at_or_below_0": 9
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 250,
+          "share_at_or_past_salience_pole": 0.5694760820045558,
+          "n_strictly_past_salience_pole": 250,
+          "share_strictly_past_salience_pole": 0.5694760820045558,
+          "n_exactly_at_salience_pole": 0,
+          "share_exactly_at_salience_pole": 0.0,
+          "median_sb": -0.34695575902473674,
+          "mean_sb": -1.7788564691958724
+        }
+      }
+    },
+    "L1|template|sum": {
+      "model": "L1",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 18,
+          "share_at_or_above_1": 0.0391304347826087,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5459388632571045,
+          "mean_A": -15.415518470861205,
+          "median_headroom": 1.5459388632571045,
+          "mean_headroom": 16.415518470861205,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5459388632571045,
+            "75": 4.113561016137378,
+            "95": 14.069211616629463
+          },
+          "n_headroom_at_or_below_0": 18
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 12,
+          "share_at_or_above_1": 0.1111111111111111,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.031070021561195756,
+          "mean_A": -9.269418204245024,
+          "median_headroom": 1.0310700215611956,
+          "mean_headroom": 10.26941820424502,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.0310700215611956,
+            "75": 5.279730963237423,
+            "95": 25.706332081867597
+          },
+          "n_headroom_at_or_below_0": 12
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 18,
+          "share_at_or_above_1": 0.03982300884955752,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5459388632571045,
+          "mean_A": -15.600137992425685,
+          "median_headroom": 1.5459388632571045,
+          "mean_headroom": 16.600137992425687,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5459388632571045,
+            "75": 3.968538018459733,
+            "95": 13.925587525334
+          },
+          "n_headroom_at_or_below_0": 18
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.951228063671033,
+          "mean_A": -4.984515502468158,
+          "median_headroom": 2.9512280636710333,
+          "mean_headroom": 5.984515502468158,
+          "headroom_percentiles": {
+            "5": 0.675,
+            "25": 1.0,
+            "50": 2.9512280636710333,
+            "75": 5.680580412492034,
+            "95": 20.09237726175105
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 17,
+          "share_at_or_above_1": 0.03811659192825112,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5118751677425589,
+          "mean_A": -2.390560002942013,
+          "median_headroom": 1.5118751677425588,
+          "mean_headroom": 3.390560002942013,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5118751677425588,
+            "75": 3.884393206690467,
+            "95": 11.48502816593974
+          },
+          "n_headroom_at_or_below_0": 17
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 269,
+          "share_at_or_past_salience_pole": 0.6127562642369021,
+          "n_strictly_past_salience_pole": 268,
+          "share_strictly_past_salience_pole": 0.6104783599088838,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -0.7137610980030327,
+          "mean_sb": -2.136183354452095
+        }
+      }
+    },
+    "L2|template|mean": {
+      "model": "L2",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017391304347826087,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.647988503789314,
+          "mean_A": -5.090972227698841,
+          "median_headroom": 1.647988503789314,
+          "mean_headroom": 6.09097222769884,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.647988503789314,
+            "75": 3.977440108124763,
+            "95": 16.388690020098963
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 2,
+          "share_at_or_above_1": 0.018518518518518517,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.8092102854842973,
+          "mean_A": -10.6366205820124,
+          "median_headroom": 2.8092102854842973,
+          "mean_headroom": 11.6366205820124,
+          "headroom_percentiles": {
+            "5": 0.6901826215282271,
+            "25": 1.10063037218527,
+            "50": 2.8092102854842973,
+            "75": 7.211328029015928,
+            "95": 30.669822630002223
+          },
+          "n_headroom_at_or_below_0": 2
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017699115044247787,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6533588277240798,
+          "mean_A": -5.135274022041675,
+          "median_headroom": 1.6533588277240798,
+          "mean_headroom": 6.135274022041675,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.6533588277240798,
+            "75": 3.946687898829628,
+            "95": 16.482121694784922
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.5879208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.587920847328758,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017937219730941704,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6124577370032415,
+          "mean_A": -2.406207300902601,
+          "median_headroom": 1.6124577370032416,
+          "mean_headroom": 3.406207300902601,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.6124577370032416,
+            "75": 3.777756002309974,
+            "95": 11.54323330494665
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 221,
+          "share_at_or_past_salience_pole": 0.5034168564920274,
+          "n_strictly_past_salience_pole": 220,
+          "share_strictly_past_salience_pole": 0.5011389521640092,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -1.1438689686271755e-15,
+          "mean_sb": -2.222836919698512
+        }
+      }
+    },
+    "L2|template|pmi": {
+      "model": "L2",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017391304347826087,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5095691016054334,
+          "mean_A": -3.812178983357428,
+          "median_headroom": 1.5095691016054333,
+          "mean_headroom": 4.812178983357428,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5095691016054333,
+            "75": 3.603465702029098,
+            "95": 14.838819619065399
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 3,
+          "share_at_or_above_1": 0.027777777777777776,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.772871460406383,
+          "mean_A": -6.3978491011730165,
+          "median_headroom": 2.772871460406383,
+          "mean_headroom": 7.3978491011730165,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 2.772871460406383,
+            "75": 6.181108134634652,
+            "95": 28.26902520530287
+          },
+          "n_headroom_at_or_below_0": 3
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 8,
+          "share_at_or_above_1": 0.017699115044247787,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5131369149685829,
+          "mean_A": -3.841801260537284,
+          "median_headroom": 1.513136914968583,
+          "mean_headroom": 4.841801260537284,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.513136914968583,
+            "75": 3.5869700501315456,
+            "95": 14.965269482810587
+          },
+          "n_headroom_at_or_below_0": 8
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.138520322695576,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.138520322695576,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 1.0,
+            "75": 4.623414680252848,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 7,
+          "share_at_or_above_1": 0.01569506726457399,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.4354076006614839,
+          "mean_A": -2.04102501992807,
+          "median_headroom": 1.4354076006614838,
+          "mean_headroom": 3.0410250199280697,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.4354076006614838,
+            "75": 3.3161422837426247,
+            "95": 10.276860466991893
+          },
+          "n_headroom_at_or_below_0": 7
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 222,
+          "share_at_or_past_salience_pole": 0.5056947608200456,
+          "n_strictly_past_salience_pole": 222,
+          "share_strictly_past_salience_pole": 0.5056947608200456,
+          "n_exactly_at_salience_pole": 0,
+          "share_exactly_at_salience_pole": 0.0,
+          "median_sb": -0.0020138974862919964,
+          "mean_sb": -2.043001334658983
+        }
+      }
+    },
+    "L2|template|sum": {
+      "model": "L2",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 18,
+          "share_at_or_above_1": 0.0391304347826087,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6294388897472731,
+          "mean_A": -3.530284433779663,
+          "median_headroom": 1.6294388897472731,
+          "mean_headroom": 4.530284433779664,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6294388897472731,
+            "75": 3.7091159931927127,
+            "95": 13.174639486062853
+          },
+          "n_headroom_at_or_below_0": 18
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 9,
+          "share_at_or_above_1": 0.08333333333333333,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.8799031236699488,
+          "mean_A": -3.9695545563437267,
+          "median_headroom": 1.8799031236699488,
+          "mean_headroom": 4.969554556343727,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.8799031236699488,
+            "75": 4.533398248063821,
+            "95": 25.989983680888333
+          },
+          "n_headroom_at_or_below_0": 9
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 18,
+          "share_at_or_above_1": 0.03982300884955752,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6294388897472731,
+          "mean_A": -3.5381033501179147,
+          "median_headroom": 1.6294388897472731,
+          "mean_headroom": 4.538103350117915,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6294388897472731,
+            "75": 3.697877128817893,
+            "95": 13.254250347689089
+          },
+          "n_headroom_at_or_below_0": 18
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.0023792533588534,
+          "mean_A": -3.0885156606684716,
+          "median_headroom": 3.0023792533588534,
+          "mean_headroom": 4.088515660668471,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 3.0023792533588534,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 15,
+          "share_at_or_above_1": 0.033632286995515695,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6057778510276348,
+          "mean_A": -2.1238401861632674,
+          "median_headroom": 1.6057778510276348,
+          "mean_headroom": 3.1238401861632674,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.6057778510276348,
+            "75": 3.510478600694464,
+            "95": 10.036035966559048
+          },
+          "n_headroom_at_or_below_0": 15
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 241,
+          "share_at_or_past_salience_pole": 0.5489749430523918,
+          "n_strictly_past_salience_pole": 238,
+          "share_strictly_past_salience_pole": 0.5421412300683371,
+          "n_exactly_at_salience_pole": 3,
+          "share_exactly_at_salience_pole": 0.00683371298405467,
+          "median_sb": -0.2282594078367391,
+          "mean_sb": -2.2139192165711155
+        }
+      }
+    },
+    "L3|template|mean": {
+      "model": "L3",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 24,
+          "share_at_or_above_1": 0.05217391304347826,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5617287595189863,
+          "mean_A": -9.00428909813681,
+          "median_headroom": 1.5617287595189864,
+          "mean_headroom": 10.00428909813681,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.5617287595189864,
+            "75": 3.5106264303690686,
+            "95": 11.922789583771918
+          },
+          "n_headroom_at_or_below_0": 24
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 16,
+          "share_at_or_above_1": 0.14814814814814814,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.4206722485608818,
+          "mean_A": -5.846879600509023,
+          "median_headroom": 1.4206722485608818,
+          "mean_headroom": 6.846879600509023,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.9992970463846056,
+            "50": 1.4206722485608818,
+            "75": 3.4459385769254625,
+            "95": 16.08632377224215
+          },
+          "n_headroom_at_or_below_0": 16
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 24,
+          "share_at_or_above_1": 0.05309734513274336,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5677532129772502,
+          "mean_A": -9.120065527354651,
+          "median_headroom": 1.5677532129772502,
+          "mean_headroom": 10.120065527354651,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.5677532129772502,
+            "75": 3.5057882794150963,
+            "95": 11.99467614817098
+          },
+          "n_headroom_at_or_below_0": 24
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -2.4629208473287583,
+          "median_headroom": 1.0,
+          "mean_headroom": 3.462920847328758,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 0.875,
+            "50": 1.0,
+            "75": 7.319817828051941,
+            "95": 8.421009110979941
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 24,
+          "share_at_or_above_1": 0.053811659192825115,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.551963110710424,
+          "mean_A": -1.8457139691225464,
+          "median_headroom": 1.5519631107104241,
+          "mean_headroom": 2.8457139691225466,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.5519631107104241,
+            "75": 3.422560536685101,
+            "95": 8.953347756466437
+          },
+          "n_headroom_at_or_below_0": 24
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 266,
+          "share_at_or_past_salience_pole": 0.6059225512528473,
+          "n_strictly_past_salience_pole": 265,
+          "share_strictly_past_salience_pole": 0.6036446469248291,
+          "n_exactly_at_salience_pole": 1,
+          "share_exactly_at_salience_pole": 0.002277904328018223,
+          "median_sb": -0.5244929863118716,
+          "mean_sb": -2.40397166996885
+        }
+      }
+    },
+    "L3|template|pmi": {
+      "model": "L3",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 14,
+          "share_at_or_above_1": 0.030434782608695653,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5227805520463435,
+          "mean_A": -4.290265257230353,
+          "median_headroom": 1.5227805520463435,
+          "mean_headroom": 5.290265257230353,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5227805520463435,
+            "75": 3.7482062960378753,
+            "95": 13.281776704087362
+          },
+          "n_headroom_at_or_below_0": 14
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 5,
+          "share_at_or_above_1": 0.046296296296296294,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -2.0066972556035667,
+          "mean_A": -10.353970900570632,
+          "median_headroom": 3.0066972556035667,
+          "mean_headroom": 11.353970900570632,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.3474404800954194,
+            "50": 3.0066972556035667,
+            "75": 5.696415193633917,
+            "95": 45.807128311308816
+          },
+          "n_headroom_at_or_below_0": 5
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 14,
+          "share_at_or_above_1": 0.030973451327433628,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.5227805520463435,
+          "mean_A": -4.294493321968623,
+          "median_headroom": 1.5227805520463435,
+          "mean_headroom": 5.294493321968624,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.5227805520463435,
+            "75": 3.7248388920198314,
+            "95": 13.198938655924593
+          },
+          "n_headroom_at_or_below_0": 14
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.701228063671033,
+          "mean_A": -4.051379599518052,
+          "median_headroom": 2.7012280636710333,
+          "mean_headroom": 5.051379599518052,
+          "headroom_percentiles": {
+            "5": 1.0,
+            "25": 1.0,
+            "50": 2.7012280636710333,
+            "75": 7.319817828051941,
+            "95": 13.819398139591922
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 14,
+          "share_at_or_above_1": 0.03139013452914798,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.49176215955610636,
+          "mean_A": -2.022520074065221,
+          "median_headroom": 1.4917621595561066,
+          "mean_headroom": 3.022520074065221,
+          "headroom_percentiles": {
+            "5": 0.5,
+            "25": 1.0,
+            "50": 1.4917621595561066,
+            "75": 3.565603825844603,
+            "95": 9.278488431146128
+          },
+          "n_headroom_at_or_below_0": 14
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 242,
+          "share_at_or_past_salience_pole": 0.55125284738041,
+          "n_strictly_past_salience_pole": 240,
+          "share_strictly_past_salience_pole": 0.5466970387243736,
+          "n_exactly_at_salience_pole": 2,
+          "share_exactly_at_salience_pole": 0.004555808656036446,
+          "median_sb": -0.17588421643407692,
+          "mean_sb": -2.2457905139219476
+        }
+      }
+    },
+    "L3|template|sum": {
+      "model": "L3",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 40,
+          "share_at_or_above_1": 0.08695652173913043,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.2630489735885171,
+          "mean_A": -8.51546855726651,
+          "median_headroom": 1.2630489735885169,
+          "mean_headroom": 9.51546855726651,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.7440737618739647,
+            "50": 1.2630489735885169,
+            "75": 2.9251674291622076,
+            "95": 11.126930482353927
+          },
+          "n_headroom_at_or_below_0": 40
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 26,
+          "share_at_or_above_1": 0.24074074074074073,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.6900594542608958,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.690059454260895,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 1.933380009933784,
+            "95": 9.139541546400665
+          },
+          "n_headroom_at_or_below_0": 26
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 40,
+          "share_at_or_above_1": 0.08849557522123894,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.24501118739790967,
+          "mean_A": -8.098730408238632,
+          "median_headroom": 1.2450111873979095,
+          "mean_headroom": 9.098730408238632,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.7177218652088094,
+            "50": 1.2450111873979095,
+            "75": 2.900316326328638,
+            "95": 10.087448411634078
+          },
+          "n_headroom_at_or_below_0": 40
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 0,
+          "share_at_or_above_1": 0.0,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.9536073170298867,
+          "mean_A": -32.06117397734157,
+          "median_headroom": 4.953607317029887,
+          "mean_headroom": 33.06117397734157,
+          "headroom_percentiles": {
+            "5": 0.675,
+            "25": 3.5155172986806305,
+            "50": 4.953607317029887,
+            "75": 14.31285525716553,
+            "95": 147.8429817762325
+          },
+          "n_headroom_at_or_below_0": 0
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 38,
+          "share_at_or_above_1": 0.08520179372197309,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.24115689220251374,
+          "mean_A": -1.4489805126417794,
+          "median_headroom": 1.2411568922025138,
+          "mean_headroom": 2.4489805126417794,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.756427500429319,
+            "50": 1.2411568922025138,
+            "75": 2.83992971235653,
+            "95": 8.447617483473186
+          },
+          "n_headroom_at_or_below_0": 38
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 255,
+          "share_at_or_past_salience_pole": 0.5808656036446469,
+          "n_strictly_past_salience_pole": 248,
+          "share_strictly_past_salience_pole": 0.5649202733485194,
+          "n_exactly_at_salience_pole": 7,
+          "share_exactly_at_salience_pole": 0.015945330296127564,
+          "median_sb": -0.0758181127227734,
+          "mean_sb": -1.8975544106892155
+        }
+      }
+    },
+    "L4|template|mean": {
+      "model": "L4",
+      "prompt_form": "template",
+      "rule": "mean",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 84,
+          "share_at_or_above_1": 0.1826086956521739,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.6307744627344847,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.630774462734484,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 3.0112663611257355,
+            "95": 14.079230928556074
+          },
+          "n_headroom_at_or_below_0": 84
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 6,
+          "share_at_or_above_1": 0.05555555555555555,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.6049718031594944,
+          "mean_A": -8.259217736997458,
+          "median_headroom": 1.6049718031594944,
+          "mean_headroom": 9.259217736997458,
+          "headroom_percentiles": {
+            "5": 0.17500000000000027,
+            "25": 1.0,
+            "50": 1.6049718031594944,
+            "75": 5.189737158587716,
+            "95": 24.4656497333724
+          },
+          "n_headroom_at_or_below_0": 6
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 82,
+          "share_at_or_above_1": 0.18141592920353983,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.620427446072399,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.620427446072399,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.9504491486277207,
+            "95": 13.926747733774915
+          },
+          "n_headroom_at_or_below_0": 82
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 2,
+          "share_at_or_above_1": 0.25,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -3.0499813518915824,
+          "mean_A": -4.215380904142341,
+          "median_headroom": 4.049981351891582,
+          "mean_headroom": 5.215380904142341,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.375,
+            "50": 4.049981351891582,
+            "75": 7.982262661032294,
+            "95": 13.878301283296112
+          },
+          "n_headroom_at_or_below_0": 2
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 84,
+          "share_at_or_above_1": 0.18834080717488788,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -1.5599290746468244,
+          "median_headroom": 1.0,
+          "mean_headroom": 2.559929074646824,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 2.880935708727447,
+            "95": 9.589587868334075
+          },
+          "n_headroom_at_or_below_0": 84
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 235,
+          "share_at_or_past_salience_pole": 0.5353075170842825,
+          "n_strictly_past_salience_pole": 232,
+          "share_strictly_past_salience_pole": 0.5284738041002278,
+          "n_exactly_at_salience_pole": 3,
+          "share_exactly_at_salience_pole": 0.00683371298405467,
+          "median_sb": -1.0563805958733052e-15,
+          "mean_sb": -1.4937760430305054
+        }
+      }
+    },
+    "L4|template|pmi": {
+      "model": "L4",
+      "prompt_form": "template",
+      "rule": "pmi",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 71,
+          "share_at_or_above_1": 0.15434782608695652,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.39402775913048205,
+          "mean_A": -3.3380872948697777,
+          "median_headroom": 1.394027759130482,
+          "mean_headroom": 4.338087294869777,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.8113398889149692,
+            "50": 1.394027759130482,
+            "75": 3.3268707791086385,
+            "95": 13.329527988197505
+          },
+          "n_headroom_at_or_below_0": 71
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 11,
+          "share_at_or_above_1": 0.10185185185185185,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.0411828416447224,
+          "mean_A": -7.0647331621757115,
+          "median_headroom": 2.041182841644722,
+          "mean_headroom": 8.064733162175711,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 2.041182841644722,
+            "75": 5.095719921317923,
+            "95": 19.550472119099737
+          },
+          "n_headroom_at_or_below_0": 11
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 70,
+          "share_at_or_above_1": 0.15486725663716813,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.37093848595536916,
+          "mean_A": -3.051117545433215,
+          "median_headroom": 1.370938485955369,
+          "mean_headroom": 4.051117545433216,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.8086792554222426,
+            "50": 1.370938485955369,
+            "75": 3.1353948887594094,
+            "95": 12.677220544269936
+          },
+          "n_headroom_at_or_below_0": 70
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 1,
+          "share_at_or_above_1": 0.125,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -6.4492272619729665,
+          "mean_A": -19.551878138035523,
+          "median_headroom": 7.4492272619729665,
+          "mean_headroom": 20.551878138035523,
+          "headroom_percentiles": {
+            "5": 1.5766654773511974,
+            "25": 4.803031722185977,
+            "50": 7.4492272619729665,
+            "75": 14.56285525716553,
+            "95": 77.06576296346614
+          },
+          "n_headroom_at_or_below_0": 1
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 69,
+          "share_at_or_above_1": 0.1547085201793722,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.3840590123891889,
+          "mean_A": -1.64862157970734,
+          "median_headroom": 1.384059012389189,
+          "mean_headroom": 2.6486215797073402,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.8111212967923507,
+            "50": 1.384059012389189,
+            "75": 3.118480112148115,
+            "95": 9.081318558158117
+          },
+          "n_headroom_at_or_below_0": 69
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 254,
+          "share_at_or_past_salience_pole": 0.5785876993166287,
+          "n_strictly_past_salience_pole": 251,
+          "share_strictly_past_salience_pole": 0.571753986332574,
+          "n_exactly_at_salience_pole": 3,
+          "share_exactly_at_salience_pole": 0.00683371298405467,
+          "median_sb": -3.0435694009296164e-14,
+          "mean_sb": -1.796591296306364
+        }
+      }
+    },
+    "L4|template|sum": {
+      "model": "L4",
+      "prompt_form": "template",
+      "rule": "sum",
+      "sets": {
+        "divergence_set": {
+          "label": "divergence_set",
+          "n": 460,
+          "n_at_or_above_1": 59,
+          "share_at_or_above_1": 0.1282608695652174,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.672804193768824,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.672804193768823,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 3.1781659665080007,
+            "95": 14.49471403361026
+          },
+          "n_headroom_at_or_below_0": 59
+        },
+        "divergence_set_size_tile": {
+          "label": "divergence_set_size_tile",
+          "n": 108,
+          "n_at_or_above_1": 7,
+          "share_at_or_above_1": 0.06481481481481481,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -0.8087900852305714,
+          "mean_A": -5.860469699036809,
+          "median_headroom": 1.8087900852305712,
+          "mean_headroom": 6.860469699036809,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 1.0,
+            "50": 1.8087900852305712,
+            "75": 4.989477714027985,
+            "95": 24.4656497333724
+          },
+          "n_headroom_at_or_below_0": 7
+        },
+        "o_star_inf_equals_o_fit": {
+          "label": "o_star_inf_equals_o_fit",
+          "n": 452,
+          "n_at_or_above_1": 58,
+          "share_at_or_above_1": 0.12831858407079647,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -3.1908341073167614,
+          "median_headroom": 1.0,
+          "mean_headroom": 4.190834107316761,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 3.1666728531304456,
+            "95": 14.058489283568294
+          },
+          "n_headroom_at_or_below_0": 58
+        },
+        "o_star_inf_differs_from_o_fit": {
+          "label": "o_star_inf_differs_from_o_fit",
+          "n": 8,
+          "n_at_or_above_1": 1,
+          "share_at_or_above_1": 0.125,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": -1.7523792533588534,
+          "mean_A": -30.904114078310375,
+          "median_headroom": 2.7523792533588534,
+          "mean_headroom": 31.904114078310375,
+          "headroom_percentiles": {
+            "5": 0.17500000000000002,
+            "25": 0.875,
+            "50": 2.7523792533588534,
+            "75": 14.18785525716553,
+            "95": 147.66798177623252
+          },
+          "n_headroom_at_or_below_0": 1
+        },
+        "divergence_set_above_ext_floor": {
+          "label": "divergence_set_above_ext_floor",
+          "n": 446,
+          "n_at_or_above_1": 59,
+          "share_at_or_above_1": 0.13228699551569506,
+          "n_above_1": 0,
+          "share_above_1": 0.0,
+          "median_A": 0.0,
+          "mean_A": -1.7539444420913706,
+          "median_headroom": 1.0,
+          "mean_headroom": 2.7539444420913712,
+          "headroom_percentiles": {
+            "5": 0.0,
+            "25": 0.5,
+            "50": 1.0,
+            "75": 3.0223442452646707,
+            "95": 11.704512745330687
+          },
+          "n_headroom_at_or_below_0": 59
+        },
+        "p1_salience_bayes_coordinate": {
+          "label": "sb on the divergence set",
+          "n": 439,
+          "n_at_or_past_salience_pole": 197,
+          "share_at_or_past_salience_pole": 0.44874715261959,
+          "n_strictly_past_salience_pole": 195,
+          "share_strictly_past_salience_pole": 0.44419134396355353,
+          "n_exactly_at_salience_pole": 2,
+          "share_exactly_at_salience_pole": 0.004555808656036446,
+          "median_sb": 0.019585789419056282,
+          "mean_sb": -1.049317125090389
+        }
+      }
+    }
+  },
+  "per_tile_primary_cell": {
+    "CTRL": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 24,
+        "share_at_or_above_1": 0.21052631578947367,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -0.5769190962780647,
+        "mean_A": -2.9887322052999887,
+        "median_headroom": 1.5769190962780648,
+        "mean_headroom": 3.9887322052999887,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 1.0,
+          "50": 1.5769190962780648,
+          "75": 3.2682040937156622,
+          "95": 12.744570717505676
+        },
+        "n_headroom_at_or_below_0": 24
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 0,
+        "share_at_or_above_1": 0.0,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -3.554600983366217,
+        "median_headroom": 1.0,
+        "mean_headroom": 4.5546009833662175,
+        "headroom_percentiles": {
+          "5": 1.0,
+          "25": 1.0,
+          "50": 1.0,
+          "75": 1.4376114755023413,
+          "95": 13.277352759785163
+        },
+        "n_headroom_at_or_below_0": 0
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 2,
+        "share_at_or_above_1": 0.017241379310344827,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.9059886116565483,
+        "mean_A": -24.833967872122706,
+        "median_headroom": 2.9059886116565483,
+        "mean_headroom": 25.8339678721227,
+        "headroom_percentiles": {
+          "5": 0.724491260079361,
+          "25": 1.0,
+          "50": 2.9059886116565483,
+          "75": 5.3138441353133405,
+          "95": 16.187003879580576
+        },
+        "n_headroom_at_or_below_0": 2
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 3,
+        "share_at_or_above_1": 0.027777777777777776,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -3.604655162310393,
+        "mean_A": -15.542837363318105,
+        "median_headroom": 4.604655162310393,
+        "mean_headroom": 16.542837363318103,
+        "headroom_percentiles": {
+          "5": 0.9587921785126114,
+          "25": 1.7995452424857428,
+          "50": 4.604655162310393,
+          "75": 8.332956374140078,
+          "95": 36.21477060976732
+        },
+        "n_headroom_at_or_below_0": 3
+      }
+    },
+    "B2": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 1,
+        "share_at_or_above_1": 0.008771929824561403,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -1.6383455722486855,
+        "median_headroom": 1.0,
+        "mean_headroom": 2.6383455722486855,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 1.0,
+          "75": 1.0,
+          "95": 7.5780767332579515
+        },
+        "n_headroom_at_or_below_0": 1
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 0,
+        "share_at_or_above_1": 0.0,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -3.590831067446138,
+        "median_headroom": 1.0,
+        "mean_headroom": 4.590831067446138,
+        "headroom_percentiles": {
+          "5": 1.0,
+          "25": 1.0,
+          "50": 1.0,
+          "75": 1.0,
+          "95": 13.277352759785163
+        },
+        "n_headroom_at_or_below_0": 0
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 2,
+        "share_at_or_above_1": 0.017241379310344827,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -2.6582367219420826,
+        "mean_A": -28.368532235142194,
+        "median_headroom": 3.6582367219420826,
+        "mean_headroom": 29.368532235142194,
+        "headroom_percentiles": {
+          "5": 1.0,
+          "25": 2.388972064268531,
+          "50": 3.6582367219420826,
+          "75": 6.7975187494321405,
+          "95": 16.839798108017234
+        },
+        "n_headroom_at_or_below_0": 2
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 26,
+        "share_at_or_above_1": 0.24074074074074073,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.427383639520539,
+        "mean_A": -9.021064803241151,
+        "median_headroom": 2.4273836395205395,
+        "mean_headroom": 10.021064803241151,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 0.42230936131008284,
+          "50": 2.4273836395205395,
+          "75": 5.472496787015565,
+          "95": 14.907085619865548
+        },
+        "n_headroom_at_or_below_0": 26
+      }
+    },
+    "B4": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 46,
+        "share_at_or_above_1": 0.40350877192982454,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.5,
+        "mean_A": -0.43231110279016466,
+        "median_headroom": 0.5,
+        "mean_headroom": 1.4323111027901645,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 0.0,
+          "50": 0.5,
+          "75": 1.0,
+          "95": 5.448621058451104
+        },
+        "n_headroom_at_or_below_0": 46
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 11,
+        "share_at_or_above_1": 0.09016393442622951,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -0.2500779662164608,
+        "mean_A": -1.1456163203954821,
+        "median_headroom": 1.2500779662164607,
+        "mean_headroom": 2.1456163203954826,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 0.6763519691788217,
+          "50": 1.2500779662164607,
+          "75": 2.065329191885282,
+          "95": 7.135533176144491
+        },
+        "n_headroom_at_or_below_0": 11
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 24,
+        "share_at_or_above_1": 0.20689655172413793,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -2.036094925471741,
+        "median_headroom": 1.0,
+        "mean_headroom": 3.036094925471741,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 0.5,
+          "50": 1.0,
+          "75": 1.9584169281560349,
+          "95": 6.117724063735202
+        },
+        "n_headroom_at_or_below_0": 24
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 5,
+        "share_at_or_above_1": 0.046296296296296294,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.7316570524016648,
+        "mean_A": -9.651055805338135,
+        "median_headroom": 2.7316570524016646,
+        "mean_headroom": 10.651055805338135,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 2.7316570524016646,
+          "75": 5.955078074997811,
+          "95": 21.364637077923973
+        },
+        "n_headroom_at_or_below_0": 5
+      }
+    },
+    "L1": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 0,
+        "share_at_or_above_1": 0.0,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -1.9402683429108654,
+        "median_headroom": 1.0,
+        "mean_headroom": 2.9402683429108656,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 1.0,
+          "75": 1.0,
+          "95": 12.212642258491138
+        },
+        "n_headroom_at_or_below_0": 0
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 1,
+        "share_at_or_above_1": 0.00819672131147541,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -0.4253750046892819,
+        "mean_A": -1.8700786941893675,
+        "median_headroom": 1.425375004689282,
+        "mean_headroom": 2.8700786941893677,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 1.425375004689282,
+          "75": 2.3964446706037905,
+          "95": 7.410218969696875
+        },
+        "n_headroom_at_or_below_0": 1
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 2,
+        "share_at_or_above_1": 0.017241379310344827,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.523359170383702,
+        "mean_A": -24.616035710231355,
+        "median_headroom": 2.523359170383702,
+        "mean_headroom": 25.616035710231355,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 2.523359170383702,
+          "75": 4.493981529619731,
+          "95": 14.18455969866703
+        },
+        "n_headroom_at_or_below_0": 2
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 7,
+        "share_at_or_above_1": 0.06481481481481481,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -2.35673474410624,
+        "mean_A": -13.762185781754352,
+        "median_headroom": 3.35673474410624,
+        "mean_headroom": 14.762185781754354,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 1.5649727498946857,
+          "50": 3.35673474410624,
+          "75": 7.6143723906304475,
+          "95": 25.567126589207316
+        },
+        "n_headroom_at_or_below_0": 7
+      }
+    },
+    "L2": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 0,
+        "share_at_or_above_1": 0.0,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -2.084995531293996,
+        "median_headroom": 1.0,
+        "mean_headroom": 3.0849955312939965,
+        "headroom_percentiles": {
+          "5": 1.0,
+          "25": 1.0,
+          "50": 1.0,
+          "75": 1.0,
+          "95": 12.212642258491138
+        },
+        "n_headroom_at_or_below_0": 0
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 4,
+        "share_at_or_above_1": 0.03278688524590164,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -0.3812730984637359,
+        "mean_A": -1.4788084983030605,
+        "median_headroom": 1.381273098463736,
+        "mean_headroom": 2.4788084983030605,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 0.8757309839618065,
+          "50": 1.381273098463736,
+          "75": 2.0562187597006356,
+          "95": 5.806394986489298
+        },
+        "n_headroom_at_or_below_0": 4
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 1,
+        "share_at_or_above_1": 0.008620689655172414,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.3672778244616237,
+        "mean_A": -5.556297431527949,
+        "median_headroom": 2.367277824461624,
+        "mean_headroom": 6.556297431527949,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 2.367277824461624,
+          "75": 4.559448947092008,
+          "95": 14.18455969866703
+        },
+        "n_headroom_at_or_below_0": 1
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 3,
+        "share_at_or_above_1": 0.027777777777777776,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.772871460406383,
+        "mean_A": -6.3978491011730165,
+        "median_headroom": 2.772871460406383,
+        "mean_headroom": 7.3978491011730165,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 2.772871460406383,
+          "75": 6.181108134634652,
+          "95": 28.26902520530287
+        },
+        "n_headroom_at_or_below_0": 3
+      }
+    },
+    "L3": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 3,
+        "share_at_or_above_1": 0.02631578947368421,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.0,
+        "mean_A": -1.499338493169495,
+        "median_headroom": 1.0,
+        "mean_headroom": 2.499338493169496,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 0.5240238402480192,
+          "50": 1.0,
+          "75": 2.4802683175023,
+          "95": 8.688571736129541
+        },
+        "n_headroom_at_or_below_0": 3
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 2,
+        "share_at_or_above_1": 0.01639344262295082,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -0.38677697219304197,
+        "mean_A": -1.6576570611121488,
+        "median_headroom": 1.3867769721930419,
+        "mean_headroom": 2.6576570611121495,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 1.3867769721930419,
+          "75": 2.4344909331095326,
+          "95": 4.95880245912498
+        },
+        "n_headroom_at_or_below_0": 2
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 4,
+        "share_at_or_above_1": 0.034482758620689655,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.1573168477573983,
+        "mean_A": -4.156331132649393,
+        "median_headroom": 2.1573168477573983,
+        "mean_headroom": 5.156331132649392,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 2.1573168477573983,
+          "75": 4.519409772679691,
+          "95": 13.445681873087459
+        },
+        "n_headroom_at_or_below_0": 4
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 5,
+        "share_at_or_above_1": 0.046296296296296294,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -2.0066972556035667,
+        "mean_A": -10.353970900570632,
+        "median_headroom": 3.0066972556035667,
+        "mean_headroom": 11.353970900570632,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.3474404800954194,
+          "50": 3.0066972556035667,
+          "75": 5.696415193633917,
+          "95": 45.807128311308816
+        },
+        "n_headroom_at_or_below_0": 5
+      }
+    },
+    "L4": {
+      "manmade": {
+        "label": "manmade",
+        "n": 114,
+        "n_at_or_above_1": 57,
+        "share_at_or_above_1": 0.5,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": 0.75,
+        "mean_A": 0.16839003434086805,
+        "median_headroom": 0.25,
+        "mean_headroom": 0.831609965659132,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 0.0,
+          "50": 0.25,
+          "75": 1.0,
+          "95": 3.6424587199798446
+        },
+        "n_headroom_at_or_below_0": 57
+      },
+      "moves": {
+        "label": "moves",
+        "n": 122,
+        "n_at_or_above_1": 3,
+        "share_at_or_above_1": 0.02459016393442623,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -0.5347855145437297,
+        "mean_A": -2.8197512446531254,
+        "median_headroom": 1.5347855145437297,
+        "mean_headroom": 3.8197512446531254,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.1477522980757504,
+          "50": 1.5347855145437297,
+          "75": 3.0064698883753307,
+          "95": 7.135533176144491
+        },
+        "n_headroom_at_or_below_0": 3
+      },
+      "hold": {
+        "label": "hold",
+        "n": 116,
+        "n_at_or_above_1": 0,
+        "share_at_or_above_1": 0.0,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.5900405339724721,
+        "mean_A": -3.85961884648533,
+        "median_headroom": 2.590040533972472,
+        "mean_headroom": 4.85961884648533,
+        "headroom_percentiles": {
+          "5": 0.5,
+          "25": 1.0,
+          "50": 2.590040533972472,
+          "75": 4.582430674918074,
+          "95": 14.12061782494137
+        },
+        "n_headroom_at_or_below_0": 0
+      },
+      "size": {
+        "label": "size",
+        "n": 108,
+        "n_at_or_above_1": 11,
+        "share_at_or_above_1": 0.10185185185185185,
+        "n_above_1": 0,
+        "share_above_1": 0.0,
+        "median_A": -1.0411828416447224,
+        "mean_A": -7.0647331621757115,
+        "median_headroom": 2.041182841644722,
+        "mean_headroom": 8.064733162175711,
+        "headroom_percentiles": {
+          "5": 0.0,
+          "25": 1.0,
+          "50": 2.041182841644722,
+          "75": 5.095719921317923,
+          "95": 19.550472119099737
+        },
+        "n_headroom_at_or_below_0": 11
+      }
+    }
+  },
+  "what_this_does_not_decide": {
+    "routed_to": "T5 (preregistration)",
+    "open_question": "Whether Arm B's primary analysis is restricted to items with F0 headroom, whether a second non-salience-confounded coordinate is added, or whether the ceiling is accepted and stated as a limit on what a null can mean.",
+    "not_decided_here": "All three. Designing the remedy in the session that produced the numbers is choosing the rule after seeing them.",
+    "what_is_not_at_risk": "Validity of the contrasts. Salience-driven behaviour is constant across framings, so it cancels in F1 - F0 and F2 - F0 and yields Delta-A = 0. Arm B's primary measure is already a contrast. What is at risk is power: a ceiling confirms 'no movement' without evidence."
+  }
+}
