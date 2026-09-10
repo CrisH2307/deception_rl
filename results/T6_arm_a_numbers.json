@@ -1,0 +1,823 @@
+{
+  "step2": {
+    "item_base": "P1 items_final.parquet, all 1,000 items, all four tiles",
+    "N": 1000,
+    "n_finite": 460,
+    "n_infinite": 540,
+    "finite_rate": 0.46,
+    "n_beta_c_exactly_zero": 0,
+    "finite_percentiles": {
+      "0": 0.187616075592814,
+      "1": 0.3079873923957348,
+      "5": 0.788867088178813,
+      "10": 1.3965088217577433,
+      "25": 2.2930281840090174,
+      "50": 3.3299609395326115,
+      "75": 4.350068230880424,
+      "90": 5.328565169032664,
+      "95": 5.984945509268434,
+      "99": 7.691696425885888,
+      "100": 10.656156333629042
+    },
+    "finite_mean": 3.364785326930565,
+    "finite_sd": 1.6142352785054057,
+    "n_finite_above_grid_endpoint": 3,
+    "divergence_curve_frozen": {
+      "0.0": {
+        "pooled": 0.0,
+        "manmade": 0.0,
+        "moves": 0.0,
+        "hold": 0.0,
+        "size": 0.0
+      },
+      "0.25": {
+        "pooled": 0.003,
+        "manmade": 0.004,
+        "moves": 0.004,
+        "hold": 0.004,
+        "size": 0.0
+      },
+      "0.5": {
+        "pooled": 0.012,
+        "manmade": 0.016,
+        "moves": 0.016,
+        "hold": 0.016,
+        "size": 0.0
+      },
+      "1.0": {
+        "pooled": 0.027,
+        "manmade": 0.024,
+        "moves": 0.052,
+        "hold": 0.02,
+        "size": 0.012
+      },
+      "2.0": {
+        "pooled": 0.093,
+        "manmade": 0.116,
+        "moves": 0.12,
+        "hold": 0.084,
+        "size": 0.052
+      },
+      "4.0": {
+        "pooled": 0.315,
+        "manmade": 0.308,
+        "moves": 0.352,
+        "hold": 0.332,
+        "size": 0.268
+      },
+      "8.0": {
+        "pooled": 0.457,
+        "manmade": 0.456,
+        "moves": 0.488,
+        "hold": 0.452,
+        "size": 0.432
+      },
+      "inf": {
+        "pooled": 0.46,
+        "manmade": 0.456,
+        "moves": 0.488,
+        "hold": 0.464,
+        "size": 0.432
+      }
+    },
+    "divergence_curve_pool": {
+      "0.0": {
+        "pooled": 0.0,
+        "manmade": 0.0,
+        "moves": 0.0,
+        "hold": 0.0,
+        "size": 0.0
+      },
+      "0.25": {
+        "pooled": 0.00163,
+        "manmade": 0.0009593092973059397,
+        "moves": 0.0016803696813298926,
+        "hold": 0.0008832326314310376,
+        "size": 0.0029905498624347064
+      },
+      "0.5": {
+        "pooled": 0.003785,
+        "manmade": 0.002038532256775122,
+        "moves": 0.004000880193642601,
+        "hold": 0.0027500652387739124,
+        "size": 0.006339965708361577
+      },
+      "1.0": {
+        "pooled": 0.009815,
+        "manmade": 0.005276201135182668,
+        "moves": 0.01050231050831183,
+        "hold": 0.0071260814581367805,
+        "size": 0.016328402248893495
+      },
+      "2.0": {
+        "pooled": 0.031265,
+        "manmade": 0.01213126548884803,
+        "moves": 0.03374742443337534,
+        "hold": 0.024790734086757533,
+        "size": 0.054308385501814264
+      },
+      "4.0": {
+        "pooled": 0.112315,
+        "manmade": 0.025901351027260374,
+        "moves": 0.1198063573986277,
+        "hold": 0.09805889555774133,
+        "size": 0.20521153156026956
+      },
+      "8.0": {
+        "pooled": 0.179535,
+        "manmade": 0.03851227116476137,
+        "moves": 0.1773390145832083,
+        "hold": 0.17461910592769536,
+        "size": 0.3272857769448543
+      },
+      "inf": {
+        "pooled": 0.18232,
+        "manmade": 0.03867215604764569,
+        "moves": 0.17895937106163357,
+        "hold": 0.17748961197984622,
+        "size": 0.33376530164679613
+      }
+    },
+    "per_tile_finite_rate": {
+      "manmade": 0.456,
+      "moves": 0.488,
+      "hold": 0.464,
+      "size": 0.432
+    },
+    "per_tile_finite_count": {
+      "manmade": 114,
+      "moves": 122,
+      "hold": 116,
+      "size": 108
+    },
+    "per_tile_finite_median": {
+      "manmade": 3.2384736669482663,
+      "moves": 3.0048808822757564,
+      "hold": 3.2588848704472184,
+      "size": 3.6477022017352283
+    },
+    "K2": {
+      "status": "reproduction check; K2 fired in T2 and is not reopened here",
+      "item_base": "full 200,000-candidate pool (v2.0 section 7.1)",
+      "threshold": 0.8,
+      "spearman_pool": -0.9036067617756205,
+      "fires": true,
+      "published": -0.9036,
+      "problems": [],
+      "pearson_finite_subset_pool": -0.3440847551205831,
+      "spearman_frozen_set_descriptive": -0.8976570801088506,
+      "pearson_frozen_finite_descriptive": -0.4583085963490706
+    },
+    "three_optima_coincidence": {
+      "fit_cost_zero": {
+        "N": 500,
+        "robust_share": 0.984,
+        "finite_share": 0.016
+      },
+      "fit_cost_positive": {
+        "N": 500,
+        "robust_share": 0.096,
+        "finite_share": 0.904
+      },
+      "marginal_robust_share": 0.54,
+      "share_of_finite_that_are_conflict": 0.9826086956521739,
+      "gap_in_robust_share_points": 88.8,
+      "pool_check": {
+        "fit_cost_zero": {
+          "N": 162694,
+          "robust_share": 0.9829004142746506
+        },
+        "fit_cost_positive": {
+          "N": 37306,
+          "robust_share": 0.09714255079611858
+        }
+      },
+      "note": "Confirms the T2 session's byproduct observation on Arm A's own base. fit_cost = 0 says o_fit = o_bayes; beta_c = infinity says o*_0 = argmax margin. Independence would put both rows near the marginal robust share."
+    }
+  },
+  "step3": {
+    "definition": "L(h*|o*_0) - L(h*|o*_infinity), probability scale",
+    "item_base": "divergence set of the frozen 1,000 (finite beta_c)",
+    "primary_convention": "p1_post_norm",
+    "n_divergence_set": 460,
+    "n_negative": 0,
+    "n_exactly_zero": 0,
+    "n_exactly_zero_and_boundary_exact": 0,
+    "n_boundary_exact_in_D": 2,
+    "percentiles": {
+      "0": 1.2302767802941511e-05,
+      "1": 4.519729502189443e-05,
+      "5": 0.00016791442964430832,
+      "10": 0.0002803403737719403,
+      "25": 0.0008907020900929524,
+      "50": 0.0021747835716987305,
+      "75": 0.0049942960212431,
+      "90": 0.00781483658771823,
+      "95": 0.010086495393181369,
+      "99": 0.013944176074332206,
+      "100": 0.01814740222007639
+    },
+    "mean": 0.0033715631469945244,
+    "sd": 0.0032912434493962885,
+    "conventions": {
+      "raw_difference": {
+        "definition": "L(h*|o*_0) - L(h*|o*_infinity), probability scale",
+        "n": 460,
+        "mean": 0.0033715631469945244,
+        "median": 0.0021747835716987305,
+        "sd": 0.0032912434493962885,
+        "percentiles": {
+          "0": 1.2302767802941511e-05,
+          "1": 4.519729502189443e-05,
+          "5": 0.00016791442964430832,
+          "10": 0.0002803403737719403,
+          "25": 0.0008907020900929524,
+          "50": 0.0021747835716987305,
+          "75": 0.0049942960212431,
+          "90": 0.00781483658771823,
+          "95": 0.010086495393181369,
+          "99": 0.013944176074332206,
+          "100": 0.01814740222007639
+        }
+      },
+      "prior_floor_1_over_H": 0.01,
+      "reference_levels": {
+        "mean_L_at_o0": 0.016368493714218196,
+        "mean_L_at_oinf": 0.012996930567223673,
+        "mean_L_at_o0_above_prior": 0.006368493714218197,
+        "mean_L_at_oinf_above_prior": 0.002996930567223673,
+        "mean_item_posterior_range": 0.011326045947018963,
+        "mean_salience_pole_post_norm": 0.7033948024425325
+      },
+      "p1_post_norm": {
+        "denominator": "P1 D47: the item's own posterior range (frozen frontier_ext_post). PRIMARY, because it is the coordinate P1 already normalises this axis by and the DV Arm B is scored on.",
+        "n": 460,
+        "n_undefined": 0,
+        "mean_of_per_item_ratios": 0.30558813263816775,
+        "median": 0.27276039276418745,
+        "sd": 0.2236179374052468,
+        "p10": 0.05203703272272682,
+        "p90": 0.548241596518926,
+        "ratio_of_means": 0.2976822770070014
+      },
+      "p1_salience_bayes": {
+        "denominator": "P1's frontier span, 1 - post_norm(o_fit); NaN where the span is at or below P1's own guard of 0.02.",
+        "n": 439,
+        "n_undefined": 21,
+        "mean_of_per_item_ratios": 1.0,
+        "median": 1.0,
+        "sd": 3.086402137466278e-16,
+        "p10": 1.0,
+        "p90": 1.0,
+        "ratio_of_means": 1.0368416890599048
+      },
+      "above_prior": {
+        "denominator": "L(h*|o*_0) - 1/|H| with 1/|H| = 0.01, the mass the Bayes-optimal signal earns over an uninformative one.",
+        "n": 460,
+        "n_undefined": 0,
+        "mean_of_per_item_ratios": 0.577872025072546,
+        "median": 0.5483064410463114,
+        "sd": 0.37243826254587276,
+        "p10": 0.11443615331924707,
+        "p90": 0.9724359253346424,
+        "ratio_of_means": 0.5294129661252905
+      },
+      "raw_share_of_total_mass": {
+        "denominator": "L(h*|o*_0), total posterior mass including the prior floor.",
+        "n": 460,
+        "n_undefined": 0,
+        "mean_of_per_item_ratios": 0.1819336245108367,
+        "median": 0.15017741337846024,
+        "sd": 0.13598723821530112,
+        "p10": 0.023258235623089065,
+        "p90": 0.38652709309294675,
+        "ratio_of_means": 0.20597882773207635
+      },
+      "o_star_infinity_is_o_fit": {
+        "n": 452,
+        "n_total": 460,
+        "share": 0.9826086956521739,
+        "n_exceptions": 8,
+        "n_exceptions_removed_by_p1_span_guard": 8,
+        "sb_at_oinf_exactly_zero": 439,
+        "sb_defined": 439,
+        "sb_price_max_shortfall_from_one": 5.662137425588298e-15,
+        "note": "argmax_o margin(o) and P1's argmax_o f(o,h*) are different functions and this is not an identity: the exceptions exist. But every exception falls inside the set P1's own span guard removes, so on every item where the frontier coordinate is defined the price is exactly 1. Read: the adversary-robust signal sits ON P1's salience pole, and buying margin walks the whole salience-to-Bayes interval. The coordinate therefore carries no distributional information about this quantity and is not used as its denominator."
+      },
+      "degeneracies": {
+        "n_salience_span_at_or_below_guard": 21,
+        "n_L_at_o0_at_or_below_prior": 0,
+        "n_L_at_oinf_at_or_below_prior": 42,
+        "n_post_norm_at_o0_below_one": 2,
+        "n_post_norm_at_oinf_exactly_zero": 19,
+        "post_norm_at_oinf_zero_note": "Items where the adversary-robust signal is the item's LOWEST-posterior option, so the normalised price is exactly 1. Not a degeneracy: a real corner of the signal space, and the spike at 1 in the figure.",
+        "max_post_norm_at_o0_shortfall_from_one": 1.3322676295501878e-15,
+        "min_above_prior_denominator": 2.3269290264074302e-05,
+        "n_above_prior_ratio_exceeding_1": 42,
+        "note": "An `above_prior` ratio above 1 is not an error: it is an item where the margin-optimal signal leaves the truth BELOW the uniform prior, so the Scientist surrenders more than the signal earned. Those items are counted, kept, and are the reason the per-item mean of that ratio sits above its ratio of means. Nothing is clipped."
+      },
+      "item_base": "divergence set of the frozen 1,000"
+    },
+    "per_tile": {
+      "manmade": {
+        "n": 114,
+        "mean": 0.003211572282687258,
+        "median": 0.0014986730630384857,
+        "p90": 0.008714753964630565,
+        "p1_post_norm_mean": 0.39954457120339615
+      },
+      "moves": {
+        "n": 122,
+        "mean": 0.002798401490372175,
+        "median": 0.0018479100190213413,
+        "p90": 0.006506728567638482,
+        "p1_post_norm_mean": 0.28088974071061
+      },
+      "hold": {
+        "n": 116,
+        "mean": 0.004318543140401423,
+        "median": 0.0032728041929291716,
+        "p90": 0.009917776916470413,
+        "p1_post_norm_mean": 0.2640697229102987
+      },
+      "size": {
+        "n": 108,
+        "mean": 0.0031707761229552134,
+        "median": 0.0022929658990323894,
+        "p90": 0.0063003934856643955,
+        "p1_post_norm_mean": 0.2789057747414902
+      }
+    },
+    "spike_at_one": {
+      "definition": "post_norm(o*_infinity) == 0 exactly: the adversary-robust signal is the item's lowest-posterior option, so the normalised price is exactly 1",
+      "n": 19,
+      "n_also_o_fit": 19,
+      "mean_fit_cost": 0.38615490079462234,
+      "mean_fit_cost_rest": 0.19460246698192318,
+      "per_tile": {
+        "manmade": 17,
+        "moves": 1,
+        "hold": 1,
+        "size": 0
+      }
+    },
+    "L_at_o0_mean_in_D": 0.016368493714218196,
+    "L_at_oinf_mean_in_D": 0.012996930567223673,
+    "robust_items_price_max": 0.0,
+    "pool_robustness_check": {
+      "status": "descriptive robustness check, not a second estimate",
+      "n_divergence_set_pool": 36464,
+      "conflict_share_frozen": 0.5,
+      "conflict_share_pool": 0.18653,
+      "conflict_share_within_divergence_set_frozen": 0.9826086956521739,
+      "conflict_share_within_divergence_set_pool": 0.92370557261957,
+      "conventions": {
+        "raw_difference": {
+          "definition": "L(h*|o*_0) - L(h*|o*_infinity), probability scale",
+          "n": 36464,
+          "mean": 0.003486917744957348,
+          "median": 0.00251949935123666,
+          "sd": 0.003377221778686439,
+          "percentiles": {
+            "0": 3.685776602153912e-08,
+            "1": 3.7537884746731156e-05,
+            "5": 0.00020374695978316298,
+            "10": 0.0004018413754351755,
+            "25": 0.0010747994364194717,
+            "50": 0.00251949935123666,
+            "75": 0.004849466185809231,
+            "90": 0.007737040638688166,
+            "95": 0.009989692187516063,
+            "99": 0.015863761136351524,
+            "100": 0.035598171156317915
+          }
+        },
+        "prior_floor_1_over_H": 0.01,
+        "reference_levels": {
+          "mean_L_at_o0": 0.016598740857348353,
+          "mean_L_at_oinf": 0.013111823112391003,
+          "mean_L_at_o0_above_prior": 0.00659874085734835,
+          "mean_L_at_oinf_above_prior": 0.003111823112391003,
+          "mean_item_posterior_range": 0.011816164051599264,
+          "mean_salience_pole_post_norm": 0.7528710695759341
+        },
+        "p1_post_norm": {
+          "denominator": "P1 D47: the item's own posterior range (frozen frontier_ext_post). PRIMARY, because it is the coordinate P1 already normalises this axis by and the DV Arm B is scored on.",
+          "n": 36464,
+          "n_undefined": 0,
+          "mean_of_per_item_ratios": 0.2762773631210606,
+          "median": 0.2657120066847258,
+          "sd": 0.17269661258419344,
+          "p10": 0.05574849223055016,
+          "p90": 0.5006177647072736,
+          "ratio_of_means": 0.2950972692771145
+        },
+        "p1_salience_bayes": {
+          "denominator": "P1's frontier span, 1 - post_norm(o_fit); NaN where the span is at or below P1's own guard of 0.02.",
+          "n": 32454,
+          "n_undefined": 4010,
+          "mean_of_per_item_ratios": 1.0,
+          "median": 1.0,
+          "sd": 1.1578085504276208e-15,
+          "p10": 1.0,
+          "p90": 1.0,
+          "ratio_of_means": 1.119971296705021
+        },
+        "above_prior": {
+          "denominator": "L(h*|o*_0) - 1/|H| with 1/|H| = 0.01, the mass the Bayes-optimal signal earns over an uninformative one.",
+          "n": 36464,
+          "n_undefined": 0,
+          "mean_of_per_item_ratios": 0.5392826147791391,
+          "median": 0.5481554685219483,
+          "sd": 0.30207914795082114,
+          "p10": 0.12721412823556102,
+          "p90": 0.9077072861309798,
+          "ratio_of_means": 0.5284216823084241
+        },
+        "raw_share_of_total_mass": {
+          "denominator": "L(h*|o*_0), total posterior mass including the prior floor.",
+          "n": 36464,
+          "n_undefined": 0,
+          "mean_of_per_item_ratios": 0.18786782753439496,
+          "median": 0.1666915126121462,
+          "sd": 0.13111103080512523,
+          "p10": 0.030186064597985365,
+          "p90": 0.3794469377229245,
+          "ratio_of_means": 0.21007122015605603
+        },
+        "o_star_infinity_is_o_fit": {
+          "n": 33716,
+          "n_total": 36464,
+          "share": 0.9246379991224221,
+          "n_exceptions": 2748,
+          "n_exceptions_removed_by_p1_span_guard": 2748,
+          "sb_at_oinf_exactly_zero": 32454,
+          "sb_defined": 32454,
+          "sb_price_max_shortfall_from_one": 7.105427357601002e-14,
+          "note": "argmax_o margin(o) and P1's argmax_o f(o,h*) are different functions and this is not an identity: the exceptions exist. But every exception falls inside the set P1's own span guard removes, so on every item where the frontier coordinate is defined the price is exactly 1. Read: the adversary-robust signal sits ON P1's salience pole, and buying margin walks the whole salience-to-Bayes interval. The coordinate therefore carries no distributional information about this quantity and is not used as its denominator."
+        },
+        "degeneracies": {
+          "n_salience_span_at_or_below_guard": 4010,
+          "n_L_at_o0_at_or_below_prior": 0,
+          "n_L_at_oinf_at_or_below_prior": 1481,
+          "n_post_norm_at_o0_below_one": 526,
+          "n_post_norm_at_oinf_exactly_zero": 228,
+          "post_norm_at_oinf_zero_note": "Items where the adversary-robust signal is the item's LOWEST-posterior option, so the normalised price is exactly 1. Not a degeneracy: a real corner of the signal space, and the spike at 1 in the figure.",
+          "max_post_norm_at_o0_shortfall_from_one": 1.199040866595169e-14,
+          "min_above_prior_denominator": 1.2599805402703154e-05,
+          "n_above_prior_ratio_exceeding_1": 1481,
+          "note": "An `above_prior` ratio above 1 is not an error: it is an item where the margin-optimal signal leaves the truth BELOW the uniform prior, so the Scientist surrenders more than the signal earned. Those items are counted, kept, and are the reason the per-item mean of that ratio sits above its ratio of means. Nothing is clipped."
+        },
+        "item_base": "divergence set of the 200k pool"
+      },
+      "frozen_minus_pool": {
+        "p1_post_norm": 0.02931076951710715,
+        "p1_salience_bayes": 0.0,
+        "above_prior": 0.0385894102934069,
+        "raw_share_of_total_mass": -0.0059342030235582655
+      },
+      "raw_mean_frozen_minus_pool": -0.00011535459796282359
+    }
+  },
+  "step4": {
+    "status": "EXPLORATORY (v2.0 section 10). No preregistered prediction, no threshold, no p-value is a test.",
+    "item_base": "frozen 1,000",
+    "identity_check": {
+      "note": "beta_c is finite iff o*_0 != o*_infinity. Any 'predictor' of finiteness that is a function of margin headroom is restating the definition, so headroom is used only among finite items, where its magnitude is not implied by membership.",
+      "exact_identity_o0_ne_oinf_equals_finite": true,
+      "headroom_positive_equals_finite": false,
+      "n_headroom_sign_exceptions": 1,
+      "headroom_max_among_robust": 4.440892098500626e-16,
+      "exceptions_note": "The exact identity is on the tie-broken argmax and holds on every item. The raw sign test `headroom > 0` does not, and the gap is reported rather than hidden: on the items listed above some rival exceeds o*_0's margin by less than P1's D51 tie-break tolerance, so the tie-break keeps o*_0 and beta_c is infinite while the float difference is positive. The magnitudes involved are of order 1e-16. Nothing is clamped; the identity used everywhere else in this script is the argmax one."
+    },
+    "spearman_beta_c_vs_property_finite_subset": {
+      "fit_cost": {
+        "spearman": -0.5744900607009181,
+        "p": 9.450562427609545e-42,
+        "per_tile": {
+          "manmade": -0.5560505788131911,
+          "moves": -0.7188748522715533,
+          "hold": -0.5618712254346112,
+          "size": -0.48777234749969034
+        },
+        "constant_on_tiles": []
+      },
+      "decision_margin": {
+        "spearman": -0.5571611358903581,
+        "p": 7.208964485258254e-39,
+        "per_tile": {
+          "manmade": -0.5476460486711799,
+          "moves": -0.7074912431470787,
+          "hold": -0.5432255857188865,
+          "size": -0.438594986995913
+        },
+        "constant_on_tiles": []
+      },
+      "posterior_gap": {
+        "spearman": 0.6018854744663245,
+        "p": 1.1286320412718719e-46,
+        "per_tile": {
+          "manmade": 0.47865356032076267,
+          "moves": 0.5762811004729443,
+          "hold": 0.6417252912005535,
+          "size": 0.7049548905846599
+        },
+        "constant_on_tiles": []
+      },
+      "local_competition_ratio": {
+        "spearman": -0.20658357737706998,
+        "p": 7.934501122659859e-06,
+        "per_tile": {
+          "manmade": -0.21289737265940284,
+          "moves": -0.34027513889522587,
+          "hold": -0.0443701226309922,
+          "size": -0.16770032486400488
+        },
+        "constant_on_tiles": []
+      },
+      "frontier_ext_post": {
+        "spearman": 0.18017924388152573,
+        "p": 0.00010201572383885378,
+        "per_tile": {
+          "manmade": 0.24234827160243824,
+          "moves": 0.36034181368774804,
+          "hold": 0.15811325106677432,
+          "size": 0.08008231158364057
+        },
+        "constant_on_tiles": []
+      },
+      "n_pareto": {
+        "spearman": -0.05678599434816081,
+        "p": 0.22414067381937472,
+        "per_tile": {
+          "manmade": -0.10924799313922628,
+          "moves": -0.328132510547248,
+          "hold": 0.24086593125434103,
+          "size": -0.04538139257075053
+        },
+        "constant_on_tiles": []
+      },
+      "tie_set_size": {
+        "spearman": 0.049104973092922034,
+        "p": 0.29328020260724064,
+        "per_tile": {
+          "manmade": 0.07304703542050994,
+          "moves": null,
+          "hold": 0.1086557126901311,
+          "size": -0.0865586231225696
+        },
+        "constant_on_tiles": [
+          "moves"
+        ]
+      },
+      "margin_headroom": {
+        "spearman": -0.7787132634184801,
+        "p": 8.878222528493487e-95,
+        "per_tile": {
+          "manmade": -0.778068487879954,
+          "moves": -0.7934710413355319,
+          "hold": -0.8055126283012339,
+          "size": -0.761382148675298
+        },
+        "constant_on_tiles": []
+      }
+    },
+    "ols_log_beta_c": {
+      "n": 460,
+      "n_excluded_beta_c_zero": 0,
+      "note": "Continuous predictors standardized; tile dummies with manmade as base. Coefficients are on log beta_c, so a negative coefficient means the property goes with a CHEAPER adversary.",
+      "r2": 0.6561425266231617,
+      "r2_adj": 0.6476995975893555,
+      "coef": {
+        "const": 1.0344728440610078,
+        "fit_cost": -0.1933254949204782,
+        "decision_margin": 0.15842520465963006,
+        "posterior_gap": 0.329562671207276,
+        "local_competition_ratio": 0.10999947993064021,
+        "frontier_ext_post": -0.1444330834690569,
+        "n_pareto": -0.1381139538740838,
+        "tie_set_size": 0.00043054837128393697,
+        "margin_headroom": -0.3420506650093311,
+        "tile_moves": 0.030503737233304566,
+        "tile_hold": -0.0027676786939498446,
+        "tile_size": 0.08657632207788897
+      },
+      "se": {
+        "const": 0.03750447597971172,
+        "fit_cost": 0.048147206924237455,
+        "decision_margin": 0.048221891676297035,
+        "posterior_gap": 0.03384726324919192,
+        "local_competition_ratio": 0.038923454039544815,
+        "frontier_ext_post": 0.03811477414508256,
+        "n_pareto": 0.031558741836466925,
+        "tie_set_size": 0.024082309107774397,
+        "margin_headroom": 0.02438030683805922,
+        "tile_moves": 0.049308602453122186,
+        "tile_hold": 0.05730384122393922,
+        "tile_size": 0.05707178756050983
+      },
+      "t": {
+        "const": 27.582650258081525,
+        "fit_cost": -4.015300310663661,
+        "decision_margin": 3.2853378238063256,
+        "posterior_gap": 9.736759772302834,
+        "local_competition_ratio": 2.826046214163952,
+        "frontier_ext_post": -3.7894251431027084,
+        "n_pareto": -4.376408748795226,
+        "tie_set_size": 0.017878201353413604,
+        "margin_headroom": -14.029793278703455,
+        "tile_moves": 0.6186291177549506,
+        "tile_hold": -0.04829831011038088,
+        "tile_size": 1.5169723216764015
+      }
+    },
+    "mechanism_beyond_n_options": {
+      "status": "EXPLORATORY. Spec v3.1 section 7.2 assigns the mechanism question here and states no prediction.",
+      "outcome_variable": "per-tile pool existence rate |D(inf)|/N (Step 1)",
+      "per_tile": {
+        "manmade": {
+          "n_options": 3,
+          "n_concepts": 1118,
+          "n_distinct_fit_vectors": 400,
+          "distinct_fraction": 0.35778175313059035,
+          "mean_within_concept_fit_range": 0.8233243446888285,
+          "pool_existence_rate": 0.03867215604764569,
+          "frozen_finite_rate": 0.456
+        },
+        "moves": {
+          "n_options": 3,
+          "n_concepts": 1118,
+          "n_distinct_fit_vectors": 580,
+          "distinct_fraction": 0.518783542039356,
+          "mean_within_concept_fit_range": 0.7358480704904452,
+          "pool_existence_rate": 0.17895937106163357,
+          "frozen_finite_rate": 0.488
+        },
+        "hold": {
+          "n_options": 4,
+          "n_concepts": 1118,
+          "n_distinct_fit_vectors": 609,
+          "distinct_fraction": 0.5447227191413238,
+          "mean_within_concept_fit_range": 0.872638176641621,
+          "pool_existence_rate": 0.17748961197984622,
+          "frozen_finite_rate": 0.464
+        },
+        "size": {
+          "n_options": 6,
+          "n_concepts": 1118,
+          "n_distinct_fit_vectors": 1104,
+          "distinct_fraction": 0.9874776386404294,
+          "mean_within_concept_fit_range": 0.9308096789136684,
+          "pool_existence_rate": 0.33376530164679613,
+          "frozen_finite_rate": 0.432
+        }
+      },
+      "within_O3_spread_pool": 0.1402872150139879,
+      "O3_to_O4_step_pool": 0.0014697590817873418,
+      "within_exceeds_between": true,
+      "frozen_rate_range": [
+        0.432,
+        0.488
+      ],
+      "tile_order_by_pool_rate": [
+        "manmade",
+        "hold",
+        "moves",
+        "size"
+      ],
+      "tile_order_by_n_options": [
+        "manmade",
+        "moves",
+        "hold",
+        "size"
+      ],
+      "tile_order_by_distinct_fraction": [
+        "manmade",
+        "moves",
+        "hold",
+        "size"
+      ],
+      "tile_order_by_fit_range": [
+        "moves",
+        "manmade",
+        "hold",
+        "size"
+      ],
+      "distinct_fraction_reproduces_rate_order": false,
+      "n_options_reproduces_rate_order": false,
+      "caveat": "Four tiles. This is an ordering check, not evidence: with four points a rank statistic takes five values and separates nothing, and `distinct_fraction` is a tile-level constant, so it cannot be told apart from any other tile-level covariate on this design. It is reported because it is the first candidate that reproduces the ordering `|O|` fails to, and because it is falsifiable on a signal space with more tiles."
+    },
+    "existence_vs_magnitude": {
+      "status": "EXPLORATORY. Separate observation, not part of the ordering check above. No preregistered prediction, no threshold.",
+      "claim": "The tiles differ in whether items diverge and barely in how much budget is needed once they do.",
+      "per_tile_median_finite_beta_c_frozen": {
+        "manmade": 3.2384736669482663,
+        "moves": 3.0048808822757564,
+        "hold": 3.2588848704472184,
+        "size": 3.6477022017352283
+      },
+      "per_tile_median_finite_beta_c_pool": {
+        "manmade": 3.091165029676631,
+        "moves": 3.3114466651168186,
+        "hold": 3.7688053394667804,
+        "size": 3.5201546575699467
+      },
+      "per_tile_pool_existence_rate": {
+        "manmade": 0.03867215604764569,
+        "moves": 0.17895937106163357,
+        "hold": 0.17748961197984622,
+        "size": 0.33376530164679613
+      },
+      "existence_rate_max_over_min": 8.630635986149402,
+      "median_beta_c_max_over_min_frozen": 1.2139257243943158,
+      "median_beta_c_max_over_min_pool": 1.219218418714137,
+      "per_tile_share_of_divergence_set_above_grid_endpoint_frozen": {
+        "manmade": 0.0,
+        "moves": 0.0,
+        "hold": 0.02586206896551724,
+        "size": 0.0
+      },
+      "per_tile_share_of_divergence_set_above_grid_endpoint_pool": {
+        "manmade": 0.004134366925064599,
+        "moves": 0.009054325955734407,
+        "hold": 0.01617281158109025,
+        "size": 0.019413416163908966
+      },
+      "max_per_tile_share_above_grid_endpoint_pool": 0.019413416163908966,
+      "reporting_consequence": "The grid endpoint of 8 is adequate PER TILE, not only on average: no tile leaves more than the share above outside the grid. A grid adequate on a pooled average could still be short on one tile, and this rules that out without extending the grid.",
+      "why_it_is_a_cleaner_mechanism_statement": "It separates the existence condition from the magnitude. Whatever distinguishes the tiles acts on whether o*_0 is already the margin-maximizer, not on how far the two options sit apart in beta. Both the |O| ordering and the distinct-fit-vector ordering are tile-level covariates fitted to four points; this is a statement about the shape of the beta_c distribution within each tile and does not depend on ordering four numbers."
+    }
+  },
+  "step1_gate_record": {
+    "task": "T6 Step 1",
+    "gate": "K1",
+    "status": "reproduction check of T1's run (PREREGISTRATION_v2.1 section 1.3)",
+    "spec_version": "v3.1",
+    "preregistration": "PREREGISTRATION_v2.md section 7.1, unamended",
+    "item_base": "full unstratified 200,000-candidate pool",
+    "N": 200000,
+    "threshold": 0.1,
+    "decision_statistic": "existence rate |D(infinity)| / N",
+    "pooled_existence_rate": 0.18232,
+    "pooled_grid_rate": 0.179535,
+    "per_tile_existence_rate": {
+      "manmade": 0.03867215604764569,
+      "moves": 0.17895937106163357,
+      "hold": 0.17748961197984622,
+      "size": 0.33376530164679613
+    },
+    "per_tile_grid_rate": {
+      "manmade": 0.03851227116476137,
+      "moves": 0.1773390145832083,
+      "hold": 0.17461910592769536,
+      "size": 0.3272857769448543
+    },
+    "tile_order": [
+      "manmade",
+      "moves",
+      "hold",
+      "size"
+    ],
+    "tile_n_options": {
+      "manmade": 3,
+      "moves": 3,
+      "hold": 4,
+      "size": 6
+    },
+    "disambiguation_verdict": "structural / inconclusive",
+    "disambiguation_gap": 0.29509314559915045,
+    "disambiguation_verdict_at_beta_8": "structural / inconclusive",
+    "disambiguation_gap_at_beta_8": 0.2887735057800929,
+    "disambiguation_anchor_note": "Applied to the beta = infinity rates because the preregistration's gate decides there; spec section 7.2 anchors at beta = 8 and those rates are reported alongside. Known open item, v2.0 Appendix A.2 item 7. Not resolved here.",
+    "outcome": 2,
+    "outcome_text": "PASS",
+    "extension": null,
+    "reproduction": {
+      "bitwise_identical_to_T2_pool_table": true,
+      "published_matched": true,
+      "problems": []
+    },
+    "artifact_sha256": {
+      "items_candidate.parquet": "ac7d13189b26a58c963e3f3ac5c1d7d4330fcd304e95bd454b2c7e66a4b42774",
+      "items_scored.parquet": "de739750ff85b0aafb6efeff3f5128a784703919aec9548d2dec3adc3632e659",
+      "items_final.parquet": "ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289"
+    },
+    "pool_posterior_range_vs_frozen_frontier_ext_post_max_abs_diff": 1.249000902703301e-16
+  },
+  "rate_claim_rule": {
+    "rule": "Any claim of the form 'X% of items diverge' uses the POOL figure. The pool rate is a property of the signal space; the frozen rate is a property of P1's 50/50 conflict quota.",
+    "population_existence_rate": 0.18232,
+    "population_grid_rate": 0.179535,
+    "population_base": "full unstratified 200,000-candidate pool",
+    "frozen_set_rate_at_grid_endpoint": 0.457,
+    "frozen_set_existence_rate": 0.46,
+    "frozen_set_status": "the Arm A base's own rate, sampler-dependent. Never a population statement. Its gap from the pool rate is fully accounted for by P1's 50% conflict quota (v2.2 section 1.3), fixed before beta_c existed.",
+    "applies_to": [
+      "divergence rate",
+      "existence rate",
+      "grid rate",
+      "per-tile divergence rate",
+      "share of items above the grid endpoint"
+    ]
+  }
+}

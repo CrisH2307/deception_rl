@@ -29,9 +29,12 @@ if os.path.join(P1_ROOT, "src") not in sys.path:
     sys.path.insert(0, os.path.join(P1_ROOT, "src"))
 
 # Frozen P1 code, by import. Copying any of this would be a duplication bug.
+# `norm` is P1's D47 min-max normalisation within an item's own option set: it is
+# what produces `post_norm`, P1's primary DV, and its raw range is the frozen
+# `frontier_ext_post` column. P2 normalises on the same axis and must use it.
 from fit import fit_matrix, pair_fit                      # noqa: E402
 from score_items import SPEC, SIZE_CAP                    # noqa: E402
-from tiebreak import lex_obayes, TAU_MAIN                 # noqa: E402
+from tiebreak import lex_obayes, norm, TAU_MAIN           # noqa: E402
 
 POOL = os.path.join(P1_ROOT, "data/processed/concept_pool.csv")
 TILES = os.path.join(P1_ROOT, "data/reference/tiles.json")

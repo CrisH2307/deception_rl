@@ -1,0 +1,56 @@
+{
+  "task": "T6 Step 1",
+  "gate": "K1",
+  "status": "reproduction check of T1's run (PREREGISTRATION_v2.1 section 1.3)",
+  "spec_version": "v3.1",
+  "preregistration": "PREREGISTRATION_v2.md section 7.1, unamended",
+  "item_base": "full unstratified 200,000-candidate pool",
+  "N": 200000,
+  "threshold": 0.1,
+  "decision_statistic": "existence rate |D(infinity)| / N",
+  "pooled_existence_rate": 0.18232,
+  "pooled_grid_rate": 0.179535,
+  "per_tile_existence_rate": {
+    "manmade": 0.03867215604764569,
+    "moves": 0.17895937106163357,
+    "hold": 0.17748961197984622,
+    "size": 0.33376530164679613
+  },
+  "per_tile_grid_rate": {
+    "manmade": 0.03851227116476137,
+    "moves": 0.1773390145832083,
+    "hold": 0.17461910592769536,
+    "size": 0.3272857769448543
+  },
+  "tile_order": [
+    "manmade",
+    "moves",
+    "hold",
+    "size"
+  ],
+  "tile_n_options": {
+    "manmade": 3,
+    "moves": 3,
+    "hold": 4,
+    "size": 6
+  },
+  "disambiguation_verdict": "structural / inconclusive",
+  "disambiguation_gap": 0.29509314559915045,
+  "disambiguation_verdict_at_beta_8": "structural / inconclusive",
+  "disambiguation_gap_at_beta_8": 0.2887735057800929,
+  "disambiguation_anchor_note": "Applied to the beta = infinity rates because the preregistration's gate decides there; spec section 7.2 anchors at beta = 8 and those rates are reported alongside. Known open item, v2.0 Appendix A.2 item 7. Not resolved here.",
+  "outcome": 2,
+  "outcome_text": "PASS",
+  "extension": null,
+  "reproduction": {
+    "bitwise_identical_to_T2_pool_table": true,
+    "published_matched": true,
+    "problems": []
+  },
+  "artifact_sha256": {
+    "items_candidate.parquet": "ac7d13189b26a58c963e3f3ac5c1d7d4330fcd304e95bd454b2c7e66a4b42774",
+    "items_scored.parquet": "de739750ff85b0aafb6efeff3f5128a784703919aec9548d2dec3adc3632e659",
+    "items_final.parquet": "ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289"
+  },
+  "pool_posterior_range_vs_frozen_frontier_ext_post_max_abs_diff": 1.249000902703301e-16
+}
