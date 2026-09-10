@@ -152,7 +152,7 @@ def md_table(d, cols, fmt):
     head += "|" + "|".join(c[1] for c in cols) + "|\n"
     body = ""
     for r in d.itertuples():
-        body += "| " + " | ".join(fmt(c[0], getattr(r, c[2])) for c in cols) + " |\n"
+        body += "| " + " | ".join(fmt(c[2], getattr(r, c[2])) for c in cols) + " |\n"
     return head + body
 
 
@@ -171,7 +171,7 @@ def main():
             return "**yes**" if v else "no"
         if isinstance(v, (int, np.integer)):
             return f"{v:,}"
-        if col == "n required":
+        if col == "n_required":
             return f"{v:,.0f}"
         return f"{v:.4f}"
 
@@ -252,7 +252,7 @@ Realized power is the normal approximation
 `PREREGISTRATION_v2.md` section 8.2 inverts, used here so the two numbers sit on
 the same footing as the preregistered curve. A noncentral-t calculation would
 differ slightly and would give slightly lower power. `n required` is
-`{N_CONST:,.0f} * sigma^2`, section 8.2's constant at `delta = 0.05`.
+`{N_CONST:,.1f} * sigma^2`, section 8.2's constant at `delta = 0.05`.
 
 **Neither number is adopted here.** Both are reported. Whether n = {N_ADOPTED}
 is accepted with its stated power, or a larger draw is made, is the author's
@@ -366,7 +366,7 @@ with a measurement.
   D109's rule-dependence requirement bites on this figure. A single headline
   `sigma` would be a `pmi` figure, and must be labelled as one.
 - **Ties cost permutations but no items.** The `n_tied == 1` filter removes
-  {int(att["drop_tied"].sum())} of the {int(att["drop_tile"].sum() + att["kept"].sum() + att["drop_tied"].sum() - att["drop_tile"].sum()):,} `size`-tile Format V rows across all cells, and every one of
+  {int(att["drop_tied"].sum())} of the {int(att["kept"].sum() + att["drop_tied"].sum() + att["drop_unscored"].sum()):,} `size`-tile Format V rows across all cells, and every one of
   those removals leaves the item's other permutation standing: {int(ex_all["cells_one_perm"].sum())} item-condition
   cells in the template set are averaged over one permutation instead of two,
   and {int(ex_all["lost_unpaired"].sum())} items are lost to unpairing. Every cell keeps all {int(pmi["n_items"].max())} `size`-tile
