@@ -4045,7 +4045,11 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.004555808656036442
+          "excess_beyond_band": 0.004555808656036442,
+          "mc_p_two_sided": 0.0029985007496251873,
+          "n_reference_distinct_values": 26,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": true
         },
         "net_directional": {
           "reference_mean": -0.06907517084282462,
@@ -4055,7 +4059,9 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.009111617312072884
+          "excess_beyond_band": 0.009111617312072884,
+          "mc_p_two_sided": 0.0029985007496251873,
+          "n_reference_distinct_values": 26
         },
         "p10": {
           "reference_mean": -5.95839861127301,
@@ -4065,7 +4071,11 @@
           "percentile_of_observed": 0.0375,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.07596201899050475,
+          "n_reference_distinct_values": 54,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4077,7 +4087,9 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.03530751708428248
+          "excess_beyond_band": 0.03530751708428248,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4087,7 +4099,9 @@
           "percentile_of_observed": 0.609,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.782608695652174,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4097,7 +4111,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 1.7079586647763643
+          "excess_beyond_band": 1.7079586647763643,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 502
         }
       }
     },
@@ -4118,7 +4134,11 @@
           "percentile_of_observed": 0.5505,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 1.0,
+          "n_reference_distinct_values": 30,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         },
         "net_directional": {
           "reference_mean": 0.07726195899772213,
@@ -4128,7 +4148,9 @@
           "percentile_of_observed": 0.5505,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 1.0,
+          "n_reference_distinct_values": 30
         },
         "p10": {
           "reference_mean": -4.783973762491052,
@@ -4138,7 +4160,11 @@
           "percentile_of_observed": 0.3485,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.6976511744127936,
+          "n_reference_distinct_values": 43,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4150,7 +4176,9 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.03530751708428248
+          "excess_beyond_band": 0.03530751708428248,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4160,7 +4188,9 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.08769931662870162
+          "excess_beyond_band": 0.08769931662870162,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4170,7 +4200,9 @@
           "percentile_of_observed": 0.0105,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.3494943324870743
+          "excess_beyond_band": 0.3494943324870743,
+          "mc_p_two_sided": 0.021989005497251374,
+          "n_reference_distinct_values": 502
         }
       }
     },
@@ -4191,7 +4223,11 @@
           "percentile_of_observed": 0.248,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.496751624187906,
+          "n_reference_distinct_values": 22,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         },
         "net_directional": {
           "reference_mean": -0.09719362186788154,
@@ -4201,7 +4237,9 @@
           "percentile_of_observed": 0.248,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.496751624187906,
+          "n_reference_distinct_values": 22
         },
         "p10": {
           "reference_mean": -1.4020714353524657,
@@ -4211,7 +4249,11 @@
           "percentile_of_observed": 0.6825,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.671664167916042,
+          "n_reference_distinct_values": 89,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4223,7 +4265,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.044419134396355336
+          "excess_beyond_band": 0.044419134396355336,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4233,7 +4277,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.02277904328018221
+          "excess_beyond_band": 0.02277904328018221,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4243,7 +4289,9 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 1.0527460513965485
+          "excess_beyond_band": 1.0527460513965485,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 502
         }
       }
     },
@@ -4264,7 +4312,11 @@
           "percentile_of_observed": 0.9955,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.002277904328018221
+          "excess_beyond_band": 0.002277904328018221,
+          "mc_p_two_sided": 0.01699150424787606,
+          "n_reference_distinct_values": 25,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         },
         "net_directional": {
           "reference_mean": -0.06431890660592253,
@@ -4274,7 +4326,9 @@
           "percentile_of_observed": 0.9955,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.004555808656036442
+          "excess_beyond_band": 0.004555808656036442,
+          "mc_p_two_sided": 0.01699150424787606,
+          "n_reference_distinct_values": 25
         },
         "p10": {
           "reference_mean": -4.063257271622499,
@@ -4284,7 +4338,11 @@
           "percentile_of_observed": 0.292,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.5847076461769115,
+          "n_reference_distinct_values": 33,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4296,7 +4354,9 @@
           "percentile_of_observed": 0.9975,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.007972665148063773
+          "excess_beyond_band": 0.007972665148063773,
+          "mc_p_two_sided": 0.0079960019990005,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4306,7 +4366,9 @@
           "percentile_of_observed": 0.581,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.8665667166416792,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4316,7 +4378,9 @@
           "percentile_of_observed": 0.087,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.17491254372813594,
+          "n_reference_distinct_values": 502
         }
       }
     },
@@ -4337,7 +4401,11 @@
           "percentile_of_observed": 0.844,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.4817591204397801,
+          "n_reference_distinct_values": 24,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         },
         "net_directional": {
           "reference_mean": -0.12391913439635537,
@@ -4347,7 +4415,9 @@
           "percentile_of_observed": 0.844,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.4817591204397801,
+          "n_reference_distinct_values": 24
         },
         "p10": {
           "reference_mean": -3.544521923676736,
@@ -4357,7 +4427,11 @@
           "percentile_of_observed": 0.99,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.015611779419170801
+          "excess_beyond_band": 0.015611779419170801,
+          "mc_p_two_sided": 0.03498250874562719,
+          "n_reference_distinct_values": 38,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4369,7 +4443,9 @@
           "percentile_of_observed": 0.3995,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.7996001999000499,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4379,7 +4455,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.03644646924829159
+          "excess_beyond_band": 0.03644646924829159,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4389,7 +4467,9 @@
           "percentile_of_observed": 0.7905,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.42778610694652675,
+          "n_reference_distinct_values": 502
         }
       }
     },
@@ -4410,7 +4490,11 @@
           "percentile_of_observed": 0.552,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 1.0,
+          "n_reference_distinct_values": 23,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         },
         "net_directional": {
           "reference_mean": -0.16164350797266513,
@@ -4420,7 +4504,9 @@
           "percentile_of_observed": 0.552,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 1.0,
+          "n_reference_distinct_values": 23
         },
         "p10": {
           "reference_mean": -2.387011964442614,
@@ -4430,7 +4516,11 @@
           "percentile_of_observed": 0.9755,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.13093453273363317,
+          "n_reference_distinct_values": 37,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4442,7 +4532,9 @@
           "percentile_of_observed": 0.0565,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.11394302848575712,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4452,7 +4544,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.08086560364464693
+          "excess_beyond_band": 0.08086560364464693,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4462,7 +4556,9 @@
           "percentile_of_observed": 0.9935,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.30309799900781087
+          "excess_beyond_band": 0.30309799900781087,
+          "mc_p_two_sided": 0.013993003498250875,
+          "n_reference_distinct_values": 502
         }
       }
     },
@@ -4483,7 +4579,11 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.0034168564920273314
+          "excess_beyond_band": 0.0034168564920273314,
+          "mc_p_two_sided": 0.005997001499250375,
+          "n_reference_distinct_values": 20,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         },
         "net_directional": {
           "reference_mean": -0.1521708428246014,
@@ -4493,7 +4593,9 @@
           "percentile_of_observed": 1.0,
           "outside_95_band": true,
           "direction": "more negative",
-          "excess_beyond_band": 0.006833712984054663
+          "excess_beyond_band": 0.006833712984054663,
+          "mc_p_two_sided": 0.005997001499250375,
+          "n_reference_distinct_values": 20
         },
         "p10": {
           "reference_mean": -1.6405977349804326,
@@ -4503,7 +4605,11 @@
           "percentile_of_observed": 0.076,
           "outside_95_band": false,
           "direction": "inside",
-          "excess_beyond_band": 0.0
+          "excess_beyond_band": 0.0,
+          "mc_p_two_sided": 0.15292353823088456,
+          "n_reference_distinct_values": 42,
+          "bonferroni_alpha": 0.0035714285714285718,
+          "survives_bonferroni": false
         }
       },
       "uniform": {
@@ -4515,7 +4621,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.010250569476081994
+          "excess_beyond_band": 0.010250569476081994,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 58
         },
         "net_directional": {
           "reference_mean": -0.04575398633257404,
@@ -4525,7 +4633,9 @@
           "percentile_of_observed": 0.0,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.05239179954441911
+          "excess_beyond_band": 0.05239179954441911,
+          "mc_p_two_sided": 0.0009995002498750624,
+          "n_reference_distinct_values": 173
         },
         "p10": {
           "reference_mean": -3.5017472631605475,
@@ -4535,15 +4645,59 @@
           "percentile_of_observed": 0.9985,
           "outside_95_band": true,
           "direction": "less negative",
-          "excess_beyond_band": 0.599179841026962
+          "excess_beyond_band": 0.599179841026962,
+          "mc_p_two_sided": 0.00399800099950025,
+          "n_reference_distinct_values": 502
         }
       }
     }
   },
   "residual_test_reading": {
     "question": "Is A more negative than the model's position on P1's coordinate alone predicts?",
-    "answer": "Partly, and small. Under the matched null, which holds P1-coordinate position fixed, three of seven models sit just above the 95% band on `share_negative` in the more-negative direction, by margins worth a few renderings out of 878; no model's tail depth (`p10`) is deeper than the band and one is shallower. The band is narrow because only 15% to 21% of renderings can move under that null, and the comparisons are uncorrected. Under the weaker uniform null models deviate in BOTH directions, which is what differing bin occupancy produces and not a negative skew.",
-    "consequence": "Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate. It is not independent evidence that models are worse than the no-adversary optimum and must not be reported as such. What survives the matched null is small and one-sided across statistics, which is weaker than 'nothing is left over' and weaker than 'models skew negative'. Both are overclaims; the claim the evidence supports is in `answer`."
+    "answer": "One comparison of fourteen survives Bonferroni correction, CTRL on share_negative, stable across seeds and at ten times the draws. Its size is about four renderings of 878, it is on the cross-family control rather than on any ladder model, it is absent on the tail statistic p10, and one uncorrected exceedance elsewhere points the opposite way. So: not nothing, and far short of the substantive claim. The matched null also has limited room, since 909 of 1,820 option-cells sit in degenerate pole bins.",
+    "consequence": "Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate. It is not independent evidence that models are worse than the no-adversary optimum and must not be reported as such. What survives correction is one small deviation on the out-of-family control, which is weaker than 'nothing is left over' and far weaker than 'models skew negative'. Both are overclaims; the claim the evidence supports is in `answer`."
+  },
+  "residual_multiple_comparisons": {
+    "family": [
+      "CTRL|share_negative",
+      "CTRL|p10",
+      "B2|share_negative",
+      "B2|p10",
+      "B4|share_negative",
+      "B4|p10",
+      "L1|share_negative",
+      "L1|p10",
+      "L2|share_negative",
+      "L2|p10",
+      "L3|share_negative",
+      "L3|p10",
+      "L4|share_negative",
+      "L4|p10"
+    ],
+    "n_comparisons": 14,
+    "bonferroni_alpha": 0.0035714285714285718,
+    "convention": "v2.0 section 8.1 corrects Bonferroni over its confirmatory family, matching P1. Applied here BY ANALOGY: this test is exploratory, spends no confirmatory alpha, and is not part of the 21-test family.",
+    "expected_exceedances_under_no_effect": 0.7000000000000001,
+    "n_outside_95_band": 4,
+    "survivors": [
+      "CTRL|share_negative"
+    ],
+    "survivor_stability": {
+      "CTRL|share_negative": [
+        {
+          "draws": 20000,
+          "seed": 101,
+          "mc_p_two_sided": 0.0018999050047497626,
+          "survives_bonferroni": true
+        },
+        {
+          "draws": 20000,
+          "seed": 202,
+          "mc_p_two_sided": 0.0018999050047497626,
+          "survives_bonferroni": true
+        }
+      ]
+    }
   },
   "residual_test_method": {
     "statistics_named_before_the_monte_carlo": [

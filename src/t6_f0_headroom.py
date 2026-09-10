@@ -281,12 +281,20 @@ def residual_calibration(it, co, A, SB_bin, SB_ok, loo, alt, K, seed=7):
             else:
                 direction = "less negative" if more_neg_is_up else "more negative"
                 excess = lo - v
+            col = np.array([x[k] for x in ref])
+            # Two-sided Monte Carlo p, (r + 1) / (B + 1), which never returns 0
+            # and is the convention that keeps a permutation p honest at finite B.
+            r_ge, r_le = int((col >= v).sum()), int((col <= v).sum())
+            pval = min(1.0, 2 * min((r_ge + 1) / (N_MC + 1),
+                                    (r_le + 1) / (N_MC + 1)))
             cell[k] = {
-                "reference_mean": float(np.mean([x[k] for x in ref])),
+                "reference_mean": float(np.mean(col)),
                 "reference_p2_5": lo, "reference_p97_5": hi, "observed": v,
-                "percentile_of_observed": float(np.mean([x[k] <= v for x in ref])),
+                "percentile_of_observed": float(np.mean(col <= v)),
                 "outside_95_band": bool(outside), "direction": direction,
-                "excess_beyond_band": float(excess)}
+                "excess_beyond_band": float(excess),
+                "mc_p_two_sided": float(pval),
+                "n_reference_distinct_values": int(len(np.unique(col)))}
         out[name] = cell
     return out
 
@@ -513,25 +521,69 @@ def main():
     num["residual_test_reading"] = {
         "question": "Is A more negative than the model's position on P1's "
                     "coordinate alone predicts?",
-        "answer": "Partly, and small. Under the matched null, which holds "
-                  "P1-coordinate position fixed, three of seven models sit just "
-                  "above the 95% band on `share_negative` in the more-negative "
-                  "direction, by margins worth a few renderings out of 878; no "
-                  "model's tail depth (`p10`) is deeper than the band and one is "
-                  "shallower. The band is narrow because only 15% to 21% of "
-                  "renderings can move under that null, and the comparisons are "
-                  "uncorrected. Under the weaker uniform null models deviate in "
-                  "BOTH directions, which is what differing bin occupancy produces "
-                  "and not a negative skew.",
+        "answer": "One comparison of fourteen survives Bonferroni correction, "
+                  "CTRL on share_negative, stable across seeds and at ten times "
+                  "the draws. Its size is about four renderings of 878, it is on "
+                  "the cross-family control rather than on any ladder model, it "
+                  "is absent on the tail statistic p10, and one uncorrected "
+                  "exceedance elsewhere points the opposite way. So: not nothing, "
+                  "and far short of the substantive claim. The matched null also "
+                  "has limited room, since 909 of 1,820 option-cells sit in "
+                  "degenerate pole bins.",
         "consequence": "Negative median A is a COROLLARY of Paper 1's far-side "
                        "finding re-expressed on the margin coordinate. It is not "
                        "independent evidence that models are worse than the "
                        "no-adversary optimum and must not be reported as such. "
-                       "What survives the matched null is small and one-sided "
-                       "across statistics, which is weaker than 'nothing is left "
-                       "over' and weaker than 'models skew negative'. Both are "
-                       "overclaims; the claim the evidence supports is in "
-                       "`answer`.",
+                       "What survives correction is one small deviation on the "
+                       "out-of-family control, which is weaker than 'nothing is "
+                       "left over' and far weaker than 'models skew negative'. "
+                       "Both are overclaims; the claim the evidence supports is "
+                       "in `answer`.",
+    }
+    comparisons = [(m, k) for m in LADDER_ORDER if m in resid for k in ("share_negative", "p10")]
+    alpha_c = 0.05 / len(comparisons)
+    surv = []
+    for m, k in comparisons:
+        c = resid[m]["matched"][k]
+        c["bonferroni_alpha"] = alpha_c
+        c["survives_bonferroni"] = bool(c["mc_p_two_sided"] < alpha_c)
+        if c["survives_bonferroni"]:
+            surv.append((m, k))
+    # A survivor at B = 2,000 sits near the Monte Carlo's own resolution, so it is
+    # rerun at 10x with two further seeds before it is reported as one.
+    stability = {}
+    for m, k in surv:
+        it, co, _, _ = renderings(ch, m, keep, A, SB, cols, ids, K, None)
+        v = resid[m]["observed"][k]
+        runs = []
+        for B, seed in ((10 * N_MC, 101), (10 * N_MC, 202)):
+            rng = np.random.default_rng(seed)
+            col = []
+            for _ in range(B):
+                cc = np.array([rng.choice(alt[(i, o)])
+                               if (i, o) in alt and len(alt[(i, o)]) > 1 else o
+                               for i, o in zip(it, co)])
+                col.append(_resid_stats(
+                    _residuals(it, cc, A, SB_bin, SB_ok, loo))[k])
+            col = np.array(col)
+            pv = min(1.0, 2 * min((int((col >= v).sum()) + 1) / (B + 1),
+                                  (int((col <= v).sum()) + 1) / (B + 1)))
+            runs.append({"draws": B, "seed": seed, "mc_p_two_sided": float(pv),
+                         "survives_bonferroni": bool(pv < alpha_c)})
+        stability[f"{m}|{k}"] = runs
+    num["residual_multiple_comparisons"] = {
+        "family": [f"{m}|{k}" for m, k in comparisons],
+        "n_comparisons": len(comparisons),
+        "bonferroni_alpha": alpha_c,
+        "convention": "v2.0 section 8.1 corrects Bonferroni over its confirmatory "
+                      "family, matching P1. Applied here BY ANALOGY: this test is "
+                      "exploratory, spends no confirmatory alpha, and is not part "
+                      "of the 21-test family.",
+        "expected_exceedances_under_no_effect": 0.05 * len(comparisons),
+        "n_outside_95_band": int(sum(
+            resid[m]["matched"][k]["outside_95_band"] for m, k in comparisons)),
+        "survivors": [f"{m}|{k}" for m, k in surv],
+        "survivor_stability": stability,
     }
     num["residual_test_method"] = {
         "statistics_named_before_the_monte_carlo": list(RESID_STATS),
@@ -881,12 +933,12 @@ def write_report(num, secs):
               f"{a3['percentile_of_observed']:.3f} |\n")
         w("\n")
 
-    REPORTED = ("share_negative", "p10")
+    mc = num["residual_multiple_comparisons"]
+    REPORTED = tuple(dict.fromkeys(f.split("|")[1] for f in mc["family"]))
     exc = [(m, k, resid[m]["matched"][k]) for m in LADDER_ORDER if m in resid
            for k in REPORTED if resid[m]["matched"][k]["outside_95_band"]]
     neg = [e for e in exc if e[2]["direction"] == "more negative"]
     pos = [e for e in exc if e[2]["direction"] == "less negative"]
-    n_comp = len([1 for m in resid for _ in REPORTED])
     n_rend = resid[LADDER_ORDER[0]]["observed"]["n"]
 
     w(f"**Reading, primary null.** Only "
@@ -895,35 +947,69 @@ def write_report(num, secs):
       f"renderings can move under it: 909 of the 1,820 option-cells sit in the two "
       f"degenerate pole bins, and only 14% of (item, `sb` bin) cells hold more "
       f"than one option.\n\n")
-    w(f"**{len(exc)} of {n_comp} model-by-statistic comparisons fall outside a "
-      f"two-sided 95% reference band**, uncorrected:\n\n")
+    w(f"**{len(exc)} of {mc['n_comparisons']} comparisons fall outside a two-sided "
+      f"95% band**, against {mc['expected_exceedances_under_no_effect']:.1f} "
+      f"expected with no effect:\n\n")
     for m, k, c in exc:
         w(f"- `{m}` on `{k}`: {c['observed']:+.4f} against "
           f"[{c['reference_p2_5']:+.4f}, {c['reference_p97_5']:+.4f}], "
           f"**{c['direction']}** than the matched null, exceeding the band by "
           f"{c['excess_beyond_band']:.4f}"
-          + (f", which is about {round(c['excess_beyond_band'] * n_rend)} of "
-             f"{n_rend} renderings" if k == "share_negative" else "")
-          + ".\n")
-    w(f"\nSo the honest statement is neither \"nothing is left over\" nor \"models "
-      f"skew negative\". {WORD[len(neg)]} of seven models sit just above the band on "
-      f"`share_negative`, in the more-negative direction, by margins worth a "
-      f"handful of renderings each; "
-      + (f"{WORD[len(pos)].lower()} sits outside in the opposite direction on "
-         "`p10`; " if len(pos) == 1
-         else f"{WORD[len(pos)].lower()} sit outside in the opposite direction; ")
-      + "and **no model's tail depth is deeper than the band**. A small negative "
-      "residual is detectable on the share statistic for some models and is "
-      "absent on the tail statistic.\n\n")
-    w("Two things bound how much that is worth. The band is **narrow because the "
-      "null has little room**: with 15% to 21% of renderings movable, the "
-      "reference distribution has low variance, so a deviation of a few "
-      "renderings clears it without being substantively large. And the "
-      "comparisons are uncorrected across "
-      f"{n_comp}, where roughly {0.05 * n_comp:.1f} exceedances are expected with "
-      "no effect at all. **The residual, if it is real, is small; the design has "
-      "little power to size it; and both halves of that belong in any sentence "
-      "that cites this test.**\n\n")
+          + (f" (about {round(c['excess_beyond_band'] * n_rend)} of {n_rend} "
+             f"renderings)" if k == "share_negative" else "")
+          + f". Two-sided Monte Carlo p = {c['mc_p_two_sided']:.5f}.\n")
+
+    w(f"\n#### Applying the multiple-comparison discipline\n\n")
+    w(f"v2.0 section 8.1 corrects Bonferroni over its family, matching Paper 1. "
+      f"Applied here **by analogy**, since this test is exploratory and spends no "
+      f"confirmatory alpha: `alpha = 0.05 / {mc['n_comparisons']} = "
+      f"{mc['bonferroni_alpha']:.6f}`, two-sided, over the "
+      f"{mc['n_comparisons']}-comparison family of "
+      f"{len(resid)} models by {len(REPORTED)} statistics.\n\n")
+    if not mc["survivors"]:
+        w("**No exceedance survives correction.** Every band exceedance above is "
+          "what a family this size produces with no effect.\n\n")
+    else:
+        w(f"**{WORD[len(mc['survivors'])]} of {mc['n_comparisons']} survives: "
+          + ", ".join(f"`{x}`" for x in mc["survivors"]) + ".** ")
+        w("This is not the expected outcome and is reported as measured. It is "
+          "stable, not a Monte Carlo artifact: rerun at ten times the draws under "
+          "two further seeds it gives "
+          + ", ".join(f"p = {r['mc_p_two_sided']:.5f}"
+                      for runs in mc["survivor_stability"].values() for r in runs)
+          + ", all still under alpha.\n\n")
+        w("**What it does and does not support.** Four things bound it, and "
+          "together they stop it short of the substantive claim:\n\n")
+        c = resid["CTRL"]["matched"]["share_negative"]
+        w(f"1. **The effect is about {round(c['excess_beyond_band'] * n_rend)} "
+          f"renderings out of {n_rend}.** A small `p` here reflects a narrow "
+          f"reference distribution, not a large deviation: the matched null has "
+          f"little room to move, so its spread is small and a few renderings "
+          f"clear it.\n")
+        w(f"2. **It is on `CTRL` alone, and `CTRL` is the cross-family control.** "
+          f"No ladder model survives. A residual that were genuinely about "
+          f"adversary structure should not appear only on the one model that "
+          f"differs from the rest by family and tokenizer. `share_negative` is a "
+          f"choice-based rate, so P1's D111 permits the comparison, but D111 "
+          f"exists precisely because that model is not commensurable with the "
+          f"ladder in other respects.\n")
+        w(f"3. **The exceedances do not agree.** {WORD[len(neg)]} point "
+          f"more-negative and {WORD[len(pos)].lower()} points **less** negative "
+          f"(`{pos[0][0]}` on `{pos[0][1]}`). A real one-directional effect does "
+          f"not produce a reversed exceedance alongside its own.\n")
+        w(f"4. **No model's tail depth is deeper than its band.** The deviation "
+          f"appears on the share statistic and is absent on `p10`, which is the "
+          f"statistic that would register a genuinely heavier negative tail.\n\n")
+        w("**Corrected conclusion.** One small deviation survives correction, on "
+          "the cross-family control, worth a handful of renderings, absent on the "
+          "tail statistic and accompanied by a reversed exceedance elsewhere. "
+          "That does not support the claim that models sit more negative on the "
+          "margin axis than their position on Paper 1's coordinate predicts. It "
+          "is also not nothing, and it is not reported as nothing. The residual "
+          "is bounded at a size the design can barely resolve, and the caveat "
+          "belongs with it: the matched null has limited room, because 909 of "
+          "1,820 option-cells sit in degenerate pole bins.\n\n")
+
     w("**Reading, secondary null.** Models deviate from the uniform reference in "
       "**both directions**: `CTRL` and `B2` carry more negative residuals than "
       "random, `B4`, `L3` and `L4` fewer. There is no systematic negative skew "

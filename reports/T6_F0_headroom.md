@@ -155,20 +155,31 @@ Descriptive and exploratory. No confirmatory alpha is spent and percentiles are 
 
 **Reading, primary null.** Only 0.1533 to 0.2130 of renderings can move under it: 909 of the 1,820 option-cells sit in the two degenerate pole bins, and only 14% of (item, `sb` bin) cells hold more than one option.
 
-**4 of 14 model-by-statistic comparisons fall outside a two-sided 95% reference band**, uncorrected:
+**4 of 14 comparisons fall outside a two-sided 95% band**, against 0.7 expected with no effect:
 
-- `CTRL` on `share_negative`: +0.2551 against [+0.2323, +0.2506], **more negative** than the matched null, exceeding the band by 0.0046, which is about 4 of 878 renderings.
-- `L1` on `share_negative`: +0.2278 against [+0.2084, +0.2255], **more negative** than the matched null, exceeding the band by 0.0023, which is about 2 of 878 renderings.
-- `L2` on `p10`: -3.1716 against [-3.8196, -3.1872], **less negative** than the matched null, exceeding the band by 0.0156.
-- `L4` on `share_negative`: +0.1663 against [+0.1503, +0.1629], **more negative** than the matched null, exceeding the band by 0.0034, which is about 3 of 878 renderings.
+- `CTRL` on `share_negative`: +0.2551 against [+0.2323, +0.2506], **more negative** than the matched null, exceeding the band by 0.0046 (about 4 of 878 renderings). Two-sided Monte Carlo p = 0.00300.
+- `L1` on `share_negative`: +0.2278 against [+0.2084, +0.2255], **more negative** than the matched null, exceeding the band by 0.0023 (about 2 of 878 renderings). Two-sided Monte Carlo p = 0.01699.
+- `L2` on `p10`: -3.1716 against [-3.8196, -3.1872], **less negative** than the matched null, exceeding the band by 0.0156. Two-sided Monte Carlo p = 0.03498.
+- `L4` on `share_negative`: +0.1663 against [+0.1503, +0.1629], **more negative** than the matched null, exceeding the band by 0.0034 (about 3 of 878 renderings). Two-sided Monte Carlo p = 0.00600.
 
-So the honest statement is neither "nothing is left over" nor "models skew negative". Three of seven models sit just above the band on `share_negative`, in the more-negative direction, by margins worth a handful of renderings each; one sits outside in the opposite direction on `p10`; and **no model's tail depth is deeper than the band**. A small negative residual is detectable on the share statistic for some models and is absent on the tail statistic.
+#### Applying the multiple-comparison discipline
 
-Two things bound how much that is worth. The band is **narrow because the null has little room**: with 15% to 21% of renderings movable, the reference distribution has low variance, so a deviation of a few renderings clears it without being substantively large. And the comparisons are uncorrected across 14, where roughly 0.7 exceedances are expected with no effect at all. **The residual, if it is real, is small; the design has little power to size it; and both halves of that belong in any sentence that cites this test.**
+v2.0 section 8.1 corrects Bonferroni over its family, matching Paper 1. Applied here **by analogy**, since this test is exploratory and spends no confirmatory alpha: `alpha = 0.05 / 14 = 0.003571`, two-sided, over the 14-comparison family of 7 models by 2 statistics.
+
+**One of 14 survives: `CTRL|share_negative`.** This is not the expected outcome and is reported as measured. It is stable, not a Monte Carlo artifact: rerun at ten times the draws under two further seeds it gives p = 0.00190, p = 0.00190, all still under alpha.
+
+**What it does and does not support.** Four things bound it, and together they stop it short of the substantive claim:
+
+1. **The effect is about 4 renderings out of 878.** A small `p` here reflects a narrow reference distribution, not a large deviation: the matched null has little room to move, so its spread is small and a few renderings clear it.
+2. **It is on `CTRL` alone, and `CTRL` is the cross-family control.** No ladder model survives. A residual that were genuinely about adversary structure should not appear only on the one model that differs from the rest by family and tokenizer. `share_negative` is a choice-based rate, so P1's D111 permits the comparison, but D111 exists precisely because that model is not commensurable with the ladder in other respects.
+3. **The exceedances do not agree.** Three point more-negative and one points **less** negative (`L2` on `p10`). A real one-directional effect does not produce a reversed exceedance alongside its own.
+4. **No model's tail depth is deeper than its band.** The deviation appears on the share statistic and is absent on `p10`, which is the statistic that would register a genuinely heavier negative tail.
+
+**Corrected conclusion.** One small deviation survives correction, on the cross-family control, worth a handful of renderings, absent on the tail statistic and accompanied by a reversed exceedance elsewhere. That does not support the claim that models sit more negative on the margin axis than their position on Paper 1's coordinate predicts. It is also not nothing, and it is not reported as nothing. The residual is bounded at a size the design can barely resolve, and the caveat belongs with it: the matched null has limited room, because 909 of 1,820 option-cells sit in degenerate pole bins.
 
 **Reading, secondary null.** Models deviate from the uniform reference in **both directions**: `CTRL` and `B2` carry more negative residuals than random, `B4`, `L3` and `L4` fewer. There is no systematic negative skew across the ladder. That two-sided spread is what differing bin occupancy produces, which is why this null is secondary: it re-expresses where each model sits on P1's coordinate rather than isolating anything left over.
 
-**Conclusion.** Partly, and small. Under the matched null, which holds P1-coordinate position fixed, three of seven models sit just above the 95% band on `share_negative` in the more-negative direction, by margins worth a few renderings out of 878; no model's tail depth (`p10`) is deeper than the band and one is shallower. The band is narrow because only 15% to 21% of renderings can move under that null, and the comparisons are uncorrected. Under the weaker uniform null models deviate in BOTH directions, which is what differing bin occupancy produces and not a negative skew. Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate. It is not independent evidence that models are worse than the no-adversary optimum and must not be reported as such. What survives the matched null is small and one-sided across statistics, which is weaker than 'nothing is left over' and weaker than 'models skew negative'. Both are overclaims; the claim the evidence supports is in `answer`.
+**Conclusion.** One comparison of fourteen survives Bonferroni correction, CTRL on share_negative, stable across seeds and at ten times the draws. Its size is about four renderings of 878, it is on the cross-family control rather than on any ladder model, it is absent on the tail statistic p10, and one uncorrected exceedance elsewhere points the opposite way. So: not nothing, and far short of the substantive claim. The matched null also has limited room, since 909 of 1,820 option-cells sit in degenerate pole bins. Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate. It is not independent evidence that models are worse than the no-adversary optimum and must not be reported as such. What survives correction is one small deviation on the out-of-family control, which is weaker than 'nothing is left over' and far weaker than 'models skew negative'. Both are overclaims; the claim the evidence supports is in `answer`.
 
 ### The point mass at `A = 0`
 
@@ -223,4 +234,4 @@ Models found: B2, B4, CTRL, L1, L2, L3, L4. `prompt_form == template` is primary
 
 Every number here is emitted to `results/T6_F0_headroom.json`. `A` is computed from the same `t6_arm_a.arm_a_columns` that produced the Arm A results, so there is one implementation of `beta_c`, `o*_0` and `o*_infinity`, not two. The posterior was checked against P1's frozen `frontier_ext_post` and the option ids against P1's own `post_norm` column.
 
-Runtime 29.2 s.
+Runtime 73.8 s.
