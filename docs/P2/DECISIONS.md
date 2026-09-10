@@ -228,6 +228,114 @@ than a replacement, so adopting the frozen set now forecloses nothing.
 
 ---
 
+## P2-D5. The `A` level confound is handled in interpretation, not in the item set
+
+**Status:** adopted.
+**Decided:** 2026-09-10, during the T5 session. Full reasoning in
+`PREREGISTRATION_v2.4.md` section 1.
+**Binds:** any Arm B analysis or reporting script. **Constant:** `P2D5_TEXT`.
+
+**Decision text.**
+
+> `o*_infinity` is Paper 1's `o_fit` on 452 of 460 divergent items, so Arm B's target
+> sits on Paper 1's salience pole and the LEVEL of `A` is confounded with salience.
+> The confound is real, permanent, and not repaired by any item set. No change is made
+> to the item set, the coordinate, or the analysis set. Instead: no claim that a model
+> carries adversary-relevant content may rest on `A` under a single framing. Every such
+> claim is made on a framing contrast and on excess over the marginal null, never on
+> raw `A`. A model at `A = 1` under F0 is reporting salience, not adversary awareness,
+> and a point mass at `A = 0` is likewise not evidence of Bayes-optimal behaviour.
+
+**Why it needed deciding.** T6 measured the coincidence and asked whether models
+already sit at or past `A = 1` under F0, which would let H-B's null be confirmed by a
+ceiling. Measured: they do not. `A >= 1` on 0.0174 to 0.1870 across the ladder, median
+`A` at or below zero for all seven, median headroom 1.0 to 1.9.
+
+**Alternatives offered and not chosen.**
+
+1. **Restrict the primary analysis to items with F0 headroom.** Rejected. `ΔA` is
+   `A(F1) - A(F0)`, so F0 headroom is a function of one term of the outcome, and
+   conditioning the analysis set on it is selection on the dependent variable in the
+   form `PREREGISTRATION_v2.2.md` section 1.3 prohibits. Also unnecessary: the
+   condition it protects against is measured absent.
+2. **Add a second coordinate not confounded with salience at the level.** Rejected. It
+   would be a new preregistered quantity chosen after F0 positions were seen, a
+   researcher degree of freedom with none of the prior provenance the existing
+   coordinate has from P1's D47.
+
+**Consequences.** The design is unchanged and the limitation is stated rather than
+engineered around: Arm B can establish whether the framing moves a model along Paper
+1's frontier, and cannot establish whether a model's position on that axis reflects
+adversary reasoning rather than salience. That is a property of the signal space, and
+no enlargement fixes it.
+
+---
+
+## P2-D6. Arm B's confirmatory statistic is a tie rate plus a sign test, not mean `ΔA`
+
+**Status:** adopted.
+**Decided:** 2026-09-10, during the T5 session. Full reasoning in
+`PREREGISTRATION_v2.4.md` section 2.
+**Binds:** any Arm B confirmatory analysis script, and `src/sign_power.py`.
+**Constant:** `P2D6_TEXT`, `P2D6_ALPHA`, `P2D6_P0`.
+
+**Decision text.**
+
+> Arm B's confirmatory instrument is (i) the tie rate, the share of analysis-set items
+> with `ΔA` exactly zero, reported directly as a primary quantity, and (ii) an exact
+> two-sided sign test on the remaining items, on the count with `ΔA > 0` against
+> `p0 = 0.5`, at `alpha = 0.05/21`. Mean `ΔA` is demoted to a reported descriptive
+> quantity. The median of per-item `ΔA` and the value computed from the means are both
+> retained. The `size`-tile analysis set, the 21-test family and `alpha` are unchanged.
+
+**Why it needed deciding.** `A` is near-trichotomous: 470 option-cells at exactly 0,
+439 at exactly 1, and 841 off-pole at median `-3.329`, unbounded below because `A`
+divides by `ext_i`. Off-pole is the common case, not a tail. Over the 6,048 admissible
+ordered option pairs, 0.7004 exceed the target move of `ΔA = +1` in magnitude and
+0.1518 exceed it tenfold, so one item moving to a far off-pole option outweighs ten
+items making the exact move Arm B exists to detect. H-B predicts a null, so a
+heavy-tailed estimator could satisfy it by widening the interval rather than by the
+models.
+
+**Alternatives offered and not chosen.**
+
+1. **Accept the mean, state the mixture as a limitation.** Rejected as contradicted,
+   not merely disfavoured. A limitation is the right instrument when an estimator is
+   unbiased but noisy or occasionally distorted by a tail. Neither holds: the
+   distortion is typical, and a three-way mixture with unbounded components means the
+   mean's expectation is a different quantity, not the effect plus noise.
+2. **Restrict to pole-to-pole transitions.** Rejected. It discards 0.8479 of
+   admissible moves and needs a new rule for what a pole/off-pole move counts as,
+   fixed after the geometry was seen. The sign is interpretable on every move,
+   including off-pole to off-pole; it is the magnitude the mixture corrupts, not the
+   direction.
+3. **A bounded transform of `ΔA`.** Rejected. The transform would be a new
+   preregistered quantity with no existing provenance, and its choice is itself a
+   degree of freedom.
+
+**Provenance, which is what makes this an extension rather than a new choice.** v2.0
+section 3.2 already names this pathology in its own words, "a mean of per-item ratios
+is not usable when the per-item denominator approaches zero, and Paper 1 measured that
+failure directly", already mandates the median as the response, carries section 6's
+`ext_i >= 0.02` floor as "the same guard", and cites P1's `src/frontier_position.py`.
+The pathology was named before any Paper 2 data existed. What is new is the magnitude,
+and that the mixture is three-way.
+
+**Consequences, including one that is a cost.** `sigma` no longer gates the
+confirmatory power curve, which is exact-binomial in the effective `n` and the
+alternative proportion; v2.0 section 8.2's curve still governs the mean, now
+descriptive. That is an exchange, not a saving: the tie rate is equally unmeasured,
+though bounded in `[0, 1]`, observed exactly rather than estimated, and monotone in
+its effect on power. D74's `delta = 0.05` is a SESOI on the mean and does not
+translate to a proportion; none is invented, the test is against `p0 = 0.5` which
+needs none, and realized power is reported at the observed effective `n`. **The defect
+this creates, stated rather than argued away: a high tie rate is the outcome H-B
+predicts and ties carry no sign, so the sign test has least power exactly where the
+null is true.** That is why the tie rate is primary in its own right and not attrition.
+Power figures are emitted by `src/sign_power.py` into `results/T5_sign_power.json`.
+
+---
+
 ## Standing checks
 
 | check | where |

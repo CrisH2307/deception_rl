@@ -77,6 +77,42 @@ def test_sigma_ceiling_the_adopted_set_covers():
     assert abs((377 / n_coef) ** 0.5 - 0.250) < 0.001
 
 
+def test_p2d6_rejects_a_mean_based_confirmatory_claim():
+    """P2-D6 demotes mean `ΔA`. A run that puts a confirmatory claim on it must
+    fail at the binding, not in the results table."""
+    dec.bind_armb_statistic("sign", dec.P2D6_ALPHA, dec.P2D6_P0, False)
+    dec.bind_armb_statistic("tie_rate", dec.P2D6_ALPHA, dec.P2D6_P0, False)
+    for bad in ("mean", "mean_delta_A", "value_from_means"):
+        try:
+            dec.bind_armb_statistic(bad, dec.P2D6_ALPHA, dec.P2D6_P0, False)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"P2-D6 accepted {bad!r} as confirmatory")
+    for kwargs in ((0.05, dec.P2D6_P0, False),          # alpha drift
+                   (dec.P2D6_ALPHA, 0.6, False),        # sign-test null drift
+                   (dec.P2D6_ALPHA, dec.P2D6_P0, True)):  # mean promoted back
+        try:
+            dec.bind_armb_statistic("sign", *kwargs)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"P2-D6 accepted drift {kwargs}")
+
+
+def test_sign_power_is_sigma_free_and_matches_the_prereg():
+    """P2-D6's power curve must not depend on `sigma`, and the figures quoted in
+    PREREGISTRATION_v2.4 section 3.2 must come from the script that emits them."""
+    import sign_power as sp
+    assert sp.ALPHA == dec.P2D6_ALPHA, "sign_power alpha drifted from P2-D6"
+    assert sp.N_CONFIRMATORY == dec.P2D4_N_CONFIRMATORY, "n drifted from P2-D4"
+    # the three figures the preregistration quotes, recomputed here
+    for n_eff, p1, want in ((108, 0.70, 0.858), (76, 0.70, 0.670), (54, 0.75, 0.740)):
+        got = sp.power(n_eff, p1)
+        assert abs(got - want) < 5e-4, f"power({n_eff}, {p1}) = {got:.4f}, prereg says {want}"
+    assert sp.detectable(108) == 0.691, "detectable p1 at n=108 drifted"
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

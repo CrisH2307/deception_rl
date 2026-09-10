@@ -82,6 +82,64 @@ P2D4_REJECTED = ("Redraw variant (a), uniform ~871 per tile, 3,487 total.",
                  "Redraw variant (b), enlarging `size` only.")
 
 
+# --------------------------------------------- P2-D5, the level confound
+P2D5_TEXT = (
+    "`o*_infinity` is Paper 1's `o_fit` on 452 of 460 divergent items, so Arm B's target\n"
+    "sits on Paper 1's salience pole and the LEVEL of `A` is confounded with salience.\n"
+    "The confound is real, permanent, and not repaired by any item set. No change is made\n"
+    "to the item set, the coordinate, or the analysis set. Instead: no claim that a model\n"
+    "carries adversary-relevant content may rest on `A` under a single framing. Every such\n"
+    "claim is made on a framing contrast and on excess over the marginal null, never on\n"
+    "raw `A`. A model at `A = 1` under F0 is reporting salience, not adversary awareness,\n"
+    "and a point mass at `A = 0` is likewise not evidence of Bayes-optimal behaviour."
+)
+P2D5_REJECTED = ("Restrict the primary analysis to items with F0 headroom.",
+                 "Add a second coordinate not confounded with salience at the level.")
+
+# ------------------------------- P2-D6, the confirmatory statistic for Arm B
+P2D6_TEXT = (
+    "Arm B's confirmatory instrument is (i) the tie rate, the share of analysis-set items\n"
+    "with `ΔA` exactly zero, reported directly as a primary quantity, and (ii) an exact\n"
+    "two-sided sign test on the remaining items, on the count with `ΔA > 0` against\n"
+    "`p0 = 0.5`, at `alpha = 0.05/21`. Mean `ΔA` is demoted to a reported descriptive\n"
+    "quantity. The median of per-item `ΔA` and the value computed from the means are both\n"
+    "retained. The `size`-tile analysis set, the 21-test family and `alpha` are unchanged."
+)
+P2D6_REJECTED = ("Accept the mean, state the mixture as a limitation.",
+                 "Restrict to pole-to-pole transitions.",
+                 "A bounded transform of `ΔA`.")
+P2D6_ALPHA = 0.05 / 21          # unchanged from v2.0 section 8.1
+P2D6_P0 = 0.5                   # the sign test's null; needs no SESOI
+P2D6_MEAN_IS_CONFIRMATORY = False
+
+
+def bind_armb_statistic(statistic, alpha, p0, mean_is_confirmatory):
+    """Assert an Arm B confirmatory run against P2-D6. Call at import.
+
+    Takes what the caller actually computes. A run that puts its confirmatory
+    claim on mean `ΔA`, or that moves `alpha` or the sign test's null, fails here
+    rather than in the results table. `sign` and `tie_rate` are the two halves of
+    the instrument and either is an admissible primary statistic; nothing else is.
+    """
+    allowed = ("sign", "tie_rate")
+    if statistic not in allowed:
+        raise AssertionError(
+            f"P2-D6: confirmatory statistic {statistic!r} is not one of {allowed}. "
+            "Mean `ΔA` is descriptive under P2-D6 and cannot carry a confirmatory "
+            "claim; see docs/P2/DECISIONS.md and PREREGISTRATION_v2.4.md section 2.")
+    checks = (("P2-D6 alpha", alpha, P2D6_ALPHA),
+              ("P2-D6 sign-test null", p0, P2D6_P0),
+              ("P2-D6 mean is confirmatory", bool(mean_is_confirmatory),
+               P2D6_MEAN_IS_CONFIRMATORY))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -145,7 +203,8 @@ def check_log(path=LOG):
     """
     text = open(path).read()
     for label, const in (("P2-D1", P2D1_TEXT), ("P2-D2", P2D2_TEXT),
-                         ("P2-D3", P2D3_TEXT), ("P2-D4", P2D4_TEXT)):
+                         ("P2-D3", P2D3_TEXT), ("P2-D4", P2D4_TEXT),
+                         ("P2-D5", P2D5_TEXT), ("P2-D6", P2D6_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -153,7 +212,8 @@ def check_log(path=LOG):
                 f"  in code:\n{quoted}\n"
                 "Fix whichever one drifted. The log is the source.")
     for label, rejected in (("P2-D1", P2D1_REJECTED), ("P2-D2", P2D2_REJECTED),
-                            ("P2-D3", P2D3_REJECTED), ("P2-D4", P2D4_REJECTED)):
+                            ("P2-D3", P2D3_REJECTED), ("P2-D4", P2D4_REJECTED),
+                            ("P2-D5", P2D5_REJECTED), ("P2-D6", P2D6_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -173,9 +233,15 @@ def main():
     print(f"Arm B tile      {P2D3_TILE!r}, pooled={P2D3_POOLED}, "
           f"n={P2D4_N_CONFIRMATORY}")
     print(f"item file       sha256 {P2D4_ITEMS_SHA256[:16]}...")
-    print(f"rejected        {len(P2D1_REJECTED)} on P2-D1, "
-          f"{len(P2D2_REJECTED)} on P2-D2, {len(P2D3_REJECTED)} on P2-D3, "
-          f"{len(P2D4_REJECTED)} on P2-D4, all present in the log")
+    print(f"Arm B statistic tie rate + sign test vs p0={P2D6_P0}, "
+          f"alpha={P2D6_ALPHA:.6f}; mean is confirmatory="
+          f"{P2D6_MEAN_IS_CONFIRMATORY}")
+    print(f"level confound  P2-D5: raw single-framing A carries no claim")
+    print("rejected        " + ", ".join(
+        f"{len(r)} on P2-D{i}" for i, r in enumerate(
+            (P2D1_REJECTED, P2D2_REJECTED, P2D3_REJECTED, P2D4_REJECTED,
+             P2D5_REJECTED, P2D6_REJECTED), start=1))
+          + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0
 

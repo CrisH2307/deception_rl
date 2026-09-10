@@ -1,0 +1,79 @@
+{
+  "instrument": "P2-D6: tie rate reported directly, plus an exact two-sided sign test against p0 = 0.5 on the items that moved",
+  "alpha": 0.002380952380952381,
+  "alpha_source": "v2.0 section 8.1, 21-test family, unchanged",
+  "n_confirmatory_items": 108,
+  "n_source": "v2.3 section 3 / P2-D4: size tile of items_final.parquet, finite beta_c",
+  "sigma_enters": false,
+  "sigma_note": "A sign test's power is exact-binomial in (n_eff, p1). v2.0 section 8.2's n = 15.05 * sigma^2 / delta^2 sizes a MEAN and no longer governs the confirmatory analysis. sigma remains needed for the mean, which P2-D6 keeps as a reported descriptive quantity.",
+  "unknown_exchanged": "sigma for the tie rate. The tie rate is bounded in [0, 1], observed exactly rather than estimated, and monotone in its effect on power. It is not knowable before F1 or F2 is scored.",
+  "power_is_lowest_where_the_null_is_true": "A high tie rate is the outcome H-B predicts, and ties carry no sign, so the sign test has least power exactly where the null holds. This is why the tie rate is a primary reported quantity and not attrition: 'no movement' is answered by the tie rate, and the sign test answers only 'among items that moved, did they move toward the adversary optimum'.",
+  "sesoi": "NOT SET. D74's delta = 0.05 is a SESOI on mean \u0394A and does not translate to a proportion without a distributional assumption. None is invented here. The confirmatory test is against p0 = 0.5, which is well posed with no SESOI; the SESOI would enter only for power, and realized power is reported at the observed n_eff instead.",
+  "rows": [
+    {
+      "tie_rate": 0.0,
+      "n_effective": 108,
+      "power_at": {
+        "0.55": 0.015197940488287948,
+        "0.6": 0.1310250274590478,
+        "0.65": 0.47991263998548067,
+        "0.7": 0.8575428615479311,
+        "0.75": 0.9882775764608351,
+        "0.8": 0.9998303737082782
+      },
+      "detectable_p1_at_80_power": 0.691
+    },
+    {
+      "tie_rate": 0.15,
+      "n_effective": 92,
+      "power_at": {
+        "0.55": 0.018200761397441284,
+        "0.6": 0.1291881773346819,
+        "0.65": 0.4434928529059773,
+        "0.7": 0.8134212839863922,
+        "0.75": 0.9769294693532262,
+        "0.8": 0.999332666091196
+      },
+      "detectable_p1_at_80_power": 0.698
+    },
+    {
+      "tie_rate": 0.3,
+      "n_effective": 76,
+      "power_at": {
+        "0.55": 0.011851170112877781,
+        "0.6": 0.0822126903909834,
+        "0.65": 0.310109973660493,
+        "0.7": 0.6696185680946365,
+        "0.75": 0.9245618849182011,
+        "0.8": 0.9943463454584258
+      },
+      "detectable_p1_at_80_power": 0.721
+    },
+    {
+      "tie_rate": 0.5,
+      "n_effective": 54,
+      "power_at": {
+        "0.55": 0.007196786181989786,
+        "0.6": 0.04287917039214934,
+        "0.65": 0.16620725871458283,
+        "0.7": 0.4253083684726943,
+        "0.75": 0.7402205123127978,
+        "0.8": 0.9402990757615229
+      },
+      "detectable_p1_at_80_power": 0.762
+    },
+    {
+      "tie_rate": 0.7,
+      "n_effective": 32,
+      "power_at": {
+        "0.55": 0.005993726131616731,
+        "0.6": 0.02483477382087934,
+        "0.65": 0.08179204506383991,
+        "0.7": 0.21176779368975174,
+        "0.75": 0.43247084269521113,
+        "0.8": 0.6982368677857195
+      },
+      "detectable_p1_at_80_power": 0.822
+    }
+  ]
+}
