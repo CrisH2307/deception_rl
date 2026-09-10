@@ -4029,74 +4029,576 @@
   },
   "residual_test": {
     "CTRL": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": -0.10033687609508757,
-      "p75": 0.7529732810668837,
-      "share_residual_exactly_zero": 0.44874715261959,
-      "share_residual_negative": 0.255125284738041
+      "observed": {
+        "share_negative": 0.255125284738041,
+        "net_directional": -0.04100227790432798,
+        "p10": -6.307242733928012,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.21304347826086956,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.2410888382687927,
+          "reference_p2_5": 0.23234624145785876,
+          "reference_p97_5": 0.2505694760820046,
+          "observed": 0.255125284738041,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.004555808656036442
+        },
+        "net_directional": {
+          "reference_mean": -0.06907517084282462,
+          "reference_p2_5": -0.08656036446469251,
+          "reference_p97_5": -0.05011389521640086,
+          "observed": -0.04100227790432798,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.009111617312072884
+        },
+        "p10": {
+          "reference_mean": -5.95839861127301,
+          "reference_p2_5": -6.340625709622783,
+          "reference_p97_5": -5.772639986968201,
+          "observed": -6.307242733928012,
+          "percentile_of_observed": 0.0375,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.255125284738041,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.03530751708428248
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": -0.04100227790432798,
+          "percentile_of_observed": 0.609,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -6.307242733928012,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 1.7079586647763643
+        }
+      }
     },
     "B2": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": -0.13648109614213388,
-      "p75": 0.0,
-      "share_residual_exactly_zero": 0.5671981776765376,
-      "share_residual_negative": 0.255125284738041
+      "observed": {
+        "share_negative": 0.255125284738041,
+        "net_directional": 0.07744874715261962,
+        "p10": -4.948778401638722,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.21195652173913043,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.2550318906605923,
+          "reference_p2_5": 0.2460136674259681,
+          "reference_p97_5": 0.2642369020501139,
+          "observed": 0.255125284738041,
+          "percentile_of_observed": 0.5505,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "net_directional": {
+          "reference_mean": 0.07726195899772213,
+          "reference_p2_5": 0.0592255125284738,
+          "reference_p97_5": 0.09567198177676539,
+          "observed": 0.07744874715261962,
+          "percentile_of_observed": 0.5505,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "p10": {
+          "reference_mean": -4.783973762491052,
+          "reference_p2_5": -5.068929941102751,
+          "reference_p97_5": -4.3762882271244585,
+          "observed": -4.948778401638722,
+          "percentile_of_observed": 0.3485,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.255125284738041,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.03530751708428248
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": 0.07744874715261962,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.08769931662870162
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -4.948778401638722,
+          "percentile_of_observed": 0.0105,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.3494943324870743
+        }
+      }
     },
     "B4": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": 0.0,
-      "p75": 0.0,
-      "share_residual_exactly_zero": 0.6321184510250569,
-      "share_residual_negative": 0.13211845102505695
+      "observed": {
+        "share_negative": 0.13211845102505695,
+        "net_directional": -0.10364464692482914,
+        "p10": -1.3619794906467895,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.17065217391304346,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.13534396355353076,
+          "reference_p2_5": 0.1275626423690205,
+          "reference_p97_5": 0.14236902050113895,
+          "observed": 0.13211845102505695,
+          "percentile_of_observed": 0.248,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "net_directional": {
+          "reference_mean": -0.09719362186788154,
+          "reference_p2_5": -0.11275626423690205,
+          "reference_p97_5": -0.08314350797266515,
+          "observed": -0.10364464692482914,
+          "percentile_of_observed": 0.248,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "p10": {
+          "reference_mean": -1.4020714353524657,
+          "reference_p2_5": -1.6225281445457183,
+          "reference_p97_5": -1.1653397545355713,
+          "observed": -1.3619794906467895,
+          "percentile_of_observed": 0.6825,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.13211845102505695,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.044419134396355336
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": -0.10364464692482914,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.02277904328018221
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -1.3619794906467895,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 1.0527460513965485
+        }
+      }
     },
     "L1": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": 0.0,
-      "p75": 0.3479541096291361,
-      "share_residual_exactly_zero": 0.5022779043280182,
-      "share_residual_negative": 0.22779043280182232
+      "observed": {
+        "share_negative": 0.22779043280182232,
+        "net_directional": -0.04214123006833714,
+        "p10": -4.077750167063941,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.2108695652173913,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.21670159453302962,
+          "reference_p2_5": 0.20842824601366744,
+          "reference_p97_5": 0.2255125284738041,
+          "observed": 0.22779043280182232,
+          "percentile_of_observed": 0.9955,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.002277904328018221
+        },
+        "net_directional": {
+          "reference_mean": -0.06431890660592253,
+          "reference_p2_5": -0.0808656036446469,
+          "reference_p97_5": -0.046697038724373585,
+          "observed": -0.04214123006833714,
+          "percentile_of_observed": 0.9955,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.004555808656036442
+        },
+        "p10": {
+          "reference_mean": -4.063257271622499,
+          "reference_p2_5": -4.396746965046833,
+          "reference_p97_5": -3.819630502765884,
+          "observed": -4.077750167063941,
+          "percentile_of_observed": 0.292,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.22779043280182232,
+          "percentile_of_observed": 0.9975,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.007972665148063773
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": -0.04214123006833714,
+          "percentile_of_observed": 0.581,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -4.077750167063941,
+          "percentile_of_observed": 0.087,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      }
     },
     "L2": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": 0.0,
-      "p75": 1.0291235971994275,
-      "share_residual_exactly_zero": 0.49544419134396356,
-      "share_residual_negative": 0.19362186788154898
+      "observed": {
+        "share_negative": 0.19362186788154898,
+        "net_directional": -0.11731207289293852,
+        "p10": -3.171623361575419,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.17282608695652174,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.19031833712984056,
+          "reference_p2_5": 0.18223234624145787,
+          "reference_p97_5": 0.19706719817767637,
+          "observed": 0.19362186788154898,
+          "percentile_of_observed": 0.844,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "net_directional": {
+          "reference_mean": -0.12391913439635537,
+          "reference_p2_5": -0.14009111617312073,
+          "reference_p97_5": -0.11042141230068371,
+          "observed": -0.11731207289293852,
+          "percentile_of_observed": 0.844,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "p10": {
+          "reference_mean": -3.544521923676736,
+          "reference_p2_5": -3.819630502765884,
+          "reference_p97_5": -3.1872351409945896,
+          "observed": -3.171623361575419,
+          "percentile_of_observed": 0.99,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.015611779419170801
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.19362186788154898,
+          "percentile_of_observed": 0.3995,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": -0.11731207289293852,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.03644646924829159
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -3.171623361575419,
+          "percentile_of_observed": 0.7905,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      }
     },
     "L3": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": 0.0,
-      "p75": 1.4097413794459557,
-      "share_residual_exactly_zero": 0.4783599088838269,
-      "share_residual_negative": 0.17995444191343962
+      "observed": {
+        "share_negative": 0.17995444191343962,
+        "net_directional": -0.16173120728929385,
+        "p10": -2.111627543035527,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.175,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.179998291571754,
+          "reference_p2_5": 0.17198177676537585,
+          "reference_p97_5": 0.1867881548974943,
+          "observed": 0.17995444191343962,
+          "percentile_of_observed": 0.552,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "net_directional": {
+          "reference_mean": -0.16164350797266513,
+          "reference_p2_5": -0.1776765375854214,
+          "reference_p97_5": -0.1480637813211845,
+          "observed": -0.16173120728929385,
+          "percentile_of_observed": 0.552,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "p10": {
+          "reference_mean": -2.387011964442614,
+          "reference_p2_5": -2.9209813115899044,
+          "reference_p97_5": -2.111627543035527,
+          "observed": -2.111627543035527,
+          "percentile_of_observed": 0.9755,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.17995444191343962,
+          "percentile_of_observed": 0.0565,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": -0.16173120728929385,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.08086560364464693
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -2.111627543035527,
+          "percentile_of_observed": 0.9935,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.30309799900781087
+        }
+      }
     },
     "L4": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": 0.0,
-      "p75": 0.9938310126577985,
-      "share_residual_exactly_zero": 0.5341685649202733,
-      "share_residual_negative": 0.1662870159453303
-    },
-    "RANDOM(calibration)": {
-      "n": 878,
-      "median_residual": 0.0,
-      "p25": 0.0,
-      "p75": 0.27363684335076477,
-      "share_residual_exactly_zero": 0.5341685649202733,
-      "share_residual_negative": 0.19931662870159453
+      "observed": {
+        "share_negative": 0.1662870159453303,
+        "net_directional": -0.13325740318906604,
+        "p10": -1.815545701016376,
+        "n": 878
+      },
+      "share_movable_under_matched_null": 0.1532608695652174,
+      "matched": {
+        "share_negative": {
+          "reference_mean": 0.15683029612756264,
+          "reference_p2_5": 0.15034168564920272,
+          "reference_p97_5": 0.16287015945330297,
+          "observed": 0.1662870159453303,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.0034168564920273314
+        },
+        "net_directional": {
+          "reference_mean": -0.1521708428246014,
+          "reference_p2_5": -0.1651480637813212,
+          "reference_p97_5": -0.1400911161731207,
+          "observed": -0.13325740318906604,
+          "percentile_of_observed": 1.0,
+          "outside_95_band": true,
+          "direction": "more negative",
+          "excess_beyond_band": 0.006833712984054663
+        },
+        "p10": {
+          "reference_mean": -1.6405977349804326,
+          "reference_p2_5": -1.855826440132855,
+          "reference_p97_5": -1.4446871970208397,
+          "observed": -1.815545701016376,
+          "percentile_of_observed": 0.076,
+          "outside_95_band": false,
+          "direction": "inside",
+          "excess_beyond_band": 0.0
+        }
+      },
+      "uniform": {
+        "share_negative": {
+          "reference_mean": 0.19755694760820047,
+          "reference_p2_5": 0.1765375854214123,
+          "reference_p97_5": 0.21981776765375854,
+          "observed": 0.1662870159453303,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.010250569476081994
+        },
+        "net_directional": {
+          "reference_mean": -0.04575398633257404,
+          "reference_p2_5": -0.08086560364464693,
+          "reference_p97_5": -0.010250569476081994,
+          "observed": -0.13325740318906604,
+          "percentile_of_observed": 0.0,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.05239179954441911
+        },
+        "p10": {
+          "reference_mean": -3.5017472631605475,
+          "reference_p2_5": -4.599284069151648,
+          "reference_p97_5": -2.414725542043338,
+          "observed": -1.815545701016376,
+          "percentile_of_observed": 0.9985,
+          "outside_95_band": true,
+          "direction": "less negative",
+          "excess_beyond_band": 0.599179841026962
+        }
+      }
     }
   },
   "residual_test_reading": {
     "question": "Is A more negative than the model's position on P1's coordinate alone predicts?",
-    "answer": "No. Median residual is exactly 0 for every model and for the uniform-random calibration chooser, and no model's residual distribution skews negative. Nothing is left over.",
-    "consequence": "Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate, not independent evidence that models are worse than the no-adversary optimum. It must not be reported as the latter."
+    "answer": "Partly, and small. Under the matched null, which holds P1-coordinate position fixed, three of seven models sit just above the 95% band on `share_negative` in the more-negative direction, by margins worth a few renderings out of 878; no model's tail depth (`p10`) is deeper than the band and one is shallower. The band is narrow because only 15% to 21% of renderings can move under that null, and the comparisons are uncorrected. Under the weaker uniform null models deviate in BOTH directions, which is what differing bin occupancy produces and not a negative skew.",
+    "consequence": "Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate. It is not independent evidence that models are worse than the no-adversary optimum and must not be reported as such. What survives the matched null is small and one-sided across statistics, which is weaker than 'nothing is left over' and weaker than 'models skew negative'. Both are overclaims; the claim the evidence supports is in `answer`."
+  },
+  "residual_test_method": {
+    "statistics_named_before_the_monte_carlo": [
+      "share_negative",
+      "net_directional",
+      "p10"
+    ],
+    "n_monte_carlo_draws": 2000,
+    "why_the_median_was_dropped": "A bin-median predictor pins the median residual near zero for ANY chooser, and a uniform-random chooser returns exactly 0.0000. That column confirms the estimator rather than calibrating a model, so no conclusion is drawn from it. The predictor stays the bin median: the earlier switch away from the bin mean was correct and is unrelated.",
+    "primary_null": "matched: resample the option uniformly among the item's options in the SAME sb bin, holding the model's position on P1's coordinate fixed. That is what the question requires.",
+    "secondary_null": "uniform: resample over the whole option set. Does NOT hold P1-coordinate position fixed, so a deviation under it can be the far-side position itself, which is Paper 1's finding rather than a residual.",
+    "status": "Descriptive and exploratory. No confirmatory alpha is spent and percentiles are not corrected across 7 models by 3 statistics."
+  },
+  "delta_A_leverage": {
+    "status": "MEASUREMENT of the coordinate, not of any model. No framing contrast exists yet; these are the moves the A axis admits.",
+    "n_ordered_option_pairs": 6048,
+    "target_move": "o*_0 -> o*_infinity is Delta-A = +1 exactly, on all 460 divergent items",
+    "by_kind": {
+      "pole_to_pole": {
+        "n": 920,
+        "share": 0.15211640211640212,
+        "median_abs_delta_A": 1.0,
+        "p90_abs_delta_A": 1.0,
+        "max_abs_delta_A": 1.0
+      },
+      "mixed": {
+        "n": 3600,
+        "share": 0.5952380952380952,
+        "median_abs_delta_A": 3.7626222490814287,
+        "p90_abs_delta_A": 16.215181395969303,
+        "max_abs_delta_A": 4777.886030253233
+      },
+      "off_to_off": {
+        "n": 1528,
+        "share": 0.2526455026455027,
+        "median_abs_delta_A": 2.4669289539797443,
+        "p90_abs_delta_A": 12.817456214905382,
+        "max_abs_delta_A": 2515.580860381313
+      }
+    },
+    "share_abs_delta_A_exceeding": {
+      "1": 0.7003968253968254,
+      "5": 0.3055555555555556,
+      "10": 0.15178571428571427,
+      "100": 0.012566137566137565,
+      "1000": 0.0016534391534391533
+    },
+    "abs_delta_A_percentiles": {
+      "50": 2.553037048679156,
+      "75": 6.187956914080559,
+      "90": 13.817456214905382,
+      "95": 25.992235077905004,
+      "99": 183.8300259910309
+    },
+    "leverage_reading": "A move of magnitude |Delta-A| carries the same weight in a mean as |Delta-A| items making the target move of +1. Since 0.1518 of admissible moves exceed 10, one item moving to a far off-pole option can outweigh ten items making the exact move Arm B exists to detect."
   },
   "what_this_does_not_decide": {
     "routed_to": "T5 (preregistration)",

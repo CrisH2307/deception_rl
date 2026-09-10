@@ -114,24 +114,61 @@ Median `A` is negative for every model on the ladder. That reads as "models are 
 
 The chance rate of landing on any one named option is 0.2732, the mean of `1/|O|` over the divergence set (`|O|` runs 3 to 6).
 
-### What is left over, tested
+### What is left over, tested against a calibrated null
 
-**Is A more negative than the model's position on P1's coordinate alone predicts?** Predictor: the median `A` among options in the same `sb` bin, taken over other items (leave-one-item-out, so the chosen option never predicts itself). A systematically **negative** residual would mean models sit lower on the margin axis than their posterior position accounts for, and that would be a finding of its own.
+**Is A more negative than the model's position on P1's coordinate alone predicts?**
 
-| model | n | median residual | p25 | p75 | share exactly 0 | share negative |
-|---|---:|---:|---:|---:|---:|---:|
-| `CTRL` | 878 | +0.0000 | -0.1003 | +0.7530 | 0.4487 | 0.2551 |
-| `B2` | 878 | +0.0000 | -0.1365 | +0.0000 | 0.5672 | 0.2551 |
-| `B4` | 878 | +0.0000 | +0.0000 | +0.0000 | 0.6321 | 0.1321 |
-| `L1` | 878 | +0.0000 | +0.0000 | +0.3480 | 0.5023 | 0.2278 |
-| `L2` | 878 | +0.0000 | +0.0000 | +1.0291 | 0.4954 | 0.1936 |
-| `L3` | 878 | +0.0000 | +0.0000 | +1.4097 | 0.4784 | 0.1800 |
-| `L4` | 878 | +0.0000 | +0.0000 | +0.9938 | 0.5342 | 0.1663 |
-| `RANDOM(calibration)` | 878 | +0.0000 | +0.0000 | +0.2736 | 0.5342 | 0.1993 |
+Predictor: the median `A` among options in the same `sb` bin, taken over other items (leave-one-item-out, so a choice never predicts itself).
 
-**No. Median residual is exactly 0 for every model and for the uniform-random calibration chooser, and no model's residual distribution skews negative. Nothing is left over.** Every model's residual distribution brackets the random chooser's. Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate, not independent evidence that models are worse than the no-adversary optimum. It must not be reported as the latter.
+**The median residual is not the test and no conclusion is drawn from it.** A bin-median predictor pins the median residual near zero for ANY chooser, and a uniform-random chooser returns exactly 0.0000. That column confirms the estimator rather than calibrating a model, so no conclusion is drawn from it. The predictor stays the bin median: the earlier switch away from the bin mean was correct and is unrelated.
 
-The bin **median** is the predictor, not the bin mean. `A` is a ratio whose per-item denominator can approach zero, and v2.0 section 3.2 already names that pathology and prescribes medians. A mean predictor returns residuals of +8 to +10 for every model **and** for the random chooser, which is a property of the predictor rather than of any model; the calibration row is what makes that visible.
+The question therefore goes to the distribution. Three statistics, **named before any Monte Carlo was run**: `share_negative`, `net_directional`, `p10`. Two nulls, 2,000 draws each:
+
+- **matched (primary).** Resample the option uniformly among the item's options in the **same `sb` bin**, holding the model's position on P1's coordinate fixed. That is what the question requires. Power is bounded by how many renderings have a within-bin alternative, reported as `movable`.
+- **uniform (secondary).** Resample over the whole option set. Does **not** hold P1-coordinate position fixed, so a deviation under it can be the far-side position itself, which is Paper 1's finding rather than a residual.
+
+Descriptive and exploratory. No confirmatory alpha is spent and percentiles are not corrected across 7 models by 3 statistics.
+
+#### Primary: matched null, P1-coordinate position held fixed
+
+| model | movable | `share_negative` | ref 95% | pctile | `p10` | ref 95% | pctile |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `CTRL` | 0.2130 | 0.2551 | [0.2323, 0.2506] | 1.000 | -6.307 | [-6.341, -5.773] | 0.037 |
+| `B2` | 0.2120 | 0.2551 | [0.2460, 0.2642] | 0.550 | -4.949 | [-5.069, -4.376] | 0.348 |
+| `B4` | 0.1707 | 0.1321 | [0.1276, 0.1424] | 0.248 | -1.362 | [-1.623, -1.165] | 0.682 |
+| `L1` | 0.2109 | 0.2278 | [0.2084, 0.2255] | 0.996 | -4.078 | [-4.397, -3.820] | 0.292 |
+| `L2` | 0.1728 | 0.1936 | [0.1822, 0.1971] | 0.844 | -3.172 | [-3.820, -3.187] | 0.990 |
+| `L3` | 0.1750 | 0.1800 | [0.1720, 0.1868] | 0.552 | -2.112 | [-2.921, -2.112] | 0.976 |
+| `L4` | 0.1533 | 0.1663 | [0.1503, 0.1629] | 1.000 | -1.816 | [-1.856, -1.445] | 0.076 |
+
+#### Secondary: uniform null, position NOT held fixed
+
+| model | movable | `share_negative` | ref 95% | pctile | `p10` | ref 95% | pctile |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `CTRL` | 0.2130 | 0.2551 | [0.1765, 0.2198] | 1.000 | -6.307 | [-4.599, -2.415] | 0.000 |
+| `B2` | 0.2120 | 0.2551 | [0.1765, 0.2198] | 1.000 | -4.949 | [-4.599, -2.415] | 0.011 |
+| `B4` | 0.1707 | 0.1321 | [0.1765, 0.2198] | 0.000 | -1.362 | [-4.599, -2.415] | 1.000 |
+| `L1` | 0.2109 | 0.2278 | [0.1765, 0.2198] | 0.998 | -4.078 | [-4.599, -2.415] | 0.087 |
+| `L2` | 0.1728 | 0.1936 | [0.1765, 0.2198] | 0.400 | -3.172 | [-4.599, -2.415] | 0.790 |
+| `L3` | 0.1750 | 0.1800 | [0.1765, 0.2198] | 0.057 | -2.112 | [-4.599, -2.415] | 0.994 |
+| `L4` | 0.1533 | 0.1663 | [0.1765, 0.2198] | 0.000 | -1.816 | [-4.599, -2.415] | 0.999 |
+
+**Reading, primary null.** Only 0.1533 to 0.2130 of renderings can move under it: 909 of the 1,820 option-cells sit in the two degenerate pole bins, and only 14% of (item, `sb` bin) cells hold more than one option.
+
+**4 of 14 model-by-statistic comparisons fall outside a two-sided 95% reference band**, uncorrected:
+
+- `CTRL` on `share_negative`: +0.2551 against [+0.2323, +0.2506], **more negative** than the matched null, exceeding the band by 0.0046, which is about 4 of 878 renderings.
+- `L1` on `share_negative`: +0.2278 against [+0.2084, +0.2255], **more negative** than the matched null, exceeding the band by 0.0023, which is about 2 of 878 renderings.
+- `L2` on `p10`: -3.1716 against [-3.8196, -3.1872], **less negative** than the matched null, exceeding the band by 0.0156.
+- `L4` on `share_negative`: +0.1663 against [+0.1503, +0.1629], **more negative** than the matched null, exceeding the band by 0.0034, which is about 3 of 878 renderings.
+
+So the honest statement is neither "nothing is left over" nor "models skew negative". Three of seven models sit just above the band on `share_negative`, in the more-negative direction, by margins worth a handful of renderings each; one sits outside in the opposite direction on `p10`; and **no model's tail depth is deeper than the band**. A small negative residual is detectable on the share statistic for some models and is absent on the tail statistic.
+
+Two things bound how much that is worth. The band is **narrow because the null has little room**: with 15% to 21% of renderings movable, the reference distribution has low variance, so a deviation of a few renderings clears it without being substantively large. And the comparisons are uncorrected across 14, where roughly 0.7 exceedances are expected with no effect at all. **The residual, if it is real, is small; the design has little power to size it; and both halves of that belong in any sentence that cites this test.**
+
+**Reading, secondary null.** Models deviate from the uniform reference in **both directions**: `CTRL` and `B2` carry more negative residuals than random, `B4`, `L3` and `L4` fewer. There is no systematic negative skew across the ladder. That two-sided spread is what differing bin occupancy produces, which is why this null is secondary: it re-expresses where each model sits on P1's coordinate rather than isolating anything left over.
+
+**Conclusion.** Partly, and small. Under the matched null, which holds P1-coordinate position fixed, three of seven models sit just above the 95% band on `share_negative` in the more-negative direction, by margins worth a few renderings out of 878; no model's tail depth (`p10`) is deeper than the band and one is shallower. The band is narrow because only 15% to 21% of renderings can move under that null, and the comparisons are uncorrected. Under the weaker uniform null models deviate in BOTH directions, which is what differing bin occupancy produces and not a negative skew. Negative median A is a COROLLARY of Paper 1's far-side finding re-expressed on the margin coordinate. It is not independent evidence that models are worse than the no-adversary optimum and must not be reported as such. What survives the matched null is small and one-sided across statistics, which is weaker than 'nothing is left over' and weaker than 'models skew negative'. Both are overclaims; the claim the evidence supports is in `answer`.
 
 ### The point mass at `A = 0`
 
@@ -186,4 +223,4 @@ Models found: B2, B4, CTRL, L1, L2, L3, L4. `prompt_form == template` is primary
 
 Every number here is emitted to `results/T6_F0_headroom.json`. `A` is computed from the same `t6_arm_a.arm_a_columns` that produced the Arm A results, so there is one implementation of `beta_c`, `o*_0` and `o*_infinity`, not two. The posterior was checked against P1's frozen `frontier_ext_post` and the option ids against P1's own `post_norm` column.
 
-Runtime 1.2 s.
+Runtime 29.2 s.

@@ -199,39 +199,96 @@ def pole_decomposition(it, co, a, o0, oinf, chance):
     }
 
 
-def residual_test(it, a, sb, cloud, bin_of):
-    """Is `A` more negative than the choice's position on P1's coordinate implies?
+WORD = {0: "None", 1: "One", 2: "Two", 3: "Three", 4: "Four",
+        5: "Five", 6: "Six", 7: "Seven"}
+RESID_STATS = ("share_negative", "net_directional", "p10")
+N_MC = 2000
 
-    Predictor: the median `A` among options in the same `sb` bin, taken over
-    OTHER items (leave-one-item-out, so the chosen option never predicts itself).
-    The residual is `A_observed - A_predicted`. A systematically NEGATIVE residual
-    would mean the models sit lower on the margin axis than their posterior
-    position accounts for, and that would be a finding of its own.
 
-    The bin MEDIAN is the predictor, not the bin mean: `A` is a ratio with a
-    per-item denominator that can approach zero, and v2.0 section 3.2 already
-    names that pathology and prescribes medians. A mean predictor gives residuals
-    of +8 to +10 for every model AND for the random chooser, which is a property
-    of the predictor, not of any model.
+def _residuals(it, co, A, SB_bin, SB_ok, loo):
+    """A_observed - A_predicted per rendering. Predictor is the leave-one-item-out
+    median A among options in the same sb bin, so a choice never predicts itself."""
+    a = np.array([A[i][o] for i, o in zip(it, co)])
+    ok = np.array([SB_ok[i][o] for i, o in zip(it, co)])
+    pr = np.array([loo.get((SB_bin[i][o], i), np.nan) for i, o in zip(it, co)])
+    r = (a - pr)[ok & np.isfinite(pr)]
+    return r
+
+
+def _resid_stats(r):
+    """The three statistics, NAMED BEFORE ANY MONTE CARLO WAS RUN.
+
+    `net_directional` turns out to be a monotone function of `share_negative`
+    under the matched null, because the exact-zero residuals all come from the
+    degenerate pole bins and permuting inside those bins cannot move one. It is
+    reported anyway, with that noted, rather than dropped after the fact.
     """
-    bn = bin_of(sb)
-    pred = np.full(len(a), np.nan)
-    for t, (i, b) in enumerate(zip(it, bn)):
-        if not np.isfinite(sb[t]):
-            continue
-        sub = cloud[(cloud["bin"] == b) & (cloud["item_id"] != i)]["A"].values
-        if len(sub):
-            pred[t] = np.median(sub)
-    r = (a - pred)
-    r = r[np.isfinite(r)]
-    return {
-        "n": int(len(r)),
-        "median_residual": float(np.median(r)),
-        "p25": float(np.percentile(r, 25)),
-        "p75": float(np.percentile(r, 75)),
-        "share_residual_exactly_zero": float((np.abs(r) < 1e-9).mean()),
-        "share_residual_negative": float((r < -1e-9).mean()),
-    }
+    neg, pos = float((r < -1e-9).mean()), float((r > 1e-9).mean())
+    return {"share_negative": neg, "net_directional": neg - pos,
+            "p10": float(np.percentile(r, 10)), "n": int(len(r))}
+
+
+def residual_calibration(it, co, A, SB_bin, SB_ok, loo, alt, K, seed=7):
+    """Is A more negative than the choice's position on P1's coordinate predicts?
+
+    The median residual CANNOT answer this: a bin-median predictor pins the median
+    near zero for any chooser, and a uniform-random chooser returns exactly 0.0000
+    too. That column confirms the estimator, it does not calibrate a model. So the
+    question is put to the distribution, against two nulls:
+
+      matched   PRIMARY. Resample each rendering's option uniformly among that
+                item's options IN THE SAME sb BIN. This holds the model's position
+                on P1's coordinate fixed, which is precisely what the question
+                requires, and randomises everything else. Its power is bounded by
+                how many renderings have a within-bin alternative at all, reported
+                as `share_movable`.
+      uniform   Resample over the item's whole option set. Weaker, and it does NOT
+                hold P1-coordinate position fixed, so a deviation under it can be
+                the far-side position itself, which is Paper 1's finding rather
+                than a residual.
+
+    Descriptive and exploratory. No confirmatory alpha is spent, and the
+    percentiles below are not corrected across the 7 models by 3 statistics.
+    """
+    obs = _resid_stats(_residuals(it, co, A, SB_bin, SB_ok, loo))
+    movable = float(np.mean([len(alt.get((i, o), (o,))) > 1 for i, o in zip(it, co)]))
+    out = {"observed": obs, "share_movable_under_matched_null": movable}
+    for name in ("matched", "uniform"):
+        rng = np.random.default_rng(seed)
+        ref = []
+        for _ in range(N_MC):
+            if name == "matched":
+                cc = np.array([rng.choice(alt[(i, o)])
+                               if (i, o) in alt and len(alt[(i, o)]) > 1 else o
+                               for i, o in zip(it, co)])
+            else:
+                cc = np.array([rng.integers(K[i]) for i in it])
+            ref.append(_resid_stats(_residuals(it, cc, A, SB_bin, SB_ok, loo)))
+        cell = {}
+        for k in RESID_STATS:
+            lo = float(np.percentile([x[k] for x in ref], 2.5))
+            hi = float(np.percentile([x[k] for x in ref], 97.5))
+            v = obs[k]
+            # "more negative" is UP for share_negative and net_directional (more
+            # renderings below the prediction) and DOWN for p10 (a deeper tail).
+            more_neg_is_up = k in ("share_negative", "net_directional")
+            outside = v > hi or v < lo
+            if not outside:
+                direction, excess = "inside", 0.0
+            elif v > hi:
+                direction = "more negative" if more_neg_is_up else "less negative"
+                excess = v - hi
+            else:
+                direction = "less negative" if more_neg_is_up else "more negative"
+                excess = lo - v
+            cell[k] = {
+                "reference_mean": float(np.mean([x[k] for x in ref])),
+                "reference_p2_5": lo, "reference_p97_5": hi, "observed": v,
+                "percentile_of_observed": float(np.mean([x[k] <= v for x in ref])),
+                "outside_95_band": bool(outside), "direction": direction,
+                "excess_beyond_band": float(excess)}
+        out[name] = cell
+    return out
 
 
 def main():
@@ -425,6 +482,22 @@ def main():
             cloud[(np.abs(cloud["sb"]) >= 1e-9) & (np.abs(cloud["sb"] - 1) >= 1e-9)]["A"])),
     }
 
+    # Leave-one-item-out bin medians and the within-bin alternative sets, both
+    # precomputed: the Monte Carlo below evaluates them 2,000 times per model.
+    loo = {}
+    for b, gg in cloud.groupby("bin"):
+        v, iv = gg["A"].values, gg["item_id"].values
+        for i in set(iv):
+            loo[(b, int(i))] = float(np.median(v[iv != i]))
+    SB_bin = {int(i): bin_of(SB[int(i)]) for i in ids[D]}
+    SB_ok = {int(i): np.isfinite(SB[int(i)]) for i in ids[D]}
+    alt = {}
+    for i in ids[D]:
+        i = int(i)
+        for o in range(K[i]):
+            if SB_ok[i][o]:
+                alt[(i, o)] = np.where(SB_ok[i] & (SB_bin[i] == SB_bin[i][o]))[0]
+
     poles, resid = {}, {}
     for model in list(LADDER_ORDER) + ["RANDOM(calibration)"]:
         rng = np.random.default_rng(0) if model.startswith("RANDOM") else None
@@ -432,20 +505,95 @@ def main():
             continue
         it, co, a, sb = renderings(ch, model, keep, A, SB, cols, ids, K, rng)
         poles[model] = pole_decomposition(it, co, a, o0, oinf, chance)
-        resid[model] = residual_test(it, a, sb, cloud, bin_of)
+        if rng is None:
+            resid[model] = residual_calibration(it, co, A, SB_bin, SB_ok, loo,
+                                                alt, K)
     num["pole_decomposition"] = poles
     num["residual_test"] = resid
     num["residual_test_reading"] = {
         "question": "Is A more negative than the model's position on P1's "
                     "coordinate alone predicts?",
-        "answer": "No. Median residual is exactly 0 for every model and for the "
-                  "uniform-random calibration chooser, and no model's residual "
-                  "distribution skews negative. Nothing is left over.",
+        "answer": "Partly, and small. Under the matched null, which holds "
+                  "P1-coordinate position fixed, three of seven models sit just "
+                  "above the 95% band on `share_negative` in the more-negative "
+                  "direction, by margins worth a few renderings out of 878; no "
+                  "model's tail depth (`p10`) is deeper than the band and one is "
+                  "shallower. The band is narrow because only 15% to 21% of "
+                  "renderings can move under that null, and the comparisons are "
+                  "uncorrected. Under the weaker uniform null models deviate in "
+                  "BOTH directions, which is what differing bin occupancy produces "
+                  "and not a negative skew.",
         "consequence": "Negative median A is a COROLLARY of Paper 1's far-side "
-                       "finding re-expressed on the margin coordinate, not "
+                       "finding re-expressed on the margin coordinate. It is not "
                        "independent evidence that models are worse than the "
-                       "no-adversary optimum. It must not be reported as the "
-                       "latter.",
+                       "no-adversary optimum and must not be reported as such. "
+                       "What survives the matched null is small and one-sided "
+                       "across statistics, which is weaker than 'nothing is left "
+                       "over' and weaker than 'models skew negative'. Both are "
+                       "overclaims; the claim the evidence supports is in "
+                       "`answer`.",
+    }
+    num["residual_test_method"] = {
+        "statistics_named_before_the_monte_carlo": list(RESID_STATS),
+        "n_monte_carlo_draws": N_MC,
+        "why_the_median_was_dropped":
+            "A bin-median predictor pins the median residual near zero for ANY "
+            "chooser, and a uniform-random chooser returns exactly 0.0000. That "
+            "column confirms the estimator rather than calibrating a model, so no "
+            "conclusion is drawn from it. The predictor stays the bin median: the "
+            "earlier switch away from the bin mean was correct and is unrelated.",
+        "primary_null": "matched: resample the option uniformly among the item's "
+                        "options in the SAME sb bin, holding the model's position "
+                        "on P1's coordinate fixed. That is what the question "
+                        "requires.",
+        "secondary_null": "uniform: resample over the whole option set. Does NOT "
+                          "hold P1-coordinate position fixed, so a deviation "
+                          "under it can be the far-side position itself, which is "
+                          "Paper 1's finding rather than a residual.",
+        "status": "Descriptive and exploratory. No confirmatory alpha is spent "
+                  "and percentiles are not corrected across 7 models by 3 "
+                  "statistics.",
+    }
+
+    # The Delta-A estimator question, routed to T5. Measured from the geometry
+    # alone: no framing contrast exists yet, so these are the moves the coordinate
+    # ADMITS, which is what makes it a property of the estimator rather than of
+    # any model.
+    pairs, kind = [], []
+    for i in ids[D]:
+        i = int(i)
+        for a_ in range(K[i]):
+            for b_ in range(K[i]):
+                if a_ == b_:
+                    continue
+                pairs.append(A[i][b_] - A[i][a_])
+                pa, pb = a_ in (o0[i], oinf[i]), b_ in (o0[i], oinf[i])
+                kind.append("pole_to_pole" if pa and pb
+                            else ("mixed" if pa or pb else "off_to_off"))
+    pairs, kind = np.array(pairs), np.array(kind)
+    mag = np.abs(pairs)
+    num["delta_A_leverage"] = {
+        "status": "MEASUREMENT of the coordinate, not of any model. No framing "
+                  "contrast exists yet; these are the moves the A axis admits.",
+        "n_ordered_option_pairs": int(len(pairs)),
+        "target_move": "o*_0 -> o*_infinity is Delta-A = +1 exactly, on all "
+                       f"{int(D.sum())} divergent items",
+        "by_kind": {k: {"n": int((kind == k).sum()),
+                        "share": float((kind == k).mean()),
+                        "median_abs_delta_A": float(np.median(mag[kind == k])),
+                        "p90_abs_delta_A": float(np.percentile(mag[kind == k], 90)),
+                        "max_abs_delta_A": float(mag[kind == k].max())}
+                    for k in ("pole_to_pole", "mixed", "off_to_off")},
+        "share_abs_delta_A_exceeding": {str(t): float((mag > t).mean())
+                                        for t in (1, 5, 10, 100, 1000)},
+        "abs_delta_A_percentiles": {int(q): float(np.percentile(mag, q))
+                                    for q in (50, 75, 90, 95, 99)},
+        "leverage_reading":
+            "A move of magnitude |Delta-A| carries the same weight in a mean as "
+            "|Delta-A| items making the target move of +1. Since "
+            f"{float((mag > 10).mean()):.4f} of admissible moves exceed 10, one "
+            "item moving to a far off-pole option can outweigh ten items making "
+            "the exact move Arm B exists to detect.",
     }
 
     num["what_this_does_not_decide"] = {
@@ -658,7 +806,7 @@ def write_report(num, secs):
       "what follows from it is T5's to decide.\n\n")
     cg = num["coordinate_geometry"]
     pol = num["pole_decomposition"]
-    res = num["residual_test"]
+    resid = num["residual_test"]
     rr = num["residual_test_reading"]
 
     w("\n## Negative median `A` is a corollary of Paper 1, not a separate finding\n\n")
@@ -694,26 +842,95 @@ def write_report(num, secs):
       f"{list(pol.values())[0]['chance_rate_any_named_option']:.4f}, the mean of "
       f"`1/|O|` over the divergence set (`|O|` runs 3 to 6).\n\n")
 
-    w("### What is left over, tested\n\n")
-    w(f"**{rr['question']}** Predictor: the median `A` among options in the same "
-      f"`sb` bin, taken over other items (leave-one-item-out, so the chosen option "
-      f"never predicts itself). A systematically **negative** residual would mean "
-      f"models sit lower on the margin axis than their posterior position "
-      f"accounts for, and that would be a finding of its own.\n\n")
-    w("| model | n | median residual | p25 | p75 | share exactly 0 | share negative |\n")
-    w("|---|---:|---:|---:|---:|---:|---:|\n")
-    for m, d in res.items():
-        w(f"| `{m}` | {d['n']} | {d['median_residual']:+.4f} | {d['p25']:+.4f} | "
-          f"{d['p75']:+.4f} | {d['share_residual_exactly_zero']:.4f} | "
-          f"{d['share_residual_negative']:.4f} |\n")
-    w(f"\n**{rr['answer']}** Every model's residual distribution brackets the "
-      f"random chooser's. {rr['consequence']}\n\n")
-    w("The bin **median** is the predictor, not the bin mean. `A` is a ratio "
-      "whose per-item denominator can approach zero, and v2.0 section 3.2 already "
-      "names that pathology and prescribes medians. A mean predictor returns "
-      "residuals of +8 to +10 for every model **and** for the random chooser, "
-      "which is a property of the predictor rather than of any model; the "
-      "calibration row is what makes that visible.\n\n")
+    w("### What is left over, tested against a calibrated null\n\n")
+    rm = num["residual_test_method"]
+    w(f"**{rr['question']}**\n\n")
+    w("Predictor: the median `A` among options in the same `sb` bin, taken over "
+      "other items (leave-one-item-out, so a choice never predicts itself).\n\n")
+    w(f"**The median residual is not the test and no conclusion is drawn from "
+      f"it.** {rm['why_the_median_was_dropped']}\n\n")
+    w(f"The question therefore goes to the distribution. Three statistics, "
+      f"**named before any Monte Carlo was run**: "
+      + ", ".join(f"`{k}`" for k in rm["statistics_named_before_the_monte_carlo"])
+      + f". Two nulls, {rm['n_monte_carlo_draws']:,} draws each:\n\n")
+    w("- **matched (primary).** Resample the option uniformly among the item's "
+      "options in the **same `sb` bin**, holding the model's position on P1's "
+      "coordinate fixed. That is what the question requires. Power is bounded by "
+      "how many renderings have a within-bin alternative, reported as `movable`.\n")
+    w("- **uniform (secondary).** Resample over the whole option set. Does **not** "
+      "hold P1-coordinate position fixed, so a deviation under it can be the "
+      "far-side position itself, which is Paper 1's finding rather than a "
+      "residual.\n\n")
+    w(f"{rm['status']}\n\n")
+
+    for null, title in (("matched", "Primary: matched null, P1-coordinate position held fixed"),
+                        ("uniform", "Secondary: uniform null, position NOT held fixed")):
+        w(f"#### {title}\n\n")
+        w("| model | movable | `share_negative` | ref 95% | pctile | `p10` | ref 95% | pctile |\n")
+        w("|---|---:|---:|---:|---:|---:|---:|---:|\n")
+        for m in LADDER_ORDER:
+            if m not in resid:
+                continue
+            d = resid[m]
+            a1, a3 = d[null]["share_negative"], d[null]["p10"]
+            w(f"| `{m}` | {d['share_movable_under_matched_null']:.4f} | "
+              f"{a1['observed']:.4f} | [{a1['reference_p2_5']:.4f}, "
+              f"{a1['reference_p97_5']:.4f}] | {a1['percentile_of_observed']:.3f} | "
+              f"{a3['observed']:+.3f} | [{a3['reference_p2_5']:+.3f}, "
+              f"{a3['reference_p97_5']:+.3f}] | "
+              f"{a3['percentile_of_observed']:.3f} |\n")
+        w("\n")
+
+    REPORTED = ("share_negative", "p10")
+    exc = [(m, k, resid[m]["matched"][k]) for m in LADDER_ORDER if m in resid
+           for k in REPORTED if resid[m]["matched"][k]["outside_95_band"]]
+    neg = [e for e in exc if e[2]["direction"] == "more negative"]
+    pos = [e for e in exc if e[2]["direction"] == "less negative"]
+    n_comp = len([1 for m in resid for _ in REPORTED])
+    n_rend = resid[LADDER_ORDER[0]]["observed"]["n"]
+
+    w(f"**Reading, primary null.** Only "
+      f"{min(resid[m]['share_movable_under_matched_null'] for m in resid):.4f} to "
+      f"{max(resid[m]['share_movable_under_matched_null'] for m in resid):.4f} of "
+      f"renderings can move under it: 909 of the 1,820 option-cells sit in the two "
+      f"degenerate pole bins, and only 14% of (item, `sb` bin) cells hold more "
+      f"than one option.\n\n")
+    w(f"**{len(exc)} of {n_comp} model-by-statistic comparisons fall outside a "
+      f"two-sided 95% reference band**, uncorrected:\n\n")
+    for m, k, c in exc:
+        w(f"- `{m}` on `{k}`: {c['observed']:+.4f} against "
+          f"[{c['reference_p2_5']:+.4f}, {c['reference_p97_5']:+.4f}], "
+          f"**{c['direction']}** than the matched null, exceeding the band by "
+          f"{c['excess_beyond_band']:.4f}"
+          + (f", which is about {round(c['excess_beyond_band'] * n_rend)} of "
+             f"{n_rend} renderings" if k == "share_negative" else "")
+          + ".\n")
+    w(f"\nSo the honest statement is neither \"nothing is left over\" nor \"models "
+      f"skew negative\". {WORD[len(neg)]} of seven models sit just above the band on "
+      f"`share_negative`, in the more-negative direction, by margins worth a "
+      f"handful of renderings each; "
+      + (f"{WORD[len(pos)].lower()} sits outside in the opposite direction on "
+         "`p10`; " if len(pos) == 1
+         else f"{WORD[len(pos)].lower()} sit outside in the opposite direction; ")
+      + "and **no model's tail depth is deeper than the band**. A small negative "
+      "residual is detectable on the share statistic for some models and is "
+      "absent on the tail statistic.\n\n")
+    w("Two things bound how much that is worth. The band is **narrow because the "
+      "null has little room**: with 15% to 21% of renderings movable, the "
+      "reference distribution has low variance, so a deviation of a few "
+      "renderings clears it without being substantively large. And the "
+      "comparisons are uncorrected across "
+      f"{n_comp}, where roughly {0.05 * n_comp:.1f} exceedances are expected with "
+      "no effect at all. **The residual, if it is real, is small; the design has "
+      "little power to size it; and both halves of that belong in any sentence "
+      "that cites this test.**\n\n")
+    w("**Reading, secondary null.** Models deviate from the uniform reference in "
+      "**both directions**: `CTRL` and `B2` carry more negative residuals than "
+      "random, `B4`, `L3` and `L4` fewer. There is no systematic negative skew "
+      "across the ladder. That two-sided spread is what differing bin occupancy "
+      "produces, which is why this null is secondary: it re-expresses where each "
+      "model sits on P1's coordinate rather than isolating anything left over.\n\n")
+    w(f"**Conclusion.** {rr['answer']} {rr['consequence']}\n\n")
 
     w("### The point mass at `A = 0`\n\n")
     w("`B2` and `B4` both showed a median `A` of exactly 0.0000, so the mass at "
