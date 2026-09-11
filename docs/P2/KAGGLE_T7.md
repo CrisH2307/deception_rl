@@ -44,7 +44,10 @@ whole repository is simplest and small.
 From `deception-p1` it needs:
 
 ```
-src/                                        the frozen harness, imported not copied
+src/                                        ALL of it. The harness is imported,
+                                            not copied, and score_llm pulls in
+                                            decisions, fit, score_items and more.
+                                            Do not cherry-pick files.
 data/reference/tiles.json
 data/processed/items_final.parquet
 notebooks/results_2/env.json                pinned revisions, cross-checked
@@ -56,10 +59,38 @@ notebooks/results_3/choices_llm_t26.parquet
 Paper 1 gitignores `data/**` and `notebooks/**` outputs, so these will not be in
 a git clone. Copy them from the working tree.
 
-If your slugs differ, override the paths in cell 1 rather than renaming
-anything; every path is an environment variable with a default.
+**The folder structure inside either dataset does not matter.** Cell 1 calls
+`locate()`, which walks `/kaggle/input` and binds every path to whatever it
+finds, so a zip that extracts to `deception-p2/deception_RL/data/...` works
+exactly as well as one that extracts to `deception-p2/data/...`. If a file is
+absent, `locate()` names it and says which dataset it belongs in, rather than
+failing later with a stack trace.
 
-## 3. Session settings
+### Sizes, so you know what you are uploading
+
+Nothing here is large. If you hit a 1 MB limit you are using the wrong upload
+mechanism, not exceeding a dataset quota: see section 3a.
+
+| | |
+|---|---:|
+| `deception-p2` total | ~550 KB |
+| `deception-p1` total | ~2 MB |
+
+## 3a. The notebook and the dataset are separate uploads
+
+This is the one thing that reliably goes wrong.
+
+| what | how it gets to Kaggle | size |
+|---|---|---:|
+| `notebooks/kaggle_t7.ipynb` | **Import Notebook**, the `.ipynb` on its own, never zipped | 12 KB |
+| `notebooks/kaggle_t7_framings.py` | **inside the `deception-p2` dataset** | 35 KB |
+
+The `.py` is not a notebook and is not imported as one. It is a data file as far
+as Kaggle is concerned, and it lives in the dataset with everything else. Kaggle's
+notebook import has a size limit that a zip of both files will exceed; the
+notebook alone is 12 KB and will not.
+
+## 4. Session settings
 
 - **Accelerator: GPU T4 x2.** Paper 1 ran on 2x T4 and the cost estimate is
   scaled from that run. Cell 1 asserts a GPU is present.
@@ -87,7 +118,7 @@ The ladder is `Qwen3-0.6B / 1.7B / 4B / 8B`, the two base siblings
 `Qwen3-1.7B-Base` and `Qwen3-8B-Base`, and the cross-family control
 `allenai/OLMo-2-1124-7B-Instruct`. About 40 GB of weights in total.
 
-## 4. Run order
+## 5. Run order
 
 Open `notebooks/kaggle_t7.ipynb`. Run cells in order. **Do not Run All.**
 
@@ -117,7 +148,7 @@ design in both runs. A count far above that means this environment is noisier
 than the one that produced `cond4`, and the floor rises with it. **That is the
 measurement working, not a failure.** Record it and continue.
 
-## 5. Interruptions
+## 6. Interruptions
 
 Kaggle sessions are killed at the time limit. The run is built for it.
 
@@ -138,7 +169,7 @@ If a model runs out of memory, the failure is recorded, completed tiles stay on
 disk, and the run continues to the next model rather than aborting the session.
 Cell 6 lists any failed cells.
 
-## 6. Budget
+## 7. Budget
 
 About **17 GPU-hours** for the full ladder, scaled from Paper 1's recorded 2.33
 hours for the 8B model, adjusted for 1.5x the renderings and 1.28x the prompt
@@ -152,7 +183,7 @@ unscored.
 Cheapest first if you are splitting sessions: `L1`, `L2`, `B2`, `L3`, `CTRL`,
 `L4`, `B4`.
 
-## 7. What to bring back
+## 8. What to bring back
 
 From `/kaggle/working`:
 
@@ -164,13 +195,13 @@ env_t7.json            environment, pins, F0 counts, budget, any failures
 Put them where the analysis session can read them and say so. Nothing else is
 needed; the checkpoints under `ckpt/` are redundant once the export is complete.
 
-## 8. If something is wrong
+## 9. If something is wrong
 
 | symptom | cause | fix |
 |---|---|---|
 | cell 1 raises on revisions | a pin drifted from Paper 1's record | Paper 1's `env.json` is the record. Do not edit `MODELS` to pass. |
 | cell 2 raises on SHA256 | a stale dataset upload | re-upload, and re-run `src/t7_render.py` first |
-| cell 2 says models not cached | no internet and no model dataset | see section 3 |
+| cell 2 says models not cached | no internet and no model dataset | see section 4 |
 | cell 3 determinism assert fails | the scorer is not bit-identical within the session | stop and report. P2-D13's floor assumes it is. |
 | a tile is quarantined on resume | a session died mid-write | expected, it re-runs automatically |
 | export says INCOMPLETE | a model or tile did not finish | re-run cell 5, it resumes |

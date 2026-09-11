@@ -69,8 +69,13 @@ for p in (P1_SRC, P2_SRC):
     if p not in sys.path:
         sys.path.insert(0, p)
 
-import coords            # noqa: E402  P1
-import score_llm         # noqa: E402  P1
+# Paper 1's harness is imported LAZILY, by `load_p1()` below. Importing it at
+# module scope would mean a wrong `P1_SRC` kills `import kaggle_t7_framings`
+# with a ModuleNotFoundError before `locate()` has had a chance to find the
+# real path, which is the common case on a first upload and reads like a bug in
+# this file rather than a missing dataset.
+coords = None
+score_llm = None
 
 P2_ROOT = os.environ.get("P2_ROOT", "/kaggle/input/deception-p2")
 P1_ROOT_K = os.environ.get("P1_ROOT_K", "/kaggle/input/deception-p1")
@@ -102,6 +107,51 @@ MODELS = {
 # Base models run a borrowed template and the control has no thinking mode.
 NATIVE_THINKING = {"L1", "L2", "L3", "L4"}
 
+def load_p1(p1_src=None):
+    """Import Paper 1's frozen harness from `P1_SRC`. Idempotent.
+
+    Called by `locate()` once the path is known, and defensively by everything
+    that touches the harness, so a caller that skipped `locate()` still gets a
+    sentence rather than a NameError.
+    """
+    global coords, score_llm, P1_SRC
+    if p1_src:
+        # An explicit path is validated BEFORE the idempotency short-circuit.
+        # Otherwise a caller switching P1_SRC after a successful load would get
+        # the previously imported module and no indication the path was ignored.
+        need = [f for f in ("score_llm.py", "coords.py")
+                if not os.path.exists(os.path.join(p1_src, f))]
+        if need:
+            raise ModuleNotFoundError(
+                f"P1_SRC={p1_src!r} does not contain {need}.\n"
+                "Call locate() first, or point P1_SRC at the folder holding "
+                "Paper 1's score_llm.py and coords.py.\n"
+                "That folder is deception-p1's src/, and all of it is needed: "
+                "score_llm imports decisions, fit and score_items in turn, so "
+                "cherry-picking files does not work.")
+        if p1_src != P1_SRC:
+            coords = score_llm = None      # a genuine switch, reload
+        P1_SRC = p1_src
+    if P1_SRC not in sys.path:
+        sys.path.insert(0, P1_SRC)
+    if coords is not None and score_llm is not None:
+        return True
+    try:
+        import coords as _coords
+        import score_llm as _score_llm
+    except ModuleNotFoundError as e:
+        raise ModuleNotFoundError(
+            f"Paper 1's harness is not importable from P1_SRC={P1_SRC!r} "
+            f"({e.name!r} not found).\n"
+            "Call locate() first, or set P1_SRC to the folder holding Paper 1's "
+            "score_llm.py and coords.py.\n"
+            "That folder lives in the deception-p1 dataset; Paper 1's src/ is "
+            "not optional, the harness is imported rather than copied."
+        ) from None
+    coords, score_llm = _coords, _score_llm
+    return True
+
+
 ENV = {}
 
 # Paper 1's own resolved commits, from notebooks/results_2/env.json
@@ -127,6 +177,96 @@ P1_FLIP_RATES = {"L1": 0.010, "L2": 0.000, "L3": 0.003, "L4": 0.013,
 P1_FLIP_NOTE = ("P1's batch-8-vs-batch-1 flip rates on manmade/moves/hold, "
                 "pooled per model. Not the size tile, which P1 and T7 both "
                 "score at batch 1. Context for T7's F0 count, not a threshold.")
+
+
+def locate(root="/kaggle/input", verbose=True):
+    """Find the inputs wherever the dataset upload put them, and set the paths.
+
+    A Kaggle dataset built from a zip keeps whatever folder structure the zip
+    had, so `/kaggle/input/deception-p2/data/processed/t7_stimuli.parquet` and
+    `/kaggle/input/deception-p2/deception_RL/data/processed/t7_stimuli.parquet`
+    are both normal outcomes of doing the upload correctly. Guessing between
+    them is not the user's job. This walks the mounts once and rebinds the
+    module paths to what is actually there.
+
+    Returns `(found, missing)`. Missing entries are reported by the caller; this
+    function never raises, so cell 1 can print a complete picture rather than
+    stopping at the first absent file.
+    """
+    global STIMULI, TILES_JSON, ITEMS, P1_SRC, P2_ROOT, P1_NOTEBOOKS
+    wanted = {
+        "t7_stimuli.parquet": None, "t7_stimuli_manifest.json": None,
+        "T6_gate_record.json": None, "tiles.json": None,
+        "items_final.parquet": None, "score_llm.py": None, "coords.py": None,
+        "choices_llm.parquet": None, "choices_llm_t26.parquet": None,
+    }
+    env_jsons = []
+    if os.path.isdir(root):
+        for dirpath, _, files in os.walk(root):
+            for f in files:
+                if f in wanted and wanted[f] is None:
+                    wanted[f] = os.path.join(dirpath, f)
+                elif f == "env.json" and "results_" in dirpath:
+                    env_jsons.append(os.path.join(dirpath, f))
+
+    if wanted["t7_stimuli.parquet"]:
+        STIMULI = wanted["t7_stimuli.parquet"]
+    if wanted["tiles.json"]:
+        TILES_JSON = wanted["tiles.json"]
+    if wanted["items_final.parquet"]:
+        ITEMS = wanted["items_final.parquet"]
+    if wanted["score_llm.py"]:
+        P1_SRC = os.path.dirname(wanted["score_llm.py"])
+        if P1_SRC not in sys.path:
+            sys.path.insert(0, P1_SRC)
+        load_p1(P1_SRC)
+    if wanted["T6_gate_record.json"]:
+        # P2_ROOT is used as <root>/results/T6_gate_record.json
+        P2_ROOT = os.path.dirname(os.path.dirname(wanted["T6_gate_record.json"]))
+    if env_jsons:
+        # P1_NOTEBOOKS is used as <root>/results_N/env.json
+        P1_NOTEBOOKS = os.path.dirname(os.path.dirname(env_jsons[0]))
+
+    missing = [k for k, v in wanted.items() if v is None]
+    found = {k: v for k, v in wanted.items() if v}
+    if verbose:
+        print(f"scanned {root}")
+        for k, v in wanted.items():
+            print(f"  {'OK ' if v else 'MISSING'} {k:28s} {v or ''}")
+        print(f"  {'OK ' if env_jsons else 'MISSING'} "
+              f"{'results_*/env.json':28s} {len(env_jsons)} found")
+        print("")
+        print("resolved paths:")
+        for label, val in (("STIMULI", STIMULI), ("TILES_JSON", TILES_JSON),
+                           ("ITEMS", ITEMS), ("P1_SRC", P1_SRC),
+                           ("P2_ROOT", P2_ROOT),
+                           ("P1_NOTEBOOKS", P1_NOTEBOOKS)):
+            print(f"  {label:13s} {val}")
+    if missing:
+        need = {
+            "t7_stimuli.parquet": "deception-p2: data/processed/",
+            "t7_stimuli_manifest.json": "deception-p2: data/processed/",
+            "T6_gate_record.json": "deception-p2: results/",
+            "tiles.json": "deception-p1: data/reference/",
+            "items_final.parquet": "deception-p1: data/processed/",
+            "score_llm.py": "deception-p1: src/",
+            "coords.py": "deception-p1: src/",
+            "choices_llm.parquet":
+                "deception-p1: notebooks/results_2/  (cell 4 only; without it "
+                "the F0 verdict moves to the local analysis)",
+            "choices_llm_t26.parquet":
+                "deception-p1: notebooks/results_3/  (cell 4 only)",
+        }
+        print("")
+        print("=" * 70)
+        print(f"{len(missing)} file(s) not found under {root}:")
+        for m in missing:
+            print(f"  {m:28s} -> {need[m]}")
+        print("Add them to the dataset and restart the session. The folder")
+        print("structure inside the dataset does not matter; this scan finds")
+        print("them anywhere.")
+        print("=" * 70)
+    return found, missing
 
 
 def _sha256(path):
@@ -264,6 +404,7 @@ def assert_no_sampling():
     floor, the reading of the c5 reference.
     """
     import inspect
+    load_p1()
     src = inspect.getsource(score_llm)
     banned = (".generate(", "do_sample", "temperature", "top_p", "top_k",
               "multinomial")
@@ -395,6 +536,7 @@ def simulate_kill_and_resume(S, ckpt=None):
 
 
 def records(rung, rev, framing, rows, scored, ROWS):
+    load_p1()
     out = []
     for ridx, d in scored.items():
         r = rows.loc[ridx]
@@ -415,6 +557,7 @@ def records(rung, rev, framing, rows, scored, ROWS):
 
 def run_rung(rung, S, TILES, ROWS, max_batch=BATCH_DEFAULT,
              done_already=None):
+    load_p1()
     repo, rev, family = MODELS[rung]
     done = os.path.join(CKPT, f"t7_{rung}.parquet")
     if os.path.exists(done):
@@ -569,6 +712,7 @@ def determinism_gate(rung, S, TILES):
     the assumption is wrong and the F0 disagreement count stops being a clean
     measurement of cross-session noise.
     """
+    load_p1()
     repo, rev, _ = MODELS[rung]
     tok = AutoTokenizer.from_pretrained(repo, revision=rev)
     m = AutoModelForCausalLM.from_pretrained(repo, revision=rev, dtype=DTYPE,
@@ -689,6 +833,8 @@ def implied_floor(f0_counts, tile=CONFIRMATORY_TILE):
 
 def main(models=None, stage=None):
     os.makedirs(CKPT, exist_ok=True)
+    locate()
+    load_p1()
     capture_env()
     verify_inputs()
     assert_no_sampling()

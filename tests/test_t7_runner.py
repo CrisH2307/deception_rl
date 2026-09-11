@@ -141,6 +141,53 @@ def test_implied_floor_is_upward_only():
     assert K.PROVISIONAL_FLOOR == dec.P2D13_PROVISIONAL_FLOOR
 
 
+def test_p1_harness_is_imported_lazily():
+    """A wrong P1_SRC must not kill `import kaggle_t7_framings`.
+
+    It is the common first-upload failure, and at module scope it surfaces as a
+    ModuleNotFoundError that reads like a bug in the runner rather than a
+    missing dataset. `locate()` cannot help if the import already died.
+    """
+    src = open(os.path.join(REPO, "notebooks/kaggle_t7_framings.py")).read()
+    head = src.split("def load_p1")[0]
+    for banned in ("\nimport coords", "\nimport score_llm"):
+        assert banned not in head, (
+            f"{banned.strip()!r} at module scope; a wrong P1_SRC would kill the "
+            "import before locate() can run")
+    try:
+        K.load_p1("/nonexistent/p1/src")
+    except ModuleNotFoundError as e:
+        assert "locate()" in str(e) and "deception-p1" in str(e), str(e)
+        assert "cherry-picking" in str(e), "the message must say all of src/ is needed"
+    else:
+        raise AssertionError("load_p1 accepted a nonexistent P1_SRC")
+    K.load_p1(os.path.join(P1, "src"))       # restore for the other tests
+
+
+def test_locate_handles_a_nested_zip_layout():
+    """A dataset built from a zip keeps the zip's folder structure, so the repo
+    folder is usually still inside the mount. locate() must not care."""
+    import shutil
+    root = tempfile.mkdtemp()
+    p2 = os.path.join(root, "deception-p2", "deception_RL")
+    os.makedirs(os.path.join(p2, "data/processed"), exist_ok=True)
+    os.makedirs(os.path.join(p2, "results"), exist_ok=True)
+    shutil.copy(K.STIMULI, os.path.join(p2, "data/processed"))
+    shutil.copy(MANIFEST, os.path.join(p2, "data/processed"))
+    shutil.copy(os.path.join(REPO, "results/T6_gate_record.json"),
+                os.path.join(p2, "results"))
+    before = K.STIMULI
+    try:
+        found, missing = K.locate(root, verbose=False)
+        assert "t7_stimuli.parquet" in found
+        assert found["t7_stimuli.parquet"].startswith(root)
+        assert os.path.exists(os.path.join(K.P2_ROOT, "results/T6_gate_record.json"))
+        # the P1-side files are absent here, and must be named rather than ignored
+        assert "score_llm.py" in missing and "items_final.parquet" in missing
+    finally:
+        K.STIMULI = before
+
+
 def test_notebook_stage_2_defaults_off():
     """A Run All must stop at the stage 1 verdict."""
     import re
@@ -150,8 +197,9 @@ def test_notebook_stage_2_defaults_off():
     assert re.search(r"^RUN_STAGE2 = False\b", src, re.M), \
         "stage 2 does not default to off; a Run All would skip the verdict"
     assert "HALT" in src, "the stage 1 verdict does not halt"
-    for fn in ("capture_env", "verify_inputs", "assert_no_sampling",
-               "simulate_kill_and_resume", "plan_run", "run_rung", "export"):
+    for fn in ("locate", "load_p1", "capture_env", "verify_inputs",
+               "assert_no_sampling", "simulate_kill_and_resume", "plan_run",
+               "run_rung", "export"):
         assert f"K.{fn}" in src, f"the notebook never calls {fn}"
     # the notebook must not re-implement the harness rules it inherits
     for banned in ("score_rows(", "max_batch=1", "def records", "AutoModelForCausalLM"):
