@@ -606,7 +606,12 @@ the bound is then slack.
 
 ## P2-D12. Three Arm B quantities, none gating another
 
-**Status:** adopted. Supersedes P2-D11 and P2-D8's gating role.
+**Status:** adopted, **the inertness floor's derivation superseded by P2-D13 on
+2026-09-10**. The three-quantity structure, the removal of the gate and the floor's
+value of 7 all stand. What P2-D13 withdraws is the derivation of 7 from bootstrap
+arithmetic, which does not survive P2-D9's determinism, and it restates the floor on
+numerical grounds with an upward-only revision rule. Supersedes P2-D11 and P2-D8's
+gating role.
 **Decided:** 2026-09-10, by the author, during the T5.6 session, before any Paper 2
 model data exists. Full reasoning in `PREREGISTRATION_v2.7.md`.
 **Binds:** any Arm B confirmatory analysis script.
@@ -685,6 +690,187 @@ is kept unchanged: `PREREGISTRATION_v2.6.md` section 3.3 reports it and a supers
 document must still reproduce. Separately measured and reported: P2-D10's blind spot on
 the `c5` contrast is 0.0000 to 0.0509, which is the gap bounded from the geometry in
 `v2.5` section 3, now observed on a real manipulation.
+
+---
+
+## P2-D13. Quantity (a)'s floor is a numerical noise floor, not a statistical threshold
+
+**Status:** adopted. Supersedes P2-D12's derivation of the floor, not its value.
+**Decided:** 2026-09-10, by the author, during the T5.6 session, before any Paper 2
+model data exists. Full reasoning in `PREREGISTRATION_v2.8.md` section 1.
+**Binds:** any Arm B confirmatory analysis script.
+**Constant:** `P2D13_TEXT`, `P2D13_PROVISIONAL_FLOOR`, `P2D13_REVISION_IS_UPWARD_ONLY`,
+`P2D13_FLOOR_IS_STATISTICAL`.
+
+**Decision text.**
+
+> Quantity (a)'s floor is a numerical noise floor, not a statistical threshold. Under
+> P2-D9 the scorer is deterministic, so under the strict null every item has `ΔA = 0`,
+> every bootstrap resample returns exactly zero, the lower bound never clears, and Type
+> I error is exactly 0 rather than `alpha`. A single changed option establishes
+> deductively that the framing moved something, so P2-D12's derivation of 7 from
+> bootstrap arithmetic guarded no statistical quantity and is withdrawn. The hazard is
+> floating-point nondeterminism flipping a near-tie argmax across runs and hardware.
+> The floor is provisionally 7 items and is revised to T7's `F0`-versus-`cond4`
+> disagreement count if that count exceeds 7. The revision is upward-only by
+> construction, the rule being a maximum, and it is triggered by a measurement
+> `T7.md` step 2 already performs for the environment-equivalence check. P2-D8's
+> bootstrap is retained unchanged in quantity (b), where two estimated population rates
+> are compared in the interior of the parameter space.
+
+**Why it needed deciding.** P2-D12 justified the floor by asking how many movers the
+cluster bootstrap needs before its lower bound clears zero. That reasoning assumes the
+null has sampling variation. P2-D9 established it does not: the scorer is an argmax
+over teacher-forced log-probabilities with no sampling, so a framing that moves nothing
+produces an all-zero sample, an all-zero resample distribution, and an interval of
+`[0, 0]`. The instrument could not produce a false positive at any rate, which means it
+was also not producing the `alpha`-level protection the floor was described as buying.
+A floor that is presented as statistical when it is not invites a reader to treat 7 as
+a significance threshold.
+
+**Why the floor is not lowered to one, which is what the deductive argument alone would
+give.** Because the numerical hazard is real and unmeasured until T7 runs. Setting the
+floor at 1 before measuring would set it at its most permissive on an untested
+assumption of noiseless reproduction. The provisional 7 is a **conservative convention
+with no statistical derivation** and is labelled as one wherever it appears.
+
+**Why the revision is upward-only, and why that is structural rather than an
+instruction.** The rule is `floor = max(7, F0 disagreement items)`. A quiet environment
+cannot lower the bar. That is what stops a low measured noise floor from being used to
+make the movement half easier to clear after F1 has been seen, and it does not depend
+on a later session reading and honouring a prohibition.
+
+**The caveat, stated rather than corrected.** `F0` and `cond4` are identical text under
+P2-D1, so the `F0` disagreement count measures noise under an identical prompt. `F1`
+and `F2` are longer prompts with different batch shapes, so their numerical noise could
+exceed it. The `F0` rate is therefore a **lower bound** on the noise floor. It is used
+as the floor rather than scaled, because any scaling factor would be invented here and
+no measurement supports one.
+
+**What this closes.** `PREREGISTRATION_v2.6.md` section 1.1 argued the no-effect rate
+of 1.0 from Paper 1's code path and recorded that it could not be corroborated, because
+the frozen artifacts contain no repeated rendering. T7's `F0` run is that repeated
+rendering. The quantity v2.6 could only argue, T7 measures.
+
+**Alternatives offered and not chosen.**
+
+1. **Keep the bootstrap floor of 7 on its original derivation.** Rejected. It describes
+   an `alpha`-level guarantee the instrument does not provide under a deterministic
+   scorer, and nothing it guards is not already guarded deductively or by the `F0` rate.
+2. **Lower the floor to a single changed item.** Rejected. Deductively correct and
+   numerically reckless: it assumes noiseless reproduction, which is the one thing a
+   cross-hardware re-run cannot assume.
+3. **Scale the `F0` disagreement count upward to allow for F1's longer prompts.**
+   Rejected. The scaling factor would be invented after the caveat was noticed, with no
+   measurement behind it. The caveat is reported instead.
+
+**Consequences.** `src/armb_floor.py` carries `floor_for_run`, which T7 calls with the
+`F0` disagreement count. The bootstrap loses its role in (a) and keeps it unchanged,
+seed included, in (b): (b) compares two population rates both estimated from a finite
+item sample in the interior of the parameter space, where an interval is the right
+instrument, while (a) tests a one-sided point null at the boundary against data with no
+sampling error in the choice given the prompt.
+
+---
+
+## P2-D14. `p0 = 0.5` is retained, and its Type II cost is stated with the verdict
+
+**Status:** adopted.
+**Decided:** 2026-09-10, by the author, during the T5.6 session, before any Paper 2
+model data exists. Full reasoning in `PREREGISTRATION_v2.8.md` section 2.
+**Binds:** any Arm B results report.
+**Constant:** `P2D14_TEXT`, `P2D14_TYPE_II_GAP`.
+
+**Decision text.**
+
+> `p0 = 0.5` is retained and is stated as conservative against Type I and costly in
+> Type II. The word "chance" is withdrawn from the licenses box: `PREREGISTRATION_v2.7.md`
+> section 2.1 measures the content-neutral sign proportion at 0.2453 to 0.5000, at or
+> below 0.5 on all seven models and below it at the corrected `alpha` on one, so 0.5 is
+> not the neutral baseline. A null on (c) therefore does NOT distinguish "no directional
+> effect" from "a directional effect that did not clear the gap between 0.5 and the
+> measured content-neutral baseline". The per-model gap is 0.0000 to 0.2547 and is
+> reported with the verdict, so a reader can size the cost rather than being told it
+> exists.
+
+**Why it needed deciding.** `v2.7` section 3.4 licensed a null on (c) as "the direction
+was not distinguishable from chance", while `v2.7` section 2.1 measured the
+content-neutral baseline below 0.5 on every model. Calling 0.5 chance contradicts the
+document's own diagnostic two sections earlier. The contradiction is not cosmetic: it
+is the difference between a null that means "nothing directional happened" and one that
+means "nothing directional happened that was large enough to cross a baseline we
+measured in the wrong place".
+
+**Alternatives offered and not chosen.**
+
+1. **Recalibrate `p0` to the measured content-neutral baseline.** Rejected, on the same
+   ground P2-D12 rejected it: it would recalibrate a preregistered test against a
+   different manipulation, on a coordinate Paper 1 never used, and it would make a
+   positive F1 result easier to obtain. The conservative direction is kept and its cost
+   is disclosed instead.
+2. **Keep the word "chance" and note the diagnostic separately.** Rejected. That is the
+   state `v2.7` was in, and it leaves the reader to notice a contradiction between two
+   sections rather than being told the answer in the place the claim is made.
+
+**Consequences.** The gap is `0.5` minus the model's measured neutral proportion:
+`CTRL` 0.2547, `B2` 0.0000, `B4` 0.0125, `L1` 0.0926, `L2` 0.0312, `L3` 0.2429, `L4`
+0.2091. The Type II cost is therefore large on `CTRL`, `L3` and `L4` and negligible on
+`B2`, `B4` and `L2`. Emitted by `src/armb_floor.py` into `results/T5_armb_floor.json`.
+
+---
+
+## P2-D15. `sign(ΔA)` is admissible for the cross-family control under D111
+
+**Status:** adopted.
+**Decided:** 2026-09-10, by the author, during the T5.6 session, before any Paper 2
+model data exists. Full reasoning in `PREREGISTRATION_v2.8.md` section 3.
+**Binds:** any Arm B analysis or report citing the cross-family control.
+**Constant:** `P2D15_TEXT`, `P2D15_SIGN_IS_ADMISSIBLE`, `P2D15_STILL_INADMISSIBLE`.
+
+**Decision text.**
+
+> `sign(ΔA)` is ADMISSIBLE for the cross-family control under Paper 1's D111. D111
+> restricts cross-family comparison to choice-based statistics and bans raw PMI
+> magnitudes, because the control's tokenizer differs by construction and
+> log-probability magnitudes stop being commensurable. The operational test is whether
+> the statistic changes when the tokenizer changes but the chosen options do not.
+> `A(o) = (marg_norm(o) - marg_norm(o*_0)) / ext_i` with `ext_i > 0` a per-item
+> constant, so `sign(ΔA)` is an ordinal comparison of two options on frozen, model-free
+> item geometry, selected by the model's choice and nothing else. It is computed within
+> a model and reported as a rate, which is what D111 permits. The ruling extends to
+> nothing that reads a model's scores rather than its choice: `logp_sum_chosen`,
+> `logp_neutral_chosen` and any PMI value remain inadmissible across families. The
+> conclusion is reported both ways regardless: on the six ladder models alone the
+> neutral sign proportion runs 0.2571 to 0.5000, still at or below 0.5 on every one.
+
+**Why it needed deciding.** `v2.7` section 2.1's diagnostic uses the control's `ΔA`
+sign proportion, and the control is the one model significant at the corrected `alpha`.
+`ΔA` derives from a magnitude coordinate, which is exactly the shape D111 restricts, so
+the diagnostic's strongest single number sat on an unruled question. Leaving it unruled
+would mean either citing it without authority or dropping it without reason.
+
+**Why "derives from a magnitude coordinate" is the wrong test, which is what made this
+look harder than it is.** D111's mechanism is tokenizer non-identity making
+log-probabilities incommensurable. `A` reads no log-probability. It is a lookup into
+frozen item geometry indexed by the chosen option, and the same is true of `post_norm`,
+which Paper 1 itself computes for the control. The test that matches D111's mechanism
+is whether a tokenizer change moves the statistic with the choices held fixed, and for
+`sign(ΔA)` it does not.
+
+**Alternatives offered and not chosen.**
+
+1. **Rule it inadmissible because `A` is a magnitude coordinate.** Rejected. It applies
+   D111 by the shape of the quantity rather than by its mechanism, and it would equally
+   forbid `post_norm` for the control, which Paper 1 computes.
+2. **Drop the control from the diagnostic without ruling.** Rejected. It discards the
+   diagnostic's largest measured gap to avoid answering a question, and a later session
+   would face the same question with no record that it had been considered.
+
+**Consequences.** The control's 0.2453 may be cited. The conclusion that a
+content-neutral insertion does not drift toward the salience pole is stated on all
+seven models and restated on the six ladder models, so it does not rest on this ruling.
+What stays inadmissible is unchanged and is named in the decision text, so the ruling
+cannot be read as a general relaxation of D111.
 
 ---
 

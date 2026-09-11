@@ -324,6 +324,82 @@ def test_p2d12_rejected_p0_swap_rests_on_a_measurement():
     assert dec.P2D6_P0 == 0.5, "p0 drifted off P2-D6"
 
 
+def test_p2d13_floor_is_upward_only_and_not_statistical():
+    """The floor rule is a maximum, so a quiet environment cannot lower the bar.
+
+    That property is what stops a low measured noise floor from being used to
+    make the movement half easier to clear after F1 has been seen, so it is
+    asserted rather than left to the docstring.
+    """
+    import armb_floor as af
+    assert dec.P2D13_FLOOR_IS_STATISTICAL is False
+    assert dec.P2D13_REVISION_IS_UPWARD_ONLY is True
+    assert af.PROVISIONAL_FLOOR == dec.P2D13_PROVISIONAL_FLOOR
+    for n in range(0, 120):
+        f = af.floor_for_run(n)
+        assert f >= dec.P2D13_PROVISIONAL_FLOOR, f"floor fell below at n={n}"
+        assert f >= n, f"floor below the measured noise at n={n}"
+    assert af.floor_for_run(0) == dec.P2D13_PROVISIONAL_FLOOR
+
+
+def test_p2d13_bind_rejects_a_floor_that_ignores_the_measurement():
+    """A run that keeps the provisional floor against a larger measured noise
+    floor must fail at the binding, not report a movement verdict the
+    environment could have produced on its own."""
+    dec.bind_armb_floor(7, 0, False)
+    dec.bind_armb_floor(20, 20, False)
+    for args in ((7, 20, False),          # ignored a larger measured floor
+                 (25, 20, False),         # invented headroom above the rule
+                 (3, 0, False),           # below the provisional floor
+                 (7, 0, True)):           # described as statistical
+        try:
+            dec.bind_armb_floor(*args)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"P2-D13 accepted drift: {args}")
+    try:
+        dec.bind_armb_floor(7, -1, False)
+    except (AssertionError, ValueError):
+        pass
+    else:
+        raise AssertionError("P2-D13 accepted a negative disagreement count")
+
+
+def test_p2d14_type_ii_gaps_are_nonnegative_and_match_the_emitter():
+    """P2-D14 rests on the neutral baseline sitting at or below p0. If a gap ever
+    went negative the Type II statement would reverse and p0 = 0.5 would be
+    anti-conservative for that model."""
+    import json
+    path = "results/T5_armb_floor.json"
+    if not os.path.exists(path):
+        raise AssertionError(f"{path} missing; run python3 src/armb_floor.py")
+    got = json.load(open(path))["type_ii_cost_of_p0_half"]["per_model"]
+    assert dec.P2D6_P0 == 0.5
+    for m, want in dec.P2D14_TYPE_II_GAP.items():
+        assert abs(got[m]["gap_to_p0"] - want) < 1e-12, (
+            f"P2-D14 states {want} for {m}; the emitter gives {got[m]['gap_to_p0']}")
+        assert got[m]["gap_to_p0"] >= 0.0, (
+            f"{m}: neutral baseline above p0; the Type II statement reverses")
+
+
+def test_p2d15_conclusion_survives_the_control_being_excluded():
+    """P2-D15 rules the control admissible, and the conclusion is reported both
+    ways so it does not rest on the ruling. Check the fallback actually holds."""
+    import json
+    d = json.load(open("results/T5_armb_floor.json"))["d111_ruling"]
+    assert d["admissible"] is dec.P2D15_SIGN_IS_ADMISSIBLE
+    assert d["conclusion_holds_without_the_control"], (
+        "the neutral-baseline conclusion needs the control, so P2-D15 is "
+        "load-bearing and section 3.4's fallback is wrong")
+    assert d["max_over_six"] <= 0.5 + 1e-12
+    text = dec.P2D15_TEXT.lower()
+    for banned in dec.P2D15_STILL_INADMISSIBLE:
+        assert banned.lower() in text, (
+            f"{banned!r} is bound as still-inadmissible but the decision text "
+            "does not name it, so the ruling could be read as a relaxation")
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

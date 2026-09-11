@@ -348,6 +348,105 @@ def bind_armb_quantities(inertness_null, c5_gates, sign_p0, quantities):
                                "docs/P2/DECISIONS.md")) from None
 
 
+
+# ------------------ P2-D13, the inertness floor is numerical, not statistical
+P2D13_TEXT = (
+    "Quantity (a)'s floor is a numerical noise floor, not a statistical threshold. Under\n"
+    "P2-D9 the scorer is deterministic, so under the strict null every item has `ΔA = 0`,\n"
+    "every bootstrap resample returns exactly zero, the lower bound never clears, and Type\n"
+    "I error is exactly 0 rather than `alpha`. A single changed option establishes\n"
+    "deductively that the framing moved something, so P2-D12's derivation of 7 from\n"
+    "bootstrap arithmetic guarded no statistical quantity and is withdrawn. The hazard is\n"
+    "floating-point nondeterminism flipping a near-tie argmax across runs and hardware.\n"
+    "The floor is provisionally 7 items and is revised to T7's `F0`-versus-`cond4`\n"
+    "disagreement count if that count exceeds 7. The revision is upward-only by\n"
+    "construction, the rule being a maximum, and it is triggered by a measurement\n"
+    "`T7.md` step 2 already performs for the environment-equivalence check. P2-D8's\n"
+    "bootstrap is retained unchanged in quantity (b), where two estimated population rates\n"
+    "are compared in the interior of the parameter space."
+)
+P2D13_REJECTED = ("Keep the bootstrap floor of 7 on its original derivation.",
+                  "Lower the floor to a single changed item.",
+                  "Scale the `F0` disagreement count upward to allow for F1's longer "
+                  "prompts.")
+P2D13_PROVISIONAL_FLOOR = 7           # same value as P2-D12; different justification
+P2D13_REVISION_IS_UPWARD_ONLY = True
+P2D13_FLOOR_IS_STATISTICAL = False    # the whole content of this decision
+
+# ---------------------- P2-D14, p0 = 0.5 retained, its Type II cost disclosed
+P2D14_TEXT = (
+    "`p0 = 0.5` is retained and is stated as conservative against Type I and costly in\n"
+    "Type II. The word \"chance\" is withdrawn from the licenses box: `PREREGISTRATION_v2.7.md`\n"
+    "section 2.1 measures the content-neutral sign proportion at 0.2453 to 0.5000, at or\n"
+    "below 0.5 on all seven models and below it at the corrected `alpha` on one, so 0.5 is\n"
+    "not the neutral baseline. A null on (c) therefore does NOT distinguish \"no directional\n"
+    "effect\" from \"a directional effect that did not clear the gap between 0.5 and the\n"
+    "measured content-neutral baseline\". The per-model gap is 0.0000 to 0.2547 and is\n"
+    "reported with the verdict, so a reader can size the cost rather than being told it\n"
+    "exists."
+)
+P2D14_REJECTED = ("Recalibrate `p0` to the measured content-neutral baseline.",
+                  "Keep the word \"chance\" and note the diagnostic separately.")
+# 0.5 minus the measured content-neutral sign proportion, from
+# results/T5_armb_floor.json. Reported with every (c) verdict.
+P2D14_TYPE_II_GAP = {"CTRL": 0.2547169811320755, "B2": 0.0,
+                     "B4": 0.012500000000000011, "L1": 0.09259259259259256,
+                     "L2": 0.03125, "L3": 0.24285714285714283,
+                     "L4": 0.20909090909090908}
+
+# ------------------- P2-D15, sign(delta-A) is admissible cross-family under D111
+P2D15_TEXT = (
+    "`sign(ΔA)` is ADMISSIBLE for the cross-family control under Paper 1's D111. D111\n"
+    "restricts cross-family comparison to choice-based statistics and bans raw PMI\n"
+    "magnitudes, because the control's tokenizer differs by construction and\n"
+    "log-probability magnitudes stop being commensurable. The operational test is whether\n"
+    "the statistic changes when the tokenizer changes but the chosen options do not.\n"
+    "`A(o) = (marg_norm(o) - marg_norm(o*_0)) / ext_i` with `ext_i > 0` a per-item\n"
+    "constant, so `sign(ΔA)` is an ordinal comparison of two options on frozen, model-free\n"
+    "item geometry, selected by the model's choice and nothing else. It is computed within\n"
+    "a model and reported as a rate, which is what D111 permits. The ruling extends to\n"
+    "nothing that reads a model's scores rather than its choice: `logp_sum_chosen`,\n"
+    "`logp_neutral_chosen` and any PMI value remain inadmissible across families. The\n"
+    "conclusion is reported both ways regardless: on the six ladder models alone the\n"
+    "neutral sign proportion runs 0.2571 to 0.5000, still at or below 0.5 on every one."
+)
+P2D15_REJECTED = ("Rule it inadmissible because `A` is a magnitude coordinate.",
+                  "Drop the control from the diagnostic without ruling.")
+P2D15_SIGN_IS_ADMISSIBLE = True
+# Named in the decision text so the ruling cannot be read as relaxing D111.
+P2D15_STILL_INADMISSIBLE = ("logp_sum_chosen", "logp_neutral_chosen", "pmi")
+
+
+def bind_armb_floor(floor_used, f0_disagreement_items, floor_is_statistical):
+    """Assert T7's inertness floor against P2-D13. Call where the floor is set.
+
+    Takes the floor the run actually used and the disagreement count it was
+    derived from, so a run that kept the provisional floor against a larger
+    measured noise floor fails here rather than reporting a movement verdict the
+    environment could have produced on its own.
+    """
+    if int(f0_disagreement_items) < 0:
+        raise AssertionError(
+            f"P2-D13: disagreement count cannot be negative, got "
+            f"{int(f0_disagreement_items)}. A negative count would pass the "
+            "maximum silently, since max(7, -1) is 7.")
+    want = max(P2D13_PROVISIONAL_FLOOR, int(f0_disagreement_items))
+    if int(floor_used) != want:
+        raise AssertionError(
+            f"P2-D13: floor = max({P2D13_PROVISIONAL_FLOOR}, "
+            f"{int(f0_disagreement_items)}) = {want}; the run used "
+            f"{int(floor_used)}. The revision is upward-only and the rule is a "
+            "maximum. docs/P2/DECISIONS.md is the source.")
+    try:
+        assert_verbatim("P2-D13 floor is statistical",
+                        str(bool(floor_is_statistical)),
+                        str(P2D13_FLOOR_IS_STATISTICAL))
+    except AssertionError as e:
+        raise AssertionError(
+            str(e).replace(".claude/rules/30-data-decisions.md",
+                           "docs/P2/DECISIONS.md")) from None
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -415,7 +514,9 @@ def check_log(path=LOG):
                          ("P2-D5", P2D5_TEXT), ("P2-D6", P2D6_TEXT),
                          ("P2-D7", P2D7_TEXT), ("P2-D8", P2D8_TEXT),
                          ("P2-D9", P2D9_TEXT), ("P2-D10", P2D10_TEXT),
-                         ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT)):
+                         ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT),
+                         ("P2-D13", P2D13_TEXT), ("P2-D14", P2D14_TEXT),
+                         ("P2-D15", P2D15_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -428,7 +529,10 @@ def check_log(path=LOG):
                             ("P2-D7", P2D7_REJECTED), ("P2-D8", P2D8_REJECTED),
                             ("P2-D9", P2D9_REJECTED), ("P2-D10", P2D10_REJECTED),
                             ("P2-D11", P2D11_REJECTED),
-                            ("P2-D12", P2D12_REJECTED)):
+                            ("P2-D12", P2D12_REJECTED),
+                            ("P2-D13", P2D13_REJECTED),
+                            ("P2-D14", P2D14_REJECTED),
+                            ("P2-D15", P2D15_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -465,6 +569,16 @@ def main():
     print(f"quantities      P2-D12: {P2D12_QUANTITIES}; c5 gates="
           f"{P2D12_C5_GATES}; inertness null={P2D12_INERTNESS_NULL}, floor "
           f"{P2D12_INERTNESS_FLOOR_ITEMS} of {P2D4_N_CONFIRMATORY} items")
+    print(f"inertness floor P2-D13: provisional {P2D13_PROVISIONAL_FLOOR}, "
+          f"floor = max({P2D13_PROVISIONAL_FLOOR}, F0 disagreement items); "
+          f"statistical={P2D13_FLOOR_IS_STATISTICAL}, "
+          f"upward only={P2D13_REVISION_IS_UPWARD_ONLY}")
+    print(f"type II cost    P2-D14: p0={P2D6_P0} kept; gap to the neutral baseline "
+          f"{min(P2D14_TYPE_II_GAP.values()):.4f} to "
+          f"{max(P2D14_TYPE_II_GAP.values()):.4f}")
+    print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
+          f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
+          f"{P2D15_STILL_INADMISSIBLE}")
     print(f"SUPERSEDED      P2-D11: framing must move "
           f"{P2D11_CEILING['change_rate_multiple_of_c5'][0]:.2f} to "
           f"{P2D11_CEILING['change_rate_multiple_of_c5'][1]:.2f} x c5; n_eff then "
@@ -476,7 +590,8 @@ def main():
             (P2D1_REJECTED, P2D2_REJECTED, P2D3_REJECTED, P2D4_REJECTED,
              P2D5_REJECTED, P2D6_REJECTED, P2D7_REJECTED,
              P2D8_REJECTED, P2D9_REJECTED, P2D10_REJECTED,
-             P2D11_REJECTED, P2D12_REJECTED), start=1))
+             P2D11_REJECTED, P2D12_REJECTED, P2D13_REJECTED,
+             P2D14_REJECTED, P2D15_REJECTED), start=1))
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

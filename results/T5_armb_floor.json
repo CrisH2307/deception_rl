@@ -1,0 +1,83 @@
+{
+  "purpose": "Quantity (a)'s floor on numerical grounds, the Type II cost of p0 = 0.5, and the D111 ruling on the control's sign proportion. Written before T7 runs.",
+  "floor": {
+    "provisional": 7,
+    "rule": "floor = max(provisional, F0-versus-cond4 disagreement items)",
+    "revision_is_upward_only": true,
+    "why_not_statistical": "Under P2-D9 the scorer is deterministic, so the strict null gives every item delta-A = 0, every resample returns exactly 0, and the bootstrap lower bound never clears. Type I error is 0, not alpha. A single changed option settles inertness deductively, so the bootstrap guarded no statistical quantity in quantity (a).",
+    "why_not_lowered_to_one": "Because the numerical hazard is not zero and is unmeasured until T7 runs. Setting the floor at 1 before measuring would set it at its most permissive on an untested assumption of noiseless reproduction. The provisional 7 is a conservative convention with no statistical derivation, and it is labelled as one rather than presented as a computed threshold.",
+    "measured_by": "T7.md step 2's F0-versus-cond4 disagreement count, computed for the environment-equivalence check, whose purpose predates this decision.",
+    "caveat": "F0 and cond4 are identical text, so the F0 rate measures noise under an identical prompt. F1 and F2 are longer prompts with different batch shapes, so their numerical noise could exceed it. The F0 rate is therefore a LOWER bound on the noise floor, and it is used as the floor rather than scaled, because any scaling factor would be invented here.",
+    "bootstrap_retained_in_quantity_b": "(b) compares two population rates both estimated from a finite item sample, in the interior of the parameter space. An interval is the right instrument there and P2-D8's is kept unchanged, seed included."
+  },
+  "type_ii_cost_of_p0_half": {
+    "statement": "p0 = 0.5 is conservative against Type I and costly in Type II. A null on (c) does not distinguish 'no directional effect' from 'a directional effect that did not clear the gap between 0.5 and the measured content-neutral baseline'.",
+    "p0": 0.5,
+    "per_model": {
+      "CTRL": {
+        "neutral_sign_proportion": 0.24528301886792453,
+        "gap_to_p0": 0.25471698113207547,
+        "n_eff": 53,
+        "below_p0_at_corrected_alpha": true
+      },
+      "B2": {
+        "neutral_sign_proportion": 0.5,
+        "gap_to_p0": 0.0,
+        "n_eff": 42,
+        "below_p0_at_corrected_alpha": false
+      },
+      "B4": {
+        "neutral_sign_proportion": 0.4875,
+        "gap_to_p0": 0.012500000000000011,
+        "n_eff": 80,
+        "below_p0_at_corrected_alpha": false
+      },
+      "L1": {
+        "neutral_sign_proportion": 0.4074074074074074,
+        "gap_to_p0": 0.09259259259259262,
+        "n_eff": 27,
+        "below_p0_at_corrected_alpha": false
+      },
+      "L2": {
+        "neutral_sign_proportion": 0.46875,
+        "gap_to_p0": 0.03125,
+        "n_eff": 32,
+        "below_p0_at_corrected_alpha": false
+      },
+      "L3": {
+        "neutral_sign_proportion": 0.2571428571428571,
+        "gap_to_p0": 0.24285714285714288,
+        "n_eff": 35,
+        "below_p0_at_corrected_alpha": false
+      },
+      "L4": {
+        "neutral_sign_proportion": 0.2909090909090909,
+        "gap_to_p0": 0.2090909090909091,
+        "n_eff": 55,
+        "below_p0_at_corrected_alpha": false
+      }
+    },
+    "gap_range": [
+      0.0,
+      0.25471698113207547
+    ]
+  },
+  "d111_ruling": {
+    "admissible": true,
+    "rule": "sign(delta-A) depends only on which options were chosen and on frozen model-free item geometry. No log-probability magnitude enters, and it is computed within a model and reported as a rate, which is what D111 permits.",
+    "operational_test": "Does the statistic change if the tokenizer changes but the chosen options do not? For sign(delta-A), no. For raw PMI, yes. That is the line D111 draws.",
+    "what_remains_inadmissible": "logp_sum_chosen, logp_neutral_chosen and any PMI value, compared across families. The ruling here extends to nothing that reads a model's scores rather than its choice.",
+    "conclusion_holds_without_the_control": true,
+    "six_ladder_models": {
+      "B2": 0.5,
+      "B4": 0.4875,
+      "L1": 0.4074074074074074,
+      "L2": 0.46875,
+      "L3": 0.2571428571428571,
+      "L4": 0.2909090909090909
+    },
+    "max_over_six": 0.5,
+    "control_proportion": 0.24528301886792453,
+    "restated_if_inadmissible": "On the six ladder models alone the neutral sign proportion runs 0.2571 to 0.5000, still at or below 0.5 on every one, so p0 = 0.5 remains conservative and P2-D12's third rejected alternative stands either way."
+  }
+}
