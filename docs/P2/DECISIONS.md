@@ -378,7 +378,11 @@ sized against an unmeasured quantity.
 
 ## P2-D8. The Arm B tie rate is calibrated against Paper 1's `c5` same-option rate
 
-**Status:** adopted.
+**Status:** adopted, **gating role superseded by P2-D12 on 2026-09-10**. The reference
+values, the bootstrap, the seed and the two-families-of-21 correction all stand and are
+still bound. What P2-D12 removes is the comparison's role as a gate on H-B's
+no-movement half; it becomes quantity (b), reported and descriptive. The decision text
+below is unedited, per the rule at the head of this file.
 **Decided:** 2026-09-10, during the T5 session. Full reasoning in
 `PREREGISTRATION_v2.5.md` section 2.
 **Binds:** any Arm B confirmatory analysis script.
@@ -428,6 +432,259 @@ outcome specifically. Separately measured and reported: `ΔA = 0` is not the sam
 as "same option", since `A` is not injective, on 48 of 108 confirmatory items and 50 of
 1,620 option pairs; the comparison therefore runs on the same-option rate and the tie
 rate is reported beside it.
+
+---
+
+## P2-D9. Paper 1's `c5` reference is an active comparator, not a baseline
+
+**Status:** adopted.
+**Decided:** 2026-09-10, during the T5.6 session, before any Paper 2 model data
+exists. Full reasoning in `PREREGISTRATION_v2.6.md` section 1.
+**Binds:** any Arm B confirmatory analysis script, and the outcome table it reports.
+**Constant:** `P2D9_TEXT`, `P2D9_C5_IS_ACTIVE`, `P2D9_C5_CHANGE_RATE_RANGE`.
+
+**Decision text.**
+
+> Paper 1's `c5` insert is an ACTIVE comparator, not a no-manipulation baseline. On the
+> `size`-tile confirmatory set the insert changes the chosen option on 0.1389 to 0.3704
+> of matched rendering pairs, and the cluster bootstrap interval excludes the no-effect
+> rate on all seven models at `alpha = 0.05/21`. The no-effect rate is exactly 1.0
+> because Paper 1's chooser is an argmax over teacher-forced log-probabilities with no
+> sampling anywhere in the scoring path. A framing rate indistinguishable from `R_m`
+> therefore reads as "the framing moved choices about as much as a known-effective
+> content insertion in the same slot did", not as "the framing moved nothing". That
+> reading is still not support for H-B, because the comparison is blind to direction.
+
+**Why it needed deciding.** P2-D8 fixed `R_m`, the decision rule, the interval and the
+outcome table, and left the reference's own status unstated. The two available readings
+license different sentences from the same result, and neither is recoverable from the
+number `R_m` alone: 0.7037 is consistent with an insert that moved almost nothing and
+with one that moved a third of the renderings, depending on what the no-effect rate is.
+Deciding this after T7's data existed would be choosing an interpretation with the
+result in view.
+
+**How the no-effect rate was obtained, since it is argued rather than measured.** Paper
+1 never samples. `score_llm.score_rows` teacher-forces every option string and sums
+token log-probabilities from one forward pass, `score_llm.pick` returns the argmax set,
+and `n_tied == 1` is filtered. There is no temperature, no `do_sample`, no seed and no
+`generate` call in that file, so an identical prompt gives an identical choice. The
+frozen artifacts hold no repeated rendering, since the two choice files share no model
+and permutation is a real perturbation, so this cannot be corroborated by a repeat run.
+The residual is float nondeterminism across batch compositions flipping a near-tie. It
+is not quantifiable from the frozen columns, which carry the chosen option's score and
+not the runner-up's, and it is not a credible account of a change rate of 0.37.
+
+**Alternatives offered and not chosen.**
+
+1. **Leave the reference's status unstated and read it in T7.** Rejected. Both readings
+   are available in advance and the choice between them is an interpretive degree of
+   freedom that would be exercised with the result in view.
+2. **Treat `c5` as a baseline on the strength of its small mean effect.** Rejected on a
+   measurement. `reports/T5_sigma_prior.md` reports a mean `d_i` on `post_norm` of
+   -0.0322 to +0.0116, which is near zero, and a per-item dispersion of 0.1357 to
+   0.3391, which is not. A near-zero mean is not absence of movement, and on the
+   coordinate that actually calibrates the reference, the chosen option, the insert
+   moves 14 to 37 per cent of renderings.
+3. **Recompute the reference under a null perturbation to measure the no-effect rate.**
+   Rejected as unavailable rather than undesirable. It would require re-running Paper 1's
+   harness on a duplicate rendering, which is new inference against a frozen artifact.
+
+**Consequences.** The outcome table in `PREREGISTRATION_v2.5.md` section 2.5 is restated
+in `PREREGISTRATION_v2.6.md` section 1.4 with the "indistinguishable" row reading
+against an active comparator. `v2.5` is not edited, per D148. The verdicts themselves do
+not change: an indistinguishable cell is still reported inconclusive and its sign test
+still carries no claim. What changes is the sentence T7 is permitted to write about it.
+Total variation distance between the `cond4` and `cond5` option marginals is 0.0741 to
+0.2315, so the insert also shifts the option distribution and is not only churn.
+
+---
+
+## P2-D10. The same-option rate is primary for H-B; the tie rate is the sign test's denominator
+
+**Status:** adopted. Supersedes `PREREGISTRATION_v2.4.md` section 2.4's label.
+**Decided:** 2026-09-10, during the T5.6 session, before any Paper 2 model data exists.
+Full reasoning in `PREREGISTRATION_v2.6.md` section 2.
+**Binds:** any Arm B confirmatory analysis script.
+**Constant:** `P2D10_TEXT`, `P2D10_PRIMARY_RATE`, `P2D10_SIGN_TEST_DENOMINATOR`.
+
+**Decision text.**
+
+> Arm B's primary no-movement statistic is the SAME-OPTION rate, not the tie rate. The
+> same-option rate is what P2-D8's reference calibrates, and a statistic with no null
+> cannot carry half of a confirmatory conjunction. The tie rate governs the sign test's
+> denominator, because ties are mechanically what the sign test drops, and it is
+> reported beside the same-option rate with its exact interval and its realized power.
+> The gap between them is non-negative, since same option implies `ΔA = 0`, and is
+> reported per cell as the coordinate's blind spot: choice movement between two options
+> that share an `A`. `PREREGISTRATION_v2.4.md` section 2.4's label of the tie rate as
+> primary is superseded, and `v2.5` section 2.3 already ran the comparison on the
+> same-option rate, so this decision makes the two documents agree rather than changing
+> what either computes.
+
+**Why it needed deciding.** `v2.4` section 2.4 made the tie rate primary. `v2.5` section
+2.3 defined the reference comparison on the same-option rate and section 3 said why.
+Both cannot be primary for H-B's no-movement half, and nothing in either document rules
+between them. Left unresolved, T7 would have picked one, and a session picking between
+two preregistered statistics after seeing which one favours the outcome is the failure
+the preregistration exists to prevent.
+
+**Alternatives offered and not chosen.**
+
+1. **Keep the tie rate primary and calibrate it directly.** Rejected. The reference is a
+   same-option rate computed on Paper 1's own conditions, and `A` did not exist for Paper
+   1. Calibrating the tie rate against it would compare a rate to a bound on itself:
+   same-option rate is at most the tie rate, so the comparison would be biased toward
+   "no movement" by exactly the blind spot, which is 48 of 108 confirmatory items.
+2. **Run both as co-primary and require agreement.** Rejected. It adds a third verdict,
+   "the two rates disagree", with no rule for it, and it corrects nothing, since the two
+   rates are nested rather than independent.
+3. **Report the gap only as an aggregate limitation.** Rejected. The blind spot is
+   item-specific, and the aggregate 0.0309 of option pairs understates it: 0.4444 of
+   confirmatory items carry at least one `A`-tied option pair.
+
+**Consequences.** The movement half of the conjunction is the same-option rate against
+`R_m` under P2-D8's rule, unchanged in every particular except the name. The sign test's
+denominator is the non-tie count, which is at most the count of pairs that changed
+option, so the two halves of the conjunction operate on nested subsets and the sign
+test's subset is the smaller. That difference is the blind spot expressed as counts and
+is reported per cell. P2-D8's alpha argument is unaffected: the conjunction's error is
+still bounded by the smaller of its parts.
+
+---
+
+## P2-D11. Every reported Arm B null carries both detection limits in one statement
+
+**Status:** **superseded by P2-D12 on 2026-09-10**, same day, before any Paper 2 model
+data existed. The requirement that every null carry its detection limits in one
+statement stands; the limits themselves changed, because P2-D12 removed the gate the
+ceiling was computed under. `results/T5_detection_ceiling.json` and
+`PREREGISTRATION_v2.6.md` section 3.3 remain the record of the superseded design and
+still reproduce. The replacement is `results/T5_inertness_ceiling.json` and
+`PREREGISTRATION_v2.7.md` section 3. The decision text below is unedited.
+**Decided:** 2026-09-10, during the T5.6 session, before any Paper 2 model data exists.
+Full reasoning in `PREREGISTRATION_v2.6.md` section 3.
+**Binds:** any Arm B results report.
+**Constant:** `P2D11_TEXT`, `P2D11_N_BENCHMARK`, `P2D11_CEILING`.
+
+**Decision text.**
+
+> Every reported Arm B null carries both detection limits in one statement. The
+> reference comparison cannot resolve a same-option-rate gap below roughly 0.15, which
+> requires a framing to change choices on 1.45 to 2.13 times as many pairs as `c5` does
+> before the movement half can fire. At that boundary the sign test's effective `n` is
+> at most 32 to 58, so its power reaches 0.80 only at `p1` between 0.746 and 0.822. The
+> two limits compose rather than trade off, because a framing weak enough to sit near
+> the first boundary leaves the second with that effective `n`. `n = 108` against `v2.0`
+> section 8.2's benchmark of 400 is a third shortfall and it does not disappear because
+> P2-D6 changed the statistic. A null licenses only that the framing did not move
+> choices detectably more than `c5` did, at this `n`, on this tile, on this coordinate.
+
+**Why it needed deciding.** The two limits are stated in two documents, `v2.5` section
+2.3 and `v2.4` section 3.2, and neither says they compose. A reader assembling them from
+two sections has no way to see that the second binds hardest exactly where the first
+just fired. Left as two disclosures, a null would be reported as "no movement detected"
+with the limits available but unassembled, which is the same failure as reporting an
+interval with no reference.
+
+**Alternatives offered and not chosen.**
+
+1. **Cross-reference the two sections from the results report.** Rejected. It leaves the
+   composition to the reader, and the composition is the part neither section states.
+2. **Compute the joint ceiling in T7 from the observed tie rate.** Rejected. The observed
+   tie rate is data, so a ceiling computed from it is a post-hoc power calculation. The
+   bound here is computed from `R_m` and the instrument half-width, both fixed before T7
+   runs, and it is an upper bound rather than an estimate.
+
+**Consequences.** `src/detection_ceiling.py` emits the per-model bound into
+`results/T5_detection_ceiling.json` before T7 runs, and T7 reports it rather than
+deriving one. The bound is `n_eff <= 108 * (1 - (R_m - h_m))`, which follows from
+same-option rate at most tie rate. It is a bound and not a prediction: a framing that
+moves choices far more than `c5` does gives a lower tie rate and more effective `n`, and
+the bound is then slack.
+
+---
+
+## P2-D12. Three Arm B quantities, none gating another
+
+**Status:** adopted. Supersedes P2-D11 and P2-D8's gating role.
+**Decided:** 2026-09-10, by the author, during the T5.6 session, before any Paper 2
+model data exists. Full reasoning in `PREREGISTRATION_v2.7.md`.
+**Binds:** any Arm B confirmatory analysis script.
+**Constant:** `P2D12_TEXT`, `P2D12_C5_GATES`, `P2D12_INERTNESS_NULL`,
+`P2D12_INERTNESS_FLOOR_ITEMS`, `P2D12_QUANTITIES`.
+
+**Decision text.**
+
+> Arm B reports three quantities and none of them gates another. (a) INERTNESS: the
+> same-option change rate against zero, per model, on the full confirmatory `n`, with
+> P2-D8's cluster bootstrap. Zero is the exact null, because Paper 1's scorer is
+> deterministic (P2-D9), so this establishes whether the framing moved anything at all,
+> which is the question the `c5` reference was introduced for. (b) MAGNITUDE CONTEXT:
+> the same-option rate against `R_m`, with the bootstrap half-width stated. Reported and
+> descriptive; it gates nothing and spends no `alpha`. (c) DIRECTION: the exact
+> two-sided sign test on items with `ΔA != 0` against `p0 = 0.5`, unchanged. H-B's
+> no-movement half resolves on (a) with (b) as context, never on (b). The gate in
+> `PREREGISTRATION_v2.5.md` section 2.3 and `v2.6` section 1.4 is superseded, and with
+> it P2-D11's ceiling.
+
+**Why it needed deciding.** P2-D9 established that the no-effect same-option rate is
+exactly 1.0, because Paper 1's chooser is an argmax over teacher-forced
+log-probabilities with no sampling. That answers the inertness question the `c5`
+reference was introduced for, in `PREREGISTRATION_v2.5.md` section 2: whether a high
+tie rate means models are insensitive or means T3's templates are too weak to move
+anything. A change rate distinguishable from zero settles it directly, with no
+reference manipulation. P2-D8 was written before that was known and kept the comparison
+as a gate, which set the bar for "something moved" at the magnitude of an unrelated
+manipulation. Measured, the cost was the design: `L1` had to move 2.13 times what `c5`
+moves before the movement half fired at all.
+
+**What the restructure costs and what it does not buy, stated because the obvious
+reading is wrong.** It does **not** make the sign test more powerful. The sign test's
+effective `n` is set by the observed tie rate under both designs. What the gate did was
+refuse to run the sign test at all unless the framing effect was large, and a large
+framing effect is mechanically a low tie rate, so the gated ceiling's `n_eff` of 32 to
+58 was conditional on the gate firing. Under P2-D12 a cell whose framing moves choices
+about as much as `c5` does now reports a sign test at an effective `n` of 14 to 40 with
+its realized power, where the gated design reported it as inconclusive and discarded
+the result. That is strictly more information and it is honestly underpowered rather
+than silent.
+
+**One consequence to name.** The inertness floor is 7 of 108 items, which is 0.11 to
+0.25 times what `c5` itself moves, so the movement half is nearly free and H-B's
+rejection rests almost entirely on (c). That is the correct allocation, because H-B is
+a claim about direction, and P2-D8's `alpha` bound is unaffected since a conjunction's
+error is still bounded by the smaller of its parts. It also makes confirming H-B's null
+half demanding: a framing must change the chosen option on fewer than 7 of 108 items.
+Confirming a null should be demanding, and P2-D9's exact zero is what makes that a
+claim about the framing rather than about measurement noise.
+
+**Alternatives offered and not chosen.**
+
+1. **Keep the `c5` comparison as the gate.** Rejected. It sets the bar for "something
+   moved" at the magnitude of an unrelated manipulation, and the one thing a magnitude
+   gate might have been reaching for, ruling out that any inserted text drifts choices
+   toward `o*_infinity`, it does not do. That confound is directional and a magnitude
+   gate is blind to direction.
+2. **Gate on inertness and drop the `c5` comparison entirely.** Rejected. `R_m` is the
+   only thing that says whether a framing effect is large or small in this signal
+   space, and a change rate reported against zero alone would invite reading any
+   significant movement as a substantial one.
+3. **Adopt `c5`'s own `ΔA` sign proportion as `p0`.** Rejected. It is the
+   direction-matched reference the magnitude gate was a poor substitute for, and it is
+   measured: 0.2453 to 0.5000, at or below 0.5 on all seven models, so a content-neutral
+   insertion does not drift toward the salience pole and `p0 = 0.5` is conservative.
+   Moving `p0` off 0.5 would recalibrate a preregistered test against a different
+   manipulation, which P2-D6 fixed. It is reported as a diagnostic and nothing else.
+
+**Consequences.** `src/inertness_ceiling.py` emits the replacement ceiling into
+`results/T5_inertness_ceiling.json` before T7 runs. The inertness floor is a count of
+moving items and not a rate, because the cluster bootstrap's lower bound is zero
+exactly when a resample can contain no moving item, so a mover that changes one of its
+two renderings counts the same as one that changes both. `results/T5_detection_ceiling.json`
+is kept unchanged: `PREREGISTRATION_v2.6.md` section 3.3 reports it and a superseded
+document must still reproduce. Separately measured and reported: P2-D10's blind spot on
+the `c5` contrast is 0.0000 to 0.0509, which is the gap bounded from the geometry in
+`v2.5` section 3, now observed on a real manipulation.
 
 ---
 

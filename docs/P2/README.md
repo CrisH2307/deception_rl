@@ -7,6 +7,7 @@
 | `foundation.md` | Literature survey, formal core, positioning, verified references |
 | `prompt-plan.md` | Full plan, dependency graph, locked decisions, all ten task briefs |
 | `tasks/T0.md` ... `tasks/T9.md` | Individual task briefs, one per session |
+| `DECISIONS.md` | Author decisions not derivable from the spec or the preregistration, with the alternatives not chosen. Bound at import by `src/p2_decisions.py` |
 
 The spec at `../spec/adversary-game-v1.md` is produced by T0 and does not exist yet.
 
@@ -19,6 +20,10 @@ The spec at `../spec/adversary-game-v1.md` is produced by T0 and does not exist 
 | D3 | No human arm |
 | D4 | Feature-scorer RL first; GRPO gated on Arm A and B results |
 | D5 | Decoy-only adversary (responds to the signal, does not choose `h*`) |
+
+Decisions taken during a task, rather than locked before Wave 1, live in
+`DECISIONS.md` under `P2-D<n>` ids. They are bound to the code that implements them
+the way Paper 1's D100 binds its own: verbatim constant, asserted at import.
 
 ## Order of execution
 

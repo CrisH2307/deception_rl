@@ -1,0 +1,166 @@
+{
+  "purpose": "The two Arm B detection limits stated together, with what a null does and does not license. Written before T7 runs.",
+  "n_confirmatory": 108,
+  "alpha": 0.002380952380952381,
+  "limit_1_reference_comparison": {
+    "instrument": "P2-D8 cluster bootstrap, items, 10,000 resamples, seed 20260910, at 1 - alpha",
+    "half_width_range": [
+      0.14120370370370366,
+      0.1666666666666667
+    ],
+    "consequence": "A same-option-rate gap below roughly 0.15 is not resolvable. Such a cell is 'indistinguishable', which P2-D8 rules is not support for H-B."
+  },
+  "limit_2_sign_test": {
+    "instrument": "P2-D6 exact two-sided sign test against p0 = 0.5",
+    "effective_n": "108 * (1 - tie rate); ties carry no sign",
+    "p1_at_80_power_at_30_percent_ties": 0.721,
+    "source": "results/T5_sign_power.json"
+  },
+  "limit_3_information": {
+    "n_adopted": 108,
+    "n_benchmark_v2_0_section_8_2": 400,
+    "statement": "P2-D6 replaced the mean with a sign test, so section 8.2's curve no longer governs the confirmatory test. The shortfall in information is unchanged by that. A modest directional effect will not be detected, and realized power is reported rather than assumed."
+  },
+  "composition": "Rejecting H-B needs both halves. The movement half fires only at a framing same-option rate at or below R_m - h_m. Same-option <= tie, so at that boundary the tie rate is at least R_m - h_m and the sign test's effective n is at most 108 * (1 - (R_m - h_m)). The per-model sign_power_upper_bound_at values are that bound. The two limits do not trade off in the design's favour.",
+  "per_model": {
+    "CTRL": {
+      "c5_reference_R_m": 0.7037037037037037,
+      "c5_change_rate": 0.2962962962962963,
+      "bootstrap_half_width": 0.1550925925925926,
+      "framing_same_option_rate_needed": 0.5486111111111112,
+      "framing_change_rate_needed": 0.45138888888888884,
+      "change_rate_multiple_of_c5": 1.5234375,
+      "n_eff_max_at_that_boundary": 48,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.044165772355970814,
+        "0.65": 0.15894831748193933,
+        "0.7": 0.39614501831482196,
+        "0.75": 0.6985870334332971,
+        "0.8": 0.9161978136552734
+      },
+      "p1_at_80_power_upper_bound": 0.77
+    },
+    "B2": {
+      "c5_reference_R_m": 0.8037383177570093,
+      "c5_change_rate": 0.19626168224299068,
+      "bootstrap_half_width": 0.14120370370370366,
+      "framing_same_option_rate_needed": 0.6625346140533057,
+      "framing_change_rate_needed": 0.3374653859466943,
+      "change_rate_multiple_of_c5": 1.7194664902998231,
+      "n_eff_max_at_that_boundary": 36,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.019642937546446852,
+        "0.65": 0.0725472713711682,
+        "0.7": 0.20367718642247684,
+        "0.75": 0.43629749710998433,
+        "0.8": 0.7158764610941117
+      },
+      "p1_at_80_power_upper_bound": 0.818
+    },
+    "B4": {
+      "c5_reference_R_m": 0.6296296296296297,
+      "c5_change_rate": 0.37037037037037035,
+      "bootstrap_half_width": 0.1666666666666667,
+      "framing_same_option_rate_needed": 0.4629629629629629,
+      "framing_change_rate_needed": 0.5370370370370371,
+      "change_rate_multiple_of_c5": 1.4500000000000002,
+      "n_eff_max_at_that_boundary": 58,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.06135576988619838,
+        "0.65": 0.22222370823254622,
+        "0.7": 0.5190869453312605,
+        "0.75": 0.8197878502803809,
+        "0.8": 0.9689982088409368
+      },
+      "p1_at_80_power_upper_bound": 0.746
+    },
+    "L1": {
+      "c5_reference_R_m": 0.8611111111111112,
+      "c5_change_rate": 0.13888888888888884,
+      "bootstrap_half_width": 0.1574074074074074,
+      "framing_same_option_rate_needed": 0.7037037037037037,
+      "framing_change_rate_needed": 0.2962962962962963,
+      "change_rate_multiple_of_c5": 2.133333333333334,
+      "n_eff_max_at_that_boundary": 32,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.02483477382087934,
+        "0.65": 0.08179204506383991,
+        "0.7": 0.21176779368975174,
+        "0.75": 0.43247084269521113,
+        "0.8": 0.6982368677857195
+      },
+      "p1_at_80_power_upper_bound": 0.822
+    },
+    "L2": {
+      "c5_reference_R_m": 0.8518518518518519,
+      "c5_change_rate": 0.14814814814814814,
+      "bootstrap_half_width": 0.14814814814814817,
+      "framing_same_option_rate_needed": 0.7037037037037037,
+      "framing_change_rate_needed": 0.2962962962962963,
+      "change_rate_multiple_of_c5": 2.0,
+      "n_eff_max_at_that_boundary": 32,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.02483477382087934,
+        "0.65": 0.08179204506383991,
+        "0.7": 0.21176779368975174,
+        "0.75": 0.43247084269521113,
+        "0.8": 0.6982368677857195
+      },
+      "p1_at_80_power_upper_bound": 0.822
+    },
+    "L3": {
+      "c5_reference_R_m": 0.8101851851851852,
+      "c5_change_rate": 0.18981481481481477,
+      "bootstrap_half_width": 0.14165013227513323,
+      "framing_same_option_rate_needed": 0.668535052910052,
+      "framing_change_rate_needed": 0.331464947089948,
+      "change_rate_multiple_of_c5": 1.7462543554007022,
+      "n_eff_max_at_that_boundary": 35,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.025961914591106548,
+        "0.65": 0.08902922360664234,
+        "0.7": 0.2341188099088272,
+        "0.75": 0.47430274107260456,
+        "0.8": 0.7450123950299493
+      },
+      "p1_at_80_power_upper_bound": 0.812
+    },
+    "L4": {
+      "c5_reference_R_m": 0.7407407407407407,
+      "c5_change_rate": 0.2592592592592593,
+      "bootstrap_half_width": 0.16666666666666669,
+      "framing_same_option_rate_needed": 0.574074074074074,
+      "framing_change_rate_needed": 0.42592592592592604,
+      "change_rate_multiple_of_c5": 1.642857142857143,
+      "n_eff_max_at_that_boundary": 46,
+      "sign_power_upper_bound_at": {
+        "0.6": 0.035417465994495224,
+        "0.65": 0.13188750769291038,
+        "0.7": 0.34475396476355313,
+        "0.75": 0.6425135087718776,
+        "0.8": 0.8856127505523996
+      },
+      "p1_at_80_power_upper_bound": 0.78
+    }
+  },
+  "a_null_licenses": "That the framing did not move choices detectably more than Paper 1's c5 insert moved them, at this n, on this tile, with this coordinate. c5 is an active comparator, not a no-manipulation baseline (results/T5_c5_effect.json), so this is a statement about relative magnitude and not about absence of movement.",
+  "a_null_does_not_license": "That models are insensitive to adversary structure. Three separate readings produce the same null and the design does not separate them: the models are insensitive; T3's F1/F2 are too weak to move anything, which is a fact about the templates; or the effect is real and smaller than the limits above. The A coordinate additionally cannot see a switch between two A-tied options, on 48 of 108 confirmatory items (v2.5 section 3).",
+  "ranges": {
+    "half_width": [
+      0.14120370370370366,
+      0.1666666666666667
+    ],
+    "change_rate_multiple_of_c5": [
+      1.4500000000000002,
+      2.133333333333334
+    ],
+    "n_eff_max": [
+      32,
+      58
+    ],
+    "p1_at_80_power": [
+      0.746,
+      0.822
+    ]
+  }
+}

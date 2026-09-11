@@ -212,6 +212,142 @@ def bind_armb_tie(reference, boot_n, boot_seed, tie_in_main_family):
                                "docs/P2/DECISIONS.md")) from None
 
 
+
+# --------------------------------- P2-D9, the c5 reference's status
+P2D9_TEXT = (
+    "Paper 1's `c5` insert is an ACTIVE comparator, not a no-manipulation baseline. On the\n"
+    "`size`-tile confirmatory set the insert changes the chosen option on 0.1389 to 0.3704\n"
+    "of matched rendering pairs, and the cluster bootstrap interval excludes the no-effect\n"
+    "rate on all seven models at `alpha = 0.05/21`. The no-effect rate is exactly 1.0\n"
+    "because Paper 1's chooser is an argmax over teacher-forced log-probabilities with no\n"
+    "sampling anywhere in the scoring path. A framing rate indistinguishable from `R_m`\n"
+    "therefore reads as \"the framing moved choices about as much as a known-effective\n"
+    "content insertion in the same slot did\", not as \"the framing moved nothing\". That\n"
+    "reading is still not support for H-B, because the comparison is blind to direction."
+)
+P2D9_REJECTED = ("Leave the reference's status unstated and read it in T7.",
+                 "Treat `c5` as a baseline on the strength of its small mean effect.",
+                 "Recompute the reference under a null perturbation to measure the "
+                 "no-effect rate.")
+P2D9_C5_IS_ACTIVE = True
+# Emitted by `src/c5_effect.py` into `results/T5_c5_effect.json`, size tile.
+P2D9_C5_CHANGE_RATE_RANGE = (0.1388888888888889, 0.37037037037037035)
+P2D9_NO_EFFECT_SAME_OPTION_RATE = 1.0
+
+# ------------------------- P2-D10, which rate is primary for H-B's no-movement half
+P2D10_TEXT = (
+    "Arm B's primary no-movement statistic is the SAME-OPTION rate, not the tie rate. The\n"
+    "same-option rate is what P2-D8's reference calibrates, and a statistic with no null\n"
+    "cannot carry half of a confirmatory conjunction. The tie rate governs the sign test's\n"
+    "denominator, because ties are mechanically what the sign test drops, and it is\n"
+    "reported beside the same-option rate with its exact interval and its realized power.\n"
+    "The gap between them is non-negative, since same option implies `ΔA = 0`, and is\n"
+    "reported per cell as the coordinate's blind spot: choice movement between two options\n"
+    "that share an `A`. `PREREGISTRATION_v2.4.md` section 2.4's label of the tie rate as\n"
+    "primary is superseded, and `v2.5` section 2.3 already ran the comparison on the\n"
+    "same-option rate, so this decision makes the two documents agree rather than changing\n"
+    "what either computes."
+)
+P2D10_REJECTED = ("Keep the tie rate primary and calibrate it directly.",
+                  "Run both as co-primary and require agreement.",
+                  "Report the gap only as an aggregate limitation.")
+P2D10_PRIMARY_RATE = "same_option"
+P2D10_SIGN_TEST_DENOMINATOR = "non_tie"
+
+# --------------------------- P2-D11, the joint detection statement a null must carry
+P2D11_TEXT = (
+    "Every reported Arm B null carries both detection limits in one statement. The\n"
+    "reference comparison cannot resolve a same-option-rate gap below roughly 0.15, which\n"
+    "requires a framing to change choices on 1.45 to 2.13 times as many pairs as `c5` does\n"
+    "before the movement half can fire. At that boundary the sign test's effective `n` is\n"
+    "at most 32 to 58, so its power reaches 0.80 only at `p1` between 0.746 and 0.822. The\n"
+    "two limits compose rather than trade off, because a framing weak enough to sit near\n"
+    "the first boundary leaves the second with that effective `n`. `n = 108` against `v2.0`\n"
+    "section 8.2's benchmark of 400 is a third shortfall and it does not disappear because\n"
+    "P2-D6 changed the statistic. A null licenses only that the framing did not move\n"
+    "choices detectably more than `c5` did, at this `n`, on this tile, on this coordinate."
+)
+P2D11_REJECTED = ("Cross-reference the two sections from the results report.",
+                  "Compute the joint ceiling in T7 from the observed tie rate.")
+P2D11_N_BENCHMARK = 400
+# (min, max) over the seven models, from `results/T5_detection_ceiling.json`.
+P2D11_CEILING = {"half_width": (0.1412037037037037, 0.16666666666666669),
+                 "change_rate_multiple_of_c5": (1.4500000000000002,
+                                                2.133333333333334),
+                 "n_eff_max": (32, 58),
+                 "p1_at_80_power": (0.746, 0.822)}
+
+
+def bind_armb_rates(primary_rate, sign_denominator, c5_is_active):
+    """Assert an Arm B run against P2-D9 and P2-D10. Call at import.
+
+    Takes what the caller actually used. A script that computes its verdict from
+    the tie rate, or that writes the baseline reading of an indistinguishable
+    cell, fails here rather than in the results table.
+    """
+    checks = (("P2-D10 primary no-movement rate", primary_rate, P2D10_PRIMARY_RATE),
+              ("P2-D10 sign test denominator", sign_denominator,
+               P2D10_SIGN_TEST_DENOMINATOR),
+              ("P2-D9 c5 reference is active", bool(c5_is_active),
+               P2D9_C5_IS_ACTIVE))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
+
+# ------------------------- P2-D12, three quantities, none gating another
+P2D12_TEXT = (
+    "Arm B reports three quantities and none of them gates another. (a) INERTNESS: the\n"
+    "same-option change rate against zero, per model, on the full confirmatory `n`, with\n"
+    "P2-D8's cluster bootstrap. Zero is the exact null, because Paper 1's scorer is\n"
+    "deterministic (P2-D9), so this establishes whether the framing moved anything at all,\n"
+    "which is the question the `c5` reference was introduced for. (b) MAGNITUDE CONTEXT:\n"
+    "the same-option rate against `R_m`, with the bootstrap half-width stated. Reported and\n"
+    "descriptive; it gates nothing and spends no `alpha`. (c) DIRECTION: the exact\n"
+    "two-sided sign test on items with `ΔA != 0` against `p0 = 0.5`, unchanged. H-B's\n"
+    "no-movement half resolves on (a) with (b) as context, never on (b). The gate in\n"
+    "`PREREGISTRATION_v2.5.md` section 2.3 and `v2.6` section 1.4 is superseded, and with\n"
+    "it P2-D11's ceiling."
+)
+P2D12_REJECTED = ("Keep the `c5` comparison as the gate.",
+                  "Gate on inertness and drop the `c5` comparison entirely.",
+                  "Adopt `c5`'s own `ΔA` sign proportion as `p0`.")
+P2D12_QUANTITIES = ("inertness", "magnitude_context", "direction")
+P2D12_C5_GATES = False           # (b) is descriptive; this is the whole decision
+P2D12_INERTNESS_NULL = 0.0       # exact, per P2-D9's deterministic scorer
+# Emitted by `src/inertness_ceiling.py`. A count of moving items, not a rate: the
+# bootstrap's lower bound is zero exactly when a resample can contain no mover.
+P2D12_INERTNESS_FLOOR_ITEMS = 7
+
+
+def bind_armb_quantities(inertness_null, c5_gates, sign_p0, quantities):
+    """Assert an Arm B run against P2-D12. Call at import.
+
+    The check that matters is `c5_gates`. A script that resolves H-B's
+    no-movement half on the reference comparison rather than on inertness is the
+    superseded design, and it must fail here rather than produce a table that
+    looks like the current one.
+    """
+    checks = (("P2-D12 inertness null", float(inertness_null),
+               P2D12_INERTNESS_NULL),
+              ("P2-D12 c5 comparison gates", bool(c5_gates), P2D12_C5_GATES),
+              ("P2-D6 sign-test null, unchanged by P2-D12", float(sign_p0),
+               P2D6_P0),
+              ("P2-D12 reported quantities", tuple(quantities), P2D12_QUANTITIES))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -277,7 +413,9 @@ def check_log(path=LOG):
     for label, const in (("P2-D1", P2D1_TEXT), ("P2-D2", P2D2_TEXT),
                          ("P2-D3", P2D3_TEXT), ("P2-D4", P2D4_TEXT),
                          ("P2-D5", P2D5_TEXT), ("P2-D6", P2D6_TEXT),
-                         ("P2-D7", P2D7_TEXT), ("P2-D8", P2D8_TEXT)):
+                         ("P2-D7", P2D7_TEXT), ("P2-D8", P2D8_TEXT),
+                         ("P2-D9", P2D9_TEXT), ("P2-D10", P2D10_TEXT),
+                         ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -287,7 +425,10 @@ def check_log(path=LOG):
     for label, rejected in (("P2-D1", P2D1_REJECTED), ("P2-D2", P2D2_REJECTED),
                             ("P2-D3", P2D3_REJECTED), ("P2-D4", P2D4_REJECTED),
                             ("P2-D5", P2D5_REJECTED), ("P2-D6", P2D6_REJECTED),
-                            ("P2-D7", P2D7_REJECTED), ("P2-D8", P2D8_REJECTED)):
+                            ("P2-D7", P2D7_REJECTED), ("P2-D8", P2D8_REJECTED),
+                            ("P2-D9", P2D9_REJECTED), ("P2-D10", P2D10_REJECTED),
+                            ("P2-D11", P2D11_REJECTED),
+                            ("P2-D12", P2D12_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -315,11 +456,27 @@ def main():
           f"boot seed {P2D8_BOOT_SEED}; in main family={P2D8_TIE_IN_MAIN_FAMILY}")
     print(f"redraw (b)      P2-D7: declined, enlargement authorized="
           f"{P2D7_ENLARGEMENT_AUTHORIZED}")
+    print(f"c5 status       P2-D9: active={P2D9_C5_IS_ACTIVE}, change rate "
+          f"{P2D9_C5_CHANGE_RATE_RANGE[0]:.4f} to "
+          f"{P2D9_C5_CHANGE_RATE_RANGE[1]:.4f} against a no-effect rate of "
+          f"{P2D9_NO_EFFECT_SAME_OPTION_RATE}")
+    print(f"primary rate    P2-D10: {P2D10_PRIMARY_RATE!r}; sign test denominator "
+          f"{P2D10_SIGN_TEST_DENOMINATOR!r}")
+    print(f"quantities      P2-D12: {P2D12_QUANTITIES}; c5 gates="
+          f"{P2D12_C5_GATES}; inertness null={P2D12_INERTNESS_NULL}, floor "
+          f"{P2D12_INERTNESS_FLOOR_ITEMS} of {P2D4_N_CONFIRMATORY} items")
+    print(f"SUPERSEDED      P2-D11: framing must move "
+          f"{P2D11_CEILING['change_rate_multiple_of_c5'][0]:.2f} to "
+          f"{P2D11_CEILING['change_rate_multiple_of_c5'][1]:.2f} x c5; n_eff then "
+          f"<= {P2D11_CEILING['n_eff_max'][0]}-{P2D11_CEILING['n_eff_max'][1]}, "
+          f"p1 at 80% power {P2D11_CEILING['p1_at_80_power'][0]:.3f}-"
+          f"{P2D11_CEILING['p1_at_80_power'][1]:.3f}")
     print("rejected        " + ", ".join(
         f"{len(r)} on P2-D{i}" for i, r in enumerate(
             (P2D1_REJECTED, P2D2_REJECTED, P2D3_REJECTED, P2D4_REJECTED,
              P2D5_REJECTED, P2D6_REJECTED, P2D7_REJECTED,
-             P2D8_REJECTED), start=1))
+             P2D8_REJECTED, P2D9_REJECTED, P2D10_REJECTED,
+             P2D11_REJECTED, P2D12_REJECTED), start=1))
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0
