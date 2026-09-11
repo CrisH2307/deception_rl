@@ -188,6 +188,49 @@ def test_locate_handles_a_nested_zip_layout():
         K.STIMULI = before
 
 
+def test_optional_inputs_do_not_block_the_run():
+    """Only the seven required files block. The F0 comparison files and P1's
+    env.json are absent from a perfectly good upload, and both have a fallback:
+    the verdict moves to the local analysis, and the pins fall back to this
+    module's constant. Blocking on them would stop a run that can proceed."""
+    import shutil
+    root = tempfile.mkdtemp()
+    p2 = os.path.join(root, "p2")
+    p1s = os.path.join(root, "p1", "src")
+    os.makedirs(os.path.join(p2, "data/processed"))
+    os.makedirs(os.path.join(p2, "results"))
+    os.makedirs(p1s)
+    shutil.copy(K.STIMULI, os.path.join(p2, "data/processed"))
+    shutil.copy(MANIFEST, os.path.join(p2, "data/processed"))
+    shutil.copy(os.path.join(REPO, "results/T6_gate_record.json"),
+                os.path.join(p2, "results"))
+    shutil.copy(os.path.join(P1, "data/reference/tiles.json"), p2)
+    shutil.copy(os.path.join(P1, "data/processed/items_final.parquet"), p2)
+    for f in ("score_llm.py", "coords.py"):
+        shutil.copy(os.path.join(P1, "src", f), p1s)
+    saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT)
+    try:
+        found, missing = K.locate(root, verbose=False)
+        assert missing == [], f"optional files blocked the run: {missing}"
+        for opt in ("choices_llm.parquet", "choices_llm_t26.parquet"):
+            assert opt not in found, "fixture should not have the optional files"
+            assert opt in K.OPTIONAL_NOTE, f"{opt} has no stated fallback"
+        assert set(K.REQUIRED) <= set(found), set(K.REQUIRED) - set(found)
+    finally:
+        (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT) = saved
+
+
+def test_required_inputs_do_block():
+    """The seven that nothing works without must still stop the run."""
+    root = tempfile.mkdtemp()
+    saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT)
+    try:
+        _, missing = K.locate(root, verbose=False)
+        assert set(missing) == set(K.REQUIRED), (set(missing), set(K.REQUIRED))
+    finally:
+        (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT) = saved
+
+
 def test_notebook_stage_2_defaults_off():
     """A Run All must stop at the stage 1 verdict."""
     import re

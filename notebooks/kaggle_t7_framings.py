@@ -179,6 +179,26 @@ P1_FLIP_NOTE = ("P1's batch-8-vs-batch-1 flip rates on manmade/moves/hold, "
                 "score at batch 1. Context for T7's F0 count, not a threshold.")
 
 
+# Absent these, nothing downstream works.
+REQUIRED = ("t7_stimuli.parquet", "t7_stimuli_manifest.json",
+            "T6_gate_record.json", "tiles.json", "items_final.parquet",
+            "score_llm.py", "coords.py")
+# Absent these, the run still scores. Only the stage 1 verdict and the pin
+# cross-check are affected, and both have a stated fallback.
+OPTIONAL_NOTE = {
+    "choices_llm.parquet":
+        "deception-p1: notebooks/results_2/. Cell 4's F0 verdict only. Without "
+        "it the verdict moves to the local analysis, where the same comparison "
+        "is run against the same frozen file.",
+    "choices_llm_t26.parquet":
+        "deception-p1: notebooks/results_3/. Same, for B2/B4/CTRL.",
+    "results_*/env.json":
+        "deception-p1: notebooks/results_2/ and results_3/. The pinned commits "
+        "are then checked against this module's constant only, not against "
+        "Paper 1's own record.",
+}
+
+
 def locate(root="/kaggle/input", verbose=True):
     """Find the inputs wherever the dataset upload put them, and set the paths.
 
@@ -227,7 +247,11 @@ def locate(root="/kaggle/input", verbose=True):
         # P1_NOTEBOOKS is used as <root>/results_N/env.json
         P1_NOTEBOOKS = os.path.dirname(os.path.dirname(env_jsons[0]))
 
-    missing = [k for k, v in wanted.items() if v is None]
+    missing = [k for k, v in wanted.items() if v is None and k in REQUIRED]
+    optional_missing = [k for k, v in wanted.items()
+                        if v is None and k not in REQUIRED]
+    if not env_jsons:
+        optional_missing.append("results_*/env.json")
     found = {k: v for k, v in wanted.items() if v}
     if verbose:
         print(f"scanned {root}")
@@ -242,6 +266,12 @@ def locate(root="/kaggle/input", verbose=True):
                            ("P2_ROOT", P2_ROOT),
                            ("P1_NOTEBOOKS", P1_NOTEBOOKS)):
             print(f"  {label:13s} {val}")
+    if optional_missing:
+        print("")
+        print(f"{len(optional_missing)} optional file(s) absent. These do NOT")
+        print("block the run:")
+        for m in optional_missing:
+            print(f"  {m:28s} -> {OPTIONAL_NOTE[m]}")
     if missing:
         need = {
             "t7_stimuli.parquet": "deception-p2: data/processed/",
@@ -251,11 +281,6 @@ def locate(root="/kaggle/input", verbose=True):
             "items_final.parquet": "deception-p1: data/processed/",
             "score_llm.py": "deception-p1: src/",
             "coords.py": "deception-p1: src/",
-            "choices_llm.parquet":
-                "deception-p1: notebooks/results_2/  (cell 4 only; without it "
-                "the F0 verdict moves to the local analysis)",
-            "choices_llm_t26.parquet":
-                "deception-p1: notebooks/results_3/  (cell 4 only)",
         }
         print("")
         print("=" * 70)
