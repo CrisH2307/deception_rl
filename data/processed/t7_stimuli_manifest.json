@@ -1,0 +1,35 @@
+{
+  "purpose": "T7 Arm B stimuli. Scored on Kaggle T4s; rendered and checked here so a rendering bug does not cost a T4 session.",
+  "scope": "all 1,000 items, 2 permutations, 3 framings, Format V base",
+  "confirmatory_subset": "size tile, n = 108 with finite beta_c (P2-D3, P2-D4)",
+  "n_rows": 6000,
+  "n_items": 1000,
+  "per_framing": {
+    "F0": 2000,
+    "F1": 2000,
+    "F2": 2000
+  },
+  "per_tile": {
+    "manmade": 1500,
+    "moves": 1500,
+    "hold": 1500,
+    "size": 1500
+  },
+  "framing_ids": [
+    "F0",
+    "F1",
+    "F2"
+  ],
+  "variant": "base",
+  "slot_anchor": "\n\nWhich do you send?",
+  "f0_replication_target": "Paper 1 condition 4 (Format V, base variant)",
+  "source_items_rendered_sha256": "c9cb7185f0c88986853c750751b7f6e05366d5986c21ade891de4ad2cec815b6",
+  "items_final_sha256": "ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289",
+  "stimuli_sha256": "f6dcdc61770eef935ceae97a19b95d94d4cc978c12f45d7d7aaabe150bd2fca0",
+  "median_chars": {
+    "F0": 628,
+    "F1": 884,
+    "F2": 893
+  },
+  "batch_rule": "D102 part 3: the `size` tile is scored at max_batch = 1. P1 does this because size carries the primary curve and is where margins inside the fp16 noise floor sit. T7 inherits it, and size is also the confirmatory tile."
+}
