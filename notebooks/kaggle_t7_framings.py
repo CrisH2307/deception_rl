@@ -228,13 +228,49 @@ def locate(root="/kaggle/input", verbose=True):
         "choices_llm.parquet": None, "choices_llm_t26.parquet": None,
     }
     env_jsons = []
+    cands = {k: [] for k in wanted}
     if os.path.isdir(root):
         for dirpath, _, files in os.walk(root):
             for f in files:
-                if f in wanted and wanted[f] is None:
-                    wanted[f] = os.path.join(dirpath, f)
+                if f in cands:
+                    cands[f].append(os.path.join(dirpath, f))
                 elif f == "env.json" and "results_" in dirpath:
                     env_jsons.append(os.path.join(dirpath, f))
+
+    # More than one copy of a file is normal: Paper 1's kaggle_bundle carries its
+    # own items_final.parquet, and it can be older than the live one. Taking
+    # whichever os.walk reached first would pick a stale artifact at random and
+    # the run would complete with wrong numbers. Where a recorded hash exists,
+    # the copy that matches it is the right one, so choose on that rather than on
+    # walk order.
+    def _recorded(name):
+        try:
+            if name == "items_final.parquet" and cands["T6_gate_record.json"]:
+                return json.load(open(cands["T6_gate_record.json"][0])
+                                 )["artifact_sha256"]["items_final.parquet"]
+            if name == "t7_stimuli.parquet" and cands["t7_stimuli_manifest.json"]:
+                return json.load(open(cands["t7_stimuli_manifest.json"][0])
+                                 )["stimuli_sha256"]
+        except Exception:                                     # noqa: BLE001
+            return None
+        return None
+
+    duplicates = {}
+    for name, paths in cands.items():
+        if not paths:
+            continue
+        chosen, why = paths[0], "only copy" if len(paths) == 1 else "first found"
+        want = _recorded(name) if len(paths) > 1 else None
+        if want:
+            match = [q for q in paths if _sha256(q) == want]
+            if match:
+                chosen, why = match[0], "sha256 matches the recorded value"
+            else:
+                why = "NO copy matches the recorded hash; first found"
+        if len(paths) > 1:
+            duplicates[name] = {"n": len(paths), "chosen": chosen, "why": why,
+                                "rejected": [q for q in paths if q != chosen]}
+        wanted[name] = chosen
 
     if wanted["t7_stimuli.parquet"]:
         STIMULI = wanted["t7_stimuli.parquet"]
@@ -281,6 +317,14 @@ def locate(root="/kaggle/input", verbose=True):
                            ("P2_ROOT", P2_ROOT),
                            ("P1_NOTEBOOKS", P1_NOTEBOOKS)):
             print(f"  {label:13s} {val}")
+    if verbose and duplicates:
+        print("")
+        print(f"{len(duplicates)} file(s) found in more than one place:")
+        for name, d in duplicates.items():
+            print(f"  {name}  ({d['n']} copies, chose on: {d['why']})")
+            print(f"    USING    {d['chosen']}")
+            for q in d["rejected"]:
+                print(f"    ignored  {q}")
     if optional_missing:
         print("")
         print(f"{len(optional_missing)} optional file(s) absent. These do NOT")
@@ -306,6 +350,7 @@ def locate(root="/kaggle/input", verbose=True):
         print("structure inside the dataset does not matter; this scan finds")
         print("them anywhere.")
         print("=" * 70)
+    globals()["DUPLICATES"] = duplicates
     return found, missing
 
 

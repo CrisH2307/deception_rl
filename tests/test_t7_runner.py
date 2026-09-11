@@ -263,6 +263,49 @@ def test_locate_handles_one_dataset_per_file():
          K.GATE_RECORD, K.MANIFEST_PATH) = saved
 
 
+def test_duplicate_items_final_is_resolved_by_hash_not_walk_order():
+    """Paper 1's kaggle_bundle carries its own items_final.parquet and it is
+    older than the live one. With both mounted, taking whichever os.walk reached
+    first picks a stale artifact at random and the run completes with wrong
+    numbers. The copy matching T6's recorded hash is the right one."""
+    import hashlib
+    import shutil
+    stale = os.path.join(P1, "data/kaggle_bundle/data/processed/items_final.parquet")
+    live = os.path.join(P1, "data/processed/items_final.parquet")
+    if not os.path.exists(stale):
+        return                      # nothing to disambiguate on this machine
+    root = tempfile.mkdtemp()
+    # "aaa" sorts first, so a naive walk reaches the stale copy first
+    for name, src in (("aaa_bundle", stale), ("zzz_live", live)):
+        d = os.path.join(root, name)
+        os.makedirs(d)
+        shutil.copy(src, d)
+    for name, src in (("gate", os.path.join(REPO, "results/T6_gate_record.json")),
+                      ("tiles", os.path.join(P1, "data/reference/tiles.json")),
+                      ("stim", K.STIMULI), ("man", MANIFEST),
+                      ("p1src", os.path.join(P1, "src/score_llm.py"))):
+        d = os.path.join(root, name)
+        os.makedirs(d, exist_ok=True)
+        shutil.copy(src, d)
+    shutil.copy(os.path.join(P1, "src/coords.py"), os.path.join(root, "p1src"))
+    saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT,
+             K.GATE_RECORD, K.MANIFEST_PATH)
+    try:
+        _, missing = K.locate(root, verbose=False)
+        assert not missing, missing
+        want = json.load(open(os.path.join(REPO, "results/T6_gate_record.json"))
+                         )["artifact_sha256"]["items_final.parquet"]
+        got = hashlib.sha256(open(K.ITEMS, "rb").read()).hexdigest()
+        assert got == want, "locate picked the stale items_final.parquet"
+        assert "items_final.parquet" in K.DUPLICATES
+        assert K.DUPLICATES["items_final.parquet"]["n"] == 2
+        ver = K.verify_inputs()
+        assert all(v["matches"] for v in ver.values()), ver
+    finally:
+        (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT,
+         K.GATE_RECORD, K.MANIFEST_PATH) = saved
+
+
 def test_notebook_stage_2_defaults_off():
     """A Run All must stop at the stage 1 verdict."""
     import re
