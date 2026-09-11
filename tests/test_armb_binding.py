@@ -254,6 +254,76 @@ def test_p2d11_ceiling_composes_and_binds():
             f"P2-D11 states {k} of {a} to {b}; the script emits {got_lo} to {got_hi}")
 
 
+def test_p2d12_c5_must_not_gate():
+    """P2-D12's whole content is that the reference comparison gates nothing. A
+    run that resolves H-B's no-movement half on it is the superseded design."""
+    dec.bind_armb_quantities(dec.P2D12_INERTNESS_NULL, False, dec.P2D6_P0,
+                             dec.P2D12_QUANTITIES)
+    for args in ((dec.P2D12_INERTNESS_NULL, True, dec.P2D6_P0, dec.P2D12_QUANTITIES),
+                 (0.7037, False, dec.P2D6_P0, dec.P2D12_QUANTITIES),
+                 (dec.P2D12_INERTNESS_NULL, False, 0.29, dec.P2D12_QUANTITIES),
+                 (dec.P2D12_INERTNESS_NULL, False, dec.P2D6_P0,
+                  ("inertness", "direction"))):
+        try:
+            dec.bind_armb_quantities(*args)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"P2-D12 accepted drift: {args}")
+
+
+def test_p2d12_floor_is_what_the_bootstrap_actually_accepts():
+    """The floor is stated as 7 items. Recompute it against P2-D8's own bootstrap
+    rather than trusting the analytic solution that produced it."""
+    import inertness_ceiling as ic
+    k = dec.P2D12_INERTNESS_FLOOR_ITEMS
+    assert ic.inertness_floor() == k
+    assert ic.check_floor(k)["clears_zero"], f"{k} movers do not clear zero"
+    assert not ic.check_floor(k - 1)["clears_zero"], f"{k} is not the smallest"
+    # a mover that changes one of its two renderings must count the same
+    assert ic.check_floor(k, both_permutations=False)["clears_zero"]
+
+
+def test_p2d12_buys_what_it_claims_and_not_what_it_does_not():
+    """Two checks in opposite directions, because the obvious reading is wrong.
+
+    It must lower the movement bar well below the superseded gate. It must NOT be
+    claimed to raise sign-test power: at a c5-like tie rate the effective n is
+    smaller than the gated ceiling's, because the gated ceiling was conditional on
+    a large framing effect.
+    """
+    import json
+    path = "results/T5_inertness_ceiling.json"
+    if not os.path.exists(path):
+        raise AssertionError(f"{path} missing; run python3 src/inertness_ceiling.py")
+    d = json.load(open(path))
+    gated_lo = dec.P2D11_CEILING["change_rate_multiple_of_c5"][0]
+    worst = max(v["floor_as_multiple_of_c5"] for v in d["per_model"].values())
+    assert worst < gated_lo, (
+        f"inertness floor is {worst:.2f}x c5 at worst against the gate's "
+        f"{gated_lo:.2f}x at best; P2-D12 lowers no bar")
+    gated_n_lo = dec.P2D11_CEILING["n_eff_max"][0]
+    n_eff = [v["n_eff_at_a_c5_like_tie_rate"] for v in d["per_model"].values()]
+    assert min(n_eff) < gated_n_lo, (
+        "a c5-like tie rate gives more effective n than the gated ceiling did, "
+        "which would make P2-D12's 'not a power gain' note wrong")
+    assert d["quantity_b_magnitude_context"]["role"].startswith("DESCRIPTIVE")
+
+
+def test_p2d12_rejected_p0_swap_rests_on_a_measurement():
+    """P2-D12 declined c5's own sign proportion as `p0` partly because it is at or
+    below 0.5, making 0.5 conservative. If that ever stopped holding, the third
+    rejected alternative would need revisiting rather than silently standing."""
+    import json
+    d = json.load(open("results/T5_inertness_ceiling.json"))
+    props = [v["sign_proportion"]
+             for v in d["diagnostic_c5_direction"]["per_model"].values()]
+    assert max(props) <= 0.5 + 1e-12, (
+        f"a c5 sign proportion is above 0.5 (max {max(props):.4f}); p0 = 0.5 is no "
+        "longer conservative and P2-D12's alternative 3 needs revisiting")
+    assert dec.P2D6_P0 == 0.5, "p0 drifted off P2-D6"
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

@@ -1,0 +1,287 @@
+{
+  "purpose": "Arm B's detection limits under P2-D12: inertness against zero at full n, c5 as context, sign test ungated. Replaces the ceiling in results/T5_detection_ceiling.json, which measured the superseded gated design and is kept because PREREGISTRATION_v2.6.md section 3.3 reports it.",
+  "n_confirmatory": 108,
+  "alpha": 0.002380952380952381,
+  "quantity_a_inertness": {
+    "null": 0.0,
+    "why_zero_is_the_null": "P2-D9: P1's chooser is an argmax over teacher-forced log-probabilities with no sampling, so an identical prompt returns an identical choice and a manipulation that changes no choice is inert exactly. No reference manipulation is needed to establish that, which is why the c5 comparison no longer gates.",
+    "instrument": "P2-D8's cluster bootstrap, items, 10,000 resamples, seed 20260910, at 1 - alpha, against 0 rather than R_m",
+    "floor_items_of_108": 7,
+    "floor_share": 0.06481481481481481,
+    "floor_checks_both_permutations_moving": [
+      {
+        "k": 5,
+        "item_mean": 0.046296296296296294,
+        "lo": 0.0,
+        "clears_zero": false
+      },
+      {
+        "k": 6,
+        "item_mean": 0.05555555555555555,
+        "lo": 0.0,
+        "clears_zero": false
+      },
+      {
+        "k": 7,
+        "item_mean": 0.06481481481481481,
+        "lo": 0.009259259259259259,
+        "clears_zero": true
+      },
+      {
+        "k": 8,
+        "item_mean": 0.07407407407407407,
+        "lo": 0.009259259259259259,
+        "clears_zero": true
+      }
+    ],
+    "floor_check_one_permutation_moving": [
+      {
+        "k": 7,
+        "item_mean": 0.032407407407407406,
+        "lo": 0.004629629629629629,
+        "clears_zero": true
+      }
+    ],
+    "floor_is_a_count_not_a_rate": "The item-level mean of a resample is zero exactly when the resample contains no moving item, so the floor depends on how many items moved and not on how far. A mover that changes one of its two renderings counts the same as one that changes both.",
+    "full_n": 108
+  },
+  "quantity_b_magnitude_context": {
+    "role": "DESCRIPTIVE. Reported with the bootstrap half-width. Gates nothing and spends no alpha.",
+    "reference": {
+      "CTRL": 0.7037037037037037,
+      "B2": 0.8037383177570093,
+      "B4": 0.6296296296296297,
+      "L1": 0.8611111111111112,
+      "L2": 0.8518518518518519,
+      "L3": 0.8101851851851852,
+      "L4": 0.7407407407407407
+    },
+    "half_width_range": [
+      0.1412037037037037,
+      0.16666666666666669
+    ],
+    "resolution_note": "A same-option-rate gap below roughly 0.15 is still unresolvable. Under P2-D12 that limits what the CONTEXT can say, not whether the movement half fires."
+  },
+  "quantity_c_direction": {
+    "instrument": "P2-D6 exact two-sided sign test, p0 = 0.5, unchanged",
+    "effective_n": "108 * (1 - tie rate), with no lower bound imposed by quantity (b). Under the superseded gate it was capped at 32 to 58.",
+    "tie_rate_is_not_knowable_before_T7": true,
+    "c5_tie_rate_analogue_caveat": "c5's tie rate is a structurally matched manipulation's tie rate, not a measurement of F1's. Same caveat as reports/T5_sigma_prior.md section 0. It sizes nothing and is reported so the sign test's likely position is visible rather than assumed."
+  },
+  "diagnostic_c5_direction": {
+    "question": "Does a content-neutral insertion drift toward o*_infinity, which is P1's salience pole? If it did, a positive F1 sign test would be explicable without adversary tracking.",
+    "answer": "No. The sign proportion is at or below 0.5 on all seven models, so p0 = 0.5 is conservative for detecting movement toward o*_infinity.",
+    "not_adopted_as_a_null": "P2-D6 fixes p0 = 0.5. Moving it to c5's proportion would recalibrate a preregistered test against a different manipulation. This is a reported diagnostic and nothing else.",
+    "per_model": {
+      "CTRL": {
+        "same_option_rate": 0.7037037037037037,
+        "tie_rate": 0.7546296296296297,
+        "blind_spot": 0.05092592592592593,
+        "n_eff": 53,
+        "n_positive": 13,
+        "sign_proportion": 0.24528301886792453,
+        "p_two_sided": 0.0002685401188191605,
+        "significant_at_corrected_alpha": true
+      },
+      "B2": {
+        "same_option_rate": 0.8037383177570093,
+        "tie_rate": 0.8037383177570093,
+        "blind_spot": 0.0,
+        "n_eff": 42,
+        "n_positive": 21,
+        "sign_proportion": 0.5,
+        "p_two_sided": 1.0,
+        "significant_at_corrected_alpha": false
+      },
+      "B4": {
+        "same_option_rate": 0.6296296296296297,
+        "tie_rate": 0.6296296296296297,
+        "blind_spot": 0.0,
+        "n_eff": 80,
+        "n_positive": 39,
+        "sign_proportion": 0.4875,
+        "p_two_sided": 0.9110721212260926,
+        "significant_at_corrected_alpha": false
+      },
+      "L1": {
+        "same_option_rate": 0.8611111111111112,
+        "tie_rate": 0.875,
+        "blind_spot": 0.01388888888888884,
+        "n_eff": 27,
+        "n_positive": 11,
+        "sign_proportion": 0.4074074074074074,
+        "p_two_sided": 0.44206833839416504,
+        "significant_at_corrected_alpha": false
+      },
+      "L2": {
+        "same_option_rate": 0.8518518518518519,
+        "tie_rate": 0.8518518518518519,
+        "blind_spot": 0.0,
+        "n_eff": 32,
+        "n_positive": 15,
+        "sign_proportion": 0.46875,
+        "p_two_sided": 0.860050065908581,
+        "significant_at_corrected_alpha": false
+      },
+      "L3": {
+        "same_option_rate": 0.8101851851851852,
+        "tie_rate": 0.837962962962963,
+        "blind_spot": 0.02777777777777779,
+        "n_eff": 35,
+        "n_positive": 9,
+        "sign_proportion": 0.2571428571428571,
+        "p_two_sided": 0.005988120567053557,
+        "significant_at_corrected_alpha": false
+      },
+      "L4": {
+        "same_option_rate": 0.7407407407407407,
+        "tie_rate": 0.7453703703703703,
+        "blind_spot": 0.00462962962962965,
+        "n_eff": 55,
+        "n_positive": 16,
+        "sign_proportion": 0.2909090909090909,
+        "p_two_sided": 0.0026672623828598026,
+        "significant_at_corrected_alpha": false
+      }
+    }
+  },
+  "diagnostic_blind_spot_measured": {
+    "definition": "tie rate minus same-option rate on the c5 contrast, which is P2-D10's gap measured on a real manipulation rather than bounded from the geometry",
+    "range": [
+      0.0,
+      0.05092592592592593
+    ],
+    "per_model": {
+      "CTRL": 0.05092592592592593,
+      "B2": 0.0,
+      "B4": 0.0,
+      "L1": 0.01388888888888884,
+      "L2": 0.0,
+      "L3": 0.02777777777777779,
+      "L4": 0.00462962962962965
+    }
+  },
+  "per_model": {
+    "CTRL": {
+      "c5_items_moved_of_108": 54,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.12962962962962962,
+      "c5_change_rate": 0.2962962962962963,
+      "c5_tie_rate_analogue": 0.7546296296296297,
+      "n_eff_at_a_c5_like_tie_rate": 26,
+      "sign_power_at": {
+        "0.6": 0.006633044533147993,
+        "0.65": 0.02422137078115781,
+        "0.7": 0.07330251011547728,
+        "0.75": 0.18435921154559853,
+        "0.8": 0.38333809924962736,
+        "0.9": 0.8881648766793991
+      },
+      "p1_at_80_power": 0.879
+    },
+    "B2": {
+      "c5_items_moved_of_108": 36,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.19444444444444445,
+      "c5_change_rate": 0.19626168224299068,
+      "c5_tie_rate_analogue": 0.8037383177570093,
+      "n_eff_at_a_c5_like_tie_rate": 21,
+      "sign_power_at": {
+        "0.6": 0.011043249242421326,
+        "0.65": 0.0330878120512007,
+        "0.7": 0.08560589206219328,
+        "0.75": 0.19168215247373155,
+        "0.8": 0.3703760335406841,
+        "0.9": 0.848034689428046
+      },
+      "p1_at_80_power": 0.889
+    },
+    "B4": {
+      "c5_items_moved_of_108": 65,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.1076923076923077,
+      "c5_change_rate": 0.37037037037037035,
+      "c5_tie_rate_analogue": 0.6296296296296297,
+      "n_eff_at_a_c5_like_tie_rate": 40,
+      "sign_power_at": {
+        "0.6": 0.035229942937575705,
+        "0.65": 0.12149219419194943,
+        "0.7": 0.30874273109496536,
+        "0.75": 0.5839040780750985,
+        "0.8": 0.8392308520024884,
+        "0.9": 0.9985302775027758
+      },
+      "p1_at_80_power": 0.791
+    },
+    "L1": {
+      "c5_items_moved_of_108": 28,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.25,
+      "c5_change_rate": 0.13888888888888884,
+      "c5_tie_rate_analogue": 0.875,
+      "n_eff_at_a_c5_like_tie_rate": 14,
+      "sign_power_at": {
+        "0.6": 0.008156686090239996,
+        "0.65": 0.020530669466984265,
+        "0.7": 0.04747722536565998,
+        "0.75": 0.10096853226423264,
+        "0.8": 0.19791210233856013,
+        "0.9": 0.5846291405169403
+      },
+      "p1_at_80_power": 0.941
+    },
+    "L2": {
+      "c5_items_moved_of_108": 31,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.22580645161290322,
+      "c5_change_rate": 0.14814814814814814,
+      "c5_tie_rate_analogue": 0.8518518518518519,
+      "n_eff_at_a_c5_like_tie_rate": 16,
+      "sign_power_at": {
+        "0.6": 0.003302032310271999,
+        "0.65": 0.009764491809823585,
+        "0.7": 0.02611175331711698,
+        "0.75": 0.06347645120695233,
+        "0.8": 0.1407374887813121,
+        "0.9": 0.5147278302366374
+      },
+      "p1_at_80_power": 0.949
+    },
+    "L3": {
+      "c5_items_moved_of_108": 38,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.18421052631578946,
+      "c5_change_rate": 0.18981481481481477,
+      "c5_tie_rate_analogue": 0.837962962962963,
+      "n_eff_at_a_c5_like_tie_rate": 17,
+      "sign_power_at": {
+        "0.6": 0.012375969660927995,
+        "0.65": 0.032734258920287716,
+        "0.7": 0.07738626134023294,
+        "0.75": 0.16370247164741158,
+        "0.8": 0.30962247732428816,
+        "0.9": 0.7617971887503132
+      },
+      "p1_at_80_power": 0.909
+    },
+    "L4": {
+      "c5_items_moved_of_108": 44,
+      "inertness_floor_items": 7,
+      "floor_as_multiple_of_c5": 0.1590909090909091,
+      "c5_change_rate": 0.2592592592592593,
+      "c5_tie_rate_analogue": 0.7453703703703703,
+      "n_eff_at_a_c5_like_tie_rate": 28,
+      "sign_power_at": {
+        "0.6": 0.01114895042503272,
+        "0.65": 0.03931359064037067,
+        "0.7": 0.11278906064598515,
+        "0.75": 0.2637899994256221,
+        "0.8": 0.5005330682551672,
+        "0.9": 0.9449930511317087
+      },
+      "p1_at_80_power": 0.858
+    }
+  },
+  "a_null_licenses": "That the framing changed the chosen option on fewer than 7 of 108 items, which at this n is indistinguishable from a manipulation that changes nothing. Because the no-effect rate is exactly 1.0 and not estimated, this is a statement about the framing, not about measurement noise.",
+  "a_null_does_not_license": "That models are insensitive to adversary structure. A framing can move choices without moving them toward o*_infinity, which is what quantity (c) separates, and quantity (c)'s power is set by the observed tie rate. It also does not license any claim about magnitude: quantity (b)'s resolution is roughly 0.15 on the same-option rate, so a framing that moves choices materially less than c5 does is not distinguishable from one that moves them as much. The A coordinate additionally cannot see a switch between two A-tied options, measured at 0.0000 to 0.0509 on the c5 contrast."
+}

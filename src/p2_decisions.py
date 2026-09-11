@@ -299,6 +299,55 @@ def bind_armb_rates(primary_rate, sign_denominator, c5_is_active):
                                "docs/P2/DECISIONS.md")) from None
 
 
+
+# ------------------------- P2-D12, three quantities, none gating another
+P2D12_TEXT = (
+    "Arm B reports three quantities and none of them gates another. (a) INERTNESS: the\n"
+    "same-option change rate against zero, per model, on the full confirmatory `n`, with\n"
+    "P2-D8's cluster bootstrap. Zero is the exact null, because Paper 1's scorer is\n"
+    "deterministic (P2-D9), so this establishes whether the framing moved anything at all,\n"
+    "which is the question the `c5` reference was introduced for. (b) MAGNITUDE CONTEXT:\n"
+    "the same-option rate against `R_m`, with the bootstrap half-width stated. Reported and\n"
+    "descriptive; it gates nothing and spends no `alpha`. (c) DIRECTION: the exact\n"
+    "two-sided sign test on items with `ΔA != 0` against `p0 = 0.5`, unchanged. H-B's\n"
+    "no-movement half resolves on (a) with (b) as context, never on (b). The gate in\n"
+    "`PREREGISTRATION_v2.5.md` section 2.3 and `v2.6` section 1.4 is superseded, and with\n"
+    "it P2-D11's ceiling."
+)
+P2D12_REJECTED = ("Keep the `c5` comparison as the gate.",
+                  "Gate on inertness and drop the `c5` comparison entirely.",
+                  "Adopt `c5`'s own `ΔA` sign proportion as `p0`.")
+P2D12_QUANTITIES = ("inertness", "magnitude_context", "direction")
+P2D12_C5_GATES = False           # (b) is descriptive; this is the whole decision
+P2D12_INERTNESS_NULL = 0.0       # exact, per P2-D9's deterministic scorer
+# Emitted by `src/inertness_ceiling.py`. A count of moving items, not a rate: the
+# bootstrap's lower bound is zero exactly when a resample can contain no mover.
+P2D12_INERTNESS_FLOOR_ITEMS = 7
+
+
+def bind_armb_quantities(inertness_null, c5_gates, sign_p0, quantities):
+    """Assert an Arm B run against P2-D12. Call at import.
+
+    The check that matters is `c5_gates`. A script that resolves H-B's
+    no-movement half on the reference comparison rather than on inertness is the
+    superseded design, and it must fail here rather than produce a table that
+    looks like the current one.
+    """
+    checks = (("P2-D12 inertness null", float(inertness_null),
+               P2D12_INERTNESS_NULL),
+              ("P2-D12 c5 comparison gates", bool(c5_gates), P2D12_C5_GATES),
+              ("P2-D6 sign-test null, unchanged by P2-D12", float(sign_p0),
+               P2D6_P0),
+              ("P2-D12 reported quantities", tuple(quantities), P2D12_QUANTITIES))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -366,7 +415,7 @@ def check_log(path=LOG):
                          ("P2-D5", P2D5_TEXT), ("P2-D6", P2D6_TEXT),
                          ("P2-D7", P2D7_TEXT), ("P2-D8", P2D8_TEXT),
                          ("P2-D9", P2D9_TEXT), ("P2-D10", P2D10_TEXT),
-                         ("P2-D11", P2D11_TEXT)):
+                         ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -378,7 +427,8 @@ def check_log(path=LOG):
                             ("P2-D5", P2D5_REJECTED), ("P2-D6", P2D6_REJECTED),
                             ("P2-D7", P2D7_REJECTED), ("P2-D8", P2D8_REJECTED),
                             ("P2-D9", P2D9_REJECTED), ("P2-D10", P2D10_REJECTED),
-                            ("P2-D11", P2D11_REJECTED)):
+                            ("P2-D11", P2D11_REJECTED),
+                            ("P2-D12", P2D12_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -412,7 +462,10 @@ def main():
           f"{P2D9_NO_EFFECT_SAME_OPTION_RATE}")
     print(f"primary rate    P2-D10: {P2D10_PRIMARY_RATE!r}; sign test denominator "
           f"{P2D10_SIGN_TEST_DENOMINATOR!r}")
-    print(f"detection floor P2-D11: framing must move "
+    print(f"quantities      P2-D12: {P2D12_QUANTITIES}; c5 gates="
+          f"{P2D12_C5_GATES}; inertness null={P2D12_INERTNESS_NULL}, floor "
+          f"{P2D12_INERTNESS_FLOOR_ITEMS} of {P2D4_N_CONFIRMATORY} items")
+    print(f"SUPERSEDED      P2-D11: framing must move "
           f"{P2D11_CEILING['change_rate_multiple_of_c5'][0]:.2f} to "
           f"{P2D11_CEILING['change_rate_multiple_of_c5'][1]:.2f} x c5; n_eff then "
           f"<= {P2D11_CEILING['n_eff_max'][0]}-{P2D11_CEILING['n_eff_max'][1]}, "
@@ -423,7 +476,7 @@ def main():
             (P2D1_REJECTED, P2D2_REJECTED, P2D3_REJECTED, P2D4_REJECTED,
              P2D5_REJECTED, P2D6_REJECTED, P2D7_REJECTED,
              P2D8_REJECTED, P2D9_REJECTED, P2D10_REJECTED,
-             P2D11_REJECTED), start=1))
+             P2D11_REJECTED, P2D12_REJECTED), start=1))
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0
