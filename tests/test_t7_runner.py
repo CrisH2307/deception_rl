@@ -231,6 +231,38 @@ def test_required_inputs_do_block():
         (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT) = saved
 
 
+def test_locate_handles_one_dataset_per_file():
+    """Uploading each file as its own flat dataset is a normal thing to do, and
+    it leaves no results/ or notebooks/ to rebuild a path from. The located
+    paths must be used directly rather than re-derived from a root."""
+    import shutil
+    root = tempfile.mkdtemp()
+    def ds(name):
+        d = os.path.join(root, name)
+        os.makedirs(d, exist_ok=True)
+        return d
+    shutil.copy(os.path.join(REPO, "results/T6_gate_record.json"), ds("gate"))
+    shutil.copy(K.STIMULI, ds("stim"))
+    shutil.copy(MANIFEST, ds("man"))
+    shutil.copy(os.path.join(P1, "data/reference/tiles.json"), ds("tiles"))
+    shutil.copy(os.path.join(P1, "data/processed/items_final.parquet"), ds("items"))
+    for f in ("score_llm.py", "coords.py"):
+        shutil.copy(os.path.join(P1, "src", f), ds("p1src"))
+    saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT,
+             K.GATE_RECORD, K.MANIFEST_PATH)
+    try:
+        _, missing = K.locate(root, verbose=False)
+        assert missing == [], missing
+        assert K.GATE_RECORD and os.path.exists(K.GATE_RECORD)
+        assert K.MANIFEST_PATH and os.path.exists(K.MANIFEST_PATH)
+        # the real check: verify_inputs must not rebuild a results/ path
+        ver = K.verify_inputs()
+        assert all(v["matches"] for v in ver.values()), ver
+    finally:
+        (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT,
+         K.GATE_RECORD, K.MANIFEST_PATH) = saved
+
+
 def test_notebook_stage_2_defaults_off():
     """A Run All must stop at the stage 1 verdict."""
     import re

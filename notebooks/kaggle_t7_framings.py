@@ -84,6 +84,12 @@ STIMULI = os.environ.get("T7_STIMULI", "/kaggle/input/deception-p2/data/processe
 TILES_JSON = os.environ.get("T7_TILES", "/kaggle/input/deception-p1/data/reference/tiles.json")
 ITEMS = os.environ.get("T7_ITEMS", "/kaggle/input/deception-p1/data/processed/items_final.parquet")
 P1_CHOICES = os.environ.get("T7_P1_CHOICES", "")   # optional: for the F0 check here
+# Set by `locate()`. Explicit paths beat roots, because a per-file dataset upload
+# has no folder structure to rebuild a path from.
+MANIFEST_PATH = None
+GATE_RECORD = None
+P1_ENV_JSONS = []
+P1_CHOICES_PATHS = []
 OUTDIR = "/kaggle/working" if os.path.isdir("/kaggle/working") else "./outputs"
 CKPT = os.path.join(OUTDIR, "ckpt")
 
@@ -214,6 +220,7 @@ def locate(root="/kaggle/input", verbose=True):
     stopping at the first absent file.
     """
     global STIMULI, TILES_JSON, ITEMS, P1_SRC, P2_ROOT, P1_NOTEBOOKS
+    global MANIFEST_PATH, GATE_RECORD, P1_ENV_JSONS, P1_CHOICES_PATHS
     wanted = {
         "t7_stimuli.parquet": None, "t7_stimuli_manifest.json": None,
         "T6_gate_record.json": None, "tiles.json": None,
@@ -240,11 +247,19 @@ def locate(root="/kaggle/input", verbose=True):
         if P1_SRC not in sys.path:
             sys.path.insert(0, P1_SRC)
         load_p1(P1_SRC)
+    if wanted["t7_stimuli_manifest.json"]:
+        MANIFEST_PATH = wanted["t7_stimuli_manifest.json"]
     if wanted["T6_gate_record.json"]:
-        # P2_ROOT is used as <root>/results/T6_gate_record.json
-        P2_ROOT = os.path.dirname(os.path.dirname(wanted["T6_gate_record.json"]))
+        GATE_RECORD = wanted["T6_gate_record.json"]
+        P2_ROOT = os.path.dirname(os.path.dirname(GATE_RECORD))
+    # Every file may have been uploaded as its own flat dataset, in which case
+    # there is no results/ or notebooks/ to derive anything from. The located
+    # paths are the source; the roots above are kept only for reporting.
+    P1_ENV_JSONS = list(env_jsons)
+    P1_CHOICES_PATHS = [wanted[k] for k in
+                        ("choices_llm.parquet", "choices_llm_t26.parquet")
+                        if wanted[k]]
     if env_jsons:
-        # P1_NOTEBOOKS is used as <root>/results_N/env.json
         P1_NOTEBOOKS = os.path.dirname(os.path.dirname(env_jsons[0]))
 
     missing = [k for k, v in wanted.items() if v is None and k in REQUIRED]
@@ -345,12 +360,15 @@ def capture_env(path=None):
 
     # cross-check the pins against Paper 1's own record
     checked, problems = {}, []
-    for rel, key in (("results_2/env.json", "qwen_revisions"),
-                     ("results_3/env.json", "models")):
-        f = os.path.join(P1_NOTEBOOKS, rel)
+    candidates = P1_ENV_JSONS or [
+        os.path.join(P1_NOTEBOOKS, r) for r in
+        ("results_2/env.json", "results_3/env.json")]
+    for f in candidates:
         if not os.path.exists(f):
             continue
-        for rung, rec in json.load(open(f)).get(key, {}).items():
+        blob = json.load(open(f))
+        recs = {**blob.get("qwen_revisions", {}), **blob.get("models", {})}
+        for rung, rec in recs.items():
             checked[rung] = rec["revision"]
             want = P1_RECORDED_REVISIONS.get(rung)
             if want is None:
@@ -393,8 +411,12 @@ def verify_inputs(stimuli=None, items=None, gate_record=None, manifest=None):
     """
     stimuli = stimuli or STIMULI
     items = items or ITEMS
-    gate_record = gate_record or os.path.join(P2_ROOT, "results/T6_gate_record.json")
-    manifest = manifest or os.path.splitext(stimuli)[0] + "_manifest.json"
+    # Prefer what `locate` actually found. Re-deriving these from a root assumes
+    # a folder layout, and a per-file dataset upload has none.
+    gate_record = gate_record or GATE_RECORD or os.path.join(
+        P2_ROOT, "results/T6_gate_record.json")
+    manifest = manifest or MANIFEST_PATH or (
+        os.path.splitext(stimuli)[0] + "_manifest.json")
     out, problems = {}, []
     for label, path, want in (
             ("items_final.parquet", items,
