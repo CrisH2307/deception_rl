@@ -627,6 +627,35 @@ def simulate_kill_and_resume(S, ckpt=None):
                 os.remove(f)
 
 
+def verify_menus(S, TILES):
+    """Every rendering's stored `option_order` must reproduce its printed menu.
+
+    Paper 1's `score_llm.self_check(rendered=...)` does this, but it opens with
+    `assert len(V) == 4000`, which is Paper 1's own stimulus count: 1,000 items
+    x 2 permutations x 2 variants. A Paper 2 rendering is
+    (item x permutation x framing), so the set is 6,000 and that assert fires.
+
+    P1's harness is frozen and is not edited (`CLAUDE.md`). The count assert is
+    the only part of that block which cannot apply here, so the check it guards
+    is reimplemented over the Paper 2 set and `self_check` is called without
+    `rendered`. Nothing is lost: `score_rows` makes the identical assertion on
+    every row it scores, so this is the same guarantee moved earlier, where it
+    costs no GPU time to fail.
+    """
+    bad = []
+    for r in S.itertuples():
+        disp = [TILES[r.tile]["options"][i] for i in r.option_order]
+        if "\n".join(f"  {o}" for o in disp) not in r.text:
+            bad.append((int(r.item_id), r.framing, int(r.permutation_id)))
+    if bad:
+        raise AssertionError(
+            f"{len(bad)} rendering(s) whose option_order does not reproduce the "
+            f"printed menu, first few: {bad[:5]}")
+    print(f"  menu mapping verified on all {len(S):,} V renderings "
+          f"({S['framing'].nunique()} framings)")
+    return len(S)
+
+
 def records(rung, rev, framing, rows, scored, ROWS):
     load_p1()
     out = []
@@ -662,7 +691,11 @@ def run_rung(rung, S, TILES, ROWS, max_batch=BATCH_DEFAULT,
     ENV.setdefault("tokenizer_class", {})[rung] = type(tok).__name__
 
     native = rung in NATIVE_THINKING
-    score_llm.self_check(tok, TILES, rendered=S, assert_thinking=native,
+    # `rendered` is deliberately not passed: P1's self_check asserts its own
+    # 4,000-rendering count there. `verify_menus` does that block's real work
+    # over the 6,000-row Paper 2 set. See verify_menus for why P1 is not edited.
+    verify_menus(S, TILES)
+    score_llm.self_check(tok, TILES, assert_thinking=native,
                          exempt_reason=None if native else
                          f"{family}: no native thinking mode (D115)")
 

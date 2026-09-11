@@ -323,6 +323,29 @@ def test_preflight_accepts_uncached_but_reachable_models():
     assert r["revision"] == K.MODELS["L1"][1], "preflight checked the wrong pin"
 
 
+def test_verify_menus_replaces_p1s_count_bound_check():
+    """P1's self_check(rendered=...) opens with `assert len(V) == 4000`, its own
+    stimulus count. A P2 rendering is (item x permutation x framing), so the set
+    is 6,000 and that assert fires on a correct run. P1 is frozen and not edited;
+    the check it guards is done here instead, over the whole P2 set."""
+    S = _stimuli()
+    TILES = {t["id"]: t
+             for t in json.load(open(os.path.join(P1, "data/reference/tiles.json")))["tiles"]}
+    assert K.verify_menus(S, TILES) == len(S) == 6000
+    bad = S.copy()
+    bad.loc[bad.index[0], "text"] = "menu removed"
+    try:
+        K.verify_menus(bad, TILES)
+    except AssertionError as e:
+        assert "option_order" in str(e)
+    else:
+        raise AssertionError("a corrupted rendering passed verify_menus")
+    # and the runner must not hand `rendered` to P1's self_check any more
+    src = open(os.path.join(REPO, "notebooks/kaggle_t7_framings.py")).read()
+    assert "self_check(tok, TILES, assert_thinking" in src
+    assert "rendered=S" not in src, "P1's count assert would fire again"
+
+
 def test_notebook_stage_2_defaults_off():
     """A Run All must stop at the stage 1 verdict."""
     import re
