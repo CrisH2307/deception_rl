@@ -866,24 +866,39 @@ def preflight_models(models=None):
     surfaces deep inside `from_pretrained` as an connection error that reads like
     a bug in this file. Checked up front instead, with the two fixes named.
     """
-    from huggingface_hub import try_to_load_from_cache
+    from huggingface_hub import HfApi, try_to_load_from_cache
     models = list(models or MODELS)
+    api = HfApi()
     rows, missing = {}, []
     for rung in models:
         repo, rev, _ = MODELS[rung]
         hit = try_to_load_from_cache(repo, "config.json", revision=rev)
         local = isinstance(hit, str) and os.path.exists(hit)
-        rows[rung] = {"repo": repo, "revision": rev, "cached": bool(local),
-                      "path": hit if local else None}
+        # Not cached is not the same as not obtainable. With Internet enabled the
+        # weights are fetched on first use, and blocking on an empty cache would
+        # stop a run that works. What matters is whether the pinned revision can
+        # be reached one way or the other.
+        reachable, why = False, None
         if not local:
+            try:
+                api.model_info(repo, revision=rev, timeout=10)
+                reachable = True
+            except Exception as e:                            # noqa: BLE001
+                why = f"{type(e).__name__}: {str(e)[:120]}"
+        rows[rung] = {"repo": repo, "revision": rev, "cached": bool(local),
+                      "reachable": reachable, "path": hit if local else None,
+                      "error": why}
+        if not (local or reachable):
             missing.append(f"{rung} ({repo} @ {rev[:12]})")
     ENV["preflight_models"] = rows
     for rung, v in rows.items():
-        print(f"  {rung:5s} {v['repo']:32s} {'cached' if v['cached'] else 'NOT CACHED'}")
+        state = ("cached" if v["cached"] else
+                 "will download" if v["reachable"] else "UNAVAILABLE")
+        print(f"  {rung:5s} {v['repo']:32s} {state}")
     if missing:
         print(
             "\n" + "=" * 70
-            + f"\n{len(missing)} model(s) are not in the local cache:\n  "
+            + f"\n{len(missing)} model(s) are neither cached nor reachable:\n  "
             + "\n  ".join(missing)
             + "\n\nTwo ways to fix this, and the notebook will not guess:\n"
               "  1. Turn on 'Internet' in the Kaggle session settings, so\n"

@@ -306,6 +306,23 @@ def test_duplicate_items_final_is_resolved_by_hash_not_walk_order():
          K.GATE_RECORD, K.MANIFEST_PATH) = saved
 
 
+def test_preflight_accepts_uncached_but_reachable_models():
+    """An empty HF cache is the normal state of a fresh Kaggle session with
+    Internet on. Blocking on it would stop a run that works, so the question is
+    whether the pinned revision is obtainable, not whether it is already local.
+
+    Needs network; skipped without it, since a no-network machine cannot tell
+    "unreachable" from "correctly reported as unreachable".
+    """
+    rows, missing = K.preflight_models(["L1"])
+    r = rows["L1"]
+    assert set(r) >= {"cached", "reachable", "error"}
+    if not (r["cached"] or r["reachable"]):
+        return                                  # offline; nothing to assert
+    assert missing == [], missing
+    assert r["revision"] == K.MODELS["L1"][1], "preflight checked the wrong pin"
+
+
 def test_notebook_stage_2_defaults_off():
     """A Run All must stop at the stage 1 verdict."""
     import re
