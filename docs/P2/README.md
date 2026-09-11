@@ -8,6 +8,7 @@
 | `prompt-plan.md` | Full plan, dependency graph, locked decisions, all ten task briefs |
 | `tasks/T0.md` ... `tasks/T9.md` | Individual task briefs, one per session |
 | `DECISIONS.md` | Author decisions not derivable from the spec or the preregistration, with the alternatives not chosen. Bound at import by `src/p2_decisions.py` |
+| `KAGGLE_T7.md` | How to upload, run and resume T7's scoring on Kaggle, and what to bring back |
 
 The spec at `../spec/adversary-game-v1.md` is produced by T0 and does not exist yet.
 
