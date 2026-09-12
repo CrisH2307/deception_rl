@@ -39,6 +39,22 @@ def _stimuli():
     return pd.read_parquet(K.STIMULI)
 
 
+POOL_SRC = os.path.join(P1, "data/processed/concept_pool.csv")
+RATINGS_SRC = os.path.join(P1, "data/raw/jum2f/02_object-level/_property-ratings.tsv")
+
+
+def _add_coord_inputs(dirpath):
+    """concept_pool.csv and _property-ratings.tsv, which coords.build needs.
+
+    Required since build_rows replaced the read_parquet that raised KeyError on
+    every row, so every mount fixture has to carry them.
+    """
+    import shutil
+    os.makedirs(dirpath, exist_ok=True)
+    for src in (POOL_SRC, RATINGS_SRC):
+        shutil.copy(src, dirpath)
+
+
 def test_pins_agree_with_paper_1s_own_record():
     """The revisions are Paper 1's. Cross-check them against P1's env.json.
 
@@ -208,6 +224,7 @@ def test_optional_inputs_do_not_block_the_run():
     shutil.copy(os.path.join(P1, "data/processed/items_final.parquet"), p2)
     for f in ("score_llm.py", "coords.py"):
         shutil.copy(os.path.join(P1, "src", f), p1s)
+    _add_coord_inputs(os.path.join(root, "coordinputs"))
     saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT)
     try:
         found, missing = K.locate(root, verbose=False)
@@ -248,6 +265,7 @@ def test_locate_handles_one_dataset_per_file():
     shutil.copy(os.path.join(P1, "data/processed/items_final.parquet"), ds("items"))
     for f in ("score_llm.py", "coords.py"):
         shutil.copy(os.path.join(P1, "src", f), ds("p1src"))
+    _add_coord_inputs(ds("coordinputs"))
     saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT,
              K.GATE_RECORD, K.MANIFEST_PATH)
     try:
@@ -288,6 +306,7 @@ def test_duplicate_items_final_is_resolved_by_hash_not_walk_order():
         os.makedirs(d, exist_ok=True)
         shutil.copy(src, d)
     shutil.copy(os.path.join(P1, "src/coords.py"), os.path.join(root, "p1src"))
+    _add_coord_inputs(os.path.join(root, "coordinputs"))
     saved = (K.STIMULI, K.TILES_JSON, K.ITEMS, K.P1_SRC, K.P2_ROOT,
              K.GATE_RECORD, K.MANIFEST_PATH)
     try:
@@ -344,6 +363,44 @@ def test_verify_menus_replaces_p1s_count_bound_check():
     src = open(os.path.join(REPO, "notebooks/kaggle_t7_framings.py")).read()
     assert "self_check(tok, TILES, assert_thinking" in src
     assert "rendered=S" not in src, "P1's count assert would fire again"
+
+
+def test_rows_must_be_the_coordinate_dict_not_the_item_frame():
+    """coords.coord does rows[int(iid)], so `rows` is a dict keyed by item id.
+    Passing the items_final DataFrame makes that an integer column lookup and
+    every scored row raises KeyError, which is silent if the caller swallows
+    exceptions per tile."""
+    import coords
+    tiles_json = os.path.join(P1, "data/reference/tiles.json")
+    TILES = {t["id"]: t for t in json.load(open(tiles_json))["tiles"]}
+    saved = (K.ITEMS, K.POOL_CSV, K.RATINGS_TSV)
+    try:
+        K.ITEMS = os.path.join(P1, "data/processed/items_final.parquet")
+        K.POOL_CSV = os.path.join(P1, "data/processed/concept_pool.csv")
+        K.RATINGS_TSV = os.path.join(
+            P1, "data/raw/jum2f/02_object-level/_property-ratings.tsv")
+        rows = K.build_rows(TILES)
+        assert isinstance(rows, dict) and len(rows) == 1000, type(rows)
+        iid = next(iter(rows))
+        assert len(rows[iid]) == 4, rows[iid]
+        rec = coords.coord(rows, iid, (0,))
+        assert rec["n_tied"] == 1 and rec["chosen_option"] == 0, rec
+        # the wrong thing must fail loudly, so this stays a real distinction
+        try:
+            coords.coord(pd.read_parquet(K.ITEMS), iid, (0,))
+        except (KeyError, TypeError):
+            pass
+        else:
+            raise AssertionError("a DataFrame was accepted where a dict is required")
+    finally:
+        (K.ITEMS, K.POOL_CSV, K.RATINGS_TSV) = saved
+
+
+def test_pool_and_ratings_are_required_inputs():
+    """coords.build needs both, and its path defaults are relative to Paper 1's
+    repo root, so they must be located rather than assumed."""
+    for name in ("concept_pool.csv", "_property-ratings.tsv"):
+        assert name in K.REQUIRED, f"{name} is not required but build_rows needs it"
 
 
 def test_notebook_stage_2_defaults_off():

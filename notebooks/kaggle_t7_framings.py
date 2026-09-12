@@ -88,6 +88,8 @@ P1_CHOICES = os.environ.get("T7_P1_CHOICES", "")   # optional: for the F0 check 
 # has no folder structure to rebuild a path from.
 MANIFEST_PATH = None
 GATE_RECORD = None
+POOL_CSV = None
+RATINGS_TSV = None
 P1_ENV_JSONS = []
 P1_CHOICES_PATHS = []
 OUTDIR = "/kaggle/working" if os.path.isdir("/kaggle/working") else "./outputs"
@@ -188,7 +190,9 @@ P1_FLIP_NOTE = ("P1's batch-8-vs-batch-1 flip rates on manmade/moves/hold, "
 # Absent these, nothing downstream works.
 REQUIRED = ("t7_stimuli.parquet", "t7_stimuli_manifest.json",
             "T6_gate_record.json", "tiles.json", "items_final.parquet",
-            "score_llm.py", "coords.py")
+            "score_llm.py", "coords.py",
+            # coords.build needs these to rebuild the per-item coordinate table.
+            "concept_pool.csv", "_property-ratings.tsv")
 # Absent these, the run still scores. Only the stage 1 verdict and the pin
 # cross-check are affected, and both have a stated fallback.
 OPTIONAL_NOTE = {
@@ -221,11 +225,13 @@ def locate(root="/kaggle/input", verbose=True):
     """
     global STIMULI, TILES_JSON, ITEMS, P1_SRC, P2_ROOT, P1_NOTEBOOKS
     global MANIFEST_PATH, GATE_RECORD, P1_ENV_JSONS, P1_CHOICES_PATHS
+    global POOL_CSV, RATINGS_TSV
     wanted = {
         "t7_stimuli.parquet": None, "t7_stimuli_manifest.json": None,
         "T6_gate_record.json": None, "tiles.json": None,
         "items_final.parquet": None, "score_llm.py": None, "coords.py": None,
         "choices_llm.parquet": None, "choices_llm_t26.parquet": None,
+        "concept_pool.csv": None, "_property-ratings.tsv": None,
     }
     env_jsons = []
     cands = {k: [] for k in wanted}
@@ -283,6 +289,10 @@ def locate(root="/kaggle/input", verbose=True):
         if P1_SRC not in sys.path:
             sys.path.insert(0, P1_SRC)
         load_p1(P1_SRC)
+    if wanted["concept_pool.csv"]:
+        POOL_CSV = wanted["concept_pool.csv"]
+    if wanted["_property-ratings.tsv"]:
+        RATINGS_TSV = wanted["_property-ratings.tsv"]
     if wanted["t7_stimuli_manifest.json"]:
         MANIFEST_PATH = wanted["t7_stimuli_manifest.json"]
     if wanted["T6_gate_record.json"]:
@@ -338,6 +348,9 @@ def locate(root="/kaggle/input", verbose=True):
             "T6_gate_record.json": "deception-p2: results/",
             "tiles.json": "deception-p1: data/reference/",
             "items_final.parquet": "deception-p1: data/processed/",
+            "concept_pool.csv": "deception-p1: data/processed/",
+            "_property-ratings.tsv":
+                "deception-p1: data/raw/jum2f/02_object-level/",
             "score_llm.py": "deception-p1: src/",
             "coords.py": "deception-p1: src/",
         }
@@ -627,6 +640,32 @@ def simulate_kill_and_resume(S, ckpt=None):
                 os.remove(f)
 
 
+def build_rows(TILES):
+    """`{item_id: (fit_norm, post_norm, o_fit, o_bayes)}`, which `coord` indexes.
+
+    NOT `pd.read_parquet(items_final)`. `coords.coord` does `rows[int(iid)]`, so
+    `rows` is a dict keyed by item id; handing it a DataFrame makes that an
+    integer column lookup and every row raises KeyError. Paper 1's own notebook
+    builds it with `coords.self_check(TILES)`, which calls `build` and then
+    validates against `choices_baseline.parquet`.
+
+    `coords.build`'s path defaults are relative to Paper 1's repository root, so
+    they are passed explicitly from what `locate` found. `final` must be the
+    items file that matches T6's recorded hash, which is what `locate` binds.
+    """
+    load_p1()
+    import coords
+    if not (POOL_CSV and RATINGS_TSV):
+        raise AssertionError(
+            "concept_pool.csv and _property-ratings.tsv are needed to rebuild "
+            "the coordinate table; call locate() first. Both are in Paper 1's "
+            "kaggle_bundle under data/processed/ and "
+            "data/raw/jum2f/02_object-level/.")
+    rows = coords.build(TILES, final=ITEMS, pool=POOL_CSV, r2_path=RATINGS_TSV)
+    print(f"  coordinate table built for {len(rows):,} items")
+    return rows
+
+
 def verify_menus(S, TILES):
     """Every rendering's stored `option_order` must reproduce its printed menu.
 
@@ -730,12 +769,21 @@ def run_rung(rung, S, TILES, ROWS, max_batch=BATCH_DEFAULT,
                   "recorded and continuing to the next tile.", flush=True)
             continue
         except Exception as e:                                # noqa: BLE001
+            # OOM is a resource problem on one cell and the next tile may well
+            # fit, so it is recorded and skipped above. Anything else is a bug,
+            # and continuing past it scores nothing on every remaining tile while
+            # printing a tidy summary and exiting zero. That is the failure mode
+            # CLAUDE.md calls out: plausible-looking progress from an unmet
+            # precondition. Record it, then stop.
             ENV.setdefault("failures", []).append(
                 {"model": rung, "tile": tid, "error": type(e).__name__,
                  "max_batch": mb, "detail": str(e)[:300]})
-            print(f"  {tid}: {type(e).__name__}, recorded and continuing.",
-                  flush=True)
-            continue
+            json.dump(ENV, open(os.path.join(OUTDIR, "env_t7.json"), "w"),
+                      indent=2, default=str)
+            print(f"  {tid}: {type(e).__name__}. Recorded to env_t7.json and "
+                  "STOPPING: this is not a resource failure, so the remaining "
+                  "tiles would fail the same way.", flush=True)
+            raise
         d = pd.DataFrame(got)
         # Written the moment the tile finishes. Accumulating in memory and
         # writing at the end is what makes a killed session cost everything.
@@ -980,7 +1028,7 @@ def main(models=None, stage=None):
     assert_no_sampling()
     S = pd.read_parquet(STIMULI)
     TILES = {t["id"]: t for t in json.load(open(TILES_JSON))["tiles"]}
-    ROWS = pd.read_parquet(ITEMS)
+    ROWS = build_rows(TILES)
     models = list(models or MODELS)
     print(f"{len(S):,} renderings, {S['item_id'].nunique():,} items, "
           f"framings {sorted(S['framing'].unique())}")
