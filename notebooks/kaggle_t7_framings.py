@@ -871,10 +871,21 @@ def export(S, outdir=None, ckpt=None, models=None):
                  else f"INCOMPLETE, missing {v['missing_tiles']}"))
     print(f"\ntotal {len(ALL):,} of {want_per_model * len(models):,} expected")
     print(f"written: {out}\n         {os.path.join(outdir, 'env_t7.json')}")
-    if ENV.get("failures"):
-        print(f"\n{len(ENV['failures'])} failed (model, tile) cell(s):")
-        for f in ENV["failures"]:
+    # A failure recorded earlier in the kernel for a cell that has since been
+    # scored is history, not a live problem. Reporting the two identically makes
+    # a complete run look broken, which is how a real failure gets ignored.
+    done_now = set(scan["done"])
+    live = [f for f in ENV.get("failures", [])
+            if (f["model"], f["tile"]) not in done_now]
+    stale = len(ENV.get("failures", [])) - len(live)
+    if live:
+        print(f"\n{len(live)} UNRESOLVED failed (model, tile) cell(s):")
+        for f in live:
             print(f"  {f['model']:5s} {f['tile']:8s} {f['error']}")
+    if stale:
+        print(f"\n{stale} earlier failure(s) superseded: those cells have since "
+              "been scored and are complete. Kept in env_t7.json for the record.")
+    ENV["failures_unresolved"] = live
     return ALL
 
 
