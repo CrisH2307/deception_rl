@@ -1,0 +1,116 @@
+{
+  "captured_utc": "2026-09-12T03:34:25.162183+00:00",
+  "python": "3.12.13",
+  "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+  "torch": "2.10.0+cu128",
+  "numpy": "2.0.2",
+  "pandas": "2.3.3",
+  "cuda_available": true,
+  "cuda_version": "12.8",
+  "cudnn": 91002,
+  "device_count": 2,
+  "devices": [
+    {"index": 0, "name": "Tesla T4", "capability": "7.5", "total_MiB": 14911, "free_MiB": 14806},
+    {"index": 1, "name": "Tesla T4", "capability": "7.5", "total_MiB": 14911, "free_MiB": 14806}
+  ],
+  "dtype": "torch.float16",
+  "models": {
+    "L1": {"repo": "Qwen/Qwen3-0.6B", "revision": "c1899de289a04d12100db370d81485cdf75e47ca", "family": "qwen3"},
+    "L2": {"repo": "Qwen/Qwen3-1.7B", "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e", "family": "qwen3"},
+    "L3": {"repo": "Qwen/Qwen3-4B", "revision": "1cfa9a7208912126459214e8b04321603b3df60c", "family": "qwen3"},
+    "L4": {"repo": "Qwen/Qwen3-8B", "revision": "b968826d9c46dd6066d109eabc6255188de91218", "family": "qwen3"},
+    "B2": {"repo": "Qwen/Qwen3-1.7B-Base", "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1", "family": "qwen3-base"},
+    "B4": {"repo": "Qwen/Qwen3-8B-Base", "revision": "49e3418fbbbca6ecbdf9608b4d22e5a407081db4", "family": "qwen3-base"},
+    "CTRL": {"repo": "allenai/OLMo-2-1124-7B-Instruct", "revision": "470b1fba1ae01581f270116362ee4aa1b97f4c84", "family": "control"}
+  },
+  "estimate_hours": {"L1": 0.33, "L2": 0.95, "L3": 2.23, "L4": 4.46, "B2": 0.95, "B4": 4.46, "CTRL": 3.9},
+  "p1_flip_rates": {"L1": 0.01, "L2": 0.0, "L3": 0.003, "L4": 0.013, "B2": 0.007, "B4": 0.003, "CTRL": 0.0},
+  "p1_flip_note": "P1's batch-8-vs-batch-1 flip rates on manmade/moves/hold, pooled per model. Not the size tile, which P1 and T7 both score at batch 1. Context for T7's F0 count, not a threshold.",
+  "transformers": "5.0.0",
+  "tokenizers": "0.22.2",
+  "accelerate": "1.13.0",
+  "safetensors": "0.7.0",
+  "p1_revision_crosscheck": {
+    "p1_env_found": false,
+    "n_checked": 0,
+    "problems": [],
+    "note": "P1's env.json not mounted; pins verified against the module constant only"
+  },
+  "input_verification": {
+    "items_final.parquet": {
+      "path": "/kaggle/input/datasets/crishuynh2307/items-final-ec79b071/items_final.parquet",
+      "sha256": "ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289",
+      "expected": "ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289",
+      "matches": true
+    },
+    "t7_stimuli.parquet": {
+      "path": "/kaggle/input/datasets/crishuynh2307/paper2/data/processed/t7_stimuli.parquet",
+      "sha256": "f6dcdc61770eef935ceae97a19b95d94d4cc978c12f45d7d7aaabe150bd2fca0",
+      "expected": "f6dcdc61770eef935ceae97a19b95d94d4cc978c12f45d7d7aaabe150bd2fca0",
+      "matches": true
+    }
+  },
+  "no_sampling_check": {
+    "module": "/kaggle/input/datasets/crishuynh2307/deception/kaggle_bundle/src/score_llm.py",
+    "banned_tokens_found": [],
+    "pick_is_argmax": true
+  },
+  "preflight_models": {
+    "L1": {"repo": "Qwen/Qwen3-0.6B", "revision": "c1899de289a04d12100db370d81485cdf75e47ca", "cached": false, "reachable": true, "path": null, "error": null},
+    "L2": {"repo": "Qwen/Qwen3-1.7B", "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e", "cached": false, "reachable": true, "path": null, "error": null},
+    "L3": {"repo": "Qwen/Qwen3-4B", "revision": "1cfa9a7208912126459214e8b04321603b3df60c", "cached": false, "reachable": true, "path": null, "error": null},
+    "L4": {"repo": "Qwen/Qwen3-8B", "revision": "b968826d9c46dd6066d109eabc6255188de91218", "cached": false, "reachable": true, "path": null, "error": null},
+    "B2": {"repo": "Qwen/Qwen3-1.7B-Base", "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1", "cached": false, "reachable": true, "path": null, "error": null},
+    "B4": {"repo": "Qwen/Qwen3-8B-Base", "revision": "49e3418fbbbca6ecbdf9608b4d22e5a407081db4", "cached": false, "reachable": true, "path": null, "error": null},
+    "CTRL": {"repo": "allenai/OLMo-2-1124-7B-Instruct", "revision": "470b1fba1ae01581f270116362ee4aa1b97f4c84", "cached": false, "reachable": true, "path": null, "error": null}
+  },
+  "determinism": {"model": "L1", "tile": "manmade", "framing": "F1", "n": 64, "bit_identical": true, "max_abs_diff": 0.0},
+  "tokenizer_class": {"L1": "Qwen2Tokenizer", "L2": "Qwen2Tokenizer", "L3": "Qwen2Tokenizer", "B2": "Qwen2Tokenizer", "CTRL": "TokenizersBackend", "L4": "Qwen2Tokenizer", "B4": "Qwen2Tokenizer"},
+  "tile_hours": {
+    "L1/manmade": 0.023993482854631213, "L1/moves": 0.0247467401292589,
+    "L1/hold": 0.03530042250951131, "L1/size": 0.17894164436393314,
+    "L2/manmade": 0.04937648256619771, "L2/moves": 0.04941177705923716,
+    "L2/hold": 0.07099952552053664, "L2/size": 0.18694217953417036,
+    "L3/manmade": 0.11914072016874949, "L3/moves": 0.11913372933864594,
+    "L3/hold": 0.16422079655859206, "L3/size": 0.4186555469698376,
+    "B2/manmade": 0.04927431709236569, "B2/moves": 0.04931548006004757,
+    "B2/hold": 0.07088220410876804, "B2/size": 0.18688515855206383,
+    "CTRL/manmade": 0.1961850259039137, "CTRL/moves": 0.19582750327057308,
+    "CTRL/hold": 0.27902512576844957, "CTRL/size": 0.638379258579678,
+    "L4/manmade": 0.20288034167554644, "L4/moves": 0.20304533859093984,
+    "L4/hold": 0.2876131585571501, "L4/size": 0.7348025244474411,
+    "B4/manmade": 0.20285949058002894, "B4/moves": 0.2029118901491165,
+    "B4/hold": 0.287315376467175, "B4/size": 0.7343226391077041
+  },
+  "model_hours": {
+    "L1": 0.2630891592635049, "L2": 0.3568413390053643, "L3": 0.8212680120600594,
+    "B2": 0.35646466930707293, "CTRL": 1.3095240381028916,
+    "L4": 1.4284643632835812, "B4": 1.4275278328524696
+  },
+  "f0_vs_cond4": {
+    "L1": {
+      "hold": {"renderings": 500, "disagreeing_renderings": 1, "items": 250, "disagreeing_items": 1},
+      "manmade": {"renderings": 500, "disagreeing_renderings": 2, "items": 250, "disagreeing_items": 2},
+      "moves": {"renderings": 500, "disagreeing_renderings": 2, "items": 250, "disagreeing_items": 2},
+      "size": {"renderings": 500, "disagreeing_renderings": 0, "items": 250, "disagreeing_items": 0}
+    }
+  },
+  "implied_floor": {
+    "tile": "size",
+    "per_model": {"L1": {"disagreeing_items": 0, "items": 250, "disagreeing_renderings": 0, "renderings": 500, "implied_floor": 7, "p1_batch_flip_rate": 0.01}},
+    "pooled_worst_case_floor": 7,
+    "provisional_floor": 7,
+    "rule": "floor = max(7, F0-versus-cond4 disagreement items); upward-only (P2-D13)",
+    "caveat": "counted on the full size tile; the confirmatory subset is the 108 items with finite beta_c, restricted in the analysis session, so this is an upper bound"
+  },
+  "completeness": {
+    "L1": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []},
+    "L2": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []},
+    "L3": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []},
+    "L4": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []},
+    "B2": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []},
+    "B4": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []},
+    "CTRL": {"rows": 18000, "expected": 18000, "complete": true, "missing_tiles": []}
+  },
+  "export": {"rows": 126000, "expected": 126000, "models_complete": 7, "models": 7}
+}
