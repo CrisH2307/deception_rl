@@ -1,0 +1,330 @@
+{
+  "purpose": "T7 step 2. F0 against Paper 1's frozen cond4: environment equivalence, the within-environment baseline, and P2-D13's measured noise floor. No Arm B statistic is computed here.",
+  "rule": "pmi",
+  "prompt_form": "template",
+  "choices_sha256": "944596176bdf12d53e569cdcb083bbf5a2bf98533f18a171092714e883b5d6b3",
+  "renderings_compared": 13998,
+  "confirmatory_tile": "size",
+  "per_model_per_tile": {
+    "B2": {
+      "hold": {
+        "renderings": 500,
+        "disagreeing_renderings": 7,
+        "disagreement_rate": 0.014,
+        "items": 250,
+        "disagreeing_items": 7
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 1,
+        "disagreement_rate": 0.002,
+        "items": 250,
+        "disagreeing_items": 1
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    },
+    "B4": {
+      "hold": {
+        "renderings": 500,
+        "disagreeing_renderings": 3,
+        "disagreement_rate": 0.006,
+        "items": 250,
+        "disagreeing_items": 3
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 2,
+        "disagreement_rate": 0.004,
+        "items": 250,
+        "disagreeing_items": 2
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 4,
+        "disagreement_rate": 0.008,
+        "items": 250,
+        "disagreeing_items": 4
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    },
+    "CTRL": {
+      "hold": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 1,
+        "disagreement_rate": 0.002,
+        "items": 250,
+        "disagreeing_items": 1
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    },
+    "L1": {
+      "hold": {
+        "renderings": 500,
+        "disagreeing_renderings": 1,
+        "disagreement_rate": 0.002,
+        "items": 250,
+        "disagreeing_items": 1
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 2,
+        "disagreement_rate": 0.004,
+        "items": 250,
+        "disagreeing_items": 2
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 2,
+        "disagreement_rate": 0.004,
+        "items": 250,
+        "disagreeing_items": 2
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    },
+    "L2": {
+      "hold": {
+        "renderings": 498,
+        "disagreeing_renderings": 3,
+        "disagreement_rate": 0.006024096385542169,
+        "items": 250,
+        "disagreeing_items": 3
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 2,
+        "disagreement_rate": 0.004,
+        "items": 250,
+        "disagreeing_items": 2
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    },
+    "L3": {
+      "hold": {
+        "renderings": 500,
+        "disagreeing_renderings": 1,
+        "disagreement_rate": 0.002,
+        "items": 250,
+        "disagreeing_items": 1
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 1,
+        "disagreement_rate": 0.002,
+        "items": 250,
+        "disagreeing_items": 1
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 3,
+        "disagreement_rate": 0.006,
+        "items": 250,
+        "disagreeing_items": 3
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    },
+    "L4": {
+      "hold": {
+        "renderings": 500,
+        "disagreeing_renderings": 8,
+        "disagreement_rate": 0.016,
+        "items": 250,
+        "disagreeing_items": 8
+      },
+      "manmade": {
+        "renderings": 500,
+        "disagreeing_renderings": 4,
+        "disagreement_rate": 0.008,
+        "items": 250,
+        "disagreeing_items": 4
+      },
+      "moves": {
+        "renderings": 500,
+        "disagreeing_renderings": 4,
+        "disagreement_rate": 0.008,
+        "items": 250,
+        "disagreeing_items": 4
+      },
+      "size": {
+        "renderings": 500,
+        "disagreeing_renderings": 0,
+        "disagreement_rate": 0.0,
+        "items": 250,
+        "disagreeing_items": 0
+      }
+    }
+  },
+  "confirmatory_tile_summary": {
+    "B2": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    },
+    "B4": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    },
+    "CTRL": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    },
+    "L1": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    },
+    "L2": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    },
+    "L3": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    },
+    "L4": {
+      "renderings": 500,
+      "disagreeing_renderings": 0,
+      "disagreement_rate": 0.0,
+      "items": 250,
+      "disagreeing_items": 0
+    }
+  },
+  "off_confirmatory_summary": {
+    "B2": {
+      "renderings": 1500,
+      "disagreeing_renderings": 8,
+      "rate": 0.005333333333333333,
+      "p1_batch_flip_rate": 0.007
+    },
+    "B4": {
+      "renderings": 1500,
+      "disagreeing_renderings": 9,
+      "rate": 0.006,
+      "p1_batch_flip_rate": 0.003
+    },
+    "CTRL": {
+      "renderings": 1500,
+      "disagreeing_renderings": 1,
+      "rate": 0.0006666666666666666,
+      "p1_batch_flip_rate": 0.0
+    },
+    "L1": {
+      "renderings": 1500,
+      "disagreeing_renderings": 5,
+      "rate": 0.0033333333333333335,
+      "p1_batch_flip_rate": 0.01
+    },
+    "L2": {
+      "renderings": 1498,
+      "disagreeing_renderings": 5,
+      "rate": 0.0033377837116154874,
+      "p1_batch_flip_rate": 0.0
+    },
+    "L3": {
+      "renderings": 1500,
+      "disagreeing_renderings": 5,
+      "rate": 0.0033333333333333335,
+      "p1_batch_flip_rate": 0.003
+    },
+    "L4": {
+      "renderings": 1500,
+      "disagreeing_renderings": 16,
+      "rate": 0.010666666666666666,
+      "p1_batch_flip_rate": 0.013
+    }
+  },
+  "environment_equivalence": {
+    "verdict": "EXACT on the confirmatory tile",
+    "confirmatory_disagreeing_items": 0,
+    "confirmatory_renderings": 3500,
+    "what_it_licenses": "The comparison to Paper 1's published reference set is exact rather than approximate, and F0 is Paper 1's cond4 at the choice level on the confirmatory tile."
+  },
+  "floor": {
+    "provisional": 7,
+    "measured_worst_case_items": 0,
+    "adopted": 7,
+    "rule": "floor = max(7, F0-versus-cond4 disagreement items), upward-only (P2-D13)",
+    "revised": false,
+    "caveat": "counted on the full size tile (250 items); the confirmatory subset is the 108 with finite beta_c, so a count of 0 here is 0 there"
+  },
+  "closes_v26_section_1_1": "PREREGISTRATION_v2.6.md section 1.1 argued the no-effect same-option rate of 1.0 from Paper 1's code path and recorded that no repeated rendering existed to corroborate it. This is that repeated rendering. On the confirmatory tile the measured rate is 1.0."
+}
