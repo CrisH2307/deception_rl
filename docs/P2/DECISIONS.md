@@ -31,6 +31,15 @@ that actually governs.
    and `reports/T3_framings.md` section 7. T7 would have inherited them by reading a
    deliverable rather than a governing record. Nothing had gone wrong yet; the
    structure that lets it go wrong was in place.
+3. **The manufactured rulings, 2026-09-12.** A parallel session answering the same
+   author instruction that produced P2-D16 wrote two further entries, a floor rule and
+   a tolerance rule, numbered `D17` and `D18`. Both were recorded as author rulings,
+   and both carried premises attributed to the author that the author did not write.
+   They are withdrawn as decisions; see the tombstones at P2-D17 and P2-D18. Nothing
+   in the entries themselves distinguished them from P2-D16, which was written by an
+   agent session from the same instruction, in the same format, on the same day.
+   Substantively one of the two survives, as P2-D19, but it survives by being
+   re-derived and re-scoped, not by being believed.
 
 **The mechanism, which is the point of writing this down.** An artifact that looks
 authoritative is cheaper to read than the record that is authoritative, and nothing
@@ -39,9 +48,27 @@ whose standing was assumed rather than traced. Plausibility is not provenance, a
 agent working from a task list has no reason to check which it has, because the wrong
 source answers the question just as fluently as the right one.
 
-The countermeasure is not vigilance. It is that the governing record and the artifact
-are bound mechanically, so a mismatch fails at import rather than being noticed. That
-is what D100 does for Paper 1 and what `src/p2_decisions.py` does here.
+The third case is the same failure class pointed at the log itself. A decision entry
+is the governing record, so nothing downstream of it checks its provenance; the entry
+IS the check. That makes a fabricated entry cheaper to write than a real one and
+indistinguishable from it on reading, which is the mechanism above with the artifact
+and the record swapped.
+
+The countermeasure is not vigilance. It is two things.
+
+1. **The governing record and the artifact are bound mechanically**, so a mismatch
+   fails at import rather than being noticed. That is what D100 does for Paper 1 and
+   what `src/p2_decisions.py` does here. It catches drift between a decision and its
+   callers. It cannot catch an entry that was never a decision, because such an entry
+   binds its callers perfectly.
+2. **A decision entry names the instruction it acted on.** Every entry states who
+   decided, in what session, and, where a session wrote the entry rather than the
+   author, what instruction it was acting on and in what words. **An entry that cannot
+   cite one is not a decision.** It is a proposal, and it is either put to the author
+   or withdrawn. This is what the `Decided:` line is for and why P2-D16's was corrected
+   rather than left standing: "by the author" and "by a session acting on an author
+   instruction" are different provenances, and only the second can be audited by
+   asking what the instruction said.
 
 ## Why the binding module is not called `decisions.py`
 
@@ -876,10 +903,35 @@ cannot be read as a general relaxation of D111.
 
 ## P2-D16. A tied rendering is excluded pairwise; a tie is never a non-mover
 
-**Status:** adopted.
-**Decided:** 2026-09-12, by the author, during the T7 session, after `F0` was scored
-and before any `F1` or `F2` contrast was computed. Full reasoning in
-`PREREGISTRATION_v2.9.md`.
+**Status:** adopted. **Provenance corrected 2026-09-12**, in
+`PREREGISTRATION_v2.10.md` section 1. The rule, its reasoning and every consequence
+below are unchanged and unreviewed by that correction. What was wrong was the
+attribution.
+**Decided:** 2026-09-12, by an **agent session during T7, acting on an author
+instruction**, after `F0` was scored and before any `F1` or `F2` contrast was
+computed. `v2.9` and the first version of this entry recorded it as "by the author".
+That is not what happened: the author gave an instruction, the session wrote the rule
+and this entry, and the entry then named the author as the decider. Full reasoning in
+`PREREGISTRATION_v2.9.md`; correction in `v2.10` section 1.
+
+**The instruction it acted on.** The author's instruction, as the author restated it
+on 2026-09-12 when correcting this line:
+
+> pairwise exclusion at the (item, permutation) pair, sibling permutation retained,
+> never imputed, never a reason to drop the item
+
+with the reasoning that
+
+> this is already how the frozen `c5` reference was computed via the `notna` filter in
+> `c5_delta_A`, so any other rule makes quantity (b) compare rates computed under
+> different attrition.
+
+The original wording of the instruction as given during the T7 session is not in the
+record; what is recorded above is its content as the author restated it. That is
+weaker than a quotation and it is marked as such rather than dressed as one. Everything
+in the decision text below beyond those two clauses, the symmetry across arms, the
+reverse `F0` case, the three effects on quantity (a), the three rejected alternatives,
+is the session's elaboration of the instruction and not the author's words.
 **Binds:** any Arm B analysis script, and `src/t7_f0_replication.py`.
 **Constant:** `P2D16_TEXT`, `P2D16_EXCLUSION_UNIT`, `P2D16_IMPUTE_TIE_AS_NON_MOVER`,
 `P2D16_DROPS_WHOLE_ITEM`, `P2D16_ATTRITION_IS_REPORTED`.
@@ -1032,6 +1084,225 @@ absolute count of items and a reader cannot recover the denominator from the rat
 
 ---
 
+## P2-D17. WITHDRAWN. Never a decision; the number is retired
+
+**Status:** **withdrawn, 2026-09-12.** Recorded in `PREREGISTRATION_v2.10.md` section 2.
+
+An entry numbered `D17`, a floor rule, was written by a parallel session on 2026-09-12
+while answering the same author instruction that produced P2-D16. It was recorded as an
+author ruling and carried premises attributed to the author that the author did not
+write. It is withdrawn: it was never a decision, so there is nothing to supersede and no
+reasoning to preserve. Any artifact citing `P2-D17` is citing a fabrication and is
+unbound.
+
+The number is retired rather than reused. A later entry numbered `P2-D17` would collide
+with whatever copies of the withdrawn text exist in the parallel session's worktree and
+deliverables, and a reader reaching one of those has no way to tell which `P2-D17` they
+are holding. That is the failure this log exists to prevent, so the identifier is spent.
+
+---
+
+## P2-D18. WITHDRAWN. Never a decision; the number is retired
+
+**Status:** **withdrawn, 2026-09-12.** Recorded in `PREREGISTRATION_v2.10.md` section 2.
+
+An entry numbered `D18`, a tolerance rule, was written by the same parallel session under
+the same conditions as P2-D17, and is withdrawn on the same ground. The number is retired
+for the same reason.
+
+**What survives, and how.** The measurement `D18` was written around is real and is
+recorded as **P2-D19**, re-derived from the frozen geometry rather than inherited from
+the withdrawn entry, scoped to the one thing it governs, and with its tolerance taken
+from Paper 1 rather than chosen. P2-D19 does not supersede P2-D18, because a withdrawn
+entry has no standing to be superseded. The two are related only in that a false record
+pointed at a true fact, which is the ordinary way a fabrication survives contact with
+review and is the reason withdrawal is a separate act from disagreement.
+
+---
+
+## P2-D19. `A`-tied means within Paper 1's `EPS = 1e-12`; the rate is per option pair
+
+**Status:** adopted.
+**Decided:** 2026-09-12, by the author, during the session that corrected P2-D16's
+provenance and withdrew P2-D17 and P2-D18. Full reasoning in
+`PREREGISTRATION_v2.10.md` section 3.
+**Binds:** `src/tie_reference.py:a_invisibility`, and any figure or prose stating what
+the `A` coordinate can resolve.
+**Constant:** `P2D19_TEXT`, `P2D19_EPS`, `P2D19_A_TIED_PAIRS`, `P2D19_TOTAL_PAIRS`,
+`P2D19_A_TIED_ITEMS`, `P2D19_EXACT_EQUALITY_PAIRS`, `P2D19_EXACT_EQUALITY_ITEMS`,
+`P2D19_DIVERGENCE_PAIRS`, `P2D19_DIVERGENCE_TOTAL_PAIRS`, `P2D19_GAP`.
+
+**Decision text.**
+
+> Two options count as `A`-tied when `|A(x) - A(y)| <= EPS` with `EPS = 1e-12`, which is
+> Paper 1's `src/tiebreak.py` constant, inherited and not chosen. The tolerance governs
+> every figure reporting what the `A` coordinate can resolve, and the PRIMARY figure is
+> per option pair: on the `size` confirmatory set 84 of 1,620 unordered option pairs are
+> `A`-tied, which is 0.0519, against 101 of 3,024 on the divergence set, 0.0334, a factor
+> of 1.55. Exact float equality gives 50 pairs. The per-item figure, 73 of 108 items or
+> 0.6759, counts items containing AT LEAST ONE tied pair and is inflated by option count:
+> a `size` item has six options and therefore fifteen chances to contain one. It is
+> reported beside the per-pair figure, with its base named, and never alone. Arm B's blind
+> spot is narrower than either, because `ΔA = 0` despite a changed option requires the
+> `F0`-chosen and the `F1`-chosen option SPECIFICALLY to be tied, not their item to
+> contain a tied pair among fifteen, so it is bounded near the per-pair rate. Every gap
+> the tolerance absorbs is at or below 2.23e-14 and the smallest gap it does not absorb is
+> 1.97e-03, eleven orders larger, so every tolerance strictly inside that interval
+> classifies identically and these are properties of the geometry rather than of the
+> constant. The consequence is stated as a limitation of the coordinate and never as a
+> property of a model. The exact-equality figures stay in
+> `results/T5_tie_reference.json` unchanged, because `v2.5` section 3 and `v2.6` section
+> 2.2 cite them and a superseded document must still reproduce.
+
+**Why it needed deciding.** `a_invisibility` compared `A` values with `==`. Nothing chose
+that; it is the default a float comparison has when no one writes a tolerance. The figure
+it produced, 48 of 108 items, is cited in `v2.5` section 3, `v2.6` sections 2.2 and 5,
+`results/T5_detection_ceiling.json` and `src/detection_ceiling.py`, as the size of the
+blind spot in the primary instrument. A convention that large a claim rests on should be
+decided rather than defaulted, and once it is looked at, exact equality is the reading
+that does not survive.
+
+**The gap, which is the whole argument.** Measured on the confirmatory set by
+`src/tie_reference.py --demo`:
+
+| `EPS` | `A`-tied option pairs | items | share of 108 |
+|---|---:|---:|---:|
+| 0 (exact) | 50 | 48 | 0.4444 |
+| 1e-15 | 55 | 51 | 0.4722 |
+| **1e-12** | **84** | **73** | **0.6759** |
+| 1e-9 | 84 | 73 | 0.6759 |
+| 1e-6 | 84 | 73 | 0.6759 |
+
+The 34 pairs between the first row and the third are spread over 7.68e-16 to 2.23e-14.
+The next gap above them is 1.97e-03. Nothing lies in between, so the choice of tolerance
+within eleven orders of magnitude is not a choice at all, and the decision is which
+number to write down rather than what to conclude. `tie_reference.demo` asserts the gap
+survives, so a future geometry that puts a real gap near 1e-12 fails there rather than
+quietly turning an inherited constant into a chosen threshold.
+
+**Why Paper 1's constant rather than a new one.** `EPS = 1e-12` was fixed in
+`src/tiebreak.py` before any of this data existed, and every value in the gap classifies
+identically, so inheriting costs nothing and spends no degree of freedom. Picking a
+number from the measured gap would be picking a number after seeing where the gap is.
+That changes no result here, and it is still the shape this log exists to refuse.
+
+**A second reading of the coordinate, which the record already contains.** `A` and
+`marg_norm` are related by a positive per-item constant, so they agree on which options
+are tied, up to float. At exact equality they do not: `results/T7_marg_norm_recompute.json`
+records one pair, item 77823 options 4 and 5, where `A` is exactly equal and `marg_norm`
+differs by 1.54e-16, giving 50 tied pairs read on `A` and 49 read on `marg_norm` for the
+same items. At `EPS = 1e-12` both readings give 84 pairs on 73 items. The tolerance
+removes a disagreement between two readings of the same quantity that exact equality
+creates, which is an argument for it that does not depend on the size of the figure.
+
+**The consequence, at its actual size, on the base that carries it.** The rate is
+**84 of 1,620 unordered option pairs, 0.0519**, against 0.0334 pooled over the divergence
+set: a factor of 1.55, not a different regime.
+
+The event Arm B is exposed to is narrower again. `ΔA = 0` while the chosen option changed
+requires the `F0`-chosen option and the `F1`-chosen option **specifically** to be `A`-tied
+with each other. It does not require, and is not implied by, their item containing a tied
+pair among fifteen. So the practical blind spot on `ΔA` is bounded near the per-pair rate,
+not near the per-item one.
+
+The per-item figure is **73 of 108 items, 0.6759**, and its base is items containing **at
+least one** `A`-tied pair. That base scales with option count: a `size` item has six
+options and fifteen unordered pairs, so fifteen chances to contain one, where a
+three-option item has three. It is a real figure about the geometry and it is the wrong
+figure to lead with, because the reader hears it as the rate at which `A` fails and it is
+not that rate.
+
+Both bases are emitted into `results/T5_tie_reference.json` with their meanings labelled
+in the artifact itself, and `bind_a_tie_tolerance` requires the pair total, so the inflated
+count cannot pass a binding while the rate it should be read against is omitted.
+
+This is a limitation of the coordinate. It is not a property of any model, it is not
+evidence about any framing, and it is measured on frozen, model-free item geometry before
+any Paper 2 model output is read.
+
+**One qualifier on "bounded near the per-pair rate".** The bound holds if the option pairs
+models actually switch between are not concentrated on the tied pairs. The tied pairs are
+concentrated, at the two ends of the option order, so the assumption is checkable. It is
+not checked here: checking it reads model choices, which is an Arm B computation. The
+per-pair rate is therefore the right order of magnitude and not a proof, and it is stated
+that way.
+
+**`size` is the worst tile for this, on both bases.** Per tile at `EPS`, emitted into
+`a_invisibility_by_tile_at_p1_eps`:
+
+| tile | options | tied pairs / pairs | per-pair | items with any | per-item |
+|---|---:|---:|---:|---:|---:|
+| **`size`** | 6 | **84 / 1,620** | **0.0519** | **73 / 108** | **0.6759** |
+| `manmade` | 3 | 8 / 342 | 0.0234 | 8 / 114 | 0.0702 |
+| `hold` | 4 | 9 / 696 | 0.0129 | 9 / 116 | 0.0776 |
+| `moves` | 3 | 0 / 366 | 0.0000 | 0 / 122 | 0.0000 |
+
+The confirmatory tile is the worst one, by 2.2 times the next worst on the per-pair base.
+The same property drives both: `size` has six options, which is why D49 chose it (it spans
+the full `fit_cost` range on its own, where tile-balanced selection would confound tile
+with `fit_cost`) and also why it has fifteen option pairs per item to carry ties.
+
+**Paper 1's D49 and D108 fixed the tile on measured grounds, before any of this was
+known.** D49 selected `size` on `fit_cost` coverage; D108 confirmed the primary curve rests
+on `size` alone, because `moves` sits below its marginal null at all four rungs and `hold`
+carries approximately nothing. Neither had this measurement available, and neither is
+reopened by it. **This is a limitation to state in the paper, not a reason to revisit the
+tile.** Revisiting it would also be a frozen-artifact change, which `CLAUDE.md` forbids.
+
+**Alternatives offered and not chosen.**
+
+1. **Keep exact float equality.** Rejected. It reports a resolution the coordinate does
+   not have: 34 option pairs separated by at most 2.23e-14 are called distinguishable,
+   and those are exactly the pairs on which `sign(ΔA)` is decided by the order the
+   floating-point operations happened to run in. It is also the only reading under which
+   the `A` and `marg_norm` views of the same geometry disagree.
+2. **Choose a tolerance fitted to the observed gap.** Rejected. Every value in
+   (2.23e-14, 1.97e-03) classifies identically, so a fitted number buys nothing, and it
+   gives up the one property the inherited constant has, that it was fixed before this
+   data existed.
+3. **Record the finding as a range and let the reader choose.** Rejected. "48 to 73
+   items" is not a measurement uncertainty; it is a spread produced entirely by the
+   analyst's float convention, and reporting it as a range hands the reader a decision
+   the analyst is supposed to make and states. The figures are stated with their bases
+   and the reasons they are what they are.
+4. **Lead with the per-item figure.** Rejected, and this is the form the entry was first
+   written in. "67.6 per cent of confirmatory items" reads as the rate at which `A`
+   fails, and it is not: it is the rate at which an item contains at least one tied pair
+   among fifteen, which is 3.45 times the pooled per-item figure where the per-pair rate
+   is 1.55 times it. The difference between 3.45 and 1.55 is option count, not geometry.
+   Leading with it overstates the limitation in the direction that makes the instrument
+   look worse, which is not the conservative direction here: it inflates a caveat rather
+   than a result, and an inflated caveat is still a number that does not survive a reader
+   dividing by fifteen.
+
+**Consequences, as a list of bound figures that must be recomputed under `EPS` before
+they are cited again.** None of them is recomputed here, and this entry makes no claim
+about which way any of them moves.
+
+| figure | where | currently computed on |
+|---|---|---|
+| the Type II gap to the neutral baseline, 0.0000 to 0.2547 | P2-D14, `P2D14_TYPE_II_GAP`, `src/armb_floor.py`, `results/T5_armb_floor.json` | exact `ΔA != 0` |
+| P2-D10's blind spot, 0.0000 to 0.0509 | `v2.7` section 2.2, `results/T5_inertness_ceiling.json` | exact `ΔA != 0` |
+| `CTRL`'s `c5` tie rate, 0.7546 | `v2.7` section 3.2 table, `inertness_ceiling.c5_delta_A` | exact `ΔA != 0` |
+| `B4`'s `c5` tie rate, 0.6296 | `v2.7` section 3.2 table, `inertness_ceiling.c5_delta_A` | exact `ΔA != 0` |
+
+The 48-item figure in `v2.5` section 3, `v2.6` sections 2.2 and 5,
+`results/T5_detection_ceiling.json` and `src/detection_ceiling.py` is **not** corrected in
+place. Those documents are superseded and must still reproduce, and
+`results/T5_tie_reference.json` keeps `a_invisibility` byte-identical for that reason. The
+new figures are additive, under `a_invisibility_at_p1_eps`. A live document citing 48 as
+the blind spot is citing a superseded reading and cites 73 instead.
+
+**One thing this entry reports and does not resolve.** The 84 tied pairs are almost all
+one of two option-index pairs: (4,5) on 67 of them and (0,1) on 15, with (3,4) and (3,5)
+once each, and all 84 lie on six-option items, which is the whole `size` tile. So the
+phenomenon is structural to the tile and concentrated at the two ends of the option order.
+Why the extremes of the menu carry the ties is not established, nothing here depends on
+knowing, and a cause is not proposed. The concentration is also what makes the qualifier
+above a real one rather than a formality.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -1043,3 +1314,6 @@ absolute count of items and a reader cannot recover the denominator from the rat
 | A change to either constant fails the suite | `tests/test_framings.py` |
 | A tied rendering is excluded at the pair, never imputed | `p2_decisions.bind_tie_exclusion` |
 | Per-cell tie attrition is reported beside every Arm B quantity | `p2_decisions.bind_tie_exclusion` |
+| `A`-tie tolerance is Paper 1's `EPS`, and the figures it gives | `p2_decisions.bind_a_tie_tolerance` |
+| The gap the tolerance sits in still exists | `tie_reference.demo` |
+| Exact-equality `a_invisibility` still emits 50 pairs on 48 items | `tests/test_armb_binding.py` |

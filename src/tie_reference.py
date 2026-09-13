@@ -43,6 +43,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import p1  # noqa: E402
 import t6_arm_a as t6  # noqa: E402
 import t6_f0_headroom as H  # noqa: E402
+import p2_decisions as P2D  # noqa: E402
+
+from tiebreak import EPS as P1_EPS  # noqa: E402  Paper 1's frozen 1e-12; P2-D19
 
 RULE, FORM = H.RULE, H.FORM
 OUT = "results/T5_tie_reference.json"
@@ -71,21 +74,52 @@ def paired(ch, model, keep, vary):
             "same_option_rate": float((a == b).mean())}
 
 
-def a_invisibility(A, ids, mask):
+def a_invisibility(A, ids, mask, eps=0.0):
     """How much option movement `A` cannot see, on a given item subset.
 
     Reported because it bounds what the tie rate can mean: on an item where two
     options share an `A`, a real switch between them registers as no movement.
+
+    `eps` is the tolerance at which two options count as `A`-tied. The default of
+    0.0 is exact float equality and is what `v2.5` section 3 and `v2.6` section
+    2.2 report; it is kept as the default so those figures still reproduce. P2-D19
+    adopts Paper 1's `tiebreak.EPS = 1e-12` for anything citing the coordinate's
+    resolution, and `main` emits both. `next_gap_above_eps` is the smallest gap the
+    tolerance does NOT absorb: it is what says whether the tolerance sits in a gap
+    or in a continuum, and a value close to `eps` means this number was chosen
+    rather than inherited.
     """
     n_items_with_dup, n_pairs, n_dup_pairs = 0, 0, 0
+    next_gap = float("inf")
     for i in ids[mask]:
         a = A[int(i)]
         k = len(a)
-        dup = sum(1 for x in range(k) for y in range(x + 1, k) if a[x] == a[y])
+        dup = 0
+        for x in range(k):
+            for y in range(x + 1, k):
+                g = abs(a[x] - a[y])
+                if g <= eps:
+                    dup += 1
+                else:
+                    next_gap = min(next_gap, float(g))
         n_dup_pairs += dup
         n_pairs += k * (k - 1) // 2
         n_items_with_dup += bool(dup)
-    return {"n_items": int(mask.sum()),
+    return {"n_items": int(mask.sum()), "eps": float(eps),
+            "next_gap_above_eps": next_gap,
+            # P2-D19's primary base is the option pair. The per-item share counts
+            # items containing AT LEAST ONE tied pair, so it scales with option
+            # count: a 6-option item has 15 chances to contain one, a 3-option
+            # item has 3. Both are labelled here so neither can be lifted out of
+            # the JSON without the other.
+            "primary_base": "unordered option pairs",
+            "share_option_pairs_invisible_to_A_is":
+                "PRIMARY. A-tied option pairs / all unordered option pairs.",
+            "share_items_with_an_A_tied_option_pair_is":
+                "SECONDARY, and inflated by option count. Items containing at "
+                "least one A-tied pair / items. Not the Arm B blind-spot rate: "
+                "that needs the two CHOSEN options tied, not the item to contain "
+                "a tied pair. Quote only beside the per-pair share.",
             "n_items_with_an_A_tied_option_pair": n_items_with_dup,
             "share_items_with_an_A_tied_option_pair":
                 float(n_items_with_dup / max(1, int(mask.sum()))),
@@ -194,6 +228,17 @@ def main():
             "converse fails. The references calibrate the SAME-OPTION rate, and "
             "the A-invisibility figures below say how far the two can diverge.",
         "a_invisibility": {k: a_invisibility(A, ids, m) for k, m in sets.items()},
+        # P2-D19: the same figures at Paper 1's tiebreak tolerance. The exact-
+        # equality block above is kept unchanged because `v2.5` and `v2.6` cite it
+        # and a superseded document must still reproduce.
+        "a_invisibility_at_p1_eps": {k: a_invisibility(A, ids, m, eps=P1_EPS)
+                                    for k, m in sets.items()},
+        # Per tile, so "size is the worst tile on both bases" has a source. D49
+        # and D108 fixed the tile on measured grounds years before this; this is
+        # a limitation to state, not a reason to revisit it.
+        "a_invisibility_by_tile_at_p1_eps": {
+            t: a_invisibility(A, ids, D & (tiles == t), eps=P1_EPS)
+            for t in sorted(set(tiles[D]))},
         "references": {},
     }
     for sname, mask in sets.items():
@@ -241,6 +286,12 @@ def main():
                          "interval on the pairs would treat 108 items as 216 "
                          "independent draws.",
     }
+    # P2-D19 binds the tolerance and the two figures it produces. Asserted here,
+    # before the write, so a drift cannot enter the artifact.
+    e = out["a_invisibility_at_p1_eps"]["size_tile_confirmatory"]
+    P2D.bind_a_tie_tolerance(e["eps"], e["n_items_with_an_A_tied_option_pair"],
+                             e["n_A_tied_option_pairs"],
+                             e["n_unordered_option_pairs"], e["next_gap_above_eps"])
     os.makedirs("results", exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=2)
     for sname in sets:
@@ -279,14 +330,37 @@ def demo():
             if a[o] - a[o] != 0.0:
                 bad += 1
     assert bad == 0, "A(o) - A(o) is not zero; same option must give delta-A = 0"
-    inv = a_invisibility(A, ids, D & (df["tile"].values == "size"))
+    SZ = D & (df["tile"].values == "size")
+    inv = a_invisibility(A, ids, SZ)
     assert inv["n_A_tied_option_pairs"] > 0, (
         "no A-tied option pairs found; the report claims the tie rate and the "
         "same-option rate can differ, and that claim now has no support")
+    eps_inv = a_invisibility(A, ids, SZ, eps=P1_EPS)
+    # P2-D19 stands on a gap, not on a threshold: the tolerance is inherited and
+    # is only defensible while nothing sits near it. If a future geometry puts a
+    # real gap inside a decade of 1e-12, the decision has to be revisited rather
+    # than silently kept, and this is where that surfaces.
+    assert eps_inv["next_gap_above_eps"] > P1_EPS * 1e6, (
+        f"P2-D19: the smallest gap above eps is {eps_inv['next_gap_above_eps']:.3g}, "
+        f"within six orders of {P1_EPS:g}. The tolerance no longer sits in a gap, "
+        "so it is now a chosen threshold and the decision must be revisited.")
     print(f"ok: same option gives delta-A = 0 on all {int(D.sum())} divergent "
           f"items, so same-option rate <= tie rate")
-    print(f"    size tile: {inv['n_A_tied_option_pairs']} A-tied option pairs on "
+    dv = a_invisibility(A, ids, D, eps=P1_EPS)
+    print(f"    size tile, exact equality: {inv['n_A_tied_option_pairs']} A-tied "
+          f"option pairs of {inv['n_unordered_option_pairs']}, on "
           f"{inv['n_items_with_an_A_tied_option_pair']} of {inv['n_items']} items")
+    print(f"    size tile, eps={P1_EPS:g}: PRIMARY per-pair "
+          f"{eps_inv['n_A_tied_option_pairs']}/{eps_inv['n_unordered_option_pairs']} "
+          f"= {eps_inv['share_option_pairs_invisible_to_A']:.4f}, against "
+          f"{dv['n_A_tied_option_pairs']}/{dv['n_unordered_option_pairs']} "
+          f"= {dv['share_option_pairs_invisible_to_A']:.4f} pooled, "
+          f"x{eps_inv['share_option_pairs_invisible_to_A'] / dv['share_option_pairs_invisible_to_A']:.2f}")
+    print(f"    size tile, eps={P1_EPS:g}: secondary per-item "
+          f"{eps_inv['n_items_with_an_A_tied_option_pair']}/{eps_inv['n_items']} "
+          f"= {eps_inv['share_items_with_an_A_tied_option_pair']:.4f} (items with "
+          f"ANY tied pair; 15 pairs per size item, so inflated by option count)")
+    print(f"    next gap above eps {eps_inv['next_gap_above_eps']:.4g}")
     return 0
 
 

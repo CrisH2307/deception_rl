@@ -513,6 +513,96 @@ def bind_armb_floor(floor_used, f0_disagreement_items, floor_is_statistical):
                            "docs/P2/DECISIONS.md")) from None
 
 
+# ------------------- P2-D17, P2-D18: WITHDRAWN, numbers retired
+# Two entries written by a parallel session on 2026-09-12 and recorded as author
+# rulings with premises the author did not write. Withdrawn; never decisions. The
+# numbers are retired rather than reused, because copies of the withdrawn text
+# exist outside this repository and a reused number could not be told apart from
+# them. Named here so a caller importing `P2D17_*` fails loudly instead of
+# finding nothing and moving on.
+P2D17_WITHDRAWN = True
+P2D18_WITHDRAWN = True
+P2D17_TEXT = P2D18_TEXT = None
+
+
+# ------------------- P2-D19, the A-tie tolerance is Paper 1's EPS
+P2D19_TEXT = (
+    "Two options count as `A`-tied when `|A(x) - A(y)| <= EPS` with `EPS = 1e-12`, which is\n"
+    "Paper 1's `src/tiebreak.py` constant, inherited and not chosen. The tolerance governs\n"
+    "every figure reporting what the `A` coordinate can resolve, and the PRIMARY figure is\n"
+    "per option pair: on the `size` confirmatory set 84 of 1,620 unordered option pairs are\n"
+    "`A`-tied, which is 0.0519, against 101 of 3,024 on the divergence set, 0.0334, a factor\n"
+    "of 1.55. Exact float equality gives 50 pairs. The per-item figure, 73 of 108 items or\n"
+    "0.6759, counts items containing AT LEAST ONE tied pair and is inflated by option count:\n"
+    "a `size` item has six options and therefore fifteen chances to contain one. It is\n"
+    "reported beside the per-pair figure, with its base named, and never alone. Arm B's blind\n"
+    "spot is narrower than either, because `ΔA = 0` despite a changed option requires the\n"
+    "`F0`-chosen and the `F1`-chosen option SPECIFICALLY to be tied, not their item to\n"
+    "contain a tied pair among fifteen, so it is bounded near the per-pair rate. Every gap\n"
+    "the tolerance absorbs is at or below 2.23e-14 and the smallest gap it does not absorb is\n"
+    "1.97e-03, eleven orders larger, so every tolerance strictly inside that interval\n"
+    "classifies identically and these are properties of the geometry rather than of the\n"
+    "constant. The consequence is stated as a limitation of the coordinate and never as a\n"
+    "property of a model. The exact-equality figures stay in\n"
+    "`results/T5_tie_reference.json` unchanged, because `v2.5` section 3 and `v2.6` section\n"
+    "2.2 cite them and a superseded document must still reproduce."
+)
+P2D19_REJECTED = ("Keep exact float equality.",
+                  "Choose a tolerance fitted to the observed gap.",
+                  "Record the finding as a range and let the reader choose.",
+                  "Lead with the per-item figure.")
+# Not a literal: imported from Paper 1 so a drift in P1's constant fails here.
+from tiebreak import EPS as P2D19_EPS                      # noqa: E402,F401
+# The confirmatory-set figures, emitted by `tie_reference.a_invisibility`.
+# PRIMARY base first: the pair. The item counts are kept because the log quotes
+# them, and `bind_a_tie_tolerance` refuses to check one without the other.
+P2D19_A_TIED_PAIRS, P2D19_TOTAL_PAIRS = 84, 1620
+P2D19_A_TIED_ITEMS = 73
+P2D19_EXACT_EQUALITY_PAIRS, P2D19_EXACT_EQUALITY_ITEMS = 50, 48
+# (A-tied pairs, unordered pairs) pooled over the divergence set, for the
+# comparison the decision text makes. `size` is the worst tile on both bases.
+P2D19_DIVERGENCE_PAIRS, P2D19_DIVERGENCE_TOTAL_PAIRS = 101, 3024
+# (largest gap the tolerance absorbs, smallest gap above it). The decision stands
+# on this interval being empty, not on the value of EPS.
+P2D19_GAP = (2.229433e-14, 1.973765183412878e-03)
+
+
+def bind_a_tie_tolerance(eps, a_tied_items, a_tied_pairs, total_pairs,
+                         next_gap_above_eps):
+    """Assert an A-resolution figure against P2-D19. Call where the figure is made.
+
+    Takes what the caller actually computed. Three things are checked and they
+    fail for different reasons: an `eps` that is not Paper 1's means the tolerance
+    was chosen; a `next_gap_above_eps` near `eps` means the tolerance no longer
+    sits in a gap, so it has become a threshold whether or not anyone chose it;
+    and `total_pairs` is required so the per-pair rate, which is the decision's
+    primary figure, cannot be omitted while the inflated per-item count passes.
+    """
+    if float(eps) != float(P2D19_EPS):
+        raise AssertionError(
+            f"P2-D19: the A-tie tolerance is Paper 1's tiebreak EPS = {P2D19_EPS:g}, "
+            f"inherited and not chosen; the run used {float(eps):g}. "
+            "docs/P2/DECISIONS.md is the source.")
+    if not float(next_gap_above_eps) > float(eps) * 1e6:
+        raise AssertionError(
+            f"P2-D19: the smallest gap above eps is {float(next_gap_above_eps):.3g}, "
+            f"within six orders of {float(eps):g}. The tolerance sat in an empty "
+            f"interval of eleven orders ({P2D19_GAP[0]:.3g} to {P2D19_GAP[1]:.3g}) "
+            "when it was adopted; it no longer does, so it is now a chosen "
+            "threshold and P2-D19 must be revisited rather than kept.")
+    for label, actual, expected in (
+            ("P2-D19 A-tied option pairs", int(a_tied_pairs), P2D19_A_TIED_PAIRS),
+            ("P2-D19 unordered option pairs", int(total_pairs), P2D19_TOTAL_PAIRS),
+            ("P2-D19 items with an A-tied pair", int(a_tied_items),
+             P2D19_A_TIED_ITEMS)):
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -582,7 +672,8 @@ def check_log(path=LOG):
                          ("P2-D9", P2D9_TEXT), ("P2-D10", P2D10_TEXT),
                          ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT),
                          ("P2-D13", P2D13_TEXT), ("P2-D14", P2D14_TEXT),
-                         ("P2-D15", P2D15_TEXT), ("P2-D16", P2D16_TEXT)):
+                         ("P2-D15", P2D15_TEXT), ("P2-D16", P2D16_TEXT),
+                         ("P2-D19", P2D19_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -599,7 +690,8 @@ def check_log(path=LOG):
                             ("P2-D13", P2D13_REJECTED),
                             ("P2-D14", P2D14_REJECTED),
                             ("P2-D15", P2D15_REJECTED),
-                            ("P2-D16", P2D16_REJECTED)):
+                            ("P2-D16", P2D16_REJECTED),
+                            ("P2-D19", P2D19_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -647,6 +739,18 @@ def main():
           f"imputed as non-mover={P2D16_IMPUTE_TIE_AS_NON_MOVER}, whole item "
           f"dropped={P2D16_DROPS_WHOLE_ITEM}, attrition reported="
           f"{P2D16_ATTRITION_IS_REPORTED}")
+    print(f"A-tie tolerance P2-D19: eps={P2D19_EPS:g} (P1 tiebreak.EPS); PRIMARY "
+          f"per-pair {P2D19_A_TIED_PAIRS}/{P2D19_TOTAL_PAIRS}="
+          f"{P2D19_A_TIED_PAIRS / P2D19_TOTAL_PAIRS:.4f} vs "
+          f"{P2D19_DIVERGENCE_PAIRS}/{P2D19_DIVERGENCE_TOTAL_PAIRS}="
+          f"{P2D19_DIVERGENCE_PAIRS / P2D19_DIVERGENCE_TOTAL_PAIRS:.4f} pooled "
+          f"(x{(P2D19_A_TIED_PAIRS / P2D19_TOTAL_PAIRS) / (P2D19_DIVERGENCE_PAIRS / P2D19_DIVERGENCE_TOTAL_PAIRS):.2f})")
+    print(f"                secondary per-item {P2D19_A_TIED_ITEMS} of "
+          f"{P2D4_N_CONFIRMATORY} items carry ANY tied pair, inflated by option "
+          f"count; exact equality gives {P2D19_EXACT_EQUALITY_PAIRS} pairs on "
+          f"{P2D19_EXACT_EQUALITY_ITEMS} items; empty gap {P2D19_GAP[0]:.3g} to "
+          f"{P2D19_GAP[1]:.3g}")
+    print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
           f"{P2D15_STILL_INADMISSIBLE}")
@@ -663,6 +767,7 @@ def main():
              P2D8_REJECTED, P2D9_REJECTED, P2D10_REJECTED,
              P2D11_REJECTED, P2D12_REJECTED, P2D13_REJECTED,
              P2D14_REJECTED, P2D15_REJECTED, P2D16_REJECTED), start=1))
+          + f", {len(P2D19_REJECTED)} on P2-D19"
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

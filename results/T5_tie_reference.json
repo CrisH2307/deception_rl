@@ -8,6 +8,11 @@
   "a_invisibility": {
     "divergence_set": {
       "n_items": 460,
+      "eps": 0.0,
+      "next_gap_above_eps": 7.679708692148914e-16,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
       "n_items_with_an_A_tied_option_pair": 65,
       "share_items_with_an_A_tied_option_pair": 0.14130434782608695,
       "n_unordered_option_pairs": 3024,
@@ -16,11 +21,98 @@
     },
     "size_tile_confirmatory": {
       "n_items": 108,
+      "eps": 0.0,
+      "next_gap_above_eps": 7.679708692148914e-16,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
       "n_items_with_an_A_tied_option_pair": 48,
       "share_items_with_an_A_tied_option_pair": 0.4444444444444444,
       "n_unordered_option_pairs": 1620,
       "n_A_tied_option_pairs": 50,
       "share_option_pairs_invisible_to_A": 0.030864197530864196
+    }
+  },
+  "a_invisibility_at_p1_eps": {
+    "divergence_set": {
+      "n_items": 460,
+      "eps": 1e-12,
+      "next_gap_above_eps": 0.001973765183412878,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
+      "n_items_with_an_A_tied_option_pair": 90,
+      "share_items_with_an_A_tied_option_pair": 0.1956521739130435,
+      "n_unordered_option_pairs": 3024,
+      "n_A_tied_option_pairs": 101,
+      "share_option_pairs_invisible_to_A": 0.0333994708994709
+    },
+    "size_tile_confirmatory": {
+      "n_items": 108,
+      "eps": 1e-12,
+      "next_gap_above_eps": 0.001973765183412878,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
+      "n_items_with_an_A_tied_option_pair": 73,
+      "share_items_with_an_A_tied_option_pair": 0.6759259259259259,
+      "n_unordered_option_pairs": 1620,
+      "n_A_tied_option_pairs": 84,
+      "share_option_pairs_invisible_to_A": 0.05185185185185185
+    }
+  },
+  "a_invisibility_by_tile_at_p1_eps": {
+    "hold": {
+      "n_items": 116,
+      "eps": 1e-12,
+      "next_gap_above_eps": 0.02481796051572882,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
+      "n_items_with_an_A_tied_option_pair": 9,
+      "share_items_with_an_A_tied_option_pair": 0.07758620689655173,
+      "n_unordered_option_pairs": 696,
+      "n_A_tied_option_pairs": 9,
+      "share_option_pairs_invisible_to_A": 0.01293103448275862
+    },
+    "manmade": {
+      "n_items": 114,
+      "eps": 1e-12,
+      "next_gap_above_eps": 0.13853809688563265,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
+      "n_items_with_an_A_tied_option_pair": 8,
+      "share_items_with_an_A_tied_option_pair": 0.07017543859649122,
+      "n_unordered_option_pairs": 342,
+      "n_A_tied_option_pairs": 8,
+      "share_option_pairs_invisible_to_A": 0.023391812865497075
+    },
+    "moves": {
+      "n_items": 122,
+      "eps": 1e-12,
+      "next_gap_above_eps": 0.04404254974230033,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
+      "n_items_with_an_A_tied_option_pair": 0,
+      "share_items_with_an_A_tied_option_pair": 0.0,
+      "n_unordered_option_pairs": 366,
+      "n_A_tied_option_pairs": 0,
+      "share_option_pairs_invisible_to_A": 0.0
+    },
+    "size": {
+      "n_items": 108,
+      "eps": 1e-12,
+      "next_gap_above_eps": 0.001973765183412878,
+      "primary_base": "unordered option pairs",
+      "share_option_pairs_invisible_to_A_is": "PRIMARY. A-tied option pairs / all unordered option pairs.",
+      "share_items_with_an_A_tied_option_pair_is": "SECONDARY, and inflated by option count. Items containing at least one A-tied pair / items. Not the Arm B blind-spot rate: that needs the two CHOSEN options tied, not the item to contain a tied pair. Quote only beside the per-pair share.",
+      "n_items_with_an_A_tied_option_pair": 73,
+      "share_items_with_an_A_tied_option_pair": 0.6759259259259259,
+      "n_unordered_option_pairs": 1620,
+      "n_A_tied_option_pairs": 84,
+      "share_option_pairs_invisible_to_A": 0.05185185185185185
     }
   },
   "references": {

@@ -11,6 +11,7 @@ import os
 import sys
 
 import numpy as np
+import pytest
 
 sys.path.insert(0, "src")
 
@@ -203,6 +204,70 @@ def test_p2d10_nesting_is_the_reason_the_two_rates_differ():
         "differ and P2-D10 is deciding nothing")
     assert inv["n_items_with_an_A_tied_option_pair"] == 48
     assert inv["n_items"] == dec.P2D4_N_CONFIRMATORY
+
+
+def test_p2d19_a_tie_tolerance_and_the_gap_it_sits_in():
+    """P2-D19's figures, and the empty interval the tolerance is defensible in.
+
+    Three separate failures, kept separate because they mean different things.
+    The exact-equality block must not move, or `v2.5` section 3 and `v2.6`
+    section 2.2 stop reproducing. The EPS figures must match the decision, or a
+    live document is citing a number the log does not carry. And the gap must
+    still be empty: if a real gap ever lands near 1e-12 the tolerance has become
+    a chosen threshold, which is a reason to revisit P2-D19, not to widen it.
+    """
+    import json
+    d = json.load(open("results/T5_tie_reference.json"))
+    exact = d["a_invisibility"]["size_tile_confirmatory"]
+    assert exact["eps"] == 0.0
+    assert (exact["n_A_tied_option_pairs"],
+            exact["n_items_with_an_A_tied_option_pair"]) == (
+        dec.P2D19_EXACT_EQUALITY_PAIRS, dec.P2D19_EXACT_EQUALITY_ITEMS)
+
+    e = d["a_invisibility_at_p1_eps"]["size_tile_confirmatory"]
+    dec.bind_a_tie_tolerance(e["eps"], e["n_items_with_an_A_tied_option_pair"],
+                             e["n_A_tied_option_pairs"],
+                             e["n_unordered_option_pairs"], e["next_gap_above_eps"])
+    assert e["n_items"] == dec.P2D4_N_CONFIRMATORY
+    assert e["next_gap_above_eps"] == pytest.approx(dec.P2D19_GAP[1])
+
+    # PRIMARY base. The per-item share is the one that misleads, so it is checked
+    # against its own base rather than quoted: 0.6759 is items containing ANY tied
+    # pair among fifteen, and 0.0519 is the rate a reader hears when they are told
+    # the first number.
+    assert e["share_option_pairs_invisible_to_A"] == pytest.approx(0.0519, abs=5e-5)
+    assert e["share_items_with_an_A_tied_option_pair"] == pytest.approx(0.6759, abs=5e-5)
+    assert "PRIMARY" in e["share_option_pairs_invisible_to_A_is"]
+    assert "inflated by option count" in e["share_items_with_an_A_tied_option_pair_is"]
+    assert e["n_items_with_an_A_tied_option_pair"] > exact[
+        "n_items_with_an_A_tied_option_pair"], (
+        "a tolerance cannot untie a pair; if this fires, the two blocks were "
+        "computed on different item sets")
+
+    # The size-versus-pooled comparison the decision text makes, and the claim that
+    # the confirmatory tile is the worst tile on BOTH bases.
+    dv = d["a_invisibility_at_p1_eps"]["divergence_set"]
+    assert (dv["n_A_tied_option_pairs"], dv["n_unordered_option_pairs"]) == (
+        dec.P2D19_DIVERGENCE_PAIRS, dec.P2D19_DIVERGENCE_TOTAL_PAIRS)
+    by_tile = d["a_invisibility_by_tile_at_p1_eps"]
+    for base in ("share_option_pairs_invisible_to_A",
+                 "share_items_with_an_A_tied_option_pair"):
+        worst = max(by_tile, key=lambda t: by_tile[t][base])
+        assert worst == "size", f"on {base} the worst tile is {worst}, not size"
+
+
+def test_p2d17_and_p2d18_are_withdrawn_and_carry_no_text():
+    """A withdrawn entry has no decision text, so nothing can bind to it.
+
+    `check_log` iterates over entries with text. This is the other half: the two
+    retired numbers must stay textless, or a later session can quote one into a
+    caller and the log will verify it.
+    """
+    assert dec.P2D17_WITHDRAWN and dec.P2D18_WITHDRAWN
+    assert dec.P2D17_TEXT is None and dec.P2D18_TEXT is None
+    log = open("docs/P2/DECISIONS.md").read()
+    for n in ("P2-D17", "P2-D18"):
+        assert f"## {n}. WITHDRAWN" in log, f"{n} has no tombstone in the log"
 
 
 def test_p2d9_c5_is_active_against_a_deterministic_no_effect_rate():
