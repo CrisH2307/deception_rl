@@ -603,6 +603,87 @@ def bind_a_tie_tolerance(eps, a_tied_items, a_tied_pairs, total_pairs,
                                "docs/P2/DECISIONS.md")) from None
 
 
+# ------------------- P2-D20, quantity (c)'s unit is the item
+P2D20_TEXT = (
+    "Quantity (c)'s unit is the ITEM. This is not a choice between three readings in\n"
+    "circulation; it is the unit both governing documents already state, restored. P2-D12's\n"
+    "decision text says \"the exact two-sided sign test on items with `ΔA != 0`\" and `v2.0`\n"
+    "section 3.2 says `A` is computed per rendering and \"averaged within item across the\n"
+    "two\" Format V permutations. An item's value is therefore the mean of its SURVIVING\n"
+    "pair `ΔA`s, which equals the difference of its within-item mean `A`s, and the item\n"
+    "enters the sign test when `|mean ΔA| > EPS` under P2-D19's tolerance. Three\n"
+    "consequences are fixed here because no reading covered them. An item with one\n"
+    "surviving pair contributes that pair's sign, per P2-D16: it contributes what it has,\n"
+    "and is neither imputed nor dropped. An item whose two pairs DISAGREE in sign\n"
+    "contributes the sign of their mean. An item whose two pairs cancel to within `EPS`\n"
+    "contributes nothing and is counted as a tie, which is the same event as a pair-level\n"
+    "tie and is reported as one. `inertness_ceiling.c5_delta_A`'s pair count and\n"
+    "`inertness_ceiling.main`'s `round(108 x (1 - tie_rate))` are both superseded for (c):\n"
+    "the first counts the wrong unit, the second applies an item scale to a 216-pair rate\n"
+    "and yields neither unit. Both keep emitting unchanged, because `v2.7` sections 2.1 and\n"
+    "3.2 publish them and a superseded document must still reproduce."
+)
+P2D20_REJECTED = (
+    "Adopt the rendering pair, and amend P2-D12 and v2.0 section 3.2 to match the code.",
+    "Keep `round(108 x (1 - tie_rate))`.",
+    "Exclude items whose two permutations disagree in sign.",
+    "Break a sign disagreement by permutation 0.")
+P2D20_UNIT = "item"
+P2D20_SIGN_DISAGREEMENT = "sign of the within-item mean"
+P2D20_ONE_PAIR_ITEM_CONTRIBUTES = True     # P2-D16's precedent, not a new rule
+P2D20_CANCELLING_ITEM_IS_A_TIE = True
+# Recomputed 2026-09-13 from frozen P1 rows by `inertness_ceiling.c5_delta_A`, on
+# the c5 contrast, confirmatory set. Not transcribed from v2.7.
+P2D20_C5_N_EFF_ITEM = {"CTRL": 41, "B2": 36, "B4": 63, "L1": 27, "L2": 31,
+                       "L3": 33, "L4": 43}
+# The two superseded readings, recomputed and confirmed to still reproduce what
+# v2.7 published. Kept so a caller quoting one of them can be told which it has.
+P2D20_C5_N_EFF_PAIR_EXACT = {"CTRL": 53, "B2": 42, "B4": 80, "L1": 27, "L2": 32,
+                             "L3": 35, "L4": 55}
+P2D20_C5_N_EFF_RESCALED = {"CTRL": 26, "B2": 21, "B4": 40, "L1": 14, "L2": 16,
+                           "L3": 17, "L4": 28}
+# Items whose two permutations disagree in sign, and the subset that cancel to
+# within EPS and so become ties. The case the unit exists to rule on.
+P2D20_C5_SIGN_DISAGREEMENT = {"CTRL": 1, "B2": 6, "B4": 5, "L1": 0, "L2": 0,
+                              "L3": 1, "L4": 4}
+P2D20_C5_SIGN_DISAGREEMENT_CANCELLING = {"CTRL": 1, "B2": 0, "B4": 1, "L1": 0,
+                                         "L2": 0, "L3": 0, "L4": 0}
+
+
+def bind_quantity_c_unit(unit, sign_disagreement_rule, one_pair_item_contributes,
+                         cancelling_item_is_a_tie, zero_test_eps):
+    """Assert a quantity (c) run's unit against P2-D20. Call where n_eff is formed.
+
+    The check that matters is `unit`. A run that counts rendering pairs reports an
+    `n_eff` roughly a third larger than the item unit gives, and one that rescales
+    a 216-pair rate to 108 reports one roughly a third smaller; both are wrong in
+    a direction a reader cannot see from the number. `zero_test_eps` is checked
+    because the unit and the tolerance move `n_eff` separately and a run that
+    fixes one and not the other is still not reporting P2-D20's quantity.
+    """
+    checks = (("P2-D20 unit", str(unit), P2D20_UNIT),
+              ("P2-D20 sign disagreement rule", str(sign_disagreement_rule),
+               P2D20_SIGN_DISAGREEMENT),
+              ("P2-D20 one-pair item contributes",
+               str(bool(one_pair_item_contributes)),
+               str(P2D20_ONE_PAIR_ITEM_CONTRIBUTES)),
+              ("P2-D20 cancelling item is a tie",
+               str(bool(cancelling_item_is_a_tie)),
+               str(P2D20_CANCELLING_ITEM_IS_A_TIE)))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, actual, str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+    if float(zero_test_eps) != float(P2D19_EPS):
+        raise AssertionError(
+            f"P2-D20: the item-level zero test uses P2-D19's EPS = {P2D19_EPS:g}; "
+            f"the run used {float(zero_test_eps):g}. The unit and the tolerance "
+            "move n_eff separately and both have to be right.")
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -673,7 +754,8 @@ def check_log(path=LOG):
                          ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT),
                          ("P2-D13", P2D13_TEXT), ("P2-D14", P2D14_TEXT),
                          ("P2-D15", P2D15_TEXT), ("P2-D16", P2D16_TEXT),
-                         ("P2-D19", P2D19_TEXT)):
+                         ("P2-D19", P2D19_TEXT),
+                         ("P2-D20", P2D20_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -691,7 +773,8 @@ def check_log(path=LOG):
                             ("P2-D14", P2D14_REJECTED),
                             ("P2-D15", P2D15_REJECTED),
                             ("P2-D16", P2D16_REJECTED),
-                            ("P2-D19", P2D19_REJECTED)):
+                            ("P2-D19", P2D19_REJECTED),
+                            ("P2-D20", P2D20_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -750,6 +833,15 @@ def main():
           f"count; exact equality gives {P2D19_EXACT_EQUALITY_PAIRS} pairs on "
           f"{P2D19_EXACT_EQUALITY_ITEMS} items; empty gap {P2D19_GAP[0]:.3g} to "
           f"{P2D19_GAP[1]:.3g}")
+    print(f"quantity (c)    P2-D20: unit={P2D20_UNIT}; sign disagreement -> "
+          f"{P2D20_SIGN_DISAGREEMENT}; one-pair item contributes="
+          f"{P2D20_ONE_PAIR_ITEM_CONTRIBUTES}, cancelling item is a tie="
+          f"{P2D20_CANCELLING_ITEM_IS_A_TIE}")
+    print("                c5 n_eff item " + " ".join(
+        f"{m}={n}" for m, n in P2D20_C5_N_EFF_ITEM.items()))
+    print("                superseded: pair " + " ".join(
+        str(n) for n in P2D20_C5_N_EFF_PAIR_EXACT.values()) + "; rescaled "
+        + " ".join(str(n) for n in P2D20_C5_N_EFF_RESCALED.values()))
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
@@ -767,7 +859,7 @@ def main():
              P2D8_REJECTED, P2D9_REJECTED, P2D10_REJECTED,
              P2D11_REJECTED, P2D12_REJECTED, P2D13_REJECTED,
              P2D14_REJECTED, P2D15_REJECTED, P2D16_REJECTED), start=1))
-          + f", {len(P2D19_REJECTED)} on P2-D19"
+          + f", {len(P2D19_REJECTED)} on P2-D19, {len(P2D20_REJECTED)} on P2-D20"
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

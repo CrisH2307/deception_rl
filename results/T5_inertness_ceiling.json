@@ -81,7 +81,19 @@
         "n_positive": 13,
         "sign_proportion": 0.24528301886792453,
         "p_two_sided": 0.0002685401188191605,
-        "significant_at_corrected_alpha": true
+        "significant_at_corrected_alpha": true,
+        "n_items": 108,
+        "n_items_with_both_pairs": 108,
+        "n_items_with_one_pair": 0,
+        "n_eff_item": 41,
+        "n_positive_item": 8,
+        "tie_rate_item": 0.6203703703703703,
+        "sign_proportion_item": 0.1951219512195122,
+        "p_two_sided_item": 0.00011222142620681552,
+        "n_items_sign_disagreement": 1,
+        "n_items_sign_disagreement_cancelling": 1,
+        "n_eff_pair_at_eps": 47,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       },
       "B2": {
         "same_option_rate": 0.8037383177570093,
@@ -91,7 +103,19 @@
         "n_positive": 21,
         "sign_proportion": 0.5,
         "p_two_sided": 1.0,
-        "significant_at_corrected_alpha": false
+        "significant_at_corrected_alpha": false,
+        "n_items": 108,
+        "n_items_with_both_pairs": 106,
+        "n_items_with_one_pair": 2,
+        "n_eff_item": 36,
+        "n_positive_item": 20,
+        "tie_rate_item": 0.6666666666666667,
+        "sign_proportion_item": 0.5555555555555556,
+        "p_two_sided_item": 0.617719317029696,
+        "n_items_sign_disagreement": 6,
+        "n_items_sign_disagreement_cancelling": 0,
+        "n_eff_pair_at_eps": 42,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       },
       "B4": {
         "same_option_rate": 0.6296296296296297,
@@ -101,7 +125,19 @@
         "n_positive": 39,
         "sign_proportion": 0.4875,
         "p_two_sided": 0.9110721212260926,
-        "significant_at_corrected_alpha": false
+        "significant_at_corrected_alpha": false,
+        "n_items": 108,
+        "n_items_with_both_pairs": 108,
+        "n_items_with_one_pair": 0,
+        "n_eff_item": 63,
+        "n_positive_item": 29,
+        "tie_rate_item": 0.41666666666666663,
+        "sign_proportion_item": 0.4603174603174603,
+        "p_two_sided_item": 0.6146550157654618,
+        "n_items_sign_disagreement": 5,
+        "n_items_sign_disagreement_cancelling": 1,
+        "n_eff_pair_at_eps": 79,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       },
       "L1": {
         "same_option_rate": 0.8611111111111112,
@@ -111,7 +147,19 @@
         "n_positive": 11,
         "sign_proportion": 0.4074074074074074,
         "p_two_sided": 0.44206833839416504,
-        "significant_at_corrected_alpha": false
+        "significant_at_corrected_alpha": false,
+        "n_items": 108,
+        "n_items_with_both_pairs": 108,
+        "n_items_with_one_pair": 0,
+        "n_eff_item": 27,
+        "n_positive_item": 11,
+        "tie_rate_item": 0.75,
+        "sign_proportion_item": 0.4074074074074074,
+        "p_two_sided_item": 0.44206833839416504,
+        "n_items_sign_disagreement": 0,
+        "n_items_sign_disagreement_cancelling": 0,
+        "n_eff_pair_at_eps": 27,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       },
       "L2": {
         "same_option_rate": 0.8518518518518519,
@@ -121,7 +169,19 @@
         "n_positive": 15,
         "sign_proportion": 0.46875,
         "p_two_sided": 0.860050065908581,
-        "significant_at_corrected_alpha": false
+        "significant_at_corrected_alpha": false,
+        "n_items": 108,
+        "n_items_with_both_pairs": 108,
+        "n_items_with_one_pair": 0,
+        "n_eff_item": 31,
+        "n_positive_item": 15,
+        "tie_rate_item": 0.712962962962963,
+        "sign_proportion_item": 0.4838709677419355,
+        "p_two_sided_item": 1.0,
+        "n_items_sign_disagreement": 0,
+        "n_items_sign_disagreement_cancelling": 0,
+        "n_eff_pair_at_eps": 32,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       },
       "L3": {
         "same_option_rate": 0.8101851851851852,
@@ -131,7 +191,19 @@
         "n_positive": 9,
         "sign_proportion": 0.2571428571428571,
         "p_two_sided": 0.005988120567053557,
-        "significant_at_corrected_alpha": false
+        "significant_at_corrected_alpha": false,
+        "n_items": 108,
+        "n_items_with_both_pairs": 108,
+        "n_items_with_one_pair": 0,
+        "n_eff_item": 33,
+        "n_positive_item": 8,
+        "tie_rate_item": 0.6944444444444444,
+        "sign_proportion_item": 0.24242424242424243,
+        "p_two_sided_item": 0.004551384132355452,
+        "n_items_sign_disagreement": 1,
+        "n_items_sign_disagreement_cancelling": 0,
+        "n_eff_pair_at_eps": 35,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       },
       "L4": {
         "same_option_rate": 0.7407407407407407,
@@ -141,7 +213,19 @@
         "n_positive": 16,
         "sign_proportion": 0.2909090909090909,
         "p_two_sided": 0.0026672623828598026,
-        "significant_at_corrected_alpha": false
+        "significant_at_corrected_alpha": false,
+        "n_items": 108,
+        "n_items_with_both_pairs": 108,
+        "n_items_with_one_pair": 0,
+        "n_eff_item": 43,
+        "n_positive_item": 13,
+        "tie_rate_item": 0.6018518518518519,
+        "sign_proportion_item": 0.3023255813953488,
+        "p_two_sided_item": 0.0137181850586785,
+        "n_items_sign_disagreement": 4,
+        "n_items_sign_disagreement_cancelling": 0,
+        "n_eff_pair_at_eps": 55,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
       }
     }
   },
@@ -169,6 +253,8 @@
       "c5_change_rate": 0.2962962962962963,
       "c5_tie_rate_analogue": 0.7546296296296297,
       "n_eff_at_a_c5_like_tie_rate": 26,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 41,
       "sign_power_at": {
         "0.6": 0.006633044533147993,
         "0.65": 0.02422137078115781,
@@ -186,6 +272,8 @@
       "c5_change_rate": 0.19626168224299068,
       "c5_tie_rate_analogue": 0.8037383177570093,
       "n_eff_at_a_c5_like_tie_rate": 21,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 36,
       "sign_power_at": {
         "0.6": 0.011043249242421326,
         "0.65": 0.0330878120512007,
@@ -203,6 +291,8 @@
       "c5_change_rate": 0.37037037037037035,
       "c5_tie_rate_analogue": 0.6296296296296297,
       "n_eff_at_a_c5_like_tie_rate": 40,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 63,
       "sign_power_at": {
         "0.6": 0.035229942937575705,
         "0.65": 0.12149219419194943,
@@ -220,6 +310,8 @@
       "c5_change_rate": 0.13888888888888884,
       "c5_tie_rate_analogue": 0.875,
       "n_eff_at_a_c5_like_tie_rate": 14,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 27,
       "sign_power_at": {
         "0.6": 0.008156686090239996,
         "0.65": 0.020530669466984265,
@@ -237,6 +329,8 @@
       "c5_change_rate": 0.14814814814814814,
       "c5_tie_rate_analogue": 0.8518518518518519,
       "n_eff_at_a_c5_like_tie_rate": 16,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 31,
       "sign_power_at": {
         "0.6": 0.003302032310271999,
         "0.65": 0.009764491809823585,
@@ -254,6 +348,8 @@
       "c5_change_rate": 0.18981481481481477,
       "c5_tie_rate_analogue": 0.837962962962963,
       "n_eff_at_a_c5_like_tie_rate": 17,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 33,
       "sign_power_at": {
         "0.6": 0.012375969660927995,
         "0.65": 0.032734258920287716,
@@ -271,6 +367,8 @@
       "c5_change_rate": 0.2592592592592593,
       "c5_tie_rate_analogue": 0.7453703703703703,
       "n_eff_at_a_c5_like_tie_rate": 28,
+      "n_eff_at_a_c5_like_tie_rate_is": "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) applies an item scale to a 216-pair rate and gives neither unit. Retained unchanged because v2.7 section 3.2 publishes it and the power figures below are computed from it. P2-D20's n_eff is diagnostic_c5_direction.per_model[m].n_eff_item.",
+      "n_eff_item_p2d20": 43,
       "sign_power_at": {
         "0.6": 0.01114895042503272,
         "0.65": 0.03931359064037067,

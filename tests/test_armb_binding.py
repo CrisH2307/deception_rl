@@ -256,6 +256,42 @@ def test_p2d19_a_tie_tolerance_and_the_gap_it_sits_in():
         assert worst == "size", f"on {base} the worst tile is {worst}, not size"
 
 
+def test_p2d20_quantity_c_unit_is_the_item_and_both_superseded_readings_hold():
+    """P2-D20's `n_eff`, and the two readings it supersedes.
+
+    The superseded columns are asserted because they are the check that the
+    recomputation is of the same quantity: if the pair column stopped reproducing
+    `v2.7` section 2.1, the item column would be a different measurement rather
+    than a different unit of the same one.
+    """
+    import json
+    d = json.load(open("results/T5_inertness_ceiling.json"))
+    c5 = d["diagnostic_c5_direction"]["per_model"]
+    for m, v in c5.items():
+        assert v["n_eff_item"] == dec.P2D20_C5_N_EFF_ITEM[m]
+        assert v["n_eff"] == dec.P2D20_C5_N_EFF_PAIR_EXACT[m]
+        assert int(round(108 * (1 - v["tie_rate"]))) == dec.P2D20_C5_N_EFF_RESCALED[m]
+        assert v["n_items_sign_disagreement"] == dec.P2D20_C5_SIGN_DISAGREEMENT[m]
+        assert (v["n_items_sign_disagreement_cancelling"]
+                == dec.P2D20_C5_SIGN_DISAGREEMENT_CANCELLING[m])
+        # The item unit cannot exceed the item count, and cannot exceed the pair
+        # count at the same tolerance: collapsing two votes into one only loses.
+        assert v["n_eff_item"] <= v["n_items"] == dec.P2D4_N_CONFIRMATORY
+        assert v["n_eff_item"] <= v["n_eff_pair_at_eps"]
+        # A cancelling item is a sign-disagreeing item, by construction.
+        assert (v["n_items_sign_disagreement_cancelling"]
+                <= v["n_items_sign_disagreement"])
+
+    dec.bind_quantity_c_unit(dec.P2D20_UNIT, dec.P2D20_SIGN_DISAGREEMENT,
+                             True, True, dec.P2D19_EPS)
+    for bad in (("rendering_pair", dec.P2D20_SIGN_DISAGREEMENT, True, True,
+                 dec.P2D19_EPS),
+                (dec.P2D20_UNIT, "permutation 0", True, True, dec.P2D19_EPS),
+                (dec.P2D20_UNIT, dec.P2D20_SIGN_DISAGREEMENT, True, True, 0.0)):
+        with pytest.raises(AssertionError):
+            dec.bind_quantity_c_unit(*bad)
+
+
 def test_p2d17_and_p2d18_are_withdrawn_and_carry_no_text():
     """A withdrawn entry has no decision text, so nothing can bind to it.
 

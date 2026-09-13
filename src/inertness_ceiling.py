@@ -109,7 +109,59 @@ def c5_delta_A(ch, A, keep):
             "significant_at_corrected_alpha":
                 bool(n_eff and binomtest(pos, n_eff, 0.5).pvalue < SP.ALPHA),
         }
+        # P2-D20: the unit is the ITEM. Everything above is the PAIR reading and
+        # is kept byte-identical because `v2.7` section 2.1 publishes it. The
+        # item block is the one (c) runs on. Two corrections, emitted separately
+        # so they can be told apart: the unit (pair -> item) and the zero test
+        # (exact -> P2-D19's EPS).
+        out[m].update(_item_reading(it, d))
     return out
+
+
+def _item_reading(it, d, eps=P2D.P2D19_EPS):
+    """P2-D20's item aggregation of per-pair `ΔA`, and the disagreement counts.
+
+    `v2.0` section 3.2 defines the item value as `A` averaged within item across
+    the two Format V permutations, and the mean of `A` differences IS the
+    difference of mean `A`, so the item statistic is the mean of that item's
+    surviving pair `ΔA`s. An item with one surviving pair contributes that pair,
+    per P2-D16. An item whose two pairs disagree in sign contributes the sign of
+    their mean, and contributes nothing when they cancel to within `eps`, which is
+    the same event as a pair-level tie and is counted as one.
+    """
+    order = np.argsort(it, kind="stable")
+    iid, first = np.unique(it[order], return_index=True)
+    groups = np.split(d[order], first[1:])
+    mean = np.array([g.mean() for g in groups])
+    sizes = np.array([len(g) for g in groups])
+    nz = np.abs(mean) > eps
+    n_eff = int(nz.sum())
+    pos = int((mean[nz] > 0).sum())
+    # Both pairs present, both nonzero at `eps`, and of opposite sign. The case
+    # the unit exists to rule on.
+    disagree = np.array([
+        len(g) == 2 and bool(np.all(np.abs(g) > eps))
+        and bool(g[0] * g[1] < 0) for g in groups])
+    cancel = np.array([disagree[k] and abs(mean[k]) <= eps
+                       for k in range(len(groups))])
+    # The pair reading with the unit held fixed and only the zero test moved to
+    # `eps`, so the unit change and the tolerance change are separable.
+    n_eff_pair_at_eps = int((np.abs(d) > eps).sum())
+    return {
+        "n_items": int(len(iid)),
+        "n_items_with_both_pairs": int((sizes == 2).sum()),
+        "n_items_with_one_pair": int((sizes == 1).sum()),
+        "n_eff_item": n_eff, "n_positive_item": pos,
+        "tie_rate_item": float(1 - n_eff / len(iid)),
+        "sign_proportion_item": pos / n_eff if n_eff else float("nan"),
+        "p_two_sided_item":
+            binomtest(pos, n_eff, 0.5).pvalue if n_eff else float("nan"),
+        "n_items_sign_disagreement": int(disagree.sum()),
+        "n_items_sign_disagreement_cancelling": int(cancel.sum()),
+        "n_eff_pair_at_eps": n_eff_pair_at_eps,
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, "
+                   "retained because v2.7 section 2.1 publishes it.",
+    }
 
 
 def main():
@@ -120,6 +172,11 @@ def main():
     checks = [check_floor(j) for j in (k - 2, k - 1, k, k + 1)]
     half = [check_floor(k, both_permutations=False)]
     c5 = c5_delta_A(ch, A, keep)
+    # P2-D20 binds the unit. A run that formed n_eff at the pair, or rescaled a
+    # 216-pair rate to 108, fails here rather than reporting a denominator a
+    # reader cannot tell apart from the right one.
+    P2D.bind_quantity_c_unit(P2D.P2D20_UNIT, P2D.P2D20_SIGN_DISAGREEMENT,
+                             True, True, P2D.P2D19_EPS)
     eff = json.load(open("results/T5_c5_effect.json"))["sets"]["size_tile_confirmatory"]
 
     rows = {}
@@ -133,6 +190,13 @@ def main():
             "c5_change_rate": 1 - R,
             "c5_tie_rate_analogue": c5[m]["tie_rate"],
             "n_eff_at_a_c5_like_tie_rate": n_eff,
+            "n_eff_at_a_c5_like_tie_rate_is":
+                "SUPERSEDED for quantity (c) by P2-D20: round(108 * (1 - tie_rate)) "
+                "applies an item scale to a 216-pair rate and gives neither unit. "
+                "Retained unchanged because v2.7 section 3.2 publishes it and the "
+                "power figures below are computed from it. P2-D20's n_eff is "
+                "diagnostic_c5_direction.per_model[m].n_eff_item.",
+            "n_eff_item_p2d20": c5[m]["n_eff_item"],
             "sign_power_at": {str(p): SP.power(n_eff, p) for p in P_GRID},
             "p1_at_80_power": SP.detectable(n_eff),
         }

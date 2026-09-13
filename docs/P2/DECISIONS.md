@@ -1303,6 +1303,192 @@ above a real one rather than a formality.
 
 ---
 
+## P2-D20. Quantity (c)'s unit is the item, and a sign disagreement resolves on the within-item mean
+
+**Status:** adopted.
+**Decided:** 2026-09-13, by an **agent session acting on an author instruction**, in the
+session following the one that recorded P2-D19. No `F1` or `F2` statistic of any kind was
+computed before or during it; every figure below is the `c5` contrast on frozen Paper 1
+rows. Full reasoning in `PREREGISTRATION_v2.11.md`.
+
+**The instruction it acted on**, per the countermeasure in `v2.10` section 2.4. The author
+named the three readings in circulation and their `n_eff`, and instructed:
+
+> DECIDE. State the unit, compute the n_eff it gives per model, and say what happens to an
+> item whose two permutations disagree in sign. That case is the whole reason the unit
+> matters and no reading currently covers it.
+
+with the note that
+
+> an item contributing one signed vote per item needs a rule for sign disagreement, and
+> P2-D16 already sets the precedent that a partially observed item contributes what it has
+> rather than being imputed or dropped
+
+and the constraints: recompute every `n_eff` rather than transcribe it, do not resolve the
+`ext_i` floor, compute no `F1`/`F2` statistic, and list rather than recompute any published
+power figure the unit moves. All five were followed and the third is the reason the
+consequences section below lists figures it does not evaluate.
+
+**Binds:** `src/inertness_ceiling.py`, and any script forming quantity (c)'s `n_eff`.
+**Constant:** `P2D20_TEXT`, `P2D20_UNIT`, `P2D20_SIGN_DISAGREEMENT`,
+`P2D20_ONE_PAIR_ITEM_CONTRIBUTES`, `P2D20_CANCELLING_ITEM_IS_A_TIE`,
+`P2D20_C5_N_EFF_ITEM`, `P2D20_C5_N_EFF_PAIR_EXACT`, `P2D20_C5_N_EFF_RESCALED`,
+`P2D20_C5_SIGN_DISAGREEMENT`, `P2D20_C5_SIGN_DISAGREEMENT_CANCELLING`.
+
+**Decision text.**
+
+> Quantity (c)'s unit is the ITEM. This is not a choice between three readings in
+> circulation; it is the unit both governing documents already state, restored. P2-D12's
+> decision text says "the exact two-sided sign test on items with `ΔA != 0`" and `v2.0`
+> section 3.2 says `A` is computed per rendering and "averaged within item across the
+> two" Format V permutations. An item's value is therefore the mean of its SURVIVING
+> pair `ΔA`s, which equals the difference of its within-item mean `A`s, and the item
+> enters the sign test when `|mean ΔA| > EPS` under P2-D19's tolerance. Three
+> consequences are fixed here because no reading covered them. An item with one
+> surviving pair contributes that pair's sign, per P2-D16: it contributes what it has,
+> and is neither imputed nor dropped. An item whose two pairs DISAGREE in sign
+> contributes the sign of their mean. An item whose two pairs cancel to within `EPS`
+> contributes nothing and is counted as a tie, which is the same event as a pair-level
+> tie and is reported as one. `inertness_ceiling.c5_delta_A`'s pair count and
+> `inertness_ceiling.main`'s `round(108 x (1 - tie_rate))` are both superseded for (c):
+> the first counts the wrong unit, the second applies an item scale to a 216-pair rate
+> and yields neither unit. Both keep emitting unchanged, because `v2.7` sections 2.1 and
+> 3.2 publish them and a superseded document must still reproduce.
+
+**Why it needed deciding, and why it is not really a choice.** Three readings were in
+circulation and they give different `n_eff` on identical data, which makes the denominator
+of the confirmatory test ambiguous. But they do not have equal standing. **Both governing
+documents say item.** P2-D12's decision text says "the exact two-sided sign test on items
+with `ΔA != 0`". `v2.0` section 3.2 says `A` is "computed per rendering, averaged within
+item across the two" Format V permutations. Neither is ambiguous, and neither was amended.
+What happened is that `c5_delta_A` pivoted on `(item_id, permutation_id)` and counted the
+rows, and `main` then took that pair-scale rate and multiplied its complement by 108. Those
+are implementation drift from a stated unit, not competing interpretations of an unstated
+one. Restoring the stated unit is the conservative act; amending the preregistration to
+match the code would be the other kind.
+
+**The three readings, recomputed on 2026-09-13 and not transcribed.** `c5` contrast,
+`size` confirmatory set, emitted by `src/inertness_ceiling.py`:
+
+| model | ITEM, **P2-D20** | pair, exact, `v2.7` §2.1 | `round(108 x (1 - tie_rate))`, `v2.7` §3.2 |
+|---|---:|---:|---:|
+| `CTRL` | **41** | 53 | 26 |
+| `B2` | **36** | 42 | 21 |
+| `B4` | **63** | 80 | 40 |
+| `L1` | **27** | 27 | 14 |
+| `L2` | **31** | 32 | 16 |
+| `L3` | **33** | 35 | 17 |
+| `L4` | **43** | 55 | 28 |
+
+The two superseded columns reproduce `v2.7` exactly, which is the check that the
+recomputation is of the same quantity and not of a different one that happens to be
+nearby.
+
+**The rescaled column is wrong in the opposite direction from the pair column, and by
+more.** The item unit is below the pair count on six of seven models, because an item
+whose two pairs are both nonzero collapses to one vote. It is roughly double the rescaled
+figure, because `round(108 x (1 - tie_rate))` takes a rate defined over 216 pairs and
+applies it to 108 items, which counts an item whose permutations disagree on `ΔA != 0` as
+half an item by arithmetic no decision authorizes. A reader handed either number alone
+cannot see which way it is wrong.
+
+**What happens to an item whose two permutations disagree in sign.** This is the case the
+unit exists to rule on and the case no reading covered, because at the pair unit it does
+not arise: the two pairs are simply two votes.
+
+The rule is **the sign of the within-item mean**, and it is not new either. `v2.0` section
+3.2 defines the item value as `A` averaged within item, and the mean of two `A` differences
+is the difference of the two mean `A`s, so `mean(ΔA)` IS `ΔA` of the item as `v2.0` defines
+it. The rule follows from the definition rather than being added to it.
+
+Three sub-cases, all of them observed:
+
+1. **Two pairs, same sign.** One vote in that direction. Unremarkable and the common case.
+2. **Two pairs, opposite signs, not cancelling.** One vote in the direction of the larger.
+   Measured on `c5`: `CTRL` 0 items, `B2` 6, `B4` 4, `L1` 0, `L2` 0, `L3` 1, `L4` 4. Sign
+   disagreements total 17 across the seven models, of which the 2 below cancel.
+3. **Two pairs, opposite signs, cancelling to within `EPS`.** The item's `ΔA` is zero, it
+   contributes nothing, and it is counted as a tie, because it is the same event as a
+   pair-level tie: the coordinate did not move. Measured: `CTRL` 1 item, `B4` 1, zero on
+   the other five.
+
+And the attrition case, which P2-D16 already settled and which is restated here only
+because (c)'s unit is what makes it visible: **an item with one surviving pair contributes
+that pair's sign.** It contributes what it has. It is not imputed to zero, which would add
+a tie the scorer did not produce, and it is not dropped, which would shrink a denominator
+P2-D13's floor is an absolute count against. On the `c5` contrast this affects `B2` on 2
+items and no other model.
+
+**Why not break a sign disagreement some other way.** Using the item's mean means an item
+where one permutation moves far and the other moves slightly back votes with the larger
+move. That does read magnitude, and (c) is a sign test, so it is worth being explicit:
+the magnitude is used to form the item's value, not to weight its vote. Every item that
+votes contributes exactly one vote. That is the same structure P2-D6 fixed, with `v2.0`'s
+definition of the item value supplied where P2-D6 assumed one.
+
+**One admissibility question this raises, ruled by P2-D15's mechanism and not by its
+wording.** P2-D15 ruled `sign(ΔA)` admissible for the cross-family control under Paper 1's
+D111, describing it as "an ordinal comparison of two options". `sign(mean ΔA)` compares the
+relative sizes of two differences rather than two options, so P2-D15's wording does not
+reach it. Its **mechanism** does, and P2-D15's own reasoning says the mechanism is the
+right test: D111's concern is tokenizer non-identity making log-probabilities
+incommensurable, and the operational test is whether the statistic changes when the
+tokenizer changes but the chosen options do not. The item mean is a function of frozen,
+model-free item geometry indexed by four chosen options, normalised by one per-item `ext_i`,
+computed within a model and reported as a rate. A tokenizer change with the choices held
+fixed does not move it. `CTRL` is therefore still citable, which matters because `CTRL` is
+the model whose number this decision moves most.
+
+**Alternatives offered and not chosen.**
+
+1. **Adopt the rendering pair, and amend P2-D12 and v2.0 section 3.2 to match the code.**
+   Rejected. It amends a preregistration to match an implementation that drifted from it,
+   which is the direction this project does not move in, and it would do so after the
+   `n_eff` each choice gives is on the table. It is also the reading that treats 108 items
+   as 216 independent draws in the one place the design is most short of `n`, which is the
+   clustering P2-D8's bootstrap exists to respect.
+2. **Keep `round(108 x (1 - tie_rate))`.** Rejected. It is neither unit. It applies an item
+   scale to a pair-scale rate, and `v2.10` section 4.1 already named it as producing
+   neither reading. Nothing defends it except that it is what ran.
+3. **Exclude items whose two permutations disagree in sign.** Rejected. It discards the
+   items that carry the most information about whether the effect is order-robust, and it
+   is an exclusion rule whose effect on `n_eff` is visible at the moment it would be
+   chosen. It also contradicts P2-D16's precedent in the same document: a partially
+   informative item contributes what it has.
+4. **Break a sign disagreement by permutation 0.** Rejected. It makes the confirmatory test
+   depend on which option order was labelled first, which is arbitrary, and it discards the
+   second rendering's information entirely while keeping its cost.
+
+**Consequences: published figures the unit moves.** Listed and **not recomputed here**, per
+the instruction. This entry makes no claim about which way any of them moves.
+
+| figure | where |
+|---|---|
+| `v2.7` §3.2's power table: power at `p1 = 0.75`, at `0.90`, and `p1` at 80% power, all seven models | `v2.7` §3.2, `results/T5_inertness_ceiling.json` `sign_power_at` and `p1_at_80_power` |
+| `v2.7` §2.1's `p` values and `significant_at_corrected_alpha` for the `c5` sign diagnostic | `v2.7` §2.1, `results/T5_inertness_ceiling.json` |
+| P2-D14's Type II gap, 0.0000 to 0.2547, which `src/armb_floor.py:type_ii_gap` reads from the pair block | P2-D14, `results/T5_armb_floor.json` |
+
+**One consequence that is not a power figure and is flagged rather than absorbed.** P2-D12
+and P2-D14 both rest on the `c5` neutral sign proportion being "at or below 0.5 on all
+seven models". At the item unit `B2`'s is **0.5556**, above 0.5, on `n_eff` 36 with a
+two-sided `p` of 0.6177. The claim as worded does not survive the unit change; whether the
+conclusion it supports does is a separate question, because 0.5556 at that `p` is not
+evidence of upward drift either. **It is not resolved here.** P2-D12 and P2-D14 rejected
+moving `p0` on reasoning that has to be re-read against the corrected diagnostic, and doing
+that in the same entry that changes the unit would be resolving two things at once with the
+numbers already on screen.
+
+**Consequences: what is emitted.** `inertness_ceiling.c5_delta_A` gains an item block
+(`n_eff_item`, `n_positive_item`, `tie_rate_item`, `sign_proportion_item`,
+`p_two_sided_item`, `n_items_sign_disagreement`, `n_items_sign_disagreement_cancelling`,
+`n_items_with_one_pair`) beside the pair block, which keeps every value byte-identical
+because `v2.7` sections 2.1 and 3.2 publish it and a superseded document must still
+reproduce. `n_eff_pair_at_eps` is emitted too, so the unit correction and P2-D19's
+tolerance correction can be told apart: on the `c5` contrast the tolerance alone moves only
+`CTRL`, 53 to 47, and `B4`, 80 to 79, and the unit does the rest.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -1316,4 +1502,6 @@ above a real one rather than a formality.
 | Per-cell tie attrition is reported beside every Arm B quantity | `p2_decisions.bind_tie_exclusion` |
 | `A`-tie tolerance is Paper 1's `EPS`, and the figures it gives | `p2_decisions.bind_a_tie_tolerance` |
 | The gap the tolerance sits in still exists | `tie_reference.demo` |
+| Quantity (c)'s `n_eff` is formed at the item, with P2-D19's `EPS` | `p2_decisions.bind_quantity_c_unit` |
+| The two superseded `n_eff` readings still reproduce `v2.7` | `tests/test_armb_binding.py` |
 | Exact-equality `a_invisibility` still emits 50 pairs on 48 items | `tests/test_armb_binding.py` |
