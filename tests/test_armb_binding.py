@@ -17,6 +17,7 @@ sys.path.insert(0, "src")
 import adversary as adv  # noqa: E402
 import p1  # noqa: E402
 import p2_decisions as dec  # noqa: E402
+import tie_reference as TR  # noqa: E402
 
 
 def test_bind_armb_accepts_the_governed_values():
@@ -398,6 +399,77 @@ def test_p2d15_conclusion_survives_the_control_being_excluded():
         assert banned.lower() in text, (
             f"{banned!r} is bound as still-inadmissible but the decision text "
             "does not name it, so the ruling could be read as a relaxation")
+
+
+def test_p2d16_bind_accepts_the_rule_and_rejects_every_departure():
+    """P2-D16 is a tripwire on attrition handling. Test that it fires.
+
+    The imputation case is the one that matters: counting a tied rendering as
+    "same option" adds pairs to quantity (a)'s denominator that cannot reach its
+    numerator, in the direction that confirms H-B's no-movement half.
+    """
+    good = dict(unit=dec.P2D16_EXCLUSION_UNIT, imputed_as_non_mover=False,
+                dropped_whole_item=False,
+                attrition_fields=dec.P2D16_ATTRITION_FIELDS)
+    dec.bind_tie_exclusion(**good)
+    drifted = [
+        ("imputation", dict(good, imputed_as_non_mover=True)),
+        ("whole-item exclusion", dict(good, dropped_whole_item=True)),
+        ("item-level unit", dict(good, unit=("item_id",))),
+        ("rendering-level unit",
+         dict(good, unit=("item_id", "permutation_id", "framing"))),
+        ("unreported attrition", dict(good, attrition_fields=())),
+        ("a missing denominator",
+         dict(good, attrition_fields=dec.P2D16_ATTRITION_FIELDS[:-1])),
+    ]
+    for what, kw in drifted:
+        try:
+            dec.bind_tie_exclusion(**kw)
+        except AssertionError:
+            continue
+        raise AssertionError(f"bind_tie_exclusion accepted {what}: {kw}")
+
+
+def test_p2d16_is_what_the_reference_path_already_does():
+    """The decision's ground: the c5 reference was computed under this rule.
+
+    Two things are checked, because the claim has two halves. P1's `n_tied == 1`
+    filter keeps a tied rendering out of the choice frame at all, and the pivot
+    shape in `c5_movement` and `c5_delta_A` then drops the (item, permutation)
+    pair the tie left short a column while KEEPING the item's other permutation.
+    If the second half failed, the rule would be whole-item exclusion wearing
+    this decision's name.
+    """
+    import pandas as pd
+
+    ch = TR.load_choices()
+    assert (ch["n_tied"] == 1).all(), (
+        "P2-D16 says a tied rendering never reaches a contrast, but "
+        "tie_reference.load_choices returned one")
+
+    # One item, two permutations; the cond5 rendering of permutation 0 is the
+    # tie P1's filter has already removed, so its row is absent.
+    g = pd.DataFrame({
+        "item_id":        [7, 7, 7],
+        "permutation_id": [0, 1, 1],
+        "condition":      ["cond4", "cond4", "cond5"],
+        "chosen_option":  [2, 2, 5],
+    })
+    w = g.pivot_table(index=["item_id", "permutation_id"], columns="condition",
+                      values="chosen_option", aggfunc="first")
+    w = w.loc[w.notna().all(axis=1)]
+    assert len(w) == 1, f"the tied pair was not dropped: {w}"
+    assert w.index.get_level_values("permutation_id").tolist() == [1], (
+        "the surviving permutation is not the one that was kept")
+    changed = (w["cond4"].values != w["cond5"].values).astype(float)
+    per_item = pd.DataFrame({"i": w.index.get_level_values("item_id"),
+                             "v": changed}).groupby("i")["v"].mean()
+    assert per_item.loc[7] == 1.0, (
+        "a half-observed item must contribute 0 or 1, not 0.5: the mean is over "
+        "surviving pairs, not over the two renderings the item would have had")
+    assert int((per_item > 0).sum()) == 1, (
+        "the item is still in quantity (a)'s denominator and still counts as a "
+        "mover; P2-D16 excludes the pair, never the item")
 
 
 if __name__ == "__main__":

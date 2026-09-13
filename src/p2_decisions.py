@@ -417,6 +417,72 @@ P2D15_SIGN_IS_ADMISSIBLE = True
 P2D15_STILL_INADMISSIBLE = ("logp_sum_chosen", "logp_neutral_chosen", "pmi")
 
 
+# ------------------- P2-D16, a tied rendering is excluded pairwise
+P2D16_TEXT = (
+    "A rendering whose argmax is tied carries no chosen option, so it carries neither a\n"
+    "same-option verdict nor an `A` value, and it is excluded. The exclusion is PAIRWISE and\n"
+    "at the level of the rendering pair, the (item, permutation) unit at which a framing\n"
+    "contrast is formed: the pair leaves both the numerator and the denominator of every\n"
+    "quantity whenever either of its two renderings is tied, and the item's other permutation\n"
+    "is retained. A tied rendering is never imputed as a non-mover, and the item is never\n"
+    "dropped whole. The rule is symmetric across the arms: it applies whether the tie falls\n"
+    "on `F0`, `F1` or `F2`, so a tied `F0` rendering leaves both the `F1` and the `F2`\n"
+    "contrast while a tied `F1` rendering leaves only the `F1` contrast. A tied `F0`\n"
+    "rendering is also outside the `F0`-versus-`cond4` disagreement count that sets P2-D13's\n"
+    "floor, which is already Paper 1's `n_tied == 1` filter on both sides, so it neither\n"
+    "raises nor lowers the floor. This is Paper 1's `n_tied == 1` filter applied at the\n"
+    "contrast rather than at the rendering, and it is what `src/c5_effect.py` and\n"
+    "`src/inertness_ceiling.py` already do to produce P2-D8's reference values. Every cell\n"
+    "reports its attrition: rendering pairs excluded for a tie, and items left with one\n"
+    "surviving pair or with none."
+)
+P2D16_REJECTED = ("Count the tie as a non-mover.",
+                  "Exclude the whole item.",
+                  "Break the tie with a deterministic rule and score the rendering.")
+# The unit the exclusion happens at, before any aggregation. Same shape as the
+# pivot index in `c5_movement` and `c5_delta_A`, which is the point: the rule is
+# what produced P2-D8's reference values, not a new handling for F1 and F2.
+P2D16_EXCLUSION_UNIT = ("item_id", "permutation_id")
+P2D16_IMPUTE_TIE_AS_NON_MOVER = False   # the whole content of the decision
+P2D16_DROPS_WHOLE_ITEM = False
+P2D16_ATTRITION_IS_REPORTED = True
+# What a cell reports beside its three quantities. A denominator that is not 108
+# cannot be recovered from a rate, and P2-D13's floor is an absolute count.
+P2D16_ATTRITION_FIELDS = ("pairs_excluded_for_a_tie", "items_with_one_surviving_pair",
+                          "items_with_no_surviving_pair", "item_denominator")
+
+
+def bind_tie_exclusion(unit, imputed_as_non_mover, dropped_whole_item,
+                       attrition_fields):
+    """Assert an Arm B run's tie handling against P2-D16. Call at import.
+
+    Takes what the caller actually did. The check that matters is
+    `imputed_as_non_mover`: a run that counts a tied rendering as "same option"
+    adds pairs to quantity (a)'s denominator that cannot reach its numerator, on
+    a boundary null where one item is deductive evidence, and it does so in the
+    direction that confirms H-B's no-movement half.
+    """
+    missing = [f for f in P2D16_ATTRITION_FIELDS if f not in tuple(attrition_fields)]
+    if missing:
+        raise AssertionError(
+            f"P2-D16: the cell does not report {missing}. Attrition that is not "
+            "reported is attrition a reader cannot size, and the item "
+            "denominator is not recoverable from the rate. "
+            "docs/P2/DECISIONS.md is the source.")
+    checks = (("P2-D16 exclusion unit", tuple(unit), P2D16_EXCLUSION_UNIT),
+              ("P2-D16 tie imputed as non-mover", bool(imputed_as_non_mover),
+               P2D16_IMPUTE_TIE_AS_NON_MOVER),
+              ("P2-D16 whole item dropped", bool(dropped_whole_item),
+               P2D16_DROPS_WHOLE_ITEM))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+
+
 def bind_armb_floor(floor_used, f0_disagreement_items, floor_is_statistical):
     """Assert T7's inertness floor against P2-D13. Call where the floor is set.
 
@@ -516,7 +582,7 @@ def check_log(path=LOG):
                          ("P2-D9", P2D9_TEXT), ("P2-D10", P2D10_TEXT),
                          ("P2-D11", P2D11_TEXT), ("P2-D12", P2D12_TEXT),
                          ("P2-D13", P2D13_TEXT), ("P2-D14", P2D14_TEXT),
-                         ("P2-D15", P2D15_TEXT)):
+                         ("P2-D15", P2D15_TEXT), ("P2-D16", P2D16_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -532,7 +598,8 @@ def check_log(path=LOG):
                             ("P2-D12", P2D12_REJECTED),
                             ("P2-D13", P2D13_REJECTED),
                             ("P2-D14", P2D14_REJECTED),
-                            ("P2-D15", P2D15_REJECTED)):
+                            ("P2-D15", P2D15_REJECTED),
+                            ("P2-D16", P2D16_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -576,6 +643,10 @@ def main():
     print(f"type II cost    P2-D14: p0={P2D6_P0} kept; gap to the neutral baseline "
           f"{min(P2D14_TYPE_II_GAP.values()):.4f} to "
           f"{max(P2D14_TYPE_II_GAP.values()):.4f}")
+    print(f"tie handling    P2-D16: excluded at {P2D16_EXCLUSION_UNIT}; "
+          f"imputed as non-mover={P2D16_IMPUTE_TIE_AS_NON_MOVER}, whole item "
+          f"dropped={P2D16_DROPS_WHOLE_ITEM}, attrition reported="
+          f"{P2D16_ATTRITION_IS_REPORTED}")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
           f"{P2D15_STILL_INADMISSIBLE}")
@@ -591,7 +662,7 @@ def main():
              P2D5_REJECTED, P2D6_REJECTED, P2D7_REJECTED,
              P2D8_REJECTED, P2D9_REJECTED, P2D10_REJECTED,
              P2D11_REJECTED, P2D12_REJECTED, P2D13_REJECTED,
-             P2D14_REJECTED, P2D15_REJECTED), start=1))
+             P2D14_REJECTED, P2D15_REJECTED, P2D16_REJECTED), start=1))
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

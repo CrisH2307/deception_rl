@@ -53,16 +53,17 @@ NUMBERS = "results/T6_F0_headroom.json"
 LADDER_ORDER = ("CTRL", "B2", "B4", "L1", "L2", "L3", "L4")
 
 
-def item_axis():
+def item_axis(with_marg=False):
     """Per-item `A` over every option, plus the references, on the frozen 1,000.
 
     `beta_c`, `o*_0` and `o*_infinity` come from `t6.arm_a_columns`, so this
     script and the Arm A results share one implementation of each.
+    `with_marg=True` also returns `{item_id: marg_norm over options}`.
     """
     df = p1.load_items()
     cols = t6.arm_a_columns(df)
     t6._check_p1_path(df, cols)
-    A = {}
+    A, MN = {}, {}
     ext = np.empty(len(df))
     finite = np.isfinite(cols["beta_c"])
     for tile in t6.TILES:
@@ -81,7 +82,8 @@ def item_axis():
         a = (mn - m0[:, None]) / den[:, None]
         for k, iid in enumerate(df["item_id"].values[ix]):
             A[int(iid)] = a[k]
-    return df, cols, A, ext
+            MN[int(iid)] = mn[k]
+    return (df, cols, A, ext, MN) if with_marg else (df, cols, A, ext)
 
 
 def choices():

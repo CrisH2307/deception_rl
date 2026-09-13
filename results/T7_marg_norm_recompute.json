@@ -1,0 +1,55 @@
+{
+  "source": "results/T5_inertness_ceiling.json",
+  "csv": "results/T7_confirmatory_marg_norm.csv",
+  "csv_sha256": "cead822c99fe54f8555b8d3eda038b5566f0808b598c1d712fc12efe95a2efa8",
+  "disagreements": [
+    {
+      "model": "L3",
+      "field": "n_eff",
+      "from_marg_norm": 36,
+      "reported": 35
+    },
+    {
+      "model": "L3",
+      "field": "n_positive",
+      "from_marg_norm": 10,
+      "reported": 9
+    },
+    {
+      "model": "L3",
+      "field": "sign_proportion",
+      "from_marg_norm": 0.2777777777777778,
+      "reported": 0.2571428571428571
+    },
+    {
+      "model": "L3",
+      "field": "blind_spot",
+      "from_marg_norm": 0.02314814814814814,
+      "reported": 0.02777777777777779
+    },
+    {
+      "model": "L3",
+      "field": "p_two_sided",
+      "from_marg_norm": 0.011330984183587134,
+      "reported": 0.005988120567053557
+    }
+  ],
+  "a_vs_marg_norm_tie_disagreements": [
+    {
+      "item_id": 77823,
+      "options": [
+        4,
+        5
+      ],
+      "marg_norm": [
+        0.0,
+        1.538764627560838e-16
+      ],
+      "A": [
+        -36.85983522242414,
+        -36.85983522242414
+      ]
+    }
+  ],
+  "note": "A disagreement is a float-equivalence break of P2-D15's identity sign(dA) = sign(d marg_norm). No tolerance is introduced to pick one reading."
+}

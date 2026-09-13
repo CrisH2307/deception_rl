@@ -46,6 +46,10 @@ REPORT = "reports/T7_f0_replication.md"
 RULE, FORM = TR.RULE, TR.FORM
 CONFIRMATORY_TILE = P2D.P2D3_TILE
 PROVISIONAL_FLOOR = P2D.P2D13_PROVISIONAL_FLOOR
+# Whether the on-Kaggle pin cross-check against Paper 1's env.json ran. It did
+# not, so choice identity must not be reported as environment identity.
+P1_ENV_FOUND = json.load(open("data/raw_t7/env_t7.json"))[
+    "p1_revision_crosscheck"]["p1_env_found"]
 
 
 def p1_cond4():
@@ -111,14 +115,24 @@ def main():
         "confirmatory_tile_summary": conf,
         "off_confirmatory_summary": off,
         "environment_equivalence": {
-            "verdict": "EXACT on the confirmatory tile"
+            "verdict": "CHOICE-LEVEL OUTPUT IDENTITY on the confirmatory tile; "
+                       "environment identity NOT established"
                        if worst == 0 else "PARTIAL",
             "confirmatory_disagreeing_items": worst,
             "confirmatory_renderings": sum(v["renderings"] for v in conf.values()),
+            "p1_env_found": P1_ENV_FOUND,
             "what_it_licenses":
-                "The comparison to Paper 1's published reference set is exact "
-                "rather than approximate, and F0 is Paper 1's cond4 at the "
-                "choice level on the confirmatory tile."
+                "F0 reproduces Paper 1's cond4 chosen option on every one of the "
+                f"{sum(v['renderings'] for v in conf.values()):,} confirmatory-tile "
+                "renderings, zero disagreements. That is choice-level output "
+                "identity on the confirmatory tile, so reference-set comparisons "
+                "that read only chosen options on that tile are unaffected by the "
+                "re-run. It is NOT environment identity: env_t7.json records "
+                "p1_env_found false, so the on-Kaggle pin cross-check against "
+                "Paper 1's env.json never ran, and transformers 5.0.0 / torch "
+                "2.10.0 is very unlikely to match Paper 1's stack. Off the "
+                "confirmatory tile the outputs are not identical (see "
+                "off_confirmatory_summary)."
                 if worst == 0 else
                 "Equivalence is partial; the link to Paper 1 weakens and the "
                 "reference-set comparison must be reported as approximate. The "
@@ -198,9 +212,16 @@ def _write_report(out):
       "own batch-8-against-batch-1 flip rates.\n")
     W("\n## What this licenses\n")
     W(f"{e['what_it_licenses']}\n")
-    W(f"\nThe two purposes of the `F0` re-run are separable and both hold: "
-      "environment equivalence against Paper 1, and a within-environment "
-      "baseline for the F1 and F2 contrasts.\n")
+    W("\nThe two purposes of the `F0` re-run are separable. The within-environment "
+      "baseline for the F1 and F2 contrasts holds. Environment equivalence is "
+      "established only as choice-level output identity on the confirmatory "
+      "tile: the pin cross-check against Paper 1's `env.json` did not run "
+      f"(`p1_env_found: {str(out['environment_equivalence']['p1_env_found']).lower()}`), "
+      "and the library stack is very unlikely to match Paper 1's.\n")
+    W("\n**Correction.** Commit `4db6f0c`'s message and this report's earlier "
+      "version said environment equivalence was exact and the comparison to "
+      "Paper 1's reference set exact rather than approximate. That overstated "
+      "the result; the wording above replaces it.\n")
     W("\n## The floor\n")
     W(f"```\n{out['floor']['rule']}\nmeasured   {out['floor']['measured_worst_case_items']}"
       f"\nadopted    {out['floor']['adopted']}\n```\n")

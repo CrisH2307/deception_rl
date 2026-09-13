@@ -874,6 +874,164 @@ cannot be read as a general relaxation of D111.
 
 ---
 
+## P2-D16. A tied rendering is excluded pairwise; a tie is never a non-mover
+
+**Status:** adopted.
+**Decided:** 2026-09-12, by the author, during the T7 session, after `F0` was scored
+and before any `F1` or `F2` contrast was computed. Full reasoning in
+`PREREGISTRATION_v2.9.md`.
+**Binds:** any Arm B analysis script, and `src/t7_f0_replication.py`.
+**Constant:** `P2D16_TEXT`, `P2D16_EXCLUSION_UNIT`, `P2D16_IMPUTE_TIE_AS_NON_MOVER`,
+`P2D16_DROPS_WHOLE_ITEM`, `P2D16_ATTRITION_IS_REPORTED`.
+
+**Decision text.**
+
+> A rendering whose argmax is tied carries no chosen option, so it carries neither a
+> same-option verdict nor an `A` value, and it is excluded. The exclusion is PAIRWISE and
+> at the level of the rendering pair, the (item, permutation) unit at which a framing
+> contrast is formed: the pair leaves both the numerator and the denominator of every
+> quantity whenever either of its two renderings is tied, and the item's other permutation
+> is retained. A tied rendering is never imputed as a non-mover, and the item is never
+> dropped whole. The rule is symmetric across the arms: it applies whether the tie falls
+> on `F0`, `F1` or `F2`, so a tied `F0` rendering leaves both the `F1` and the `F2`
+> contrast while a tied `F1` rendering leaves only the `F1` contrast. A tied `F0`
+> rendering is also outside the `F0`-versus-`cond4` disagreement count that sets P2-D13's
+> floor, which is already Paper 1's `n_tied == 1` filter on both sides, so it neither
+> raises nor lowers the floor. This is Paper 1's `n_tied == 1` filter applied at the
+> contrast rather than at the rendering, and it is what `src/c5_effect.py` and
+> `src/inertness_ceiling.py` already do to produce P2-D8's reference values. Every cell
+> reports its attrition: rendering pairs excluded for a tie, and items left with one
+> surviving pair or with none.
+
+**What was known when this was decided, and what was not.** The counts of affected
+renderings were known and are disclosed here: on the `size` tile at `rule = pmi`,
+`format = V`, `B2` has 2 tied renderings under `F1` and 2 under `F2`, and `L4` has 1
+under `F1`. `F0` has none, on any model. Re-derived at decision time from
+`data/raw_t7/choices_t7.parquet` grouped on (model, framing) only, and it matched. That
+re-derivation was over the whole `size` tile and not restricted to the 108 confirmatory
+items, so how many of the five losses fall inside the analysis set is **not** established
+by it. WHICH items carry the ties was not inspected. What `ΔA` those items would carry
+was not computed. No `F1` or `F2` statistic of any kind was computed before this rule was
+fixed, and the rule is stated on the structure of the event rather than on its effect.
+
+**Why it needed deciding.** `ΔA` needs both terms, so a pair whose `F1` rendering is tied
+cannot enter the contrast at all, and nothing in `v2.0` through `v2.8` says what becomes
+of it. The losses fall only in the treatment conditions, which makes the question
+directional rather than incidental: any rule that keeps a tied pair in the denominator
+while it cannot appear in the numerator biases (a) toward the null, and (a) is the half of
+H-B that P2-D13 makes deliberately demanding. Against P2-D12's inertness floor of 7 items,
+a loss of 2 is 29% of the floor, so this is not a rounding question. Left unruled, the
+session that first computes `ΔA` would pick a handling with the affected counts already on
+screen.
+
+**Why the rule is not new, which is the ground it stands on.** The same event already
+occurs in the frozen reference computation and is already handled this way. In
+`src/c5_effect.py:c5_movement` and `src/inertness_ceiling.py:c5_delta_A` the choices are
+loaded through `tie_reference.load_choices`, which applies Paper 1's `n_tied == 1` filter,
+then pivoted on (item_id, permutation_id) against `condition`, then filtered with
+`w.loc[w.notna().all(axis=1)]`. A tied `cond5` rendering therefore leaves its (item,
+permutation) row short a column and the row is dropped, while the item's other permutation
+survives. That is this rule exactly, and the numbers it produced are the `R_m` values
+P2-D8 binds and the `c5` tie rates `PREREGISTRATION_v2.7.md` section 2.1 reports. Adopting
+anything else for `F1` and `F2` would compare a rate computed under one attrition rule
+against a reference computed under another, which is quantity (b) measuring the rule
+instead of the framing. `src/t7_f0_replication.py:compare` filters `n_tied == 1` on both
+sides for the same reason and says so in its docstring: a tie carries no chosen option, so
+it cannot agree or disagree.
+
+**What it does to quantity (a).** (a)'s per-item value is the mean of the changed
+indicator over that item's SURVIVING pairs, and its count against P2-D13's floor is the
+number of items whose per-item value exceeds zero, which is `n_items_with_a_changed_pair`
+as `c5_movement` already computes it. Three effects, none of them corrected for:
+
+1. **The count can only fall, never rise.** An excluded pair can remove an item's only
+   evidence of movement; it cannot create movement. The bound is the loss count: `B2`'s
+   `F1` count is at most 2 below what it would be with those renderings scored, `B2`'s
+   `F2` count at most 2 below, `L4`'s `F1` count at most 1 below. Whether the realized
+   loss is 2, 1 or 0 depends on facts not inspected.
+2. **The denominator moves only if an item loses both pairs.** If `B2`'s two `F1` ties sit
+   on two different items, both items remain with one pair each and the denominator stays
+   108. If they are the two permutations of one item, that item has no surviving pair, it
+   leaves the item-level mean, and the denominator is 107. The floor is an absolute count
+   of items and does not move with the denominator, so a denominator of 107 makes the
+   floor marginally harder to clear. That is reported, not adjusted.
+3. **A half-observed item keeps its weight and loses its resolution.** It contributes 0 or
+   1 rather than 0, 0.5 or 1. Its weight in the item-level mean is unchanged, one item,
+   and its expectation is unchanged if the two permutations carry the same change
+   probability. Its variance is higher, which widens P2-D8's cluster bootstrap in quantity
+   (b). That is a variance effect, not a bias.
+
+**What it does to quantity (c).** The excluded pairs leave the pool before `ΔA` is
+evaluated, so they are in neither the tie count nor `n_eff`. `n_eff` falls by at most the
+number of excluded pairs and by zero if those pairs would have carried `ΔA = 0`: at most 2
+for `B2` under `F1`, at most 2 for `B2` under `F2`, at most 1 for `L4` under `F1`. The tie
+rate's denominator falls by the same amount, so the tie rate itself is not biased in a
+known direction. No adjustment is made and none is needed: P2-D6 and P2-D12 already report
+the sign test at the observed `n_eff` with its realized power, so the loss is absorbed by
+a disclosure the design already requires rather than by a correction invented here.
+
+**The reverse case, ruled now although it does not occur here.** An `F0` rendering tied
+while its `F1` or `F2` rendering is not is handled by the same rule, because the rule is
+stated on the pair rather than on the arm. Two consequences are specific to it and are
+recorded so a replication does not have to rediscover them. First, `F0` is the common
+baseline, so one tied `F0` rendering removes that pair from the `F1` contrast AND the `F2`
+contrast; the attrition is correlated across the two cells and is reported once as a
+baseline loss rather than twice as two independent losses. Second, a tied `F0` rendering
+is not evidence of numerical noise, and it is already outside P2-D13's `F0`-versus-`cond4`
+disagreement count, which requires `n_tied == 1` on both sides. A tie is an absence of a
+choice, not a disagreement between two choices, so it cannot raise the measured floor and
+it cannot lower it. A pair tied on both sides is excluded once.
+
+**Alternatives offered and not chosen.**
+
+1. **Count the tie as a non-mover.** Rejected. A tie is the absence of a choice, not the
+   repetition of one, so this records an event the scorer did not produce. It is also
+   directional in the worst place: it adds pairs to (a)'s denominator that cannot appear
+   in its numerator, and (a) tests a point null at the boundary where a single item is
+   deductive evidence. Under P2-D13 the floor is already a conservative convention; an
+   imputation that pushes toward the null makes the movement half harder to clear by
+   arithmetic rather than by measurement. It would also break the comparison to `R_m`,
+   which was computed the other way.
+2. **Exclude the whole item.** Rejected. It discards a rendering pair that carries a valid
+   contrast, and it costs more than the event requires: `B2`'s confirmatory denominator
+   would fall to at most 106 and `L4`'s to at most 107 for a total loss of 5 renderings.
+   Against an absolute floor of 7 items, shrinking the denominator is not neutral. It also
+   diverges from the reference computation, so quantity (b) would compare rates taken on
+   differently constituted item sets, and it makes the attrition item-level and unequal
+   between the `F1` and `F2` cells of the same model for no reason the event supplies.
+3. **Break the tie with a deterministic rule and score the rendering.** Rejected. Paper
+   1's `src/tiebreak.py` breaks ties in ITEM CONSTRUCTION, not in the chooser; the chooser
+   is an argmax that reports `n_tied` and Paper 1 filters on it. Supplying a chosen option
+   where the model produced none manufactures a contrast, and a manufactured contrast can
+   create movement, which is the one direction (a) must not be able to move on its own. It
+   would also be a chooser behaviour Paper 1's published results were not computed under,
+   which is a frozen-artifact change in everything but name.
+
+**One thing this decision does not rule, reported rather than resolved.** Whether
+quantity (c)'s unit is the rendering pair or the permutation-averaged item is not settled
+by the record, and this decision does not settle it. P2-D12's decision text says "the
+exact two-sided sign test on items with `ΔA != 0`", while `inertness_ceiling.py:c5_delta_A`
+computes `ΔA` per (item_id, permutation_id) and reports `n_eff` as a count of pairs, and
+the same file's ceiling table then forms `n_eff` as `round(108 * (1 - tie_rate))`, which
+is a count of items. The two readings give different `n_eff` for the same data. This rule
+is deliberately stated so it gives the SAME treatment under either: exclusion happens at
+the pair, before any aggregation, and whatever aggregation (c) uses then runs on the
+surviving pairs, which is already how `c5_movement` forms its per-item mean. The unit
+question is live, it is the author's to settle, and it is recorded here rather than
+answered because answering it would resolve an ambiguity by choosing.
+
+**Consequences.** `src/p2_decisions.py` carries `bind_tie_exclusion`, which an Arm B
+script calls with the exclusion unit it actually used and with whether it imputed, dropped
+whole items, or reported attrition. The implementation is the pivot-and-`notna` shape
+already in `c5_movement` and `c5_delta_A`, not a new helper: a third copy of a
+three-line filter is the duplication bug `CLAUDE.md` names. Reported per (model, framing)
+cell alongside every quantity: pairs excluded for a tie, items reduced to one surviving
+pair, items reduced to none, and the resulting item denominator. A cell whose denominator
+is not 108 says so next to its (a) count, because the floor it is measured against is an
+absolute count of items and a reader cannot recover the denominator from the rate.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -883,3 +1041,5 @@ cannot be read as a general relaxation of D111.
 | Framing ids are exactly `F0`, `F1`, `F2`, with no variant axis | `p2_decisions.bind` |
 | The constants still match the decision text in this file | `p2_decisions.check_log` |
 | A change to either constant fails the suite | `tests/test_framings.py` |
+| A tied rendering is excluded at the pair, never imputed | `p2_decisions.bind_tie_exclusion` |
+| Per-cell tie attrition is reported beside every Arm B quantity | `p2_decisions.bind_tie_exclusion` |

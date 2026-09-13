@@ -313,10 +313,11 @@
     }
   },
   "environment_equivalence": {
-    "verdict": "EXACT on the confirmatory tile",
+    "verdict": "CHOICE-LEVEL OUTPUT IDENTITY on the confirmatory tile; environment identity NOT established",
     "confirmatory_disagreeing_items": 0,
     "confirmatory_renderings": 3500,
-    "what_it_licenses": "The comparison to Paper 1's published reference set is exact rather than approximate, and F0 is Paper 1's cond4 at the choice level on the confirmatory tile."
+    "p1_env_found": false,
+    "what_it_licenses": "F0 reproduces Paper 1's cond4 chosen option on every one of the 3,500 confirmatory-tile renderings, zero disagreements. That is choice-level output identity on the confirmatory tile, so reference-set comparisons that read only chosen options on that tile are unaffected by the re-run. It is NOT environment identity: env_t7.json records p1_env_found false, so the on-Kaggle pin cross-check against Paper 1's env.json never ran, and transformers 5.0.0 / torch 2.10.0 is very unlikely to match Paper 1's stack. Off the confirmatory tile the outputs are not identical (see off_confirmatory_summary)."
   },
   "floor": {
     "provisional": 7,
