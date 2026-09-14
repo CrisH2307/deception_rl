@@ -536,8 +536,9 @@ def test_scope_registry_ruled_entries_stay_ruled_and_open_ones_are_triaged():
 
     open_now = {r["passage"] for r in dec.scope_audit()}
     assert open_now == {
-        "v2.0 section 4's movement criterion and P2-D5's second conjunct, "
-        "'excess over the marginal null'"}, (
+        "v2.0 section 4.4's attribution cap dA_null(m, F), v2.0 section 4's "
+        "movement criterion, and P2-D5's second conjunct, 'excess over the "
+        "marginal null'"}, (
         f"the unruled scope set changed: {sorted(open_now)}. A new entry is a "
         "question to answer, not a test to update; an entry leaving means it was "
         "ruled and the registry should say by what.")
@@ -546,6 +547,20 @@ def test_scope_registry_ruled_entries_stay_ruled_and_open_ones_are_triaged():
     # three quantities do not include it. Checked against the constants so the
     # finding cannot rot into a comment.
     assert "excess over the marginal null" in dec.P2D5_TEXT
+    # The second recorded instance: an unruled scope that is a DEFENCE. This is
+    # the louder half, and it is separated because an expired convention needs a
+    # ruling while an expired defence leaves a hypothesis the design cannot rule
+    # out. Emptying this set means the cap got a successor or was retired; either
+    # is a decision and the registry should name it.
+    und = dec.undefended()
+    assert len(und) == 1 and und[0]["defends_against"], (
+        f"the undefended set changed: {[r['passage'] for r in und]}. A defence "
+        "leaving it is a ruling; one arriving is a hypothesis newly undefended.")
+    assert "generic" in und[0]["defends_against"]
+    assert all(("defends_against" in r) for r in dec.SCOPE_REGISTRY), (
+        "a registry entry without defends_against cannot say whether its expiry "
+        "cost anything, which is the whole content of the second instance")
+
     assert not any("marginal null" in q or "excess" in q
                    for q in dec.P2D12_QUANTITIES), (
         "P2-D12 now carries an excess-over-the-null quantity, so the open scope "

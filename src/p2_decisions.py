@@ -1097,26 +1097,37 @@ def bind_direction_claim(direction_claim_made, neutral_resolves_on,
 #
 # An entry here is not an error to fix. It is a question to answer, and the
 # failure mode is nobody noticing there is one. `ruled_by` is None until answered.
+#
+# `defends_against` was added on 2026-09-14 by the second recorded instance, the
+# orphaned attribution cap. The first version of this registry recorded WHAT a
+# passage was scoped to and not WHAT IT WAS FOR, so an expiry surfaced as a
+# sentence needing a ruling and never as a hypothesis left undefended. It is None
+# for a passage that is a convention or a threshold, and a string for a passage
+# that is a defence. `undefended()` is the louder half of the audit.
 SCOPE_REGISTRY = (
     {"passage": "v2.0 section 7.2, the ext_i >= 0.02 exclusion",
      "scoped_to": "mean and median of per-item A",
      "quantity_owned_by": "P2-D6",
      "replaced_by": "P2-D6 (mean demoted to descriptive)",
+     "defends_against": None,
      "ruled_by": "P2-D23"},
     {"passage": "v2.0 section 8.2, SESOI = 0.05",
      "scoped_to": "mean dA",
      "quantity_owned_by": "P2-D6",
      "replaced_by": "P2-D6 (mean demoted to descriptive)",
+     "defends_against": None,
      "ruled_by": "PREREGISTRATION_v2.4.md section 3.1"},
     {"passage": "v2.5 section 2.3 and v2.6 section 1.4, the magnitude gate",
      "scoped_to": "the c5 comparison as a gate",
      "quantity_owned_by": "P2-D8",
      "replaced_by": "P2-D12 (gate removed)",
+     "defends_against": None,
      "ruled_by": "P2-D12"},
     {"passage": "v2.7 section 2.1's diagnostic and section 3.2's n_eff table",
      "scoped_to": "n_eff at the rendering pair",
      "quantity_owned_by": "P2-D12",
      "replaced_by": "P2-D20 (unit moved to the item)",
+     "defends_against": None,
      "ruled_by": "P2-D20, P2-D21"},
     # UNRULED. Surfaced by the registry's first run, 2026-09-14. v2.0 section 4
     # required BOTH that the interval on mean dA exclude zero AND that observed
@@ -1124,12 +1135,23 @@ SCOPE_REGISTRY = (
     # mean. It does not name the second, and P2-D12's three quantities contain no
     # excess-over-the-marginal-null quantity. P2-D5 is adopted and binds the same
     # conjunct independently, on exactly the claim Arm B exists to make.
-    {"passage": "v2.0 section 4's movement criterion and P2-D5's second conjunct, "
-                "'excess over the marginal null'",
+    {"passage": "v2.0 section 4.4's attribution cap dA_null(m, F), v2.0 section 4's "
+                "movement criterion, and P2-D5's second conjunct, 'excess over the "
+                "marginal null'",
      "scoped_to": "observed mean dA against dA_null(m, F)",
      "quantity_owned_by": "P2-D6",
      "replaced_by": "P2-D6 (mean demoted), P2-D12 (three quantities fixed, none "
                     "an excess over the marginal null)",
+     # THE SECOND RECORDED INSTANCE, and the one that cost something. v2.0
+     # section 4.4 labels it "Attribution cap, preregistered" and states what it
+     # is for in its own words: "Movement that a generic prompt-induced shift in
+     # option preference already explains is reported as prompt sensitivity and
+     # named as such." No successor was written. Neither of the cap's inputs
+     # exists: TV(m, F) on the beta_c = infinity control set is T7 step 4 and has
+     # not been run, and dA_null(m, F) has never been computed.
+     "defends_against": "the hypothesis that the movement is a generic "
+                        "prompt-induced shift in option preference rather than "
+                        "adversary tracking",
      "ruled_by": None},
 )
 
@@ -1142,6 +1164,22 @@ def scope_audit(registry=SCOPE_REGISTRY):
     maintained, because no parser can tell a scope from a mention.
     """
     return [r for r in registry if not r["ruled_by"]]
+
+
+def undefended(registry=SCOPE_REGISTRY):
+    """Unruled scopes that were DEFENCES. The louder half of `scope_audit`.
+
+    A convention whose scope expires needs a ruling. A defence whose scope expires
+    leaves a hypothesis undefended, and the design stops being able to rule that
+    hypothesis out while nothing in the reading says so. The two are the same
+    failure and they are not the same cost, so they are separated here.
+
+    This distinction is what the registry's first version lacked. It listed the
+    orphaned attribution cap correctly, as its one unruled entry, and the entry
+    read as a sentence needing a ruling because no field said the sentence was a
+    defence. See `docs/P2/DECISIONS.md`, the two instances recorded together.
+    """
+    return [r for r in scope_audit(registry) if r.get("defends_against")]
 
 
 # ------------------------------------------------- what P2-D1 makes structural
@@ -1331,12 +1369,15 @@ def main():
           f"confirmatory set={P2D23_APPLIES_TO_CONFIRMATORY}; n stays "
           f"{P2D23_CONFIRMATORY_N}; min ext_i {P2D23_MIN_EXT_CONFIRMATORY:.6g} > 0")
     print("                governs " + "; ".join(P2D23_GOVERNS))
-    _open = scope_audit()
-    print(f"scope registry   {len(SCOPE_REGISTRY)} scoped passages, {len(_open)} UNRULED")
+    _open, _und = scope_audit(), undefended()
+    print(f"scope registry   {len(SCOPE_REGISTRY)} scoped passages, {len(_open)} UNRULED, "
+          f"{len(_und)} of them DEFENCES")
     for _r in _open:
         print(f"                UNRULED: {_r['passage']}")
         print(f"                         scoped to {_r['scoped_to']}, replaced by "
               f"{_r['replaced_by']}")
+        if _r.get("defends_against"):
+            print(f"                         UNDEFENDED: {_r['defends_against']}")
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "

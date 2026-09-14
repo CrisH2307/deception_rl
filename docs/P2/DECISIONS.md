@@ -52,7 +52,8 @@ source answers the question just as fluently as the right one.
    `ext_i >= 0.02` floor correctly and wrote the exclusion against "the confirmatory Arm
    B analysis". At `v2.0` that analysis WAS the mean and median of per-item `A`, so the
    sentence was exact. P2-D6 then replaced the mean with a sign test. **The import stayed
-   correct and its scope silently expired.** Ruled, after the fact, by P2-D23.
+   correct and its scope silently expired.** Ruled, after the fact, by P2-D23. Harmless,
+   and the second instance below was not.
 
 **The fourth case is a different failure class from the first three, and the difference
 is the point.** Cases 1 to 3 are all a wrong source: a plausible module read in place of
@@ -72,6 +73,58 @@ and a live one are textually identical.
 D74's SESOI on mean `ΔA`, and ruled it explicitly: "The SESOI does not translate, and none
 is invented." The same version family left section 7.2's floor untouched. One session, one
 document, two scopes attached to the same replaced quantity, one seen and one not.
+
+5. **The orphaned attribution cap, 2026-09-14.** `v2.0` section 4.4 preregistered
+   `ΔA_null(m, F)`, labelled in its own text "**Attribution cap, preregistered**", and
+   stated what it was for in its own words: "Movement that a generic prompt-induced shift
+   in option preference already explains is reported as prompt sensitivity and named as
+   such." P2-D6 replaced the mean with a sign test, P2-D12 fixed three quantities, and
+   **no successor to the cap was written.** Still unruled.
+
+**The two instances, recorded together, because the difference between them is the
+lesson.** Case 4 and case 5 are the same failure: a correct preregistration whose scope
+expired when the quantity underneath it moved. They are not the same cost.
+
+The `ext_i` floor's expiry was **harmless**. It guarded a mean of per-item ratios, the
+analysis moved to a sign test, and P2-D23 found that the floor reached nothing and
+removed no item. Confirmatory `n` stayed 108. Had nobody noticed, nothing would have been
+wrong.
+
+The cap's expiry **removed the design's only preregistered defence against the hypothesis
+the data now points at**. Neither of its inputs exists: `TV(m, F)` on the
+`beta_c = infinity` control set is T7 step 4 and has not been run, and `ΔA_null(m, F)` has
+never been computed. It went unnoticed through P2-D6, P2-D12, P2-D19, P2-D20, P2-D21 and
+T7's confirmatory run, and surfaced only when three independent inputs converged on its
+absence: P2-D5's blocker naming a quantity that does not exist, the neutral baseline
+departing downward too, and the discarded-switch geometry carrying the signature the cap
+was written to rule out. P2-D24 rules the direction claim out on all three.
+
+**Did the standing check added for case 4 catch case 5? Partly, and the part it missed is
+the part that mattered.**
+
+It **did** list the passage. On its first run the registry returned exactly one unruled
+entry and that entry was this one. So the enumeration worked.
+
+Two things it did not do.
+
+1. **It could not have caught it earlier.** The registry was added on 2026-09-14, in the
+   same session that recorded case 4. P2-D6, P2-D12, P2-D19, P2-D20, P2-D21 and T7 all
+   predate it. A retrofitted check cannot catch what expired before it existed, and the
+   six decisions that passed over the cap passed over it with no check in place.
+2. **It recorded what the passage was scoped to and not what it was for.** The entry named
+   `ΔA_null(m, F)` as the object and P2-D6 as the owner, and it read as a sentence needing
+   a ruling. Nothing in it said the sentence was a **defence**, so the cost was invisible
+   in the record even after the enumeration had succeeded. A reader of that entry learned
+   that Arm B's licensing was unsettled. They did not learn that a hypothesis had been left
+   undefended.
+
+**The check that would have.** The registry carries a `defends_against` field as of this
+entry, and `p2_decisions.undefended()` returns the unruled scopes that are defences.
+An expired convention needs a ruling; an expired defence leaves a hypothesis the design can
+no longer rule out, and the design stops being able to while nothing in the reading says
+so. Separating them is cheap and it is the whole content of the second instance. It does
+not retroactively help: the check still has to exist before the quantity moves, which is
+the first point above and is not fixable by a better field.
 
 **The countermeasure: a decision that scopes itself to another decision's quantity names
 that decision.** Then superseding a quantity is not a local act. It surfaces every
@@ -172,6 +225,32 @@ not edited above, so the record of what was believed on 2026-09-14 stays readabl
    ratio on them is 1.81 to 4.09.** The three are `CTRL`/F1 at 4.09, `L3`/F1 at 2.50 and
    `L3`/F2 at 1.81. "1.8 to 5.1" is the range over all six concentrated cells, and 5.10 is
    `CTRL`/F2, which does not resolve.
+
+### The (4,5) signature, recorded 2026-09-14 as evidence
+
+Recorded here because it is the third of the three inputs P2-D24 rules on, and because it
+is what turned the orphaned cap from a licensing question into a cost.
+
+Of the 62 switches the `A` coordinate discards on the confirmatory set, **54 sit on option
+pair (4,5)**, with 4 on (0,1), 3 on (3,4) and 1 on (3,5)
+(`results/T7_switch_concentration.json`). Option 5 is the end of the option order on a
+six-option tile.
+
+`reports/T7_switch_concentration.md` first recorded this as structure inherited from
+P2-D19 section 3.8, cause unestablished. That is true and it is not the whole of it.
+**A generic shift in option POSITION preference would leave exactly this signature**: a
+model nudged toward or away from the end of the menu moves between the last two options,
+and those are the options `A` cannot tell apart.
+
+That hypothesis is the one `v2.0` section 4.4's attribution cap was preregistered against,
+and the cap has no successor. So the observation is **suggestive evidence for the
+alternative explanation and is uncomputable against the preregistered defence**. Neither of
+the cap's inputs exists.
+
+**Recorded, not tested.** No successor cap is computed, the hypothesis is not tested, and
+the signature is not offered as establishing anything: a generic position shift predicts
+it, other things would too, and distinguishing them is what the cap was for. **The design
+cannot currently adjudicate it, and that inability is the finding.**
 
 The third case is the same failure class pointed at the log itself. A decision entry
 is the governing record, so nothing downstream of it checks its provenance; the entry

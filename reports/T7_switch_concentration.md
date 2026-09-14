@@ -95,10 +95,36 @@ premise that the discarded switches carry the direction of the retained ones. No
 establishes it, so no direction claim is licensed on any cell. The ruling changes no number
 in this file.
 
-## Structure, consistent with P2-D19
+## The (4,5) signature, restated 2026-09-14 as evidence rather than as structure
 
-The 62 tied-pair switches fall almost entirely on one option-index pair: **(4,5) on 54**,
-(0,1) on 4, (3,4) on 3, (3,5) on 1. P2-D19 section 3.8 recorded the tied pairs themselves
-as 67 on (4,5) and 15 on (0,1), structural to the six-option tile and concentrated at the
-ends of the option order, with the cause not established. The switches inherit that shape.
-The cause is still not established and none is proposed here.
+The 62 discarded switches fall almost entirely on one option-index pair: **(4,5) on 54**,
+(0,1) on 4, (3,4) on 3, (3,5) on 1. This file first recorded that as structure inherited
+from P2-D19 section 3.8, which measured the tied pairs themselves at 67 on (4,5) and 15 on
+(0,1), and left the cause unestablished. That framing understates what the observation is.
+
+**Option 5 is the end of the option order on a six-option tile, and 54 of 62 discarded
+switches land on the pair {4, 5}.** That is the signature a generic shift in option
+POSITION preference would leave: a model whose inserted text nudges it toward or away from
+the end of the menu moves between the last two options, and those are exactly the options
+the `A` coordinate cannot tell apart.
+
+**The hypothesis this favours is the one the design can no longer rule out.** `v2.0`
+section 4.4 preregistered the attribution cap `ΔA_null(m, F)` against precisely it, in its
+own words: "Movement that a generic prompt-induced shift in option preference already
+explains is reported as prompt sensitivity and named as such." P2-D6 replaced the mean with
+a sign test, P2-D12 fixed three quantities, and no successor to the cap was written.
+`DECISIONS.md` records that as the second instance of the scope-expiry failure.
+
+So this is **suggestive evidence for the alternative explanation, and it is uncomputable
+against the preregistered defence, because the defence has no successor.** Neither of the
+cap's inputs exists: `TV(m, F)` on the `beta_c = infinity` control set is T7 step 4 and has
+not been run, and `ΔA_null(m, F)` has never been computed.
+
+**What is and is not claimed here.** The observation is recorded. The hypothesis it favours
+is named. **The design cannot currently adjudicate between it and adversary tracking**, and
+that inability is the finding. No successor cap is computed here, the hypothesis is not
+tested, and the concentration on (4,5) is not offered as establishing anything: a generic
+position shift predicts this signature, and so would other things, and distinguishing them
+is what the cap was for.
+
+The cause of the underlying tie structure is still not established, and none is proposed.
