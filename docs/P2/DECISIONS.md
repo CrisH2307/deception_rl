@@ -108,6 +108,41 @@ consequences for what Arm B may claim, and choosing among them here would be res
 ambiguity by choosing. It is recorded, it is flagged to the session that opens Arm B, and
 it is the author's.
 
+### A second open question, recorded 2026-09-14 and not resolved
+
+Not a scope expiry, so not a registry entry, but it travels with the blocker above because
+it constrains the same verdict.
+
+**The direction finding, recorded plainly.** T7's confirmatory run
+(`results/T7_armb_quantities.json`) resolves quantity (c) against `p0 = 0.5` at the
+corrected `alpha` on five cells: `CTRL`/F1, `L3`/F1, `L4`/F1, `L3`/F2, `L4`/F2. **All five
+depart downward.** Under `p0 = 0.5` a downward departure is movement away from
+`o*_infinity`, which is Paper 1's salience pole on 452 of 460 divergent items. Quantity (a)
+clears P2-D13's floor on all 14 cells, 30 to 77 items moved of 108.
+
+So: **the framings move choices substantially, and the resolving movement runs away from
+the adversary-aware optimum.** That is neither H-B's predicted null nor adversary tracking.
+It is recorded as the measurement it is.
+
+**What it cannot yet be read as, and why that is a ruling rather than a caveat.** The `c5`
+neutral baseline also departs downward where it resolves: `CTRL` 0.1951 and `L3` 0.2424 at
+P2-D20's item unit (P2-D21). A downward departure may therefore be a property of inserted
+text rather than of adversary content, and the F1 and F2 proportions need reading against
+those per-model neutral figures and not only against 0.5.
+
+Reading them against the neutral baseline is **a substantive ruling, not a restatement**.
+P2-D6 fixed `p0 = 0.5`; P2-D12 and P2-D14 both rejected moving it, and P2-D21 retained it
+while withdrawing the claim that made it look conservative. A comparison against the
+measured neutral figure is the recalibration those entries declined, performed in the
+reporting rather than in the null. Whether that is admissible, and if so whether it is
+descriptive or confirmatory, is unsettled.
+
+**It is not resolved here and it goes with the P2-D5 blocker**, because both bear on the
+same verdict and ruling one without the other would license a claim the other forbids.
+`reports/T7_switch_concentration.md` adds a third input to the same verdict: the `A`
+coordinate's blind spot is concentrated on `CTRL`, `L1` and `L3` at 1.8 to 5.1 times
+P2-D19's per-pair bound, and two of the five resolving cells sit in that group.
+
 The third case is the same failure class pointed at the log itself. A decision entry
 is the governing record, so nothing downstream of it checks its provenance; the entry
 IS the check. That makes a fabricated entry cheaper to write than a real one and

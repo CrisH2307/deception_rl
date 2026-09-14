@@ -275,3 +275,32 @@ def test_the_artifact_carries_no_excess_over_the_marginal_null_quantity(out):
     blob = json.dumps(out["cells"]).lower()
     for banned in ("a_null", "delta_a_null", "marginal_null", "excess"):
         assert banned not in blob, banned
+
+
+def test_switch_concentration_blind_spot_is_a_subset_relation():
+    """(c) can never resolve an item (a) says did not move.
+
+    A same-option item has dA = 0 exactly, so n_eff <= moved by construction and
+    the blind-spot count is non-negative. A violation is a join error between the
+    two quantities, not a result. The concentration ratio is checked for the
+    model split rather than a threshold: the finding is that it varies, and a
+    test that pinned one number would hide that.
+    """
+    import json
+    d = json.load(open("results/T7_switch_concentration.json"))
+    cells = d["per_cell"]
+    assert len(cells) == 14
+    for k, v in cells.items():
+        assert v["n_eff_item_quantity_c"] <= v["n_items_moved_quantity_a"], k
+        assert v["n_items_changed_but_delta_A_zero"] >= 0, k
+        assert v["n_switches_on_an_A_tied_pair"] <= v["n_switches"], k
+    hi = {k for k, v in cells.items() if v["concentration_ratio"] > 1}
+    assert {k.split("/")[0] for k in hi} == {"CTRL", "L1", "L3"}, (
+        f"the concentrated model set changed: {sorted(hi)}. It is the finding, "
+        "and which models are in it is what bears on (c).")
+    # Every concentrated cell loses more items to the blind spot than every
+    # unconcentrated one. If that separation ever closes, the two quantities have
+    # stopped tracking each other and the report's reading needs revisiting.
+    assert (min(cells[k]["n_items_changed_but_delta_A_zero"] for k in hi)
+            > max(cells[k]["n_items_changed_but_delta_A_zero"]
+                  for k in cells if k not in hi))

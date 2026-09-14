@@ -27,6 +27,28 @@ invariants. One task per session.
 
    If a precondition is unmet, report which one and stop. Do not begin partial work.
 
+   **Worktree base check, before any of the above.** If you are running in a git
+   worktree, the worktree may have been created from a stale ref. On 2026-09-14 a
+   session was launched from `origin/main`, 23 commits behind local `main`, and at
+   that ref the raw model outputs, half the bindings and eight preregistration
+   versions did not exist, so **every precondition above read as unmet and all of
+   them read that way for the wrong reason**. A missing precondition and a missing
+   twenty-three commits are indistinguishable from inside the worktree.
+
+   So, first:
+
+   ```
+   git rev-parse --abbrev-ref HEAD && git log --oneline -1 HEAD
+   git log --oneline -1 main
+   git merge-base --is-ancestor HEAD main && echo "BASE IS AN ANCESTOR OF main"
+   ```
+
+   **Report both refs before starting**, whatever the answer. If `HEAD` is not an
+   ancestor of local `main`, or is behind it, say so and fast-forward to local `main`
+   before reading anything else; the local branch is the state of record, because
+   commits are not always pushed. If `HEAD` is ahead of `main` or has diverged, stop
+   and report rather than moving either.
+
 4. **Read `CLAUDE.md`** and treat its invariants as binding. If the task brief and
    `CLAUDE.md` conflict, stop and report the conflict rather than resolving it.
 
