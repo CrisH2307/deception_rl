@@ -48,6 +48,66 @@ whose standing was assumed rather than traced. Plausibility is not provenance, a
 agent working from a task list has no reason to check which it has, because the wrong
 source answers the question just as fluently as the right one.
 
+4. **The expired scope, 2026-09-13.** `v2.0` section 7.2 imported Paper 1's
+   `ext_i >= 0.02` floor correctly and wrote the exclusion against "the confirmatory Arm
+   B analysis". At `v2.0` that analysis WAS the mean and median of per-item `A`, so the
+   sentence was exact. P2-D6 then replaced the mean with a sign test. **The import stayed
+   correct and its scope silently expired.** Ruled, after the fact, by P2-D23.
+
+**The fourth case is a different failure class from the first three, and the difference
+is the point.** Cases 1 to 3 are all a wrong source: a plausible module read in place of
+the governing one, a deliverable read in place of a record, an entry that was never a
+decision. Case 4 has no wrong source anywhere. The citation was right. The reasoning was
+right. The sentence was true when written and is still true of the thing it originally
+described. What moved was the quantity underneath it.
+
+So the two countermeasures below do not reach it. Provenance does not help, because the
+provenance is clean. **Mechanical binding does not help either, and this is the sharp
+part: the bound text is still true.** A binding asserts that a caller matches the decision
+text, and here the caller matches and the decision text is accurate; what has gone wrong is
+that the decision now governs nothing, and nothing in reading it says so. An expired scope
+and a live one are textually identical.
+
+`v2.4` is the proof that vigilance is not the answer. Section 3.1 caught one of these,
+D74's SESOI on mean `ΔA`, and ruled it explicitly: "The SESOI does not translate, and none
+is invented." The same version family left section 7.2's floor untouched. One session, one
+document, two scopes attached to the same replaced quantity, one seen and one not.
+
+**The countermeasure: a decision that scopes itself to another decision's quantity names
+that decision.** Then superseding a quantity is not a local act. It surfaces every
+dependent scope, because the dependents are enumerable rather than discoverable. A scope
+that cannot name the decision owning its quantity is a scope nobody can audit when that
+quantity moves.
+
+This is maintained as a registry in `src/p2_decisions.py`, `SCOPE_REGISTRY`, with
+`scope_audit()` listing every preregistration passage scoped to a quantity a later decision
+replaced, and whether each has been ruled. It is a standing check because an entry arriving
+there is not an error to fix; it is a question to answer, and the failure mode is that
+nobody notices there is one.
+
+### What the registry surfaced on its first run
+
+**`v2.0` section 4's confirmatory movement criterion, and P2-D5's second conjunct. Not
+ruled.**
+
+`v2.0` section 4 required **both** that the interval on mean `ΔA` exclude zero and that the
+observed mean `ΔA` exceed `ΔA_null(m, F)`, the marginal null of section 3.3. P2-D6 demoted
+mean `ΔA` to descriptive, which retires the first conjunct. P2-D6 does not name the second,
+and P2-D12's three quantities contain no excess-over-the-marginal-null quantity.
+
+P2-D5 is adopted and binds it independently: "Every such claim is made on a framing
+contrast **and on excess over the marginal null**, never on raw `A`." That is a live
+constraint on exactly the claim Arm B exists to make, and the quantity it names is not
+among the three P2-D12 fixed.
+
+**This entry does not rule it.** The reading could be that P2-D5's conjunct travels to the
+new quantities and needs an operational form, or that it expired with the mean the way the
+floor's scope did, or that (a), (b) and (c) already satisfy it because a framing contrast
+against a same-option baseline is an excess. Those are different decisions with different
+consequences for what Arm B may claim, and choosing among them here would be resolving an
+ambiguity by choosing. It is recorded, it is flagged to the session that opens Arm B, and
+it is the author's.
+
 The third case is the same failure class pointed at the log itself. A decision entry
 is the governing record, so nothing downstream of it checks its provenance; the entry
 IS the check. That makes a fabricated entry cheaper to write than a real one and
@@ -103,6 +163,27 @@ Written this way, a binding is not only a tripwire against drift. It is the plac
 decision's reasoning goes so that the reasoning, and not just the number, is what a
 later session collides with. Prefer that form wherever a quantity's sign, direction or
 ordering carries an argument.
+
+**The same lesson, reached independently and stated as a rule.** `bind_ext_floor`, written
+for P2-D23 before this note existed, asserts that `ext_i` is **strictly positive**. It does
+not assert that `ext_i` clears the 0.02 floor, and it does not assert a range at all. The
+reason is the same shape as the one above: at `ext_i = 0` the identity
+`sign(mean ΔA) = sign(sum of raw margin differences)` fails and the sign is **undefined
+rather than large**, so a small `ext_i` was never the hazard and a range check would have
+been guarding the wrong thing.
+
+Two bindings, written months apart by different sessions for unrelated quantities, both
+landed on it. The rule:
+
+> **Assert the premise that makes a quantity well defined, not a range the quantity happens
+> to occupy.**
+
+A premise assert survives a change of unit, tolerance or estimator, because the premise is
+what the argument needs and the argument is what a later session has to preserve. A range
+assert goes stale with the unit, and worse, it keeps passing while the argument it was
+standing in for stops holding. `gap_to_p0 >= 0` passed for every version in which the pair
+unit was current; it fired the moment the unit changed, and its message, not its bound, is
+what said why.
 
 ## Why the binding module is not called `decisions.py`
 
@@ -2104,3 +2185,5 @@ record. No artifact value changes.
 | An assert carries the reason a quantity has its sign, not just a range | the mechanism note above |
 | `ext_i > 0` on every confirmatory item, and no confirmatory quantity reads it | `p2_decisions.bind_ext_floor` |
 | Paper 1's `span > 0.02` is still the floor's governing record | `p2_decisions.check_p1_ext_floor_source` |
+| No prereg passage is scoped to a replaced quantity without a ruling | `p2_decisions.scope_audit` |
+| A binding asserts a premise, not a range the quantity occupies | the binding note above |

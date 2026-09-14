@@ -969,6 +969,64 @@ def check_p1_ext_floor_source(p1_root=None):
     return True
 
 
+# ------------------- the scope registry (DECISIONS.md, case 4: the expired scope)
+# A decision that scopes itself to another decision's QUANTITY names that decision
+# here. Superseding a quantity then surfaces every dependent scope, because the
+# dependents are enumerable rather than discoverable.
+#
+# Neither provenance nor verbatim binding reaches this failure: the citation is
+# clean and the bound text is still true of the thing it originally described.
+# Only enumeration does.
+#
+# An entry here is not an error to fix. It is a question to answer, and the
+# failure mode is nobody noticing there is one. `ruled_by` is None until answered.
+SCOPE_REGISTRY = (
+    {"passage": "v2.0 section 7.2, the ext_i >= 0.02 exclusion",
+     "scoped_to": "mean and median of per-item A",
+     "quantity_owned_by": "P2-D6",
+     "replaced_by": "P2-D6 (mean demoted to descriptive)",
+     "ruled_by": "P2-D23"},
+    {"passage": "v2.0 section 8.2, SESOI = 0.05",
+     "scoped_to": "mean dA",
+     "quantity_owned_by": "P2-D6",
+     "replaced_by": "P2-D6 (mean demoted to descriptive)",
+     "ruled_by": "PREREGISTRATION_v2.4.md section 3.1"},
+    {"passage": "v2.5 section 2.3 and v2.6 section 1.4, the magnitude gate",
+     "scoped_to": "the c5 comparison as a gate",
+     "quantity_owned_by": "P2-D8",
+     "replaced_by": "P2-D12 (gate removed)",
+     "ruled_by": "P2-D12"},
+    {"passage": "v2.7 section 2.1's diagnostic and section 3.2's n_eff table",
+     "scoped_to": "n_eff at the rendering pair",
+     "quantity_owned_by": "P2-D12",
+     "replaced_by": "P2-D20 (unit moved to the item)",
+     "ruled_by": "P2-D20, P2-D21"},
+    # UNRULED. Surfaced by the registry's first run, 2026-09-14. v2.0 section 4
+    # required BOTH that the interval on mean dA exclude zero AND that observed
+    # mean dA exceed dA_null. P2-D6 retires the first conjunct by demoting the
+    # mean. It does not name the second, and P2-D12's three quantities contain no
+    # excess-over-the-marginal-null quantity. P2-D5 is adopted and binds the same
+    # conjunct independently, on exactly the claim Arm B exists to make.
+    {"passage": "v2.0 section 4's movement criterion and P2-D5's second conjunct, "
+                "'excess over the marginal null'",
+     "scoped_to": "observed mean dA against dA_null(m, F)",
+     "quantity_owned_by": "P2-D6",
+     "replaced_by": "P2-D6 (mean demoted), P2-D12 (three quantities fixed, none "
+                    "an excess over the marginal null)",
+     "ruled_by": None},
+)
+
+
+def scope_audit(registry=SCOPE_REGISTRY):
+    """Preregistration passages scoped to a quantity a later decision replaced.
+
+    Returns the UNRULED ones. An empty list means every dependent scope of every
+    superseded quantity has been answered, not that none exists: the registry is
+    maintained, because no parser can tell a scope from a mention.
+    """
+    return [r for r in registry if not r["ruled_by"]]
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -1154,6 +1212,12 @@ def main():
           f"confirmatory set={P2D23_APPLIES_TO_CONFIRMATORY}; n stays "
           f"{P2D23_CONFIRMATORY_N}; min ext_i {P2D23_MIN_EXT_CONFIRMATORY:.6g} > 0")
     print("                governs " + "; ".join(P2D23_GOVERNS))
+    _open = scope_audit()
+    print(f"scope registry   {len(SCOPE_REGISTRY)} scoped passages, {len(_open)} UNRULED")
+    for _r in _open:
+        print(f"                UNRULED: {_r['passage']}")
+        print(f"                         scoped to {_r['scoped_to']}, replaced by "
+              f"{_r['replaced_by']}")
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "

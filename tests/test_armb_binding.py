@@ -517,6 +517,41 @@ def test_p2d23_quantities_a_and_b_never_read_ext_i():
             "reading ext_i would reopen P2-D23.")
 
 
+def test_scope_registry_ruled_entries_stay_ruled_and_open_ones_are_triaged():
+    """DECISIONS.md case 4: a scope that expired when its quantity was replaced.
+
+    Two directions, and they fail for different reasons. A ruled entry losing its
+    ruling means a decision was withdrawn without its dependents being revisited.
+    A new unruled entry appearing means a quantity was superseded and a dependent
+    scope was not triaged, which is the failure the registry exists to surface,
+    so the set is pinned rather than merely counted.
+    """
+    reg = dec.SCOPE_REGISTRY
+    for r in reg:
+        for k in ("passage", "scoped_to", "quantity_owned_by", "replaced_by"):
+            assert r[k], f"scope entry missing {k}: {r}"
+        assert r["quantity_owned_by"].startswith("P2-D"), (
+            "a scope must name the DECISION owning its quantity; that is the "
+            f"whole countermeasure. Got {r['quantity_owned_by']!r}")
+
+    open_now = {r["passage"] for r in dec.scope_audit()}
+    assert open_now == {
+        "v2.0 section 4's movement criterion and P2-D5's second conjunct, "
+        "'excess over the marginal null'"}, (
+        f"the unruled scope set changed: {sorted(open_now)}. A new entry is a "
+        "question to answer, not a test to update; an entry leaving means it was "
+        "ruled and the registry should say by what.")
+
+    # The open one is real: P2-D5 is adopted and names the quantity, and P2-D12's
+    # three quantities do not include it. Checked against the constants so the
+    # finding cannot rot into a comment.
+    assert "excess over the marginal null" in dec.P2D5_TEXT
+    assert not any("marginal null" in q or "excess" in q
+                   for q in dec.P2D12_QUANTITIES), (
+        "P2-D12 now carries an excess-over-the-null quantity, so the open scope "
+        "entry may have been answered. Rule it and update the registry.")
+
+
 def test_p2d17_and_p2d18_are_withdrawn_and_carry_no_text():
     """A withdrawn entry has no decision text, so nothing can bind to it.
 
