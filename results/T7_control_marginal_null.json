@@ -1,0 +1,1751 @@
+{
+  "purpose": "T7 step 4 (the beta_c = infinity control) and the part of step 5 P2-D25 authorizes: A_null, dA_null and TV, all DESCRIPTIVE. No mapping onto quantity (c), no successor cap, no direction claim, no verdict on H-B.",
+  "emitted_by": "src/t7_control.py",
+  "ruled_by": "P2-D25 / PREREGISTRATION_v2.16.md, recorded in PREREGISTRATION_v2.17.md",
+  "rule": "pmi",
+  "prompt_form": "template",
+  "base_framing": "F0",
+  "alpha_unchanged": 0.002380952380952381,
+  "confirmatory_family_size": 21,
+  "choices_sha256": "944596176bdf12d53e569cdcb083bbf5a2bf98533f18a171092714e883b5d6b3",
+  "items_sha256": "ec79b071dcfabd6094f9a91a2278cce0a6008ffd304c9935bd96850437218289",
+  "ext_floor": {
+    "value": 0.02,
+    "in_force_on": "The A-ratio aggregates on the CONFIRMATORY set: A_null's two aggregates, the observed A aggregates, mean_i A_i(o) inside dA_null, and mean dA. P2-D23 leaves the floor in force on every mean or median of per-item A and on the dA null; P2-D25 requires it applied and the removed count reported.",
+    "not_in_force_on": "The control marginals and TV, which read chosen options only and form no ratio. It could not apply there in any case: ext_i = 0 is the defining property of the control set, so a floor there would delete the set itself.",
+    "n_confirmatory_before": 108,
+    "n_confirmatory_after": 101,
+    "n_removed": 7,
+    "item_ids_removed": [
+      144769,
+      185450,
+      167952,
+      192511,
+      145626,
+      134648,
+      159264
+    ],
+    "min_ext_confirmatory": 0.0013400286428988384,
+    "max_ext_confirmatory": 0.5123189453303585,
+    "note": "This count is the one PREREGISTRATION_v2.16.md section 7 records the ruling session as wanting and declining to compute, and P2-D23 declined before it. It changes a descriptive figure, not its standing. The CONFIRMATORY n is untouched and stays 108 (P2-D23)."
+  },
+  "control_bases": {
+    "primary": {
+      "tile": "size",
+      "n_items": 142,
+      "arity": 6,
+      "why": "P2-D4's base, and the only one whose option arity matches the set the cap reweights: dA_null multiplies p^ctrl(o) by mean_i A_i(o) over the six-option confirmatory items, so the control marginal must live on the same support."
+    },
+    "reported_beside": {
+      "n_items": 540,
+      "per_tile": {
+        "hold": {
+          "n_items": 134,
+          "arity": 4
+        },
+        "manmade": {
+          "n_items": 136,
+          "arity": 3
+        },
+        "moves": {
+          "n_items": 128,
+          "arity": 3
+        },
+        "size": {
+          "n_items": 142,
+          "arity": 6
+        }
+      },
+      "why": "T7.md's SCOPE sentence names the 540 non-divergent items. That sentence is about how much inference to buy, not about the cap's base, and the two numbers are both correct about different sets (P2-D25)."
+    }
+  },
+  "salience_reference": {
+    "definition": "A_i(o_fit) on the floored confirmatory set; where a salience-driven chooser lands (v2.0 section 3.3)",
+    "n": 101,
+    "median": 1.0,
+    "from_the_means": 1.0,
+    "n_exactly_1": 101,
+    "share_exactly_1": 1.0,
+    "coincides_with_the_adversary_oracle": true,
+    "note": "A_i(o*_infinity) = 1 by construction, so A_i(o_fit) = 1 wherever the two coincide. On the divergence set they coincide on 452 of 460 items (P2-D5), and `results/T6_F0_headroom.json` puts ZERO of the eight exceptions on the size tile. So on the confirmatory set the salience reference and the adversary oracle are the SAME POINT and the four-reference set of v2.0 section 3.3 collapses to three. That is P2-D5's level confound at its sharpest: it is a property of the frozen item geometry, measured before any model is read, and it is why v2.0 section 3.3 puts every content claim on excess over the marginal null rather than on raw A."
+  },
+  "reference_set": {
+    "bayes_oracle": 0.0,
+    "adversary_oracle": 1.0,
+    "note": "A_i(o*_0) = 0 and A_i(o*_infinity) = 1 by construction (v2.0 section 3.2). The point is where a chooser sits on the interval, not whether it beats a baseline (T7.md step 5)."
+  },
+  "f0_replication_on_excess": {
+    "source": "results/T7_f0_replication.json",
+    "size_tile_disagreeing_renderings": 0,
+    "size_tile_renderings": 3500,
+    "what_it_means": "v2.0 section 4.2 requires the F0 replication to be reported on post_norm AND on excess over the marginal null. F0 and Paper 1's cond4 disagree on ZERO of the 3,500 size-tile renderings, so every function of chosen options agrees identically there, A_null and the excess included. The gate is satisfied BY CONSTRUCTION on this tile and A_null adds no information to it. Recorded so it is never presented as a check that passed on its own strength (PREREGISTRATION_v2.16.md section 5.2)."
+  },
+  "oracle_check": {
+    "max_A_over_chosen_options": 1.0,
+    "n_chosen_options_above_the_adversary_oracle": 0,
+    "renderings_checked": 4532,
+    "bound_is": "A <= 1 identically: marg_norm <= 1 and marg_norm(o*_infinity) = 1, so A(o*_infinity) = 1 is the adversary oracle and nothing can exceed it."
+  },
+  "reference_placement": {
+    "CTRL": {
+      "F0": {
+        "option_marginal": [
+          0.09900990099009901,
+          0.024752475247524754,
+          0.0049504950495049506,
+          0.15841584158415842,
+          0.2871287128712871,
+          0.42574257425742573
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.6270639280454104,
+        "A_null_from_the_means": -5.720903809106504,
+        "A_observed_median_of_per_item": -3.2765805713534637,
+        "A_observed_from_the_means": -5.086541574495909,
+        "excess_median": 0.35048335669194675,
+        "excess_from_the_means": 0.6343622346105953,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.0891089108910891,
+          0.0049504950495049506,
+          0.0,
+          0.10891089108910891,
+          0.18316831683168316,
+          0.6138613861386139
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.911548721946353,
+        "A_null_from_the_means": -6.159131870830511,
+        "A_observed_median_of_per_item": -3.632119755924981,
+        "A_observed_from_the_means": -5.652186406417536,
+        "excess_median": 0.279428966021372,
+        "excess_from_the_means": 0.5069454644129756,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.07920792079207921,
+          0.0,
+          0.0,
+          0.17326732673267325,
+          0.26732673267326734,
+          0.4801980198019802
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.7873725750396754,
+        "A_null_from_the_means": -5.787541882609786,
+        "A_observed_median_of_per_item": -3.6030076559663917,
+        "A_observed_from_the_means": -5.439041522424723,
+        "excess_median": 0.18436491907328367,
+        "excess_from_the_means": 0.3485003601850636,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    },
+    "B2": {
+      "F0": {
+        "option_marginal": [
+          0.07425742574257425,
+          0.019801980198019802,
+          0.5396039603960396,
+          0.07425742574257425,
+          0.15841584158415842,
+          0.13366336633663367
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -1.571534313047464,
+        "A_null_from_the_means": -2.6982660227377133,
+        "A_observed_median_of_per_item": -1.4371240464696373,
+        "A_observed_from_the_means": -2.868951612215617,
+        "excess_median": 0.13441026657782662,
+        "excess_from_the_means": -0.17068558947790358,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.08955223880597014,
+          0.009950248756218905,
+          0.5621890547263682,
+          0.04975124378109453,
+          0.1890547263681592,
+          0.09950248756218906
+        ],
+        "n_renderings": 201,
+        "n_items": 101,
+        "A_null_median_of_per_item": -1.616494673187307,
+        "A_null_from_the_means": -2.6566915482621236,
+        "A_observed_median_of_per_item": -1.3489392195553005,
+        "A_observed_from_the_means": -2.962566466657529,
+        "excess_median": 0.2675554536320066,
+        "excess_from_the_means": -0.30587491839540526,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.14,
+          0.01,
+          0.49,
+          0.055,
+          0.18,
+          0.125
+        ],
+        "n_renderings": 200,
+        "n_items": 101,
+        "A_null_median_of_per_item": -1.8751989068288668,
+        "A_null_from_the_means": -3.081639251502053,
+        "A_observed_median_of_per_item": -1.5422501397270973,
+        "A_observed_from_the_means": -3.384034781444959,
+        "excess_median": 0.33294876710176946,
+        "excess_from_the_means": -0.3023955299429062,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    },
+    "B4": {
+      "F0": {
+        "option_marginal": [
+          0.019801980198019802,
+          0.3415841584158416,
+          0.17326732673267325,
+          0.09405940594059406,
+          0.36633663366336633,
+          0.0049504950495049506
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.4616006066088434,
+        "A_null_from_the_means": -3.9728293293419803,
+        "A_observed_median_of_per_item": -1.8637525098413974,
+        "A_observed_from_the_means": -3.7621515878598903,
+        "excess_median": 0.597848096767446,
+        "excess_from_the_means": 0.21067774148208995,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.0891089108910891,
+          0.29207920792079206,
+          0.16831683168316833,
+          0.12376237623762376,
+          0.32673267326732675,
+          0.0
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.3971036917113553,
+        "A_null_from_the_means": -3.982628676102455,
+        "A_observed_median_of_per_item": -1.9905414819228606,
+        "A_observed_from_the_means": -3.8863010826552244,
+        "excess_median": 0.40656220978849467,
+        "excess_from_the_means": 0.09632759344723052,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.06435643564356436,
+          0.2623762376237624,
+          0.20297029702970298,
+          0.12871287128712872,
+          0.3118811881188119,
+          0.0297029702970297
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.3435047382962204,
+        "A_null_from_the_means": -3.8465556644359986,
+        "A_observed_median_of_per_item": -2.2147522140292812,
+        "A_observed_from_the_means": -3.8315229541204974,
+        "excess_median": 0.12875252426693917,
+        "excess_from_the_means": 0.015032710315501241,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    },
+    "L1": {
+      "F0": {
+        "option_marginal": [
+          0.06435643564356436,
+          0.12871287128712872,
+          0.24257425742574257,
+          0.054455445544554455,
+          0.13366336633663367,
+          0.37623762376237624
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.8548684922611023,
+        "A_null_from_the_means": -4.5012871334262945,
+        "A_observed_median_of_per_item": -2.164698524457397,
+        "A_observed_from_the_means": -4.1490833437313395,
+        "excess_median": 0.6901699678037052,
+        "excess_from_the_means": 0.352203789694955,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.08415841584158416,
+          0.09900990099009901,
+          0.18811881188118812,
+          0.04455445544554455,
+          0.10396039603960396,
+          0.4801980198019802
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.290053943455025,
+        "A_null_from_the_means": -5.013549959481978,
+        "A_observed_median_of_per_item": -2.783868663952161,
+        "A_observed_from_the_means": -4.5483902527962226,
+        "excess_median": 0.5061852795028643,
+        "excess_from_the_means": 0.4651597066857551,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.10396039603960396,
+          0.09405940594059406,
+          0.1782178217821782,
+          0.06930693069306931,
+          0.10891089108910891,
+          0.44554455445544555
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.2635585399285842,
+        "A_null_from_the_means": -4.951153234327452,
+        "A_observed_median_of_per_item": -3.1017610291837774,
+        "A_observed_from_the_means": -4.590524581464708,
+        "excess_median": 0.16179751074480686,
+        "excess_from_the_means": 0.3606286528627445,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    },
+    "L2": {
+      "F0": {
+        "option_marginal": [
+          0.27722772277227725,
+          0.18316831683168316,
+          0.04950495049504951,
+          0.3613861386138614,
+          0.10891089108910891,
+          0.019801980198019802
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.4789081779437656,
+        "A_null_from_the_means": -3.963735019484414,
+        "A_observed_median_of_per_item": -1.2633256337910337,
+        "A_observed_from_the_means": -3.262978737221821,
+        "excess_median": 1.215582544152732,
+        "excess_from_the_means": 0.700756282262593,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.27722772277227725,
+          0.16831683168316833,
+          0.06435643564356436,
+          0.3465346534653465,
+          0.1188118811881188,
+          0.024752475247524754
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.5008483865813202,
+        "A_null_from_the_means": -3.9722882564726705,
+        "A_observed_median_of_per_item": -1.1997486431524396,
+        "A_observed_from_the_means": -3.1464999743875777,
+        "excess_median": 1.3010997434288807,
+        "excess_from_the_means": 0.8257882820850928,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.2623762376237624,
+          0.18316831683168316,
+          0.054455445544554455,
+          0.3712871287128713,
+          0.10396039603960396,
+          0.024752475247524754
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.428672903171112,
+        "A_null_from_the_means": -3.898220071690644,
+        "A_observed_median_of_per_item": -1.4285689700782582,
+        "A_observed_from_the_means": -3.2654056695659612,
+        "excess_median": 1.0001039330928536,
+        "excess_from_the_means": 0.6328144021246827,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    },
+    "L3": {
+      "F0": {
+        "option_marginal": [
+          0.09405940594059406,
+          0.19801980198019803,
+          0.0891089108910891,
+          0.2623762376237624,
+          0.16336633663366337,
+          0.19306930693069307
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.7124275601887997,
+        "A_null_from_the_means": -4.247245072375286,
+        "A_observed_median_of_per_item": -1.6860927294568597,
+        "A_observed_from_the_means": -3.338777866994844,
+        "excess_median": 1.02633483073194,
+        "excess_from_the_means": 0.9084672053804419,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.09900990099009901,
+          0.13366336633663367,
+          0.0297029702970297,
+          0.2524752475247525,
+          0.14356435643564355,
+          0.3415841584158416
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.3241290245682342,
+        "A_null_from_the_means": -4.8979761084429425,
+        "A_observed_median_of_per_item": -2.7703557663514466,
+        "A_observed_from_the_means": -4.562567469179268,
+        "excess_median": 0.5537732582167876,
+        "excess_from_the_means": 0.33540863926367415,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.10396039603960396,
+          0.1188118811881188,
+          0.019801980198019802,
+          0.2722772277227723,
+          0.1188118811881188,
+          0.36633663366336633
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.3841534770781165,
+        "A_null_from_the_means": -4.928192637910305,
+        "A_observed_median_of_per_item": -2.6890640482089716,
+        "A_observed_from_the_means": -4.4927846104182185,
+        "excess_median": 0.6950894288691449,
+        "excess_from_the_means": 0.4354080274920866,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    },
+    "L4": {
+      "F0": {
+        "option_marginal": [
+          0.3069306930693069,
+          0.18811881188118812,
+          0.13861386138613863,
+          0.07920792079207921,
+          0.27722772277227725,
+          0.009900990099009901
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.6966952996455054,
+        "A_null_from_the_means": -4.572208381999883,
+        "A_observed_median_of_per_item": -0.9504881697510454,
+        "A_observed_from_the_means": -2.900365725491552,
+        "excess_median": 1.74620712989446,
+        "excess_from_the_means": 1.671842656508331,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F1": {
+        "option_marginal": [
+          0.42786069651741293,
+          0.11940298507462686,
+          0.0845771144278607,
+          0.04975124378109453,
+          0.30845771144278605,
+          0.009950248756218905
+        ],
+        "n_renderings": 201,
+        "n_items": 101,
+        "A_null_median_of_per_item": -2.9951876197081155,
+        "A_null_from_the_means": -5.154563503928535,
+        "A_observed_median_of_per_item": -1.725801816604763,
+        "A_observed_from_the_means": -4.087967130151946,
+        "excess_median": 1.2693858031033525,
+        "excess_from_the_means": 1.066596373776589,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      },
+      "F2": {
+        "option_marginal": [
+          0.44554455445544555,
+          0.0594059405940594,
+          0.04455445544554455,
+          0.04455445544554455,
+          0.3811881188118812,
+          0.024752475247524754
+        ],
+        "n_renderings": 202,
+        "n_items": 101,
+        "A_null_median_of_per_item": -3.214442531496389,
+        "A_null_from_the_means": -5.545299521751308,
+        "A_observed_median_of_per_item": -2.4552000612905505,
+        "A_observed_from_the_means": -4.639580960864766,
+        "excess_median": 0.7592424702058387,
+        "excess_from_the_means": 0.9057185608865419,
+        "excess_is": "DESCRIPTIVE and licenses nothing. v2.0 section 3.3 defines excess as A_observed - A_null; P2-D5's second conjunct, which would make it load-bearing, is UNRULED and stays the author's. P2-D25 holds under all three readings of it and this run claims none of them."
+      }
+    }
+  },
+  "cells": {
+    "CTRL|F1": {
+      "model": "CTRL",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.1725352112676056,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.056338028169014086,
+          0.014084507042253521,
+          0.0,
+          0.23591549295774647,
+          0.2676056338028169,
+          0.426056338028169
+        ],
+        "option_marginal_arm": [
+          0.056338028169014086,
+          0.0035211267605633804,
+          0.0,
+          0.2007042253521127,
+          0.14084507042253522,
+          0.5985915492957746
+        ],
+        "signed_shift": [
+          0.0,
+          -0.01056338028169014,
+          0.0,
+          -0.035211267605633784,
+          -0.12676056338028166,
+          0.17253521126760563
+        ],
+        "all_tiles_value": 0.08055555555555556,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.319354093734036,
+        "observed_mean_dA": -0.5656448319216272,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "B2|F1": {
+      "model": "B2",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.055579057383168304,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 283,
+        "option_marginal_base": [
+          0.03873239436619718,
+          0.01056338028169014,
+          0.5387323943661971,
+          0.12323943661971831,
+          0.14084507042253522,
+          0.14788732394366197
+        ],
+        "option_marginal_arm": [
+          0.05653710247349823,
+          0.0176678445229682,
+          0.5512367491166078,
+          0.08833922261484099,
+          0.15901060070671377,
+          0.127208480565371
+        ],
+        "signed_shift": [
+          0.017804708107301052,
+          0.007104464241278058,
+          0.012504354750410673,
+          -0.03490021400487732,
+          0.018165530284178555,
+          -0.020678843378290956
+        ],
+        "all_tiles_value": 0.09702264101557388,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.03689757031167142,
+        "observed_mean_dA": -0.09361485444191243,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "B4|F1": {
+      "model": "B4",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.15845070422535212,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.04929577464788732,
+          0.2535211267605634,
+          0.20422535211267606,
+          0.10211267605633803,
+          0.3626760563380282,
+          0.028169014084507043
+        ],
+        "option_marginal_arm": [
+          0.09507042253521127,
+          0.323943661971831,
+          0.15845070422535212,
+          0.1443661971830986,
+          0.2746478873239437,
+          0.0035211267605633804
+        ],
+        "signed_shift": [
+          0.045774647887323945,
+          0.07042253521126762,
+          -0.04577464788732394,
+          0.04225352112676056,
+          -0.0880281690140845,
+          -0.024647887323943664
+        ],
+        "all_tiles_value": 0.16203703703703703,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": 0.06757244663576593,
+        "observed_mean_dA": -0.12414949479533481,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L1|F1": {
+      "model": "L1",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.08098591549295778,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.04929577464788732,
+          0.11267605633802817,
+          0.2746478873239437,
+          0.04929577464788732,
+          0.11971830985915492,
+          0.39436619718309857
+        ],
+        "option_marginal_arm": [
+          0.04929577464788732,
+          0.0880281690140845,
+          0.2323943661971831,
+          0.06690140845070422,
+          0.1056338028169014,
+          0.45774647887323944
+        ],
+        "signed_shift": [
+          0.0,
+          -0.02464788732394367,
+          -0.04225352112676059,
+          0.0176056338028169,
+          -0.014084507042253516,
+          0.06338028169014087
+        ],
+        "all_tiles_value": 0.1675925925925926,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.28163227261231605,
+        "observed_mean_dA": -0.3993069090648828,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L2|F1": {
+      "model": "L2",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.04225352112676056,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.20774647887323944,
+          0.16901408450704225,
+          0.04225352112676056,
+          0.45774647887323944,
+          0.0880281690140845,
+          0.035211267605633804
+        ],
+        "option_marginal_arm": [
+          0.22535211267605634,
+          0.1619718309859155,
+          0.04929577464788732,
+          0.4225352112676056,
+          0.0880281690140845,
+          0.0528169014084507
+        ],
+        "signed_shift": [
+          0.017605633802816906,
+          -0.007042253521126751,
+          0.007042253521126758,
+          -0.03521126760563381,
+          0.0,
+          0.0176056338028169
+        ],
+        "all_tiles_value": 0.05462962962962963,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.13317797714377697,
+        "observed_mean_dA": 0.1164787628342429,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "SLACK",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L3|F1": {
+      "model": "L3",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.18661971830985918,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.11971830985915492,
+          0.1936619718309859,
+          0.035211267605633804,
+          0.31690140845070425,
+          0.15845070422535212,
+          0.176056338028169
+        ],
+        "option_marginal_arm": [
+          0.09859154929577464,
+          0.11619718309859155,
+          0.01056338028169014,
+          0.2852112676056338,
+          0.1267605633802817,
+          0.3626760563380282
+        ],
+        "signed_shift": [
+          -0.02112676056338028,
+          -0.07746478873239436,
+          -0.024647887323943664,
+          -0.031690140845070436,
+          -0.031690140845070436,
+          0.18661971830985918
+        ],
+        "all_tiles_value": 0.15092592592592596,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.5960396733708259,
+        "observed_mean_dA": -1.2237896021844252,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L4|F1": {
+      "model": "L4",
+      "framing": "F1",
+      "contrast": "F1 - F0",
+      "control_TV": {
+        "value": 0.21478873239436616,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.31690140845070425,
+          0.15845070422535212,
+          0.10915492957746478,
+          0.18661971830985916,
+          0.22887323943661972,
+          0.0
+        ],
+        "option_marginal_arm": [
+          0.4295774647887324,
+          0.07394366197183098,
+          0.07394366197183098,
+          0.09154929577464789,
+          0.30633802816901406,
+          0.02464788732394366
+        ],
+        "signed_shift": [
+          0.11267605633802813,
+          -0.08450704225352114,
+          -0.0352112676056338,
+          -0.09507042253521127,
+          0.07746478873239435,
+          0.02464788732394366
+        ],
+        "all_tiles_value": 0.32407407407407407,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.7925259802723589,
+        "observed_mean_dA": -1.178553300260067,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "CTRL|F2": {
+      "model": "CTRL",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.04577464788732396,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.056338028169014086,
+          0.014084507042253521,
+          0.0,
+          0.23591549295774647,
+          0.2676056338028169,
+          0.426056338028169
+        ],
+        "option_marginal_arm": [
+          0.07394366197183098,
+          0.0,
+          0.0,
+          0.25,
+          0.23591549295774647,
+          0.44014084507042256
+        ],
+        "signed_shift": [
+          0.0176056338028169,
+          -0.014084507042253521,
+          0.0,
+          0.01408450704225353,
+          -0.03169014084507041,
+          0.014084507042253558
+        ],
+        "all_tiles_value": 0.05185185185185185,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": 0.014457386489964169,
+        "observed_mean_dA": -0.35249994792881356,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "B2|F2": {
+      "model": "B2",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.0704225352112676,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.03873239436619718,
+          0.01056338028169014,
+          0.5387323943661971,
+          0.12323943661971831,
+          0.14084507042253522,
+          0.14788732394366197
+        ],
+        "option_marginal_arm": [
+          0.09859154929577464,
+          0.014084507042253521,
+          0.5246478873239436,
+          0.0880281690140845,
+          0.14788732394366197,
+          0.1267605633802817
+        ],
+        "signed_shift": [
+          0.05985915492957746,
+          0.003521126760563381,
+          -0.014084507042253502,
+          -0.03521126760563381,
+          0.007042253521126751,
+          -0.02112676056338028
+        ],
+        "all_tiles_value": 0.1537037037037037,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.20266483211307126,
+        "observed_mean_dA": -0.5851792151746481,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "B4|F2": {
+      "model": "B4",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.11619718309859155,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.04929577464788732,
+          0.2535211267605634,
+          0.20422535211267606,
+          0.10211267605633803,
+          0.3626760563380282,
+          0.028169014084507043
+        ],
+        "option_marginal_arm": [
+          0.10915492957746478,
+          0.2605633802816901,
+          0.18661971830985916,
+          0.15140845070422534,
+          0.2852112676056338,
+          0.007042253521126761
+        ],
+        "signed_shift": [
+          0.05985915492957746,
+          0.007042253521126751,
+          -0.017605633802816906,
+          0.049295774647887314,
+          -0.07746478873239437,
+          -0.02112676056338028
+        ],
+        "all_tiles_value": 0.23425925925925925,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": 0.12653177833408427,
+        "observed_mean_dA": -0.06937136626060693,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L1|F2": {
+      "model": "L1",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.10211267605633806,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.04929577464788732,
+          0.11267605633802817,
+          0.2746478873239437,
+          0.04929577464788732,
+          0.11971830985915492,
+          0.39436619718309857
+        ],
+        "option_marginal_arm": [
+          0.07042253521126761,
+          0.08450704225352113,
+          0.20774647887323944,
+          0.07042253521126761,
+          0.11267605633802817,
+          0.45422535211267606
+        ],
+        "signed_shift": [
+          0.021126760563380288,
+          -0.028169014084507046,
+          -0.06690140845070425,
+          0.021126760563380288,
+          -0.007042253521126751,
+          0.059859154929577496
+        ],
+        "all_tiles_value": 0.16574074074074074,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.4162154999335361,
+        "observed_mean_dA": -0.44144123773336813,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L2|F2": {
+      "model": "L2",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.01760563380281689,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.20774647887323944,
+          0.16901408450704225,
+          0.04225352112676056,
+          0.45774647887323944,
+          0.0880281690140845,
+          0.035211267605633804
+        ],
+        "option_marginal_arm": [
+          0.20774647887323944,
+          0.16901408450704225,
+          0.0528169014084507,
+          0.44014084507042256,
+          0.0880281690140845,
+          0.04225352112676056
+        ],
+        "signed_shift": [
+          0.0,
+          0.0,
+          0.01056338028169014,
+          -0.017605633802816878,
+          0.0,
+          0.007042253521126758
+        ],
+        "all_tiles_value": 0.024999999999999998,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.016248191800985738,
+        "observed_mean_dA": -0.002426932344140481,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "SLACK",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L3|F2": {
+      "model": "L3",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.18661971830985916,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.11971830985915492,
+          0.1936619718309859,
+          0.035211267605633804,
+          0.31690140845070425,
+          0.15845070422535212,
+          0.176056338028169
+        ],
+        "option_marginal_arm": [
+          0.11267605633802817,
+          0.1056338028169014,
+          0.01056338028169014,
+          0.3204225352112676,
+          0.09154929577464789,
+          0.3591549295774648
+        ],
+        "signed_shift": [
+          -0.007042253521126751,
+          -0.0880281690140845,
+          -0.024647887323943664,
+          0.0035211267605633756,
+          -0.06690140845070423,
+          0.1830985915492958
+        ],
+        "all_tiles_value": 0.16851851851851854,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -0.4727027255239192,
+        "observed_mean_dA": -1.154006743423374,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    },
+    "L4|F2": {
+      "model": "L4",
+      "framing": "F2",
+      "contrast": "F2 - F0",
+      "control_TV": {
+        "value": 0.278169014084507,
+        "base": "size tile, beta_c = infinity, n = 142 items, |O| = 6 (P2-D25, P2-D4)",
+        "n_items": 142,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284,
+        "option_marginal_base": [
+          0.31690140845070425,
+          0.15845070422535212,
+          0.10915492957746478,
+          0.18661971830985916,
+          0.22887323943661972,
+          0.0
+        ],
+        "option_marginal_arm": [
+          0.4084507042253521,
+          0.04929577464788732,
+          0.045774647887323945,
+          0.08098591549295775,
+          0.3908450704225352,
+          0.02464788732394366
+        ],
+        "signed_shift": [
+          0.09154929577464788,
+          -0.10915492957746481,
+          -0.06338028169014084,
+          -0.1056338028169014,
+          0.16197183098591547,
+          0.02464788732394366
+        ],
+        "all_tiles_value": 0.3,
+        "all_tiles_base": "all four tiles, beta_c = infinity, n = 540 items, |O| in {3, 3, 4, 6}. Item-weighted mean of the four WITHIN-TILE distances; no marginal is pooled across arities (P2-D3, and bind_marginal_null_use's arity premise). Reported beside the size figure, never alone.",
+        "role": "DESCRIPTIVE, and never anything else. v2.0 section 4.4's first paragraph: o*_0 = o*_infinity on these items, so there is nothing for an adversary-aware model to move toward and any change in the choice distribution is PROMPT SENSITIVITY. That ground is independent of the cap, of mean dA and of A, so P2-D6 and P2-D12 do not reach it (P2-D25).",
+        "what_it_cannot_say": "It cannot size how much of the confirmatory movement it explains. Sizing that is the reweighting, the reweighting lands in A units at the level, and A is undefined on the control set by v2.0 section 3.2. The control set can show that generic movement exists; it cannot adjudicate whether the confirmatory movement IS that movement (P2-D25)."
+      },
+      "attribution_cap": {
+        "dA_null": -1.0479424878326007,
+        "observed_mean_dA": -1.7392152353732133,
+        "observed_median_dA": 0.0,
+        "n_items": 101,
+        "cap_is": "BINDING",
+        "criterion": "v2.0 section 4.4: a confirmatory tracking claim required BOTH that the interval on mean dA exclude zero in the POSITIVE direction and that observed mean dA exceed dA_null. The first conjunct was retired when P2-D6 demoted the mean. What is computed here is the second, against the quantity it was written for, at that quantity's current descriptive standing (P2-D25).",
+        "standing": "DESCRIPTIVE on both sides. No successor cap is authorized and none is claimed; no mapping onto quantity (c) exists and none may be written (P2-D25).",
+        "P2D6_mixture_defect": "Named rather than repaired. P2-D6 measured what a mean of per-item A is on this geometry: a three-way mixture, 470 option-cells at exactly 0, 439 at exactly 1, 841 off-pole at median -3.329, unbounded below. dA_null is built from mean_i A_i(o) and the observed side is a mean of per-item A differences, so the defect reaches BOTH ends and the comparison is weak on both. Substituting a median, a bounded transform or a trimmed mean would be inventing the successor P2-D25 declines.",
+        "mean_A_by_option": [
+          -6.122960684689389,
+          -4.013181029790142,
+          -0.23658715457951943,
+          -1.9996469265813976,
+          -6.052498228339847,
+          -6.951479820324185
+        ]
+      }
+    }
+  },
+  "control_TV_by_tile": {
+    "CTRL|F1": {
+      "hold": {
+        "tv": 0.033582089552238806,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.0,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.11328125,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.1725352112676056,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "B2|F1": {
+      "hold": {
+        "tv": 0.08955223880597013,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.03308823529411764,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.21875,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.055579057383168304,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 283
+      }
+    },
+    "B4|F1": {
+      "hold": {
+        "tv": 0.19029850746268653,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.22426470588235295,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.0703125,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.15845070422535212,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L1|F1": {
+      "hold": {
+        "tv": 0.23507462686567165,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.15441176470588236,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.20703125,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.08098591549295778,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L2|F1": {
+      "hold": {
+        "tv": 0.026119402985074612,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.09558823529411764,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.0546875,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.04225352112676056,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L3|F1": {
+      "hold": {
+        "tv": 0.22388059701492544,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.17279411764705882,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.01171875,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.18661971830985918,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L4|F1": {
+      "hold": {
+        "tv": 0.22388059701492535,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.6544117647058824,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.19921875,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.21478873239436616,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "CTRL|F2": {
+      "hold": {
+        "tv": 0.09328358208955224,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.0,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.0703125,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.04577464788732396,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "B2|F2": {
+      "hold": {
+        "tv": 0.12686567164179102,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.022058823529411783,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.4140625,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.0704225352112676,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "B4|F2": {
+      "hold": {
+        "tv": 0.14552238805970152,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.4632352941176471,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.21484375,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.11619718309859155,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L1|F2": {
+      "hold": {
+        "tv": 0.208955223880597,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.15073529411764708,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.20703125,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.10211267605633806,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L2|F2": {
+      "hold": {
+        "tv": 0.033582089552238806,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.0036764705882352876,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.046875,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.01760563380281689,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L3|F2": {
+      "hold": {
+        "tv": 0.24253731343283588,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.19485294117647062,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.04296875,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.18661971830985916,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    },
+    "L4|F2": {
+      "hold": {
+        "tv": 0.22014925373134325,
+        "n_items": 134,
+        "arity": 4,
+        "n_renderings_base": 268,
+        "n_renderings_arm": 268
+      },
+      "manmade": {
+        "tv": 0.4889705882352941,
+        "n_items": 136,
+        "arity": 3,
+        "n_renderings_base": 272,
+        "n_renderings_arm": 272
+      },
+      "moves": {
+        "tv": 0.20703125,
+        "n_items": 128,
+        "arity": 3,
+        "n_renderings_base": 256,
+        "n_renderings_arm": 256
+      },
+      "size": {
+        "tv": 0.278169014084507,
+        "n_items": 142,
+        "arity": 6,
+        "n_renderings_base": 284,
+        "n_renderings_arm": 284
+      }
+    }
+  },
+  "steps_not_run": {
+    "step_4_control_change_rate": "NOT COMPUTED. A same-option or change rate on the control set would be the natural companion to quantity (a), and P2-D25 does not authorize it: v2.0 section 4.4's control measure is TV and TV is what is computed. Compute no quantity P2-D25 did not authorize.",
+    "step_5_direction_and_verdict": "NOT ISSUED. The placement is emitted; the reading of it as content is blocked by P2-D5's second conjunct, which is UNRULED and stays the author's, and by P2-D24 for anything about direction.",
+    "step_6_size_ladder": "NOT RUN. Step 6 asks whether adversary sensitivity appears at any scale, which is a statement that a model does or does not track the adversary, and that is exactly what P2-D5's unruled conjunct blocks. P2-D25 authorizes no quantity for it and explicitly does not rule the blocker. Every table here is ordered by the ladder, so the descriptive substrate exists the moment the blocker is ruled.",
+    "menu_position_marginal": "NOT COMPUTED. P2-D25 alternative 4 rejected it twice over: it is a new preregistered quantity chosen after the (4,5) signature was seen, and the signature is on canonical option ids, which P1's Format V permutes per item and per permutation."
+  },
+  "blocker": {
+    "id": "P2-D5's second conjunct, excess over the marginal null",
+    "status": "UNRULED, and P2-D25 does not rule it",
+    "effect_here": "The excess A_observed - A_null is emitted per cell and is DESCRIPTIVE. Under all three readings of the conjunct it stays descriptive: if the conjunct travels and needs an operational form, the excess would have to enter the confirmatory family and nothing here puts one there; if it expired with the mean, there is no conjunct to satisfy; if (a), (b) and (c) already satisfy it, it is discharged by quantities this run does not touch. Nothing here is offered as discharging it (PREREGISTRATION_v2.16.md section 5.5)."
+  }
+}

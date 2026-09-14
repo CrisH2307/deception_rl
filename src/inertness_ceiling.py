@@ -95,6 +95,24 @@ def check_floor(k, n=N, both_permutations=True):
             "clears_zero": bool(r["lo"] > 0)}
 
 
+def pair_delta_A(ch, A, model, keep, col="condition", base="cond4", arm="cond5"):
+    """Per-pair `ΔA` and the item id of each pair, on P2-D16's surviving pairs.
+
+    Factored out of `c5_delta_A` rather than copied, for the reason `CLAUDE.md`
+    gives: a second `A[i][b] - A[i][a]` over `pair_frame` would be a duplicated
+    frozen computation that can silently diverge. `t7_control` needs the per-item
+    mean of this vector, which is `v2.0` section 3.2's item value for `ΔA`, and
+    `c5_delta_A` needs the vector itself.
+
+    Returns `(item_ids, base_choices, arm_choices, delta_A)`.
+    """
+    w = TR.pair_frame(ch, model, keep, col, base, arm)
+    it = w.index.get_level_values("item_id").values.astype(int)
+    a0, a1 = w[base].values, w[arm].values
+    d = np.array([A[i][int(b)] - A[i][int(a)] for i, a, b in zip(it, a0, a1)])
+    return it, a0, a1, d
+
+
 def c5_delta_A(ch, A, keep, col="condition", base="cond4", arm="cond5"):
     """`c5`'s own tie rate, blind spot and `ΔA` sign proportion, per model.
 
@@ -105,10 +123,7 @@ def c5_delta_A(ch, A, keep, col="condition", base="cond4", arm="cond5"):
     """
     out = {}
     for m in TR.LADDER:
-        w = TR.pair_frame(ch, m, keep, col, base, arm)
-        it = w.index.get_level_values("item_id").values.astype(int)
-        c4, c5 = w[base].values, w[arm].values
-        d = np.array([A[i][int(b)] - A[i][int(a)] for i, a, b in zip(it, c4, c5)])
+        it, c4, c5, d = pair_delta_A(ch, A, m, keep, col, base, arm)
         nz = d != 0
         n_eff, pos = int(nz.sum()), int((d[nz] > 0).sum())
         same = float((c4 == c5).mean())
