@@ -95,18 +95,19 @@ def check_floor(k, n=N, both_permutations=True):
             "clears_zero": bool(r["lo"] > 0)}
 
 
-def c5_delta_A(ch, A, keep):
-    """`c5`'s own tie rate, blind spot and `ΔA` sign proportion, per model."""
+def c5_delta_A(ch, A, keep, col="condition", base="cond4", arm="cond5"):
+    """`c5`'s own tie rate, blind spot and `ΔA` sign proportion, per model.
+
+    `col`/`base`/`arm` default to Paper 1's condition contrast. T7's quantity (c)
+    is the same computation on `col="framing"`, `base="F0"`, so it reuses this
+    rather than reimplementing the pair pivot, the `ΔA` lookup and P2-D20's item
+    aggregation a second time.
+    """
     out = {}
     for m in TR.LADDER:
-        g = ch[(ch["model"] == m) & (ch["prompt_form"] == TR.FORM)
-               & (ch["rule"] == TR.RULE) & (ch["item_id"].isin(keep))
-               & ch["permutation_id"].notna()]
-        w = g.pivot_table(index=["item_id", "permutation_id"], columns="condition",
-                          values="chosen_option", aggfunc="first")
-        w = w.loc[w.notna().all(axis=1)]
+        w = TR.pair_frame(ch, m, keep, col, base, arm)
         it = w.index.get_level_values("item_id").values.astype(int)
-        c4, c5 = w["cond4"].values, w["cond5"].values
+        c4, c5 = w[base].values, w[arm].values
         d = np.array([A[i][int(b)] - A[i][int(a)] for i, a, b in zip(it, c4, c5)])
         nz = d != 0
         n_eff, pos = int(nz.sum()), int((d[nz] > 0).sum())

@@ -74,6 +74,34 @@ def paired(ch, model, keep, vary):
             "same_option_rate": float((a == b).mean())}
 
 
+def pair_frame(ch, model, keep, col="condition", base="cond4", arm="cond5"):
+    """Wide `(item_id, permutation_id) x {base, arm}` chosen options. P2-D16.
+
+    This is the pivot-and-`notna` shape P2-D16 names as the implementation of its
+    rule, factored out of `c5_effect.c5_movement` and
+    `inertness_ceiling.c5_delta_A` rather than copied a third time: a rendering
+    that failed P1's `n_tied == 1` filter is simply absent, so its
+    `(item, permutation)` row is short a column and leaves both the numerator and
+    the denominator, while the item's other permutation is retained and the item
+    is never dropped whole.
+
+    `col` names the factor that varies within a pair. It defaults to Paper 1's
+    `condition` so the frozen `R_m` values recompute unchanged; T7's framing
+    contrasts pass `col="framing"` with `base="F0"`. The frame is restricted to
+    the two levels of the contrast BEFORE the `notna` filter, because a third
+    level present in `ch` would otherwise drop pairs that the contrast at hand can
+    still form: P2-D16 requires a tied `F1` rendering to leave the `F1` contrast
+    only, not the `F2` one.
+    """
+    g = ch[(ch["model"] == model) & (ch["prompt_form"] == FORM)
+           & (ch["rule"] == RULE) & (ch["item_id"].isin(keep))
+           & ch[col].isin((base, arm)) & ch["permutation_id"].notna()]
+    w = g.pivot_table(index=["item_id", "permutation_id"], columns=col,
+                      values="chosen_option", aggfunc="first")
+    w = w.reindex(columns=[base, arm])
+    return w.loc[w.notna().all(axis=1)]
+
+
 def a_invisibility(A, ids, mask, eps=0.0):
     """How much option movement `A` cannot see, on a given item subset.
 

@@ -62,15 +62,16 @@ def tv(a, b):
     return float(0.5 * np.abs(pa - pb).sum())
 
 
-def c5_movement(ch, model, keep):
-    """Per-model `c5` change rate with the P2-D8 interval, on one item set."""
-    g = ch[(ch["model"] == model) & (ch["prompt_form"] == TR.FORM)
-           & (ch["rule"] == TR.RULE) & (ch["item_id"].isin(keep))
-           & ch["permutation_id"].notna()]
-    w = g.pivot_table(index=["item_id", "permutation_id"], columns="condition",
-                      values="chosen_option", aggfunc="first")
-    w = w.loc[w.notna().all(axis=1)]
-    c4, c5 = w["cond4"].values, w["cond5"].values
+def c5_movement(ch, model, keep, col="condition", base="cond4", arm="cond5"):
+    """Per-model `c5` change rate with the P2-D8 interval, on one item set.
+
+    `col`/`base`/`arm` default to Paper 1's condition contrast, which is what
+    P2-D8's `R_m` is computed on. T7's quantity (a) is the same statistic on
+    `col="framing"`, `base="F0"`: the same rate against the same null, so it runs
+    through this function rather than through a second copy of it.
+    """
+    w = TR.pair_frame(ch, model, keep, col, base, arm)
+    c4, c5 = w[base].values, w[arm].values
     changed = (c4 != c5).astype(float)
     items = w.index.get_level_values("item_id").values
     # Item-level means before resampling, per P2-D8's decision rule: each item
