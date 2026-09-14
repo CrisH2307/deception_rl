@@ -252,6 +252,33 @@ the signature is not offered as establishing anything: a generic position shift 
 it, other things would too, and distinguishing them is what the cap was for. **The design
 cannot currently adjudicate it, and that inability is the finding.**
 
+**Corrected 2026-09-14 by P2-D25. The observation stands; the hypothesis it was said to
+favour does not.** The paragraphs above are left unedited, per the rule at the head of
+this file, so the reading held on 2026-09-14 stays legible.
+
+`chosen_option` is a CANONICAL option id, not a menu position. Paper 1's Format V permutes
+the menu per item and per permutation, and on the `size` tile canonical options 4 and 5
+occupy all six menu positions at near-uniform rates under both permutations
+(`items_rendered.parquet`, `option_order`). So "option 5 is the end of the option order"
+is true of the item's canonical option list and false of the menu the model reads, and a
+model nudged toward or away from the end of the MENU would not concentrate its switches on
+canonical pair (4,5); it would smear them across canonical pairs. The generic
+option-POSITION hypothesis is therefore not what this signature favours, and no quantity in
+the design is a marginal over rendered positions, so that hypothesis is unevidenced here
+and remains unadjudicable for a second and independent reason.
+
+What the signature is consistent with is a shift in preference over canonical option
+CONTENT at the ends of the tile's ordinal scale: on `size`, canonical 0 and 1 are the grain
+of sand and the chicken egg and canonical 4 and 5 are the taxi and the aircraft carrier.
+That hypothesis IS the one `v2.0` section 4.4's cap is shaped for, because `p^ctrl(o)` is a
+marginal over canonical option ids, so the cap is matched to it rather than mismatched. It
+still cannot reach quantity (c), for the reasons P2-D24 gives and P2-D25 restates, so the
+inability recorded above is unchanged in substance and changed in its reason.
+
+P2-D24 is untouched. Its third premise is that nothing establishes the discarded switches
+carry the direction of the retained ones, which is a statement about selection and does not
+depend on what the concentration is a signature of.
+
 The third case is the same failure class pointed at the log itself. A decision entry
 is the governing record, so nothing downstream of it checks its provenance; the entry
 IS the check. That makes a fabricated entry cheaper to write than a real one and
@@ -2480,6 +2507,193 @@ for this purpose. It does not touch the human-behaviour gap claim, whose wording
 
 ---
 
+## P2-D25. `A_null` and `ΔA_null` are computed and descriptive; no mapping onto quantity (c), and no successor cap
+
+**Status:** adopted. Rules what the two preregistered marginal-null quantities may be
+used for, before either has been computed. Changes no statistic, no unit, no tolerance,
+no null and no family. `p0` is 0.5. The confirmatory family is 21 tests at
+`alpha = 0.05/21`. P2-D5's blocker stays open and stays the author's.
+**Decided:** 2026-09-14, by an **agent session acting on an author instruction**, in the
+session following the one that recorded P2-D24. **No statistic was computed.** The
+session read `v2.0`, the log, the two T7 reports and the modules, and recomputed nothing
+from `data/raw_t7/`: no `A_null`, no `ΔA_null`, no control-set `TV`, no quantity on the
+Arm B artifacts. One frozen, model-free property of Paper 1's rendering table was read
+and is disclosed in `PREREGISTRATION_v2.16.md` section 6. Full reasoning in
+`PREREGISTRATION_v2.16.md`.
+
+**The instruction it acted on**, per the countermeasure in `v2.10` section 2.4, quoted in
+the parts that bear on the ruling:
+
+> You rule. **You compute nothing.**
+>
+> **With no number on the table, what may the computed quantities be used for and what
+> may they not?** At minimum, all four:
+>
+> 1. Whether `A_null` and `ΔA_null` **enter the confirmatory family or are
+>    descriptive**. Note that the confirmatory family is 21 tests and
+>    `alpha = 0.05/21`; say what happens to that family under your ruling and whether
+>    anything you authorize changes it.
+> 2. Whether they **may be read against quantity (c) at all**, and if so **under what
+>    preregistered mapping**, or whether **no mapping is authorized**.
+> 3. What they **license about the generic-option-position-shift hypothesis** the (4,5)
+>    signature favours.
+> 4. Whether **a successor to section 4.4's cap is authorized**, or whether **the cap
+>    stays orphaned and its absence stays the finding**.
+
+with the note that
+
+> A ruling made with the numbers visible is a different object from one made without,
+> and the author split the sessions so that this one is made blind. If you find yourself
+> wanting a number to decide, that wanting is the thing the split exists to prevent
+
+and the constraints: do not reopen P2-D5, P2-D6, P2-D12, P2-D14, P2-D19, P2-D20, P2-D21
+or P2-D24; do not move `p0`; treat every claim in the instruction as unverified and check
+it against the record; and if the ruling makes the computation nearly worthless or leaves
+the hypothesis unadjudicable, say so plainly rather than inflating what it licenses. All
+were followed. Two claims in the instruction did not survive verification and are recorded
+in the consequences below.
+
+**Binds:** any script computing `A_null(m, F)` or `ΔA_null(m, F)`, any script computing
+`TV(m, F)` on the `beta_c = infinity` control set, and any report or paper passage citing
+one of the three.
+**Constant:** `P2D25_TEXT`, `P2D25_IN_CONFIRMATORY_FAMILY`,
+`P2D25_CONFIRMATORY_FAMILY_SIZE`, `P2D25_MAPPING_TO_QUANTITY_C`,
+`P2D25_SUCCESSOR_CAP_AUTHORIZED`, `P2D25_CAP_APPLIES_TO`, `P2D25_CONTROL_TV_AUTHORIZED`,
+`P2D25_CONTROL_TILE`, `P2D25_CONTROL_N`, `P2D25_CONTROL_N_ALL_TILES`,
+`P2D25_CONFIRMATORY_ARITY`, `P2D25_MARGINAL_SUPPORT`,
+`P2D25_MENU_POSITION_ADJUDICABLE`, `P2D25_CANONICAL_TAIL_IDS`,
+`P2D25_EXT_FLOOR_IN_FORCE`.
+
+**Decision text.**
+
+> `A_null(m, F)` and `ΔA_null(m, F)` are computed as `v2.0` sections 3.3 and 4.4
+> specify them, and they are DESCRIPTIVE. Neither enters the confirmatory family,
+> which stays at 21 tests at `alpha = 0.05/21`. Neither was ever a test: `A_null` is
+> a reference point in section 3.3's table and `ΔA_null` is a conjunct on section 4's
+> criterion, and section 10 lists neither. For `ΔA_null` this restates rather than
+> extends P2-D23, which already placed the `ΔA` null among the reported quantities and
+> left the `ext_i >= 0.02` floor in force on it; `A_null` has the same ratio form and
+> inherits the same floor, on its mean and on its median, under `v2.0` section 3.2's
+> two aggregates. NO mapping from either onto quantity (c) is authorized and none may
+> be written: (c) is a sign proportion, both are levels in `A` units, no preregistered
+> rule connects them, and a rule written now would be written with all fourteen of
+> (c)'s cells already published, so writing it blind to `A_null` would not make it
+> blind. NO successor to section 4.4's cap is authorized, and the cap needs none. It
+> caps mean `ΔA`, which P2-D6 demoted rather than deleted, so it follows its quantity
+> down to descriptive and is applied unchanged to the quantity it was written for.
+> P2-D6's mixture finding reaches both sides of that comparison, since `ΔA_null` is
+> built from `mean_i A_i(o)`, and the cap is reported with that defect named. Arm B's
+> confirmatory family therefore carries no defence against the generic-shift
+> hypothesis and cannot acquire one. That is the finding and it is stated as one.
+> `TV(m, F)` on the `beta_c = infinity` control set IS authorized and is descriptive,
+> on section 4.4's first paragraph, whose ground is that any change in the choice
+> distribution on adversary-robust items is prompt sensitivity. That ground is
+> independent of the cap, of mean `ΔA` and of `A`, so P2-D6 and P2-D12 do not reach it
+> and it survives them intact and unamended. The control base is the `size` tile's 142
+> adversary-robust items, which is the base P2-D4 names and the only one whose option
+> arity matches the set the cap reweights; the 540-item figure across all four tiles is
+> reported beside it with its base named, never alone. Both quantities are marginals
+> over CANONICAL option ids, so neither can adjudicate a menu-POSITION hypothesis, and
+> the (4,5) signature is not evidence for one: `chosen_option` is a canonical id, Paper
+> 1's Format V permutes the menu per item and per permutation, and canonical options 4
+> and 5 fall in all six menu positions at near-uniform rates under both permutations.
+> The hypothesis these quantities bear on is a shift in preference over canonical option
+> CONTENT at the ends of the tile's ordinal scale, and they bear on it descriptively, at
+> the level, never at the sign. The ruling holds whichever way P2-D5's blocker is later
+> ruled, because nothing it authorizes is an excess quantity in the confirmatory family
+> and nothing it authorizes reaches quantity (c).
+
+**Why it needed deciding, and why it had to be decided before the numbers existed.**
+P2-D24 named `A_null` and `ΔA_null` as preregistered-but-uncomputed and authorized
+neither for the purpose it was ruling on. It did not say what else they may be used for,
+and `docs/P2/tasks/T7.md` steps 4 and 5 both require them, so the next session was going
+to compute two quantities with no standing. The hazard is specific and it is the one this
+log keeps recording: a resolved level excess is a loud object, (c)'s five downward cells
+are already published, and a session holding both at once would be writing the bridge
+between them with both ends in view. Ruling first and computing second is what makes the
+absence of a bridge a decision rather than an omission.
+
+**What this session wanted a number for, and why it ruled without one.** Twice. First, on
+question 4: whether the cap, run on the descriptive mean, would come out near the observed
+mean `ΔA` or far from it decides how much the "nearly worthless" verdict costs, and it is
+exactly the number the split forbids, because a cap that happened to be slack would make a
+successor look unnecessary and a cap that happened to be binding would make one look
+urgent. The ruling is made on the form of the quantities instead: the cap conditions a
+level test, (c) is a sign test, and no arithmetic on either side changes that. Second, on
+the control base: the count of `size`-tile adversary-robust items the `ext_i` floor would
+reach is unknown here, and P2-D23 deliberately did not compute it. It is not needed, for
+P2-D23's own reason: the floor governs a descriptive aggregate either way, and how many
+items it removes changes the figure and not its standing.
+
+**Alternatives offered and not chosen.**
+
+1. **Admit `A_null` and `ΔA_null` to the confirmatory family.** Rejected on three
+   grounds. Neither was ever a test: `v2.0` section 8.1 lists seven models by three
+   contrasts and nothing else, and section 10's confirmatory list names the three
+   contrasts "subject to section 4.4's attribution cap", which makes the cap a condition
+   on a test and not a member of the family. Admitting them would move `alpha` for 21
+   tests that were preregistered at `0.05/21`, which is P2-D6's family and is not
+   reopened here. And a test admitted now is chosen after its neighbours are published,
+   which is the ordering hazard P2-D12, P2-D21 and P2-D24 each declined in turn.
+2. **Write a successor cap mapping the control-set reweighting onto quantity (c)'s sign proportion.** Rejected. P2-D24 already rules that use post-hoc and this entry does not
+   reopen it. The further reason is the one the session split exists for and it defeats
+   the obvious repair: a mapping written by a session that has not seen `A_null` is still
+   written by a session that has seen all fourteen of (c)'s cells, so blindness on one end
+   does not buy preregistration.
+3. **Leave the cap orphaned and compute neither quantity.** Rejected. Both formulas
+   predate all Paper 2 data, neither has a free parameter, both are named in T7's own
+   brief, and `v2.0` section 4.2 requires the `F0` replication to be reported on excess
+   over the marginal null. Declining unrun preregistered work because its licence turned
+   out to be small converts a stated limitation into a silent one, which is the failure
+   this log exists to surface. The computation is owed; the claim is not.
+4. **Compute a marginal over rendered menu positions, so the (4,5) signature can be tested against a position-shaped cap.** Rejected twice over. It is a new preregistered
+   quantity chosen after the signature was seen, which P2-D5 alternative 2 already
+   rejected in the same shape. And it would be invented to test a hypothesis whose only
+   evidence does not survive checking: the signature is on canonical ids, and canonical 4
+   and 5 are spread across all six menu positions, so a menu-position preference would not
+   produce it.
+
+**Two claims did not survive verification, and they are recorded rather than adopted**,
+per `v2.10` section 3.6.
+
+| carried | checked | verdict |
+|---|---|---|
+| both formulas are "named required steps in `T7.md`" | step 5 names the marginal null explicitly; step 4 names the control analysis and its capping role but names neither `ΔA_null` nor its formula, which appear only in `v2.0` section 4.4 | **true of the steps, loose of `ΔA_null`** |
+| the (4,5) signature is evidence for a generic option-POSITION shift | `chosen_option` is a canonical option id, not a menu position; `items_rendered.parquet` permutes the menu per item and per permutation, and canonical options 4 and 5 occupy all six menu positions at near-uniform rates under both | **fails**; the signature is on canonical ids and is not position evidence |
+
+The second is the larger of the two and it is why question 3 could be answered at all. It
+does not disturb P2-D24, whose third premise is that nothing establishes the discarded
+switches carry the direction of the retained ones; that premise is about selection and is
+untouched by what the concentration is a signature OF. What it does disturb is the
+sentence in `reports/T7_switch_concentration.md` and in this file's own "(4,5) signature"
+note, which read a canonical-id concentration as a menu-position one. Both are corrected
+where they stand, dated, and the superseded reading is left legible.
+
+**Consequences.** `src/p2_decisions.py` carries `bind_marginal_null_use`, which Session 2
+calls before emitting either quantity. Per the binding-form note it asserts the premises
+that make a use well formed and no range any value occupies: that neither quantity is in
+the confirmatory family and the family is still 21 at `alpha = 0.05/21`; that the run
+declares no mapping onto quantity (c); that no successor cap is claimed; that the control
+marginal and the set the cap reweights share an option arity, without which the
+reweighting is not defined; that the hypothesis a caller names the cap as adjudicating is
+stated over canonical option ids; and that the `ext_i` floor P2-D23 left in force is
+applied to the `A`-ratio aggregates. `tests/test_p2d25_marginal_null.py` fails if a caller
+crosses any of those, and it recomputes the menu-position spread of canonical options 4
+and 5 from Paper 1's frozen renderings rather than trusting the figure quoted here. The
+scope registry's one unruled entry is NOT cleared: it covers the cap, `v2.0` section 4's
+movement criterion and P2-D5's second conjunct, and the conjunct is the author's, so
+`undefended()` keeps returning it and the hypothesis keeps reading as undefended, which is
+the true state. A `partly_ruled_by` field records which half this entry answered. No
+`results/*.json` value changes; no superseded preregistration version is edited.
+
+**What this entry does not do.** It does not rule P2-D5's blocker, move `p0`, change a
+unit, a tolerance, a null, a floor or a family, or reopen P2-D6, P2-D12, P2-D14, P2-D19,
+P2-D20, P2-D21, P2-D23 or P2-D24. It computes no statistic of any kind. It does not
+license any claim about direction, which P2-D24 rules and which nothing here reaches. It
+does not touch the human-behaviour gap claim, whose wording `docs/P2/tasks/T4.md` fixes.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -2511,3 +2725,8 @@ for this purpose. It does not touch the human-behaviour gap claim, whose wording
 | Paper 1's `span > 0.02` is still the floor's governing record | `p2_decisions.check_p1_ext_floor_source` |
 | No prereg passage is scoped to a replaced quantity without a ruling | `p2_decisions.scope_audit` |
 | A binding asserts a premise, not a range the quantity occupies | the binding note above |
+| `A_null` and `ΔA_null` are descriptive; the family stays 21 at 0.05/21 | `p2_decisions.bind_marginal_null_use` |
+| No caller maps either onto quantity (c), and no successor cap is claimed | `p2_decisions.bind_marginal_null_use` |
+| The control marginal and the set the cap reweights share an option arity | `p2_decisions.bind_marginal_null_use` |
+| No caller reads the cap as adjudicating a menu-position hypothesis | `p2_decisions.bind_marginal_null_use` |
+| Canonical options 4 and 5 are not at the end of the rendered menu | `tests/test_p2d25_marginal_null.py` |

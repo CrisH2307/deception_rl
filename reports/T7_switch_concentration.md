@@ -128,3 +128,43 @@ position shift predicts this signature, and so would other things, and distingui
 is what the cap was for.
 
 The cause of the underlying tie structure is still not established, and none is proposed.
+
+## Corrected 2026-09-14 by P2-D25: the signature is on canonical ids, not menu positions
+
+The section above is left unedited so the reading it held stays legible. The observation,
+54 of 62 discarded switches on option-index pair (4,5), is unchanged and is recomputed by
+`src/t7_switch_concentration.py` as before. What does not survive is the inference drawn
+from it.
+
+`chosen_option` is a CANONICAL option id. `A[i][chosen_option]` indexes the item's frozen
+per-option geometry, and Paper 1's `items_rendered.parquet` carries a separate
+`option_order` that permutes the menu per item and per permutation. On the `size` tile,
+canonical options 4 and 5 fall in all six menu positions at near-uniform rates under both
+permutations. So canonical 5 is the end of the item's canonical option list and not the end
+of the menu the model reads.
+
+A model nudged toward or away from the end of the MENU would therefore not concentrate its
+switches on canonical pair (4,5). It would smear them across canonical pairs, because the
+canonical ids at the last two menu slots differ item by item. The sentence "a model whose
+inserted text nudges it toward or away from the end of the menu moves between the last two
+options" does not follow, and the generic option-POSITION hypothesis is not what this
+signature favours.
+
+What the signature is consistent with is a shift in preference over canonical option
+CONTENT at the ends of the tile's ordinal scale: canonical 0 and 1 are "about the size of a
+grain of sand" and "about the size of a chicken egg", canonical 4 and 5 are "about the size
+of a taxi" and "about the size of an aircraft carrier". That is the hypothesis `v2.0`
+section 4.4's cap is shaped for, since `p^ctrl(o)` is a marginal over canonical option ids,
+so the cap is matched to it rather than mismatched to it.
+
+Two things this does not change. P2-D24 stands: its third premise is that nothing
+establishes the discarded switches carry the direction of the retained ones, which is about
+selection and is independent of what the concentration is a signature of. And the design
+still cannot adjudicate the hypothesis on quantity (c), for the reason P2-D25 gives rather
+than the reason recorded above: the cap conditions a level and (c) is a sign proportion,
+and no preregistered rule connects them.
+
+One thing it adds. A menu-position hypothesis would need a marginal over rendered
+positions. No preregistered passage specifies one, and P2-D25 declines to invent one,
+so that hypothesis is both unevidenced here and unadjudicable, which is a second and
+independent inability from the one recorded above.

@@ -1086,6 +1086,191 @@ def bind_direction_claim(direction_claim_made, neutral_resolves_on,
             "is now established, say by what, and re-read the ruling.")
 
 
+# ------------------- P2-D25, what the two marginal-null quantities may be used for
+P2D25_TEXT = (
+    "`A_null(m, F)` and `ΔA_null(m, F)` are computed as `v2.0` sections 3.3 and 4.4\n"
+    "specify them, and they are DESCRIPTIVE. Neither enters the confirmatory family,\n"
+    "which stays at 21 tests at `alpha = 0.05/21`. Neither was ever a test: `A_null` is\n"
+    "a reference point in section 3.3's table and `ΔA_null` is a conjunct on section 4's\n"
+    "criterion, and section 10 lists neither. For `ΔA_null` this restates rather than\n"
+    "extends P2-D23, which already placed the `ΔA` null among the reported quantities and\n"
+    "left the `ext_i >= 0.02` floor in force on it; `A_null` has the same ratio form and\n"
+    "inherits the same floor, on its mean and on its median, under `v2.0` section 3.2's\n"
+    "two aggregates. NO mapping from either onto quantity (c) is authorized and none may\n"
+    "be written: (c) is a sign proportion, both are levels in `A` units, no preregistered\n"
+    "rule connects them, and a rule written now would be written with all fourteen of\n"
+    "(c)'s cells already published, so writing it blind to `A_null` would not make it\n"
+    "blind. NO successor to section 4.4's cap is authorized, and the cap needs none. It\n"
+    "caps mean `ΔA`, which P2-D6 demoted rather than deleted, so it follows its quantity\n"
+    "down to descriptive and is applied unchanged to the quantity it was written for.\n"
+    "P2-D6's mixture finding reaches both sides of that comparison, since `ΔA_null` is\n"
+    "built from `mean_i A_i(o)`, and the cap is reported with that defect named. Arm B's\n"
+    "confirmatory family therefore carries no defence against the generic-shift\n"
+    "hypothesis and cannot acquire one. That is the finding and it is stated as one.\n"
+    "`TV(m, F)` on the `beta_c = infinity` control set IS authorized and is descriptive,\n"
+    "on section 4.4's first paragraph, whose ground is that any change in the choice\n"
+    "distribution on adversary-robust items is prompt sensitivity. That ground is\n"
+    "independent of the cap, of mean `ΔA` and of `A`, so P2-D6 and P2-D12 do not reach it\n"
+    "and it survives them intact and unamended. The control base is the `size` tile's 142\n"
+    "adversary-robust items, which is the base P2-D4 names and the only one whose option\n"
+    "arity matches the set the cap reweights; the 540-item figure across all four tiles is\n"
+    "reported beside it with its base named, never alone. Both quantities are marginals\n"
+    "over CANONICAL option ids, so neither can adjudicate a menu-POSITION hypothesis, and\n"
+    "the (4,5) signature is not evidence for one: `chosen_option` is a canonical id, Paper\n"
+    "1's Format V permutes the menu per item and per permutation, and canonical options 4\n"
+    "and 5 fall in all six menu positions at near-uniform rates under both permutations.\n"
+    "The hypothesis these quantities bear on is a shift in preference over canonical option\n"
+    "CONTENT at the ends of the tile's ordinal scale, and they bear on it descriptively, at\n"
+    "the level, never at the sign. The ruling holds whichever way P2-D5's blocker is later\n"
+    "ruled, because nothing it authorizes is an excess quantity in the confirmatory family\n"
+    "and nothing it authorizes reaches quantity (c)."
+)
+P2D25_REJECTED = (
+    "Admit `A_null` and `ΔA_null` to the confirmatory family.",
+    "Write a successor cap mapping the control-set reweighting onto quantity (c)'s sign "
+    "proportion.",
+    "Leave the cap orphaned and compute neither quantity.",
+    "Compute a marginal over rendered menu positions, so the (4,5) signature can be "
+    "tested against a position-shaped cap.")
+# Question 1. Neither was ever a test: A_null is one of v2.0 section 3.3's four
+# REFERENCES and dA_null is the second conjunct of section 4's criterion, which is
+# a condition on a test and spends no alpha. The family is unchanged.
+P2D25_IN_CONFIRMATORY_FAMILY = False
+P2D25_CONFIRMATORY_FAMILY_SIZE = 21
+# Question 2. None. A level in A units and a sign proportion, with no preregistered
+# rule between them, and every cell of (c) already published.
+P2D25_MAPPING_TO_QUANTITY_C = None
+# Question 4. None. The cap's object, mean dA, still exists at descriptive standing
+# under P2-D6, so the cap applies to it unchanged and no successor is needed.
+P2D25_SUCCESSOR_CAP_AUTHORIZED = False
+P2D25_CAP_APPLIES_TO = "mean dA, descriptive under P2-D6"
+# v2.0 section 4.4's first paragraph, which is not the cap and did not expire with
+# it: any change in the choice distribution on beta_c = infinity items is prompt
+# sensitivity. Nothing in P2-D6 or P2-D12 reaches it.
+P2D25_CONTROL_TV_AUTHORIZED = True
+P2D25_CONTROL_TILE = "size"
+P2D25_CONTROL_N = 142              # P2-D4's consequences: the size tile's robust items
+P2D25_CONTROL_N_ALL_TILES = 540    # T7.md's SCOPE sentence; a different base, reported beside
+P2D25_CONFIRMATORY_ARITY = 6       # |O| on the size tile; the reweighting's shared support
+# Question 3. Both marginals are over canonical option ids (v2.0 section 3.3 in
+# those words). A canonical id is not a menu position: P1's Format V permutes the
+# menu per item and per permutation_id, and on the size tile canonical options 4
+# and 5 fall in all six menu positions at near-uniform rates under both. So the
+# (4,5) signature is not evidence for a menu-position shift, and no preregistered
+# quantity is a marginal over rendered positions.
+P2D25_MARGINAL_SUPPORT = "canonical_option_id"
+P2D25_MENU_POSITION_ADJUDICABLE = False
+P2D25_CANONICAL_TAIL_IDS = (4, 5)
+# P2-D23 leaves the ext_i floor in force on every mean or median of per-item A and
+# on "the dA null reported before P2-D6". Both quantities here have that form.
+P2D25_EXT_FLOOR_IN_FORCE = True
+
+
+def bind_marginal_null_use(in_confirmatory_family, confirmatory_family_size, alpha,
+                           mapping_to_quantity_c, successor_cap,
+                           control_arity, confirmatory_arity,
+                           hypothesis_support, ext_floor_applied):
+    """Assert the premises that make a use of A_null or dA_null well formed. P2-D25.
+
+    Per the binding-form note in `docs/P2/DECISIONS.md`: every premise below is a
+    thing that must be TRUE for a use to mean anything, not a range a value
+    occupies. No value of A_null, dA_null or TV appears here, and none can make
+    this pass or fail. That is deliberate: the ruling was made before any of them
+    existed, and it must not become re-readable only once they do.
+
+    `in_confirmatory_family`, `confirmatory_family_size` and `alpha`: neither
+    quantity is a test. `A_null` is one of `v2.0` section 3.3's four references and
+    `dA_null` is the second conjunct of section 4's criterion; section 8.1's family
+    is seven models by three contrasts and section 10 lists neither. Admitting one
+    moves `alpha` for 21 tests that are already published at 0.05/21.
+
+    `mapping_to_quantity_c`: must be None. (c) is a sign proportion against
+    `p0 = 0.5`; both quantities are levels in `A` units. No preregistered rule
+    connects them, and a rule written now is written with all fourteen of (c)'s
+    cells published, so a session blind to `A_null` is still not blind.
+
+    `successor_cap`: must be None. The cap's object still exists. P2-D6 demoted
+    mean `dA` and did not delete it, so section 4.4's cap applies to it unchanged
+    at descriptive standing. A successor would be a new quantity, chosen now.
+
+    `control_arity` and `confirmatory_arity`: the premise that makes the
+    reweighting a well formed sum. `dA_null` sums `p^ctrl(o) * mean_i A_i(o)` over
+    one option index, so the control marginal and the confirmatory `A` values must
+    live on the same option-id support. P2-D3 rejected pooling for the adjacent
+    reason: a marginal over canonical option ids does not pool across
+    `|O| in {3, 3, 4, 6}`.
+
+    `hypothesis_support`: must be `canonical_option_id`. A marginal over canonical
+    ids cannot express a preference over menu POSITIONS, because P1's Format V
+    permutes the menu per item and per permutation. A caller that names the cap as
+    adjudicating a position hypothesis has mistaken which index the cap runs on.
+
+    `ext_floor_applied`: P2-D23 leaves the `ext_i >= 0.02` floor in force on every
+    mean or median of per-item `A` and on the `dA` null. Both quantities have that
+    ratio form, so a run that reports them without the floor is reporting a
+    quantity P2-D23 governs while skipping the guard P2-D23 kept.
+    """
+    if bool(in_confirmatory_family) != P2D25_IN_CONFIRMATORY_FAMILY:
+        raise AssertionError(
+            "P2-D25: this caller puts A_null or dA_null in the confirmatory family. "
+            "Neither was ever a test: v2.0 section 3.3 lists A_null among four "
+            "REFERENCES and section 4.4 states dA_null as a CONJUNCT on section 4's "
+            "criterion, which spends no alpha, and section 10 lists neither. "
+            "docs/P2/DECISIONS.md is the source.")
+    if int(confirmatory_family_size) != P2D25_CONFIRMATORY_FAMILY_SIZE:
+        raise AssertionError(
+            f"P2-D25: the confirmatory family is {int(confirmatory_family_size)} "
+            f"tests and P2-D25 rests on it staying "
+            f"{P2D25_CONFIRMATORY_FAMILY_SIZE}. Admitting a marginal-null quantity "
+            "moves alpha for tests whose cells are already published, which is the "
+            "ordering hazard P2-D12, P2-D21 and P2-D24 each declined.")
+    if abs(float(alpha) - P2D6_ALPHA) > 1e-12:
+        raise AssertionError(
+            f"P2-D25: alpha is {float(alpha)!r} and P2-D6 fixes {P2D6_ALPHA!r}. "
+            "Nothing P2-D25 authorizes changes the family or its correction.")
+    if mapping_to_quantity_c is not None:
+        raise AssertionError(
+            f"P2-D25: this caller declares a mapping from a marginal-null level onto "
+            f"quantity (c): {mapping_to_quantity_c!r}. None is authorized. (c) is a "
+            "sign proportion and both quantities are levels in A units; no "
+            "preregistered rule connects them, and P2-D24 already rules that use "
+            "post-hoc. Writing the mapping blind to A_null does not preregister it, "
+            "because every cell of (c) is already published.")
+    if successor_cap is not None:
+        raise AssertionError(
+            f"P2-D25: this caller claims a successor to v2.0 section 4.4's cap: "
+            f"{successor_cap!r}. None is authorized and none is needed. The cap's "
+            f"object is {P2D25_CAP_APPLIES_TO}: P2-D6 demoted mean dA rather than "
+            "deleting it, so the cap applies to it unchanged. What the design lacks "
+            "is a defence for quantity (c), and section 5.1 of v2.16 says why none "
+            "can be written now.")
+    if int(control_arity) != int(confirmatory_arity):
+        raise AssertionError(
+            f"P2-D25: the control marginal is on |O| = {int(control_arity)} and the "
+            f"set the cap reweights is on |O| = {int(confirmatory_arity)}. dA_null "
+            "sums p^ctrl(o) * mean_i A_i(o) over ONE option index, so the two must "
+            "share an option-id support or the sum is not defined. P2-D3 rejected "
+            "pooling for the adjacent reason. The control base is the size tile's "
+            f"{P2D25_CONTROL_N} adversary-robust items, not the "
+            f"{P2D25_CONTROL_N_ALL_TILES} pooled across tiles.")
+    if hypothesis_support != P2D25_MARGINAL_SUPPORT:
+        raise AssertionError(
+            f"P2-D25: this caller reads the cap as adjudicating a hypothesis stated "
+            f"over {hypothesis_support!r}, and both marginals are over "
+            f"{P2D25_MARGINAL_SUPPORT!r}. A marginal over canonical option ids "
+            "cannot express a preference over menu positions: P1's Format V permutes "
+            "the menu per item and per permutation, and canonical options "
+            f"{P2D25_CANONICAL_TAIL_IDS} fall in every menu position at near-uniform "
+            "rates. Menu position is not adjudicable by any preregistered quantity.")
+    if not ext_floor_applied:
+        raise AssertionError(
+            "P2-D25: this run reports A_null or dA_null without the ext_i floor. "
+            f"P2-D23 leaves the {P2D23_FLOOR} floor IN FORCE on every mean or median "
+            "of per-item A and on the dA null, and both quantities have that ratio "
+            "form through A_i(o). The floor does not reach the confirmatory set and "
+            "does reach these.")
+
+
 # ------------------- the scope registry (DECISIONS.md, case 4: the expired scope)
 # A decision that scopes itself to another decision's QUANTITY names that decision
 # here. Superseding a quantity then surfaces every dependent scope, because the
@@ -1152,6 +1337,15 @@ SCOPE_REGISTRY = (
      "defends_against": "the hypothesis that the movement is a generic "
                         "prompt-induced shift in option preference rather than "
                         "adversary tracking",
+     # P2-D25 answered the cap half on 2026-09-14: both quantities are
+     # descriptive, no mapping onto quantity (c) is authorized, and no successor
+     # cap is authorized because the cap's object, mean dA, still exists at
+     # descriptive standing. `ruled_by` stays None ON PURPOSE. The passage also
+     # covers P2-D5's second conjunct, which is the author's and is still open,
+     # and the hypothesis is still undefended in the confirmatory family, which
+     # is what `undefended()` exists to keep saying out loud.
+     "partly_ruled_by": "P2-D25 (v2.0 section 4.4's cap and section 4's movement "
+                        "criterion; P2-D5's second conjunct stays the author's)",
      "ruled_by": None},
 )
 
@@ -1257,7 +1451,8 @@ def check_log(path=LOG):
                          ("P2-D21", P2D21_TEXT),
                          ("P2-D22", P2D22_TEXT),
                          ("P2-D23", P2D23_TEXT),
-                         ("P2-D24", P2D24_TEXT)):
+                         ("P2-D24", P2D24_TEXT),
+                         ("P2-D25", P2D25_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -1280,7 +1475,8 @@ def check_log(path=LOG):
                             ("P2-D21", P2D21_REJECTED),
                             ("P2-D22", P2D22_REJECTED),
                             ("P2-D23", P2D23_REJECTED),
-                            ("P2-D24", P2D24_REJECTED)):
+                            ("P2-D24", P2D24_REJECTED),
+                            ("P2-D25", P2D25_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -1399,6 +1595,7 @@ def main():
           + f", {len(P2D21_REJECTED)} on P2-D21, {len(P2D22_REJECTED)} on P2-D22"
           + f", {len(P2D23_REJECTED)} on P2-D23"
           + f", {len(P2D24_REJECTED)} on P2-D24"
+          + f", {len(P2D25_REJECTED)} on P2-D25"
           + ", all present in the log")
     print(f"direction       P2-D24: licensed={P2D24_DIRECTION_CLAIM_LICENSED}; "
           f"movement licensed={P2D24_MOVEMENT_CLAIM_LICENSED}; resolving cells "
@@ -1406,6 +1603,20 @@ def main():
           f"{P2D24_RESOLVING_ALL_DOWNWARD}; neutral resolves on "
           f"{P2D24_NEUTRAL_RESOLVES_ON}; marginal null computed="
           f"{P2D24_MARGINAL_NULL_COMPUTED}")
+    print(f"marginal nulls  P2-D25: A_null and dA_null DESCRIPTIVE "
+          f"(in confirmatory family={P2D25_IN_CONFIRMATORY_FAMILY}, family stays "
+          f"{P2D25_CONFIRMATORY_FAMILY_SIZE} at alpha={P2D6_ALPHA:.6f}); mapping "
+          f"onto quantity (c)={P2D25_MAPPING_TO_QUANTITY_C}; successor cap "
+          f"authorized={P2D25_SUCCESSOR_CAP_AUTHORIZED}, the cap applies to "
+          f"{P2D25_CAP_APPLIES_TO}")
+    print(f"                control TV authorized={P2D25_CONTROL_TV_AUTHORIZED} on "
+          f"the {P2D25_CONTROL_TILE} tile's {P2D25_CONTROL_N} robust items "
+          f"(|O|={P2D25_CONFIRMATORY_ARITY}); {P2D25_CONTROL_N_ALL_TILES} pooled is "
+          f"a different base and is reported beside it")
+    print(f"                marginal support {P2D25_MARGINAL_SUPPORT!r}; menu "
+          f"position adjudicable={P2D25_MENU_POSITION_ADJUDICABLE}; canonical "
+          f"{P2D25_CANONICAL_TAIL_IDS} are NOT the end of the rendered menu; ext_i "
+          f"floor in force={P2D25_EXT_FLOOR_IN_FORCE}")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0
 
