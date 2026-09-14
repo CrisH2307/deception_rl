@@ -63,6 +63,7 @@ from scipy.stats import binomtest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import p2_decisions as P2D  # noqa: E402
 import sign_power as SP     # noqa: E402
+import t6_f0_headroom as H  # noqa: E402
 import tie_reference as TR  # noqa: E402
 
 OUT = "results/T5_inertness_ceiling.json"
@@ -272,6 +273,14 @@ def main():
                               neutral["six_ladder_at_or_below_p0"], above, gaps)
     # P2-D22 governs how the above is worded wherever it is stated live.
     P2D.bind_neutral_claim_wording(False, False, False)
+    # P2-D23. The ext_i floor does not reach the confirmatory set, and the reason
+    # is that ext_i is a strictly positive per-item constant. Assert the premise,
+    # not the conclusion: at ext_i = 0 the sign identity fails and the floor does
+    # reach (c). None of (a), (b), (c) reads ext_i, so the list is empty.
+    _, _, _, _ext = H.item_axis()[:4]
+    _sz = sets["size_tile_confirmatory"]
+    P2D.bind_ext_floor(float(_ext[_sz].min()), int(_sz.sum()), ())
+    P2D.check_p1_ext_floor_source()
 
     rows = {}
     for m, R in P2D.P2D8_C5_REFERENCE.items():

@@ -867,6 +867,108 @@ def bind_neutral_claim_wording(tally_frame_used, conservative_justifies_p0,
             "set, so it is not a presentational detail.")
 
 
+# ------------------- P2-D23, the ext_i floor does not reach the confirmatory set
+P2D23_TEXT = (
+    "The `ext_i >= 0.02` floor is RETAINED and does NOT apply to Arm B's confirmatory\n"
+    "set. The confirmatory `n` stays 108. The floor is Paper 1's, carried into `v2.0`\n"
+    "section 3.2 as the guard on a MEAN OF PER-ITEM RATIOS: Paper 1's governing source is\n"
+    "the comment beside `span > 0.02` in `src/frontier_position.py`, which scopes the\n"
+    "pathology to exactly that form, and `v2.0` section 3.2 imports it in exactly those\n"
+    "words. `v2.0` section 7.2 then wrote the exclusion against \"the confirmatory Arm B\n"
+    "analysis\", which at `v2.0` WAS the mean and median of per-item `A`. P2-D6 replaced\n"
+    "the mean with a sign test and P2-D12 fixed the three quantities, and none of the\n"
+    "three has the ratio form the floor guards. (a) and (b) read chosen options only and\n"
+    "never touch `A` or `ext_i`. (c) is a sign test, and `ext_i` is a strictly positive\n"
+    "PER-ITEM constant, so both renderings of an item share it and\n"
+    "`sign(mean ΔA) = sign(sum of raw margin differences)`, which no denominator can\n"
+    "change. The floor therefore removes no item from the confirmatory set. It REMAINS IN\n"
+    "FORCE, unamended, on every quantity that is a mean or median of per-item `A`, on\n"
+    "`v2.0` section 4.3's `ΔA`-against-`ext_i` correlation, and on the `ΔA` null `v2.x`\n"
+    "reported before P2-D6; all of those are reported rather than confirmatory. The floor\n"
+    "is not withdrawn and its value is not changed: what is ruled is its reach."
+)
+P2D23_REJECTED = (
+    "Apply the floor to the confirmatory set as `v2.0` section 7.2 reads literally.",
+    "Withdraw the floor, since no confirmatory quantity needs it.",
+    "Lower the floor to a value the confirmatory set clears.")
+P2D23_FLOOR = 0.02
+P2D23_APPLIES_TO_CONFIRMATORY = False
+P2D23_CONFIRMATORY_N = 108
+# Paper 1's governing source. Not a separate entry in P1's decision log; the
+# comment beside this expression is the record, and it scopes the pathology to a
+# mean of per-item ratios. Asserted present so a change to P1 fails here.
+P2D23_P1_SOURCE = "src/frontier_position.py"
+P2D23_P1_EXPRESSION = "span > 0.02"
+# Recomputed 2026-09-13 on the size confirmatory set. The instruction carried
+# 0.00134 and 0.02; both were treated as unverified and both reproduce.
+P2D23_MIN_EXT_CONFIRMATORY = 0.001340028643
+P2D23_MAX_EXT_CONFIRMATORY = 0.5123189453
+# The quantities the floor DOES govern. None is confirmatory after P2-D6.
+P2D23_GOVERNS = ("mean of per-item A", "median of per-item A",
+                 "v2.0 section 4.3's per-item dA against ext_i correlation",
+                 "the dA null reported before P2-D6")
+
+
+def bind_ext_floor(min_ext_confirmatory, n_confirmatory, quantities_reading_ext):
+    """Assert an Arm B run's ext_i handling against P2-D23. Call where (c) is formed.
+
+    The check that matters is `min_ext_confirmatory > 0`, and it is checked for a
+    reason rather than as a range. P2-D23's whole argument is that
+    `sign(mean ΔA) = sign(sum of raw margin differences)` because `ext_i` is a
+    strictly positive per-item constant shared by both of an item's renderings. At
+    `ext_i = 0` that identity does not hold, the sign is undefined rather than
+    large, and the floor would reach the confirmatory set after all. A small
+    `ext_i` is not the hazard; a zero or negative one is.
+
+    `quantities_reading_ext` is the run's list of confirmatory quantities that read
+    `ext_i`. It must be empty. A run that adds an `A`-magnitude quantity to the
+    confirmatory family has changed what the floor reaches, and this is where that
+    surfaces instead of in the reported `n`.
+    """
+    if not float(min_ext_confirmatory) > 0.0:
+        raise AssertionError(
+            f"P2-D23: min ext_i on the confirmatory set is "
+            f"{float(min_ext_confirmatory)!r}, not strictly positive. The ruling "
+            "rests on sign(mean dA) = sign(sum of raw margin differences), which "
+            "needs a strictly positive per-item denominator. At zero the sign is "
+            "undefined and the floor reaches the confirmatory set. "
+            "docs/P2/DECISIONS.md is the source.")
+    if tuple(quantities_reading_ext):
+        raise AssertionError(
+            f"P2-D23: confirmatory quantities reading ext_i: "
+            f"{tuple(quantities_reading_ext)}. P2-D23 rules the floor out of the "
+            "confirmatory set because none of (a), (b), (c) has the ratio form. A "
+            "confirmatory quantity that reads ext_i reopens that ruling.")
+    try:
+        assert_verbatim("P2-D23 confirmatory n", str(int(n_confirmatory)),
+                        str(P2D23_CONFIRMATORY_N))
+    except AssertionError as e:
+        raise AssertionError(
+            str(e).replace(".claude/rules/30-data-decisions.md",
+                           "docs/P2/DECISIONS.md")) from None
+
+
+def check_p1_ext_floor_source(p1_root=None):
+    """Chain of custody: P1's floor is a literal in a comment-scoped expression.
+
+    P1's decision log has no entry for it, so the expression IS the record. If P1
+    ever changes it, P2-D23's premise moves and this is where that is caught.
+    """
+    import os as _os
+    root = p1_root or _os.environ.get(
+        "P1_ROOT", "/Users/crishuynh/Documents/SoftwareProject/deception")
+    path = _os.path.join(root, P2D23_P1_SOURCE)
+    if not _os.path.exists(path):
+        raise AssertionError(f"P2-D23: {path} missing; P1's floor cannot be verified.")
+    if P2D23_P1_EXPRESSION not in open(path).read():
+        raise AssertionError(
+            f"P2-D23: {P2D23_P1_EXPRESSION!r} is no longer in {P2D23_P1_SOURCE}. "
+            f"P2-D23 records the floor as {P2D23_FLOOR} carried from there, and "
+            "P1's decision log has no separate entry for it, so that expression is "
+            "the governing record. It moved.")
+    return True
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -940,7 +1042,8 @@ def check_log(path=LOG):
                          ("P2-D19", P2D19_TEXT),
                          ("P2-D20", P2D20_TEXT),
                          ("P2-D21", P2D21_TEXT),
-                         ("P2-D22", P2D22_TEXT)):
+                         ("P2-D22", P2D22_TEXT),
+                         ("P2-D23", P2D23_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -961,7 +1064,8 @@ def check_log(path=LOG):
                             ("P2-D19", P2D19_REJECTED),
                             ("P2-D20", P2D20_REJECTED),
                             ("P2-D21", P2D21_REJECTED),
-                            ("P2-D22", P2D22_REJECTED)):
+                            ("P2-D22", P2D22_REJECTED),
+                            ("P2-D23", P2D23_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -1046,6 +1150,10 @@ def main():
           f"{P2D22_B2_AT_THE_NULL}, exactly 0.5 under "
           f"{P2D22_B2_EXACTLY_HALF_UNDER} and above under "
           f"{P2D22_B2_ABOVE_HALF_UNDER}")
+    print(f"ext_i floor      P2-D23: floor={P2D23_FLOOR} RETAINED, applies to the "
+          f"confirmatory set={P2D23_APPLIES_TO_CONFIRMATORY}; n stays "
+          f"{P2D23_CONFIRMATORY_N}; min ext_i {P2D23_MIN_EXT_CONFIRMATORY:.6g} > 0")
+    print("                governs " + "; ".join(P2D23_GOVERNS))
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
@@ -1065,6 +1173,7 @@ def main():
              P2D14_REJECTED, P2D15_REJECTED, P2D16_REJECTED), start=1))
           + f", {len(P2D19_REJECTED)} on P2-D19, {len(P2D20_REJECTED)} on P2-D20"
           + f", {len(P2D21_REJECTED)} on P2-D21, {len(P2D22_REJECTED)} on P2-D22"
+          + f", {len(P2D23_REJECTED)} on P2-D23"
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

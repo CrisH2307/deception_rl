@@ -1904,6 +1904,181 @@ Every pre-existing value in `results/T5_inertness_ceiling.json` and
 
 ---
 
+## P2-D23. The `ext_i` floor is retained and does not reach the confirmatory set
+
+**Status:** adopted. Rules the reach of a floor `v2.0` imported; does not change its
+value and does not withdraw it. The confirmatory `n` stays 108.
+**Decided:** 2026-09-13, by an **agent session acting on an author instruction**, in the
+session that recorded P2-D22. No `F1` or `F2` statistic was computed. Full reasoning in
+`PREREGISTRATION_v2.14.md`.
+
+**The instruction it acted on**, per the countermeasure above, quoted in the parts that
+bear on the ruling:
+
+> The open question is whether that floor should apply to Arm B's confirmatory set,
+> which would cut n below 108.
+>
+> An earlier session reported that none of the three quantities depends on ext_i: (a)
+> reads chosen options only, (c) reads the sign of the margin difference, and ties in
+> (c) use raw margins under P2-D19. If that holds, the floor governs mean and median
+> Delta-A and v2.x's Delta-A null, none of which is confirmatory after P2-D6 replaced
+> the mean with a sign test, and the confirmatory n stays 108.
+>
+> Verify each of those three claims against the current code and the current decisions,
+> at the item unit adopted in P2-D20. The earlier report predates both P2-D19 and
+> P2-D20 and may not survive them.
+>
+> DECIDE. Whether the floor applies to the confirmatory set, and what n it leaves. State
+> which quantities it does govern and where it remains in force.
+
+with the constraints: treat every number in the instruction as unverified including
+`0.00134` and the `0.02` floor and recompute both; do not reopen P2-D6, P2-D19 or
+P2-D20; no `F1`/`F2` statistic; and **if the floor turns out to bind on a confirmatory
+quantity, say so and stop rather than choosing a remedy.** It does not bind, so no remedy
+was reached for.
+
+**Ordering, disclosed.** An earlier step printed the smallest `ext_i` in the confirmatory
+set, and that number was known to this session before the ruling. **Which items fall below
+the floor was not inspected**, the export CSV carrying `ext_i` per item was not opened for
+that purpose, and the count of items below the floor was deliberately **not computed**, on
+the reasoning that it is never needed: if the floor does not bind, the count is irrelevant,
+and if it binds, the instruction requires stopping rather than sizing a remedy. The ruling
+rests on the form of the quantities and not on how many items an exclusion would cost.
+
+**Binds:** `src/inertness_ceiling.py`, and any script forming Arm B's confirmatory `n`.
+**Constant:** `P2D23_TEXT`, `P2D23_FLOOR`, `P2D23_APPLIES_TO_CONFIRMATORY`,
+`P2D23_CONFIRMATORY_N`, `P2D23_P1_SOURCE`, `P2D23_P1_EXPRESSION`,
+`P2D23_MIN_EXT_CONFIRMATORY`, `P2D23_MAX_EXT_CONFIRMATORY`, `P2D23_GOVERNS`.
+
+**Decision text.**
+
+> The `ext_i >= 0.02` floor is RETAINED and does NOT apply to Arm B's confirmatory
+> set. The confirmatory `n` stays 108. The floor is Paper 1's, carried into `v2.0`
+> section 3.2 as the guard on a MEAN OF PER-ITEM RATIOS: Paper 1's governing source is
+> the comment beside `span > 0.02` in `src/frontier_position.py`, which scopes the
+> pathology to exactly that form, and `v2.0` section 3.2 imports it in exactly those
+> words. `v2.0` section 7.2 then wrote the exclusion against "the confirmatory Arm B
+> analysis", which at `v2.0` WAS the mean and median of per-item `A`. P2-D6 replaced
+> the mean with a sign test and P2-D12 fixed the three quantities, and none of the
+> three has the ratio form the floor guards. (a) and (b) read chosen options only and
+> never touch `A` or `ext_i`. (c) is a sign test, and `ext_i` is a strictly positive
+> PER-ITEM constant, so both renderings of an item share it and
+> `sign(mean ΔA) = sign(sum of raw margin differences)`, which no denominator can
+> change. The floor therefore removes no item from the confirmatory set. It REMAINS IN
+> FORCE, unamended, on every quantity that is a mean or median of per-item `A`, on
+> `v2.0` section 4.3's `ΔA`-against-`ext_i` correlation, and on the `ΔA` null `v2.x`
+> reported before P2-D6; all of those are reported rather than confirmatory. The floor
+> is not withdrawn and its value is not changed: what is ruled is its reach.
+
+**The two numbers in the instruction, recomputed.** Both reproduce.
+
+| carried | recomputed | source |
+|---|---|---|
+| floor `0.02` | **0.02** | `span > 0.02` in Paper 1's `src/frontier_position.py`, verified present |
+| smallest `ext_i` `0.00134` | **0.001340028643** | `t6_f0_headroom.item_axis`, `size` confirmatory set |
+
+`max ext_i` on the same set is 0.5123189453, and **no confirmatory item has
+`ext_i <= 0`**. That last check is not decoration: the ruling rests on a strictly positive
+denominator, and it is the one value of `ext_i` that would break it.
+
+**Paper 1's source says what the floor is for, and it is narrower than a floor.** The
+comment beside `span > 0.02` reads:
+
+> A mean of per-item ratios is not usable here: the per-item S->B span goes near zero on
+> some items and the ratio explodes, which produced values of -1 to -4 on a quantity
+> bounded near [0, 1].
+
+The floor is applied to `frac`, which feeds `sb_frac_median`. The other aggregate Paper 1
+reports, `sb_frac_of_means`, forms no per-item ratio and takes no floor. So Paper 1 did not
+exclude items from an analysis; it guarded **one aggregation form** and reported a second
+form that does not need the guard.
+
+`v2.0` section 3.2 imports it in exactly those terms: two aggregates are reported, the
+median of per-item values and the value computed from the means, "following Paper 1's
+handling of the same ratio pathology", and "the `ext_i >= 0.02` floor in section 6 is the
+same guard, carried over".
+
+**Where the literal reading comes from.** `v2.0` section 7.2's exclusion table then says
+items with `ext_i < 0.02` are "excluded from the confirmatory Arm B analysis". Read today
+that cuts `n`. Read at `v2.0`, the confirmatory Arm B analysis **was** the mean and median
+of per-item `A`, so section 7.2 and section 3.2 said the same thing. P2-D6 replaced the
+mean with a sign test and P2-D12 fixed the three quantities. The exclusion's wording stayed
+still while the quantity it was written against moved out from under it.
+
+**The three claims, verified against current code at P2-D20's unit.**
+
+1. **"(a) reads chosen options only."** **Verified.** `src/c5_effect.py` contains no
+   reference to `ext`, `item_axis`, `A[` or `marg_norm`; `c5_movement` pivots
+   `chosen_option` and compares option labels. The same holds for **(b)**, which the
+   instruction did not list and which is the same rate against `R_m`. In
+   `src/inertness_ceiling.py`, `A` enters at exactly one line, inside the (c) path.
+2. **"(c) reads the sign of the margin difference."** **Verified, with the mechanism
+   stated precisely, because the code does not literally read margins.** (c) computes
+   `sign(mean ΔA)` on `A`. `ext_i` is a strictly positive **per-item** constant, so both
+   renderings of an item share one denominator and
+   `mean ΔA = (sum of raw margin differences) / (2 ext_i)`. The sign is therefore the
+   sign of the raw margin sum and cannot be changed by any positive denominator. The
+   claim is true of the quantity; it is not true of the expression, and the difference is
+   the whole reason it had to be checked rather than trusted.
+3. **"Ties in (c) use raw margins under P2-D19."** **Does not survive as stated.** The
+   zero test is `|mean ΔA| > EPS` on `A`, which is `ext_i`-scaled, not on raw margins.
+   The claim predates P2-D20 and is false against the current code.
+
+   **It does not change the conclusion, and the reason is measured rather than assumed.**
+   `ext_i` lies in `(0, 0.5123]`, so dividing by it can only magnify `|ΔA|` relative to the
+   raw margin difference, never shrink it; a genuine nonzero can therefore never be turned
+   into a tie. The reverse risk is a sub-`EPS` float residue being magnified past `EPS`.
+   Worst-case amplification is `1 / 0.00134 = 746`, and the observed raw-margin residues
+   are of order `7.69e-17`, which magnified is about `5.7e-14`, still below
+   `EPS = 1e-12`. Measured directly, the **smallest nonzero `|mean ΔA|` on the
+   confirmatory set is 0.0272**, which is `2.7e10` times `EPS`. Nothing sits near the
+   boundary, so no `ext_i` in this set can move an item across it.
+
+**One open question from `v2.10` section 3.5, now answered.** That section recorded an `A`
+versus `marg_norm` disagreement on `L3` under exact equality and said whether `EPS`
+dissolves it was not computed. At P2-D20's item unit there is exactly **one** item where
+`sign(mean ΔA)` and `sign(mean Δmarg_norm)` differ, and it is that class: one side is
+exactly `0` and the other is a `7.69e-17` float residue. **Both are below `EPS`, so both
+classify as a tie** and (c) is unaffected. Its `ext_i` is 0.0264, above the floor, so it is
+not an `ext_i` pathology either. `EPS` dissolves it.
+
+**The ruling.** The floor does not reach any confirmatory quantity, so it removes no item.
+**The confirmatory `n` is 108.**
+
+**Where the floor remains in force, unamended.** On every quantity that is a mean or median
+of per-item `A`, which `v2.0` section 3.2 still specifies as reported aggregates; on `v2.0`
+section 4.3's correlation between per-item `ΔA` and `ext_i`; and on the `ΔA` null reported
+before P2-D6 replaced it. All of those are reported quantities, none is confirmatory, and
+the floor is the right guard for each. **The floor is not withdrawn and its value is not
+changed. What is ruled is its reach.**
+
+**Alternatives offered and not chosen.**
+
+1. **Apply the floor to the confirmatory set as `v2.0` section 7.2 reads literally.**
+   Rejected. It would cut `n` to protect a ratio form that no confirmatory quantity has,
+   on the one axis the design is already shortest of. Section 7.2's sentence is not a
+   separate decision from section 3.2's; it is the same guard named at the place the
+   exclusions are tabulated, and section 3.2 states what it guards.
+2. **Withdraw the floor, since no confirmatory quantity needs it.** Rejected. The reported
+   mean and median of per-item `A` still exist and still have the ratio form, and Paper 1
+   measured that failure directly. Withdrawing a guard because the analysis moved away
+   from the quantity it guards leaves it unguarded when a later section moves back.
+3. **Lower the floor to a value the confirmatory set clears.** Rejected outright. It is
+   choosing a threshold from the data it will be applied to, which is what the whole log
+   exists to refuse, and it would be doing so to reach a predetermined `n`.
+
+**Consequences.** `src/p2_decisions.py` carries `bind_ext_floor`, called by
+`inertness_ceiling.main` with the run's minimum `ext_i`, its confirmatory `n`, and the list
+of confirmatory quantities that read `ext_i`, which must be empty. The strictly-positive
+check carries its reason rather than a range, per the note above on binding form: at
+`ext_i = 0` the sign identity fails and the sign is undefined rather than large, and a
+small `ext_i` is not the hazard. `check_p1_ext_floor_source` asserts `span > 0.02` is still
+present in Paper 1's `src/frontier_position.py`, because Paper 1's decision log has no
+entry for this floor and that expression with its comment is therefore the governing
+record. No artifact value changes.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -1927,3 +2102,5 @@ Every pre-existing value in `results/T5_inertness_ceiling.json` and
 | No live statement uses a tally frame or "conservative" for `p0` | `p2_decisions.bind_neutral_claim_wording` |
 | `B2` is exactly 0.5 under aggregations A, B and E | `p2_decisions.bind_neutral_claim_wording` |
 | An assert carries the reason a quantity has its sign, not just a range | the mechanism note above |
+| `ext_i > 0` on every confirmatory item, and no confirmatory quantity reads it | `p2_decisions.bind_ext_floor` |
+| Paper 1's `span > 0.02` is still the floor's governing record | `p2_decisions.check_p1_ext_floor_source` |

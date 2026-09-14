@@ -459,6 +459,64 @@ def test_p2d22_wording_binding_and_no_tally_frame_in_live_strings():
                 f"'conservative' used affirmatively in a live string: {ctx[-120:]}"
 
 
+def test_p2d23_ext_floor_does_not_reach_the_confirmatory_set():
+    """P2-D23's premise, recomputed, and the sign identity the ruling rests on.
+
+    The ruling is not "ext_i is large enough". It is that no confirmatory
+    quantity has the ratio form, and that the one property the sign test needs
+    from ext_i is strict positivity. Both are checked, and the second is checked
+    as the identity rather than as a range.
+    """
+    import numpy as np
+    import t6_f0_headroom as H
+    from tiebreak import EPS
+    df, cols, A, ext, MN = H.item_axis(with_marg=True)
+    ids = df["item_id"].values
+    sz = np.isfinite(cols["beta_c"]) & (df["tile"].values == "size")
+    e = ext[sz]
+    assert int(sz.sum()) == dec.P2D23_CONFIRMATORY_N == 108
+    assert e.min() == pytest.approx(dec.P2D23_MIN_EXT_CONFIRMATORY)
+    assert e.max() == pytest.approx(dec.P2D23_MAX_EXT_CONFIRMATORY)
+    # The premise. Not "above the floor": strictly positive.
+    assert (e > 0).all(), "a confirmatory ext_i is not strictly positive"
+    assert e.min() < dec.P2D23_FLOOR, (
+        "no confirmatory item is below the floor, so P2-D23 is ruling on a case "
+        "that does not arise and the entry overstates what it settles")
+
+    # The identity the sign test rests on, checked on the frozen geometry: within
+    # an item, dividing every option's margin by one positive constant cannot
+    # reorder anything. Checked per item over all option pairs.
+    for i in ids[sz]:
+        i = int(i)
+        a, mn = np.asarray(A[i]), np.asarray(MN[i])
+        dA = a[:, None] - a[None, :]
+        dM = mn[:, None] - mn[None, :]
+        big = np.abs(dM) > EPS
+        assert np.array_equal(np.sign(dA[big]), np.sign(dM[big])), (
+            f"sign(dA) departs from sign(d marg_norm) on an item, so P2-D23's "
+            "invariance argument does not hold on this geometry")
+
+    dec.bind_ext_floor(float(e.min()), int(sz.sum()), ())
+    with pytest.raises(AssertionError):
+        dec.bind_ext_floor(0.0, 108, ())          # the premise fails
+    with pytest.raises(AssertionError):
+        dec.bind_ext_floor(float(e.min()), 108, ("mean per-item A",))
+    with pytest.raises(AssertionError):
+        dec.bind_ext_floor(float(e.min()), 107, ())
+    assert dec.P2D23_APPLIES_TO_CONFIRMATORY is False
+    dec.check_p1_ext_floor_source()
+
+
+def test_p2d23_quantities_a_and_b_never_read_ext_i():
+    """(a) and (b) are rates over chosen options. Checked on the source, because
+    the ruling turns on it and a later edit could add an A term silently."""
+    src = open("src/c5_effect.py").read()
+    for token in ("ext", "item_axis", "marg_norm", "A["):
+        assert token not in src, (
+            f"src/c5_effect.py now references {token!r}. Quantities (a) and (b) "
+            "reading ext_i would reopen P2-D23.")
+
+
 def test_p2d17_and_p2d18_are_withdrawn_and_carry_no_text():
     """A withdrawn entry has no decision text, so nothing can bind to it.
 
