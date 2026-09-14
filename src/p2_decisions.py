@@ -684,6 +684,111 @@ def bind_quantity_c_unit(unit, sign_disagreement_rule, one_pair_item_contributes
             "move n_eff separately and both have to be right.")
 
 
+# ------------------- P2-D21, the "all seven" claim is withdrawn; p0 = 0.5 stands
+P2D21_TEXT = (
+    "The claim that the `c5` neutral sign proportion is \"at or below 0.5 on all seven\n"
+    "models\" is WITHDRAWN. At P2-D20's item unit it is 0.1951 to 0.5556, above 0.5 on\n"
+    "`B2`, and the six-ladder-model restatement in P2-D15 fails for the same reason,\n"
+    "because the exception is a ladder model and not the control. `p0 = 0.5` is\n"
+    "RETAINED, and not on the withdrawn claim. It is retained on the structural ground\n"
+    "P2-D12 and P2-D14 both stated first and independently of any measurement: moving\n"
+    "`p0` recalibrates a preregistered test against a different manipulation, on a\n"
+    "coordinate Paper 1 never used. The empirical gloss is restated per model rather\n"
+    "than universally: `p0 = 0.5` is conservative on six models, and on `B2` it is not\n"
+    "established either way, since 0.5556 on `n_eff` 36 carries `p = 0.6177` and a 95%\n"
+    "exact interval of [0.3810, 0.7206]. Two clauses that reverse on `B2` are withdrawn\n"
+    "rather than patched. P2-D14's \"it would make a positive F1 result easier to obtain\"\n"
+    "is true on six models and false on `B2`, where recalibration would raise `p0`. And\n"
+    "P2-D14's Type II gap, `0.5` minus the proportion, is `-0.0556` on `B2`: a negative\n"
+    "gap is not a smaller cost but a different quantity, a Type I exposure the licence\n"
+    "box has no sentence for, so a `B2` (c) result significant against `p0 = 0.5` but at\n"
+    "or below 0.5556 is reported with that exposure named. `v2.7` section 5 preregistered\n"
+    "\"a proportion above 0.5 would have been a reason to keep a direction-matched\n"
+    "reference and to reconsider `p0`\"; the antecedent has fired on one model and is\n"
+    "discharged here by reconsidering and retaining, not by reading the antecedent away.\n"
+    "Every figure at the pair unit keeps emitting unchanged, because `v2.7` section 2.1\n"
+    "and `v2.8` section 2.2 publish it and a superseded document must still reproduce."
+)
+P2D21_REJECTED = (
+    "Move `p0` to the measured content-neutral baseline, per model.",
+    "Patch the wording to \"six of seven\" and leave the mechanism unexamined.",
+    "Move `p0` on `B2` alone, where the baseline sits above it.",
+    "Withdraw the diagnostic, on the ground that it no longer says one thing.")
+# p0 does NOT move. The whole content of this decision on that question.
+P2D21_P0 = 0.5
+P2D21_P0_MOVED = False
+# The two universally quantified sentences this decision withdraws. Both are
+# FALSE at P2-D20's item unit and both are recorded as False rather than deleted,
+# so a caller that re-asserts either fails here.
+P2D21_ALL_SEVEN_CLAIM_HOLDS = False
+P2D21_SIX_LADDER_CLAIM_HOLDS = False
+# The models whose item-unit neutral baseline sits ABOVE p0. On these the Type II
+# gap is negative and the exposure is Type I, which P2-D14's licence box has no
+# sentence for.
+P2D21_NEUTRAL_ABOVE_P0 = ("B2",)
+# Recomputed 2026-09-13 by `inertness_ceiling._item_reading` on the c5 contrast,
+# size confirmatory set, at P2-D20's item unit. Not transcribed from v2.7 or v2.8,
+# both of which publish the PAIR unit.
+P2D21_C5_SIGN_PROPORTION_ITEM = {
+    "CTRL": 0.1951219512195122, "B2": 0.5555555555555556,
+    "B4": 0.4603174603174603, "L1": 0.4074074074074074,
+    "L2": 0.4838709677419355, "L3": 0.24242424242424243,
+    "L4": 0.3023255813953488}
+# 0.5 minus the above. SIGNED: negative on B2. P2D14_TYPE_II_GAP is the pair-unit
+# reading and is kept unchanged beside this, because v2.8 section 2.2 publishes it.
+P2D21_TYPE_II_GAP_ITEM = {
+    "CTRL": 0.3048780487804878, "B2": -0.05555555555555558,
+    "B4": 0.039682539682539675, "L1": 0.09259259259259256,
+    "L2": 0.016129032258064502, "L3": 0.25757575757575757,
+    "L4": 0.19767441860465118}
+# Only CTRL departs from 0.5 at the corrected alpha, and it departs DOWNWARD.
+# True at the pair unit and still true at the item unit, which is why the
+# conclusion survives the wording that does not.
+P2D21_SIGNIFICANT_AT_CORRECTED_ALPHA = ("CTRL",)
+
+
+def bind_neutral_baseline(p0, all_seven_holds, six_ladder_holds, above_p0,
+                          gap_item):
+    """Assert a run's neutral-baseline claims against P2-D21. Call where cited.
+
+    The check that matters is `all_seven_holds`. The sentence "at or below 0.5 on
+    all seven models" is what P2-D12 and P2-D14 rested on and it is false at
+    P2-D20's unit, so a run that re-asserts it is citing a withdrawn claim and
+    must fail here rather than reproduce it. `six_ladder_holds` is checked
+    separately because P2-D15's fallback restatement fails for a different
+    reason: the exception is a ladder model, not the control, so the fallback
+    breaks where the admissibility ruling it exists to make optional does not.
+    `gap_item` is checked for SIGN, because P2-D14 describes the gap as a cost
+    and a negative one is a Type I exposure instead.
+    """
+    checks = (("P2-D21 p0, unmoved", float(p0), P2D21_P0),
+              ("P2-D21 \"at or below 0.5 on all seven models\"",
+               bool(all_seven_holds), P2D21_ALL_SEVEN_CLAIM_HOLDS),
+              ("P2-D21 P2-D15's six-ladder restatement",
+               bool(six_ladder_holds), P2D21_SIX_LADDER_CLAIM_HOLDS),
+              ("P2-D21 models with a baseline above p0",
+               tuple(above_p0), P2D21_NEUTRAL_ABOVE_P0))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+    for m, want in P2D21_TYPE_II_GAP_ITEM.items():
+        got = float(gap_item[m])
+        if abs(got - want) > 1e-12:
+            raise AssertionError(
+                f"P2-D21 states an item-unit Type II gap of {want} for {m}; this "
+                f"run gives {got}. docs/P2/DECISIONS.md is the source.")
+        if (got < 0) != (m in P2D21_NEUTRAL_ABOVE_P0):
+            raise AssertionError(
+                f"P2-D21: {m}'s item-unit gap has sign {got:+.4f}, which "
+                f"disagrees with the recorded set of models whose baseline sits "
+                f"above p0, {P2D21_NEUTRAL_ABOVE_P0}. A negative gap is a Type I "
+                "exposure and not a Type II cost, so the set has to be right.")
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -755,7 +860,8 @@ def check_log(path=LOG):
                          ("P2-D13", P2D13_TEXT), ("P2-D14", P2D14_TEXT),
                          ("P2-D15", P2D15_TEXT), ("P2-D16", P2D16_TEXT),
                          ("P2-D19", P2D19_TEXT),
-                         ("P2-D20", P2D20_TEXT)):
+                         ("P2-D20", P2D20_TEXT),
+                         ("P2-D21", P2D21_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -774,7 +880,8 @@ def check_log(path=LOG):
                             ("P2-D15", P2D15_REJECTED),
                             ("P2-D16", P2D16_REJECTED),
                             ("P2-D19", P2D19_REJECTED),
-                            ("P2-D20", P2D20_REJECTED)):
+                            ("P2-D20", P2D20_REJECTED),
+                            ("P2-D21", P2D21_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -842,6 +949,17 @@ def main():
     print("                superseded: pair " + " ".join(
         str(n) for n in P2D20_C5_N_EFF_PAIR_EXACT.values()) + "; rescaled "
         + " ".join(str(n) for n in P2D20_C5_N_EFF_RESCALED.values()))
+    print(f"neutral baseline P2-D21: p0={P2D21_P0} UNMOVED (moved={P2D21_P0_MOVED}); "
+          f"\"at or below 0.5 on all seven models\" holds="
+          f"{P2D21_ALL_SEVEN_CLAIM_HOLDS}, P2-D15's six-ladder restatement "
+          f"holds={P2D21_SIX_LADDER_CLAIM_HOLDS}")
+    print("                item-unit proportion " + " ".join(
+        f"{m}={v:.4f}" for m, v in P2D21_C5_SIGN_PROPORTION_ITEM.items()))
+    print("                signed Type II gap  " + " ".join(
+        f"{m}={v:+.4f}" for m, v in P2D21_TYPE_II_GAP_ITEM.items()))
+    print(f"                baseline ABOVE p0 on {P2D21_NEUTRAL_ABOVE_P0} "
+          f"(Type I exposure, not a Type II cost); departs at the corrected "
+          f"alpha only on {P2D21_SIGNIFICANT_AT_CORRECTED_ALPHA}, downward")
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
@@ -860,6 +978,7 @@ def main():
              P2D11_REJECTED, P2D12_REJECTED, P2D13_REJECTED,
              P2D14_REJECTED, P2D15_REJECTED, P2D16_REJECTED), start=1))
           + f", {len(P2D19_REJECTED)} on P2-D19, {len(P2D20_REJECTED)} on P2-D20"
+          + f", {len(P2D21_REJECTED)} on P2-D21"
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

@@ -292,6 +292,87 @@ def test_p2d20_quantity_c_unit_is_the_item_and_both_superseded_readings_hold():
             dec.bind_quantity_c_unit(*bad)
 
 
+def test_p2d21_neutral_baseline_at_the_item_unit():
+    """P2-D21's recomputed diagnostic, and the two sentences it withdraws.
+
+    The withdrawn sentences are asserted as FALSE rather than deleted. A later
+    run that re-derives either as true has either changed the unit back or
+    changed the data, and both are things this should catch rather than absorb.
+    """
+    import json
+    d = json.load(open("results/T5_inertness_ceiling.json"))
+    c5 = d["diagnostic_c5_direction"]["per_model"]
+    for m, v in c5.items():
+        assert v["sign_proportion_item"] == pytest.approx(
+            dec.P2D21_C5_SIGN_PROPORTION_ITEM[m])
+        assert v["type_ii_gap_item"] == pytest.approx(dec.P2D21_TYPE_II_GAP_ITEM[m])
+        # The gap is 0.5 minus the proportion, by definition. Asserted so a future
+        # edit cannot quietly make it an absolute value and lose the sign.
+        assert v["type_ii_gap_item"] == pytest.approx(
+            0.5 - v["sign_proportion_item"])
+
+    # Both withdrawn sentences, and the fact that they are withdrawn.
+    props = {m: v["sign_proportion_item"] for m, v in c5.items()}
+    six = {m: p for m, p in props.items() if m != "CTRL"}
+    assert max(props.values()) > 0.5, "the all-seven claim came back true"
+    assert max(six.values()) > 0.5, "P2-D15's six-ladder restatement came back true"
+    assert dec.P2D21_ALL_SEVEN_CLAIM_HOLDS is False
+    assert dec.P2D21_SIX_LADDER_CLAIM_HOLDS is False
+    # It fails on a ladder model, not the control. That is what makes it case (b):
+    # removing the control cannot rescue it.
+    assert tuple(m for m, p in props.items() if p > 0.5) == dec.P2D21_NEUTRAL_ABOVE_P0
+    assert "CTRL" not in dec.P2D21_NEUTRAL_ABOVE_P0
+
+    # B2's 0.5556 is not evidence of upward drift. The whole ruling turns on this,
+    # so it is recomputed from the counts rather than read from the artifact.
+    from scipy.stats import binomtest
+    b2 = c5["B2"]
+    bt = binomtest(b2["n_positive_item"], b2["n_eff_item"], 0.5)
+    lo, hi = bt.proportion_ci(confidence_level=0.95)
+    assert lo < 0.5 < hi, "B2's interval no longer contains 0.5"
+    assert bt.pvalue > dec.P2D6_ALPHA
+
+    # Only CTRL resolves, and downward. This is what survives the wording.
+    sig = tuple(m for m, v in c5.items() if v["significant_at_corrected_alpha_item"])
+    assert sig == dec.P2D21_SIGNIFICANT_AT_CORRECTED_ALPHA == ("CTRL",)
+    assert props["CTRL"] < 0.5, "the one resolving model no longer departs downward"
+
+    # p0 did not move.
+    assert dec.P2D21_P0 == dec.P2D6_P0 == 0.5 and dec.P2D21_P0_MOVED is False
+
+    dec.bind_neutral_baseline(0.5, False, False, ("B2",),
+                              dec.P2D21_TYPE_II_GAP_ITEM)
+    with pytest.raises(AssertionError):
+        dec.bind_neutral_baseline(0.5, True, False, ("B2",),
+                                  dec.P2D21_TYPE_II_GAP_ITEM)
+    with pytest.raises(AssertionError):
+        dec.bind_neutral_baseline(0.5, False, False, (),
+                                  dec.P2D21_TYPE_II_GAP_ITEM)
+    with pytest.raises(AssertionError):
+        # B2's gap reported as a positive Type II cost.
+        flipped = dict(dec.P2D21_TYPE_II_GAP_ITEM, B2=0.0556)
+        dec.bind_neutral_baseline(0.5, False, False, ("B2",), flipped)
+
+
+def test_p2d21_pair_unit_figures_still_reproduce():
+    """v2.7 section 2.1 and v2.8 sections 2.2 and 3.4 publish the pair unit.
+
+    P2-D21 withdraws claims, not numbers. If a pair-unit figure moved, a
+    superseded document stopped reproducing, which is a different and worse
+    failure than the one P2-D21 records.
+    """
+    import json
+    c5 = json.load(open("results/T5_inertness_ceiling.json"))[
+        "diagnostic_c5_direction"]["per_model"]
+    pair = {m: v["sign_proportion"] for m, v in c5.items()}
+    assert max(pair.values()) <= 0.5, (
+        "a pair-unit proportion rose above 0.5; v2.7 section 2.1 publishes them "
+        "as at or below 0.5 and must still reproduce")
+    for m, v in c5.items():
+        assert 0.5 - pair[m] == pytest.approx(dec.P2D14_TYPE_II_GAP[m], abs=5e-5)
+        assert v["n_eff"] == dec.P2D20_C5_N_EFF_PAIR_EXACT[m]
+
+
 def test_p2d17_and_p2d18_are_withdrawn_and_carry_no_text():
     """A withdrawn entry has no decision text, so nothing can bind to it.
 

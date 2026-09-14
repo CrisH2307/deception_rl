@@ -31,10 +31,18 @@ This file emits three things.
      have been reaching for: whether a content-neutral insertion drifts toward
      `o*_infinity`, which is P1's salience pole on 452 of 460 divergent items. If
      it did, a positive F1 sign test would be explicable without adversary
-     tracking. Measured, it does not: the proportion is at or below 0.5 on all
-     seven models. **This is reported, and it is NOT adopted as a null.** Moving
+     tracking. **This is reported, and it is NOT adopted as a null.** Moving
      `p0` off 0.5 would recalibrate a preregistered test against a different
      manipulation, and P2-D6 fixed `p0 = 0.5`.
+
+     P2-D21 corrects what this diagnostic says. The PAIR block below, which
+     `v2.7` section 2.1 publishes, gives "at or below 0.5 on all seven models".
+     At P2-D20's ITEM unit, which is the unit quantity (c) actually runs on, it
+     is 0.1951 to 0.5556 and `B2` sits above 0.5. The conclusion survives on six
+     models and is unestablished on `B2`, whose 0.5556 on `n_eff` 36 carries
+     `p = 0.6177`; the wording does not. `p0 = 0.5` is retained on the
+     structural ground, not on the withdrawn universal claim. Both readings are
+     emitted, because the pair one is published and must still reproduce.
 
      `c5`'s tie rate minus its same-option rate is P2-D10's blind spot, measured
      on a real manipulation rather than bounded from the geometry.
@@ -161,6 +169,19 @@ def _item_reading(it, d, eps=P2D.P2D19_EPS):
         "n_eff_pair_at_eps": n_eff_pair_at_eps,
         "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, "
                    "retained because v2.7 section 2.1 publishes it.",
+        # P2-D21. The pair block carries `significant_at_corrected_alpha` and
+        # `armb_floor.type_ii_gap` reads its `sign_proportion`; neither had an
+        # item-unit counterpart, which is how the diagnostic could be corrected
+        # to the item unit in P2-D20 while the claims resting on it kept citing
+        # the pair reading. Both are emitted here so they move together.
+        "significant_at_corrected_alpha_item": bool(
+            n_eff and binomtest(pos, n_eff, 0.5).pvalue < SP.ALPHA),
+        # SIGNED. Negative means the neutral baseline sits ABOVE p0, which is a
+        # Type I exposure and not the Type II cost P2-D14 describes.
+        "type_ii_gap_item": (0.5 - pos / n_eff) if n_eff else float("nan"),
+        "ci95_item": list(binomtest(pos, n_eff, 0.5)
+                          .proportion_ci(confidence_level=0.95)) if n_eff
+                     else [float("nan"), float("nan")],
     }
 
 
@@ -178,6 +199,69 @@ def main():
     P2D.bind_quantity_c_unit(P2D.P2D20_UNIT, P2D.P2D20_SIGN_DISAGREEMENT,
                              True, True, P2D.P2D19_EPS)
     eff = json.load(open("results/T5_c5_effect.json"))["sets"]["size_tile_confirmatory"]
+
+    # P2-D21. The universal claim P2-D12 and P2-D14 both rest on, re-evaluated at
+    # P2-D20's unit. Emitted rather than asserted in prose, because the claim is
+    # what those two decisions cite and it is now false.
+    six = tuple(m for m in TR.LADDER if m != "CTRL")
+    props = {m: c5[m]["sign_proportion_item"] for m in TR.LADDER}
+    gaps = {m: c5[m]["type_ii_gap_item"] for m in TR.LADDER}
+    above = tuple(m for m in TR.LADDER if props[m] > 0.5)
+    neutral = {
+        "unit": "item (P2-D20)",
+        "claim_withdrawn": "at or below 0.5 on all seven models",
+        "all_seven_at_or_below_p0": max(props.values()) <= 0.5,
+        "six_ladder_at_or_below_p0": max(props[m] for m in six) <= 0.5,
+        "range_all_seven": [min(props.values()), max(props.values())],
+        "range_six_ladder": [min(props[m] for m in six),
+                             max(props[m] for m in six)],
+        "models_above_p0": list(above),
+        "sign_proportion": props,
+        "type_ii_gap_signed": gaps,
+        "significant_at_corrected_alpha": [
+            m for m in TR.LADDER if c5[m]["significant_at_corrected_alpha_item"]],
+        "ci95": {m: c5[m]["ci95_item"] for m in TR.LADDER},
+        "p0_retained": 0.5,
+        "what_survives":
+            "Only CTRL departs from 0.5 at the corrected alpha and it departs "
+            "DOWNWARD, at the item unit as at the pair unit. The one model above "
+            "0.5 is B2 at 0.5556 on n_eff 36, p = 0.6177, 95% exact interval "
+            "[0.3810, 0.7206], which contains 0.5. That is not evidence of upward "
+            "drift, so the conclusion that a content-neutral insertion does not "
+            "drift toward the salience pole survives on six models and is "
+            "unestablished on the seventh.",
+        "what_does_not_survive":
+            "The claim as worded, on all seven models, and P2-D15's fallback "
+            "restatement on the six ladder models, which fails for a different "
+            "reason: the exception is a ladder model and not the control, so the "
+            "fallback breaks where the D111 admissibility ruling it exists to "
+            "make optional does not. Also P2-D14's clause that recalibrating p0 "
+            "would make a positive F1 result easier to obtain, which is true on "
+            "six models and false on B2, where recalibration would raise p0.",
+        "negative_gap_is_not_a_smaller_cost":
+            "P2-D14 defines the gap as 0.5 minus the proportion and calls it a "
+            "Type II cost. On B2 it is -0.0556. A negative gap is a different "
+            "quantity: there is no gap between p0 and the baseline for a real "
+            "effect to fail to clear, and instead a B2 (c) result significant "
+            "against p0 = 0.5 but at or below 0.5556 is nominally positive while "
+            "sitting at or below what a content-neutral insert does. That is a "
+            "Type I exposure and P2-D14's licence box has no sentence for it. It "
+            "is reported with B2's (c) verdict.",
+        "p0_is_retained_on":
+            "The structural ground, which uses no measurement: moving p0 "
+            "recalibrates a preregistered test against a different manipulation, "
+            "on a coordinate Paper 1 never used. P2-D12 and P2-D14 both state it "
+            "first and it is independently sufficient. The empirical gloss that "
+            "0.5 is conservative is restated per model, not universally.",
+        "preregistered_conditional_that_fired":
+            "v2.7 section 5 wrote both answers before the number was seen: 'a "
+            "proportion above 0.5 would have been a reason to keep a "
+            "direction-matched reference and to reconsider p0'. At the item unit "
+            "the antecedent fires on B2. It is discharged by reconsidering and "
+            "retaining, which P2-D21 records, not by reading the antecedent away.",
+    }
+    P2D.bind_neutral_baseline(0.5, neutral["all_seven_at_or_below_p0"],
+                              neutral["six_ladder_at_or_below_p0"], above, gaps)
 
     rows = {}
     for m, R in P2D.P2D8_C5_REFERENCE.items():
@@ -264,6 +348,11 @@ def main():
                 "recalibrate a preregistered test against a different "
                 "manipulation. This is a reported diagnostic and nothing else.",
             "per_model": c5,
+            # P2-D21. `answer` above is the PAIR reading and is kept unchanged
+            # because v2.7 section 2.1 publishes it. It is FALSE at P2-D20's item
+            # unit, which is the unit quantity (c) runs on, and this block is what
+            # a live document cites instead.
+            "answer_at_item_unit_p2d21": neutral,
         },
         "diagnostic_blind_spot_measured": {
             "definition": "tie rate minus same-option rate on the c5 contrast, "
@@ -322,6 +411,25 @@ def main():
         print(f"  {m:6s} n_eff={v['n_eff']:3d}  prop={v['sign_proportion']:.4f}  "
               f"p={v['p_two_sided']:.4f}  "
               f"{'below 0.5 at the corrected alpha' if v['significant_at_corrected_alpha'] else ''}")
+    print("\nP2-D21: the same diagnostic at P2-D20's ITEM unit, which is the unit")
+    print("        quantity (c) runs on. The pair block above is superseded for it.")
+    for m in TR.LADDER:
+        v = c5[m]
+        print(f"  {m:6s} n_eff={v['n_eff_item']:3d}  "
+              f"prop={v['sign_proportion_item']:.4f}  "
+              f"p={v['p_two_sided_item']:.4f}  "
+              f"gap={v['type_ii_gap_item']:+.4f}  "
+              f"ci95=[{v['ci95_item'][0]:.4f}, {v['ci95_item'][1]:.4f}]"
+              + ("  SIGNIFICANT at the corrected alpha"
+                 if v["significant_at_corrected_alpha_item"] else "")
+              + ("  ABOVE p0: gap is negative, exposure is Type I"
+                 if v["type_ii_gap_item"] < 0 else ""))
+    print(f'  "at or below 0.5 on all seven models" holds: '
+          f'{neutral["all_seven_at_or_below_p0"]}')
+    print(f'  P2-D15\'s six-ladder restatement holds:        '
+          f'{neutral["six_ladder_at_or_below_p0"]}')
+    print(f'  p0 retained at {neutral["p0_retained"]}, on the structural ground')
+
     b = out["diagnostic_blind_spot_measured"]["range"]
     print(f"\ndiagnostic: P2-D10 blind spot on the c5 contrast, "
           f"{b[0]:.4f} to {b[1]:.4f}")

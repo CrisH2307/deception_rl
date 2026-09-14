@@ -1489,6 +1489,234 @@ tolerance correction can be told apart: on the `c5` contrast the tolerance alone
 
 ---
 
+## P2-D21. The "all seven" neutral-baseline claim is withdrawn; `p0 = 0.5` stands on the structural ground
+
+**Status:** adopted. Withdraws a claim cited by P2-D12, P2-D14 and P2-D15; supersedes no
+rule. `p0 = 0.5` is unchanged.
+**Decided:** 2026-09-13, by an **agent session acting on an author instruction**, in the
+session following the one that recorded P2-D20. No `F1` or `F2` statistic of any kind was
+computed before or during it; every figure below is the `c5` contrast on frozen Paper 1
+rows, recomputed and not transcribed. Full reasoning in `PREREGISTRATION_v2.12.md`.
+
+**The instruction it acted on**, per the countermeasure in `v2.10` section 2.4, quoted:
+
+> P2-D12 and P2-D14 rest on the c5 neutral sign proportion being "at or below 0.5
+> on all seven models". At the item unit B2 is 0.5556 (n_eff 36, p = 0.6177), so
+> that sentence is false. This is not a wording fix: the claim is what established
+> that a content-neutral insert does not drift toward the salience pole, which is
+> what makes p0 = 0.5 conservative, which is what closed the case for a magnitude
+> gate in P2-D12. The chain runs through it.
+>
+> DO
+> 1. Recompute the full neutral sign diagnostic at the item unit, all seven models,
+>    with p values and significance at the corrected alpha. Do not transcribe.
+> 2. Trace every decision and every preregistration passage that used the "all
+>    seven" claim as a premise. List them.
+> 3. For each, apply the P2-D15 test: does the MECHANISM of the claim survive, or
+>    only the sentence? A claim whose sentence can be patched but whose mechanism
+>    depended on universality is a different case from one where six of seven
+>    carries the argument.
+> 4. Rule on whether p0 = 0.5 stands.
+
+The author also offered a reading "to evaluate not adopt", namely that the conclusion
+survives and the wording does not, that "all seven" must go everywhere it appears, and
+that P2-D12's magnitude-gate argument needs re-reading rather than re-asserting. It is
+evaluated in `v2.12` section 5 and it is partly not adopted: the conclusion is agreed, and
+the location of the damage is not. The constraints were to recompute every number
+including the three in the instruction, to leave the `ext_i` floor open, to compute no
+`F1`/`F2` statistic, and **not to move `p0` in this session even if the session concluded
+it should move**. All four were followed. The session did not conclude `p0` should move.
+
+**Binds:** `src/inertness_ceiling.py`, `src/armb_floor.py`, and any Arm B report citing
+the content-neutral baseline or the Type II gap.
+**Constant:** `P2D21_TEXT`, `P2D21_P0`, `P2D21_P0_MOVED`,
+`P2D21_ALL_SEVEN_CLAIM_HOLDS`, `P2D21_SIX_LADDER_CLAIM_HOLDS`,
+`P2D21_NEUTRAL_ABOVE_P0`, `P2D21_C5_SIGN_PROPORTION_ITEM`, `P2D21_TYPE_II_GAP_ITEM`,
+`P2D21_SIGNIFICANT_AT_CORRECTED_ALPHA`.
+
+**Decision text.**
+
+> The claim that the `c5` neutral sign proportion is "at or below 0.5 on all seven
+> models" is WITHDRAWN. At P2-D20's item unit it is 0.1951 to 0.5556, above 0.5 on
+> `B2`, and the six-ladder-model restatement in P2-D15 fails for the same reason,
+> because the exception is a ladder model and not the control. `p0 = 0.5` is
+> RETAINED, and not on the withdrawn claim. It is retained on the structural ground
+> P2-D12 and P2-D14 both stated first and independently of any measurement: moving
+> `p0` recalibrates a preregistered test against a different manipulation, on a
+> coordinate Paper 1 never used. The empirical gloss is restated per model rather
+> than universally: `p0 = 0.5` is conservative on six models, and on `B2` it is not
+> established either way, since 0.5556 on `n_eff` 36 carries `p = 0.6177` and a 95%
+> exact interval of [0.3810, 0.7206]. Two clauses that reverse on `B2` are withdrawn
+> rather than patched. P2-D14's "it would make a positive F1 result easier to obtain"
+> is true on six models and false on `B2`, where recalibration would raise `p0`. And
+> P2-D14's Type II gap, `0.5` minus the proportion, is `-0.0556` on `B2`: a negative
+> gap is not a smaller cost but a different quantity, a Type I exposure the licence
+> box has no sentence for, so a `B2` (c) result significant against `p0 = 0.5` but at
+> or below 0.5556 is reported with that exposure named. `v2.7` section 5 preregistered
+> "a proportion above 0.5 would have been a reason to keep a direction-matched
+> reference and to reconsider `p0`"; the antecedent has fired on one model and is
+> discharged here by reconsidering and retaining, not by reading the antecedent away.
+> Every figure at the pair unit keeps emitting unchanged, because `v2.7` section 2.1
+> and `v2.8` section 2.2 publish it and a superseded document must still reproduce.
+
+**The diagnostic, recomputed at P2-D20's unit.** `c5` contrast, `size` confirmatory set,
+emitted by `src/inertness_ceiling.py`. `alpha = 0.05/21 = 0.002381`.
+
+| model | `n_eff` | positive | proportion | `p` two-sided | significant | 95% exact interval | Type II gap |
+|---|---:|---:|---:|---:|---|---|---:|
+| `CTRL` | 41 | 8 | 0.1951 | 0.000112 | **yes** | [0.0882, 0.3487] | +0.3049 |
+| `B2` | 36 | 20 | **0.5556** | 0.6177 | no | [0.3810, 0.7206] | **-0.0556** |
+| `B4` | 63 | 29 | 0.4603 | 0.6147 | no | [0.3339, 0.5906] | +0.0397 |
+| `L1` | 27 | 11 | 0.4074 | 0.4421 | no | [0.2239, 0.6120] | +0.0926 |
+| `L2` | 31 | 15 | 0.4839 | 1.0000 | no | [0.3015, 0.6694] | +0.0161 |
+| `L3` | 33 | 8 | 0.2424 | 0.004551 | no | [0.1109, 0.4226] | +0.2576 |
+| `L4` | 43 | 13 | 0.3023 | 0.013718 | no | [0.1718, 0.4613] | +0.1977 |
+
+The three figures the instruction carried for `B2` all reproduce exactly: 0.5556, 36,
+0.6177. They are checked rather than assumed, because `v2.10` section 3.6 records three
+figures reaching a session through an author instruction from a withdrawn parallel session
+and not reproducing.
+
+**What survives, which is the part that decides the ruling.** Only `CTRL` departs from 0.5
+at the corrected `alpha`, and it departs downward. That was true at the pair unit and it is
+still true at the item unit; `L3` and `L4` were not significant at either. So the finding
+the claim was introduced to establish, that a content-neutral insertion does not drift
+toward the salience pole, is intact on every model where the diagnostic resolves anything.
+`B2`'s 0.5556 is a point estimate whose interval contains 0.5 and whose `p` is 0.6177. It
+is not evidence of upward drift, and it is also not evidence of its absence.
+
+**Why it needed deciding.** The withdrawn sentence is not decoration. It is the premise
+that closed P2-D12's third rejected alternative, that supplied P2-D14's Type II framing,
+and that P2-D15 restated on six models to show its own ruling was not load-bearing. Three
+decisions cite it. P2-D20 changed the unit underneath it and flagged the consequence rather
+than resolving it, which was correct there and leaves the premise standing in the log as
+though it were still true. A premise that three decisions rest on cannot be left false in
+the record while the decisions that cite it stay adopted.
+
+**What the trace found, and the two failure modes kept apart.** Each passage is classified
+as (a) a summary of a per-model table, where six of seven carries the argument and the
+sentence is patched, or (b) an argument that depended on universality, where patching the
+sentence would hide a broken argument. The full list is in `v2.12` section 3. Four are case
+(b), and three of the four are not where the instruction expected them.
+
+1. **P2-D12's alternative 1, the magnitude gate.** Case (a), robustly. It rejects the gate
+   because a magnitude gate is blind to direction, which is analytic and reads no
+   proportion. The word "any" in it quantifies over inserted text, not over models. The
+   instruction expected this to be the likeliest case (b); it is not.
+2. **P2-D12's alternative 3, adopting `c5`'s proportion as `p0`.** Case (a). Its two
+   grounds are separable and the structural one, that moving `p0` recalibrates a
+   preregistered test against a different manipulation, uses no measurement and would hold
+   at any proportion. The measurement is the gloss, not the reason.
+3. **P2-D14's alternative 1, recalibrating `p0`.** Case **(b)** at the clause level. Its
+   stated ground includes "it would make a positive F1 result easier to obtain", which is
+   true on the six models whose baseline is below 0.5 and false on `B2`, where
+   recalibration would raise `p0` and make a positive result harder. "The conservative
+   direction is kept" reverses on `B2` for the same reason. The rejection still stands, on
+   the structural clause that precedes both.
+4. **P2-D15's six-ladder restatement.** Case **(b)**. It is a universally quantified
+   sentence over six models and `B2` breaks it. It fails on a ladder model, not on the
+   control, so removing the control does not rescue it. P2-D15's ruling is untouched: it is
+   an argument about tokenizers and reads no proportion, and the control moves further
+   below 0.5 at this unit, 0.2453 to 0.1951.
+5. **P2-D14's Type II gap, and the licence box.** Case **(b)**, and the largest finding.
+   The gap is `0.5` minus the proportion and the log calls it a cost. On `B2` it is
+   `-0.0556`. A negative gap is not a smaller cost; it is a different quantity. There is no
+   gap between `p0` and the baseline for a real effect to fail to clear, and the exposure
+   reverses: a `B2` result significant against `p0 = 0.5` but at or below 0.5556 is
+   nominally positive while sitting at or below what a content-neutral insert does. That is
+   Type I, and P2-D14's amended licence has no sentence for it. `src/armb_floor.py` already
+   carried the assertion `all(gap_to_p0 >= 0)` with the message "a neutral baseline sits
+   above `p0 = 0.5`; the Type II statement reverses", so the codebase named this failure
+   mode before it occurred.
+6. **`v2.7` section 5's ordering disclosure.** Case **(b)**, and the passage the
+   instruction does not name. It preregistered both answers before the number was seen: "a
+   proportion above 0.5 would have been a reason to keep a direction-matched reference and
+   to reconsider `p0`". That is a conditional with a preregistered consequent, and at the
+   governing unit its antecedent has fired. Patching the surrounding sentence would leave a
+   fired trigger unremarked. It is discharged by performing the reconsideration, which is
+   this entry, and concluding that `p0` stands.
+7. **`v2.8` section 2.1, P2-D14's "why it needed deciding".** Case (a), and the mechanism
+   strengthens. Its point is that 0.5 is not the neutral baseline, so a null on (c) is not
+   a null against chance. At the item unit the range is 0.1951 to 0.5556, so 0.5 is still
+   not the baseline, and `B2` above it is a second way the word "chance" is wrong.
+8. **`v2.7` section 2.1's summary sentence, the artifact's `answer` field, and
+   `docs/P2/tasks/T7.md` step 0b.** Case (a) on the mechanism, false as worded. The clause
+   "where it departs from 0.5 it departs downward" is false on the point estimate and true
+   on every departure that resolves.
+
+**Why `p0 = 0.5` stands.** Four reasons, of which only the third is empirical.
+
+1. The structural ground is untouched and is independently sufficient. Moving `p0`
+   recalibrates a preregistered test against a different manipulation, on a coordinate
+   Paper 1 never used. It is stated first in both P2-D12 and P2-D14 and it would hold at
+   any measured proportion.
+2. Moving a preregistered null while holding the corrected diagnostic, with the per-model
+   `n_eff` on the table, is the ordering hazard P2-D12 itself named when it declined the
+   same move. The instruction forbade it in this session for that reason, and the reason is
+   good independently of the instruction.
+3. The exception carries no evidence. 0.5556 on `n_eff` 36 gives `p = 0.6177` and an
+   interval of [0.3810, 0.7206]. One model of seven above 0.5 at that `p` is what sampling
+   noise produces when the true baseline sits at or a little below 0.5.
+4. A per-model `p0` would be seven nulls where the design has one, which multiplies exactly
+   the degrees of freedom a single fixed `p0` exists to remove.
+
+**What does NOT follow, stated because the obvious repair is wrong.** "Six of seven are at
+or below 0.5, so `p0 = 0.5` is still conservative" does not follow. Conservativeness is a
+per-model property. Six models being conservative leaves the design conservative on six
+models and, at the point estimate, anti-conservative on `B2`. The defence of `p0` no longer
+runs through conservativeness; it runs through reasons 1, 2 and 4 above, with reason 3
+saying only that the exception is unresolved rather than that it is absent. Substituting
+the aggregate claim for the per-model one would be patching the sentence and keeping a
+mechanism that no longer holds, which is the failure this entry exists to prevent.
+
+**Alternatives offered and not chosen.**
+
+1. **Move `p0` to the measured content-neutral baseline, per model.** Rejected, on the
+   ground P2-D12 and P2-D14 both gave and which the corrected diagnostic does not touch: it
+   recalibrates a preregistered test against a different manipulation, on a coordinate
+   Paper 1 never used. It is now also rejected on a second ground the earlier entries could
+   not state, that the recalibration would move `p0` down on six models and up on one, so
+   it is not a single conservative adjustment but seven separate ones chosen with the
+   `n_eff` visible. And it is forbidden in this session by the instruction, which named the
+   ordering hazard.
+2. **Patch the wording to "six of seven" and leave the mechanism unexamined.** Rejected. It
+   is the repair the instruction warned against and it is wrong in a specific way: four of
+   the eight traced passages are case (b), and three of those four break in ways a word
+   count does not reach. A negative gap is not a smaller gap, a universally quantified
+   fallback is not a tally, and a fired preregistered conditional is not a sentence.
+3. **Move `p0` on `B2` alone, where the baseline sits above it.** Rejected. It sets a
+   model-specific null after seeing which model needs one, on a point estimate whose
+   interval contains 0.5. It would also make `B2` the only cell whose null was chosen with
+   its own diagnostic in view, which is worse than the exposure it repairs.
+4. **Withdraw the diagnostic, on the ground that it no longer says one thing.** Rejected.
+   It does say one thing: only `CTRL` departs from 0.5 at the corrected `alpha` and it
+   departs downward. Withdrawing a diagnostic because its summary sentence got harder to
+   write discards the measurement that answers the question the diagnostic was introduced
+   for, and it would remove the record of the `B2` exposure at the same time.
+
+**Consequences.** `src/inertness_ceiling.py` emits
+`diagnostic_c5_direction.answer_at_item_unit_p2d21` beside the existing `answer`, and
+`_item_reading` gains `significant_at_corrected_alpha_item`, `type_ii_gap_item` and
+`ci95_item`. `src/armb_floor.py` gains `type_ii_gap_item` and
+`type_ii_cost_of_p0_half_at_item_unit` beside the pair block, and `_six_ladder_at_item_unit`
+beside P2-D15's restatement. **Every pre-existing value in
+`results/T5_inertness_ceiling.json` and `results/T5_armb_floor.json` is byte-identical**,
+because `v2.7` sections 2.1 and 3.2 and `v2.8` sections 2.2 and 3.4 publish them and a
+superseded document must still reproduce; the new figures are additive and each carries a
+field saying which unit it is on. `p2_decisions.bind_neutral_baseline` is called by both
+scripts and fails a run that re-asserts either withdrawn sentence or that reports `B2`'s
+gap as a positive Type II cost. `docs/P2/tasks/T7.md` step 0b cites the pair-unit gaps and
+is superseded by this entry for the figures it lists; T7 reports the signed item-unit gap
+with every (c) verdict, and names the Type I exposure beside `B2`'s.
+
+**What this entry does not do.** It does not move `p0`, and it does not conclude that `p0`
+should move. It does not reopen P2-D20's unit, P2-D15's admissibility ruling, P2-D13's
+floor, or the three-quantity structure. It resolves nothing about the `ext_i` floor, which
+remains open and is named here only so it is not mistaken for settled. It computes no `F1`
+or `F2` statistic of any kind.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -1505,3 +1733,7 @@ tolerance correction can be told apart: on the `c5` contrast the tolerance alone
 | Quantity (c)'s `n_eff` is formed at the item, with P2-D19's `EPS` | `p2_decisions.bind_quantity_c_unit` |
 | The two superseded `n_eff` readings still reproduce `v2.7` | `tests/test_armb_binding.py` |
 | Exact-equality `a_invisibility` still emits 50 pairs on 48 items | `tests/test_armb_binding.py` |
+| `p0` is 0.5 and the "all seven" claim is not re-asserted | `p2_decisions.bind_neutral_baseline` |
+| The item-unit Type II gap is negative on exactly `B2` | `p2_decisions.bind_neutral_baseline` |
+| `B2`'s 95% interval still contains 0.5, so 0.5556 is not drift | `armb_floor.demo`, `tests/test_armb_binding.py` |
+| The pair-unit gaps and P2-D15's restatement still reproduce | `armb_floor.demo`, `tests/test_armb_binding.py` |

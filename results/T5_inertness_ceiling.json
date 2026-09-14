@@ -93,7 +93,13 @@
         "n_items_sign_disagreement": 1,
         "n_items_sign_disagreement_cancelling": 1,
         "n_eff_pair_at_eps": 47,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": true,
+        "type_ii_gap_item": 0.3048780487804878,
+        "ci95_item": [
+          0.08820610166285121,
+          0.34866546745137966
+        ]
       },
       "B2": {
         "same_option_rate": 0.8037383177570093,
@@ -115,7 +121,13 @@
         "n_items_sign_disagreement": 6,
         "n_items_sign_disagreement_cancelling": 0,
         "n_eff_pair_at_eps": 42,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": false,
+        "type_ii_gap_item": -0.05555555555555558,
+        "ci95_item": [
+          0.3809767940893837,
+          0.7206458080331525
+        ]
       },
       "B4": {
         "same_option_rate": 0.6296296296296297,
@@ -137,7 +149,13 @@
         "n_items_sign_disagreement": 5,
         "n_items_sign_disagreement_cancelling": 1,
         "n_eff_pair_at_eps": 79,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": false,
+        "type_ii_gap_item": 0.03968253968253971,
+        "ci95_item": [
+          0.33391433796630243,
+          0.5905744727604421
+        ]
       },
       "L1": {
         "same_option_rate": 0.8611111111111112,
@@ -159,7 +177,13 @@
         "n_items_sign_disagreement": 0,
         "n_items_sign_disagreement_cancelling": 0,
         "n_eff_pair_at_eps": 27,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": false,
+        "type_ii_gap_item": 0.09259259259259262,
+        "ci95_item": [
+          0.22389729135025838,
+          0.6120160697403175
+        ]
       },
       "L2": {
         "same_option_rate": 0.8518518518518519,
@@ -181,7 +205,13 @@
         "n_items_sign_disagreement": 0,
         "n_items_sign_disagreement_cancelling": 0,
         "n_eff_pair_at_eps": 32,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": false,
+        "type_ii_gap_item": 0.016129032258064502,
+        "ci95_item": [
+          0.30154565071234124,
+          0.6693940269482439
+        ]
       },
       "L3": {
         "same_option_rate": 0.8101851851851852,
@@ -203,7 +233,13 @@
         "n_items_sign_disagreement": 1,
         "n_items_sign_disagreement_cancelling": 0,
         "n_eff_pair_at_eps": 35,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": false,
+        "type_ii_gap_item": 0.25757575757575757,
+        "ci95_item": [
+          0.11092329955883751,
+          0.4225893177117061
+        ]
       },
       "L4": {
         "same_option_rate": 0.7407407407407407,
@@ -225,8 +261,88 @@
         "n_items_sign_disagreement": 4,
         "n_items_sign_disagreement_cancelling": 0,
         "n_eff_pair_at_eps": 55,
-        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it."
+        "unit_is": "item (P2-D20). `n_eff` above is the superseded PAIR count, retained because v2.7 section 2.1 publishes it.",
+        "significant_at_corrected_alpha_item": false,
+        "type_ii_gap_item": 0.19767441860465118,
+        "ci95_item": [
+          0.17182499248521346,
+          0.46125330573440304
+        ]
       }
+    },
+    "answer_at_item_unit_p2d21": {
+      "unit": "item (P2-D20)",
+      "claim_withdrawn": "at or below 0.5 on all seven models",
+      "all_seven_at_or_below_p0": false,
+      "six_ladder_at_or_below_p0": false,
+      "range_all_seven": [
+        0.1951219512195122,
+        0.5555555555555556
+      ],
+      "range_six_ladder": [
+        0.24242424242424243,
+        0.5555555555555556
+      ],
+      "models_above_p0": [
+        "B2"
+      ],
+      "sign_proportion": {
+        "CTRL": 0.1951219512195122,
+        "B2": 0.5555555555555556,
+        "B4": 0.4603174603174603,
+        "L1": 0.4074074074074074,
+        "L2": 0.4838709677419355,
+        "L3": 0.24242424242424243,
+        "L4": 0.3023255813953488
+      },
+      "type_ii_gap_signed": {
+        "CTRL": 0.3048780487804878,
+        "B2": -0.05555555555555558,
+        "B4": 0.03968253968253971,
+        "L1": 0.09259259259259262,
+        "L2": 0.016129032258064502,
+        "L3": 0.25757575757575757,
+        "L4": 0.19767441860465118
+      },
+      "significant_at_corrected_alpha": [
+        "CTRL"
+      ],
+      "ci95": {
+        "CTRL": [
+          0.08820610166285121,
+          0.34866546745137966
+        ],
+        "B2": [
+          0.3809767940893837,
+          0.7206458080331525
+        ],
+        "B4": [
+          0.33391433796630243,
+          0.5905744727604421
+        ],
+        "L1": [
+          0.22389729135025838,
+          0.6120160697403175
+        ],
+        "L2": [
+          0.30154565071234124,
+          0.6693940269482439
+        ],
+        "L3": [
+          0.11092329955883751,
+          0.4225893177117061
+        ],
+        "L4": [
+          0.17182499248521346,
+          0.46125330573440304
+        ]
+      },
+      "p0_retained": 0.5,
+      "what_survives": "Only CTRL departs from 0.5 at the corrected alpha and it departs DOWNWARD, at the item unit as at the pair unit. The one model above 0.5 is B2 at 0.5556 on n_eff 36, p = 0.6177, 95% exact interval [0.3810, 0.7206], which contains 0.5. That is not evidence of upward drift, so the conclusion that a content-neutral insertion does not drift toward the salience pole survives on six models and is unestablished on the seventh.",
+      "what_does_not_survive": "The claim as worded, on all seven models, and P2-D15's fallback restatement on the six ladder models, which fails for a different reason: the exception is a ladder model and not the control, so the fallback breaks where the D111 admissibility ruling it exists to make optional does not. Also P2-D14's clause that recalibrating p0 would make a positive F1 result easier to obtain, which is true on six models and false on B2, where recalibration would raise p0.",
+      "negative_gap_is_not_a_smaller_cost": "P2-D14 defines the gap as 0.5 minus the proportion and calls it a Type II cost. On B2 it is -0.0556. A negative gap is a different quantity: there is no gap between p0 and the baseline for a real effect to fail to clear, and instead a B2 (c) result significant against p0 = 0.5 but at or below 0.5556 is nominally positive while sitting at or below what a content-neutral insert does. That is a Type I exposure and P2-D14's licence box has no sentence for it. It is reported with B2's (c) verdict.",
+      "p0_is_retained_on": "The structural ground, which uses no measurement: moving p0 recalibrates a preregistered test against a different manipulation, on a coordinate Paper 1 never used. P2-D12 and P2-D14 both state it first and it is independently sufficient. The empirical gloss that 0.5 is conservative is restated per model, not universally.",
+      "preregistered_conditional_that_fired": "v2.7 section 5 wrote both answers before the number was seen: 'a proportion above 0.5 would have been a reason to keep a direction-matched reference and to reconsider p0'. At the item unit the antecedent fires on B2. It is discharged by reconsidering and retaining, which P2-D21 records, not by reading the antecedent away."
     }
   },
   "diagnostic_blind_spot_measured": {

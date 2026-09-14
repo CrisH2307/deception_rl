@@ -60,7 +60,115 @@
     "gap_range": [
       0.0,
       0.25471698113207547
-    ]
+    ],
+    "unit_is": "PAIR. SUPERSEDED for live citation by P2-D21: quantity (c)'s unit is the item (P2-D20), and at the item unit one gap is negative. Retained unchanged because v2.8 section 2.2 publishes these values and a superseded document must still reproduce. The live figures are in type_ii_cost_of_p0_half_at_item_unit."
+  },
+  "type_ii_cost_of_p0_half_at_item_unit": {
+    "statement": "At P2-D20's item unit the gap is SIGNED and B2's is negative. p0 = 0.5 is conservative against Type I on the six models whose gap is positive, and costly in Type II there by the size of the gap. On B2 the neutral baseline sits ABOVE p0, so there is no gap for a real effect to fail to clear and the exposure runs the other way: a B2 (c) result significant against p0 = 0.5 but at or below 0.5556 is nominally positive while sitting at or below what a content-neutral insert does. That is Type I and P2-D14's licence box has no sentence for it.",
+    "p0": 0.5,
+    "p0_moved": false,
+    "per_model": {
+      "CTRL": {
+        "neutral_sign_proportion": 0.1951219512195122,
+        "gap_to_p0": 0.3048780487804878,
+        "gap_is_a_type_ii_cost": true,
+        "baseline_above_p0": false,
+        "n_eff": 41,
+        "ci95": [
+          0.08820610166285121,
+          0.34866546745137966
+        ],
+        "p_two_sided": 0.00011222142620681552,
+        "departs_from_p0_at_corrected_alpha": true
+      },
+      "B2": {
+        "neutral_sign_proportion": 0.5555555555555556,
+        "gap_to_p0": -0.05555555555555558,
+        "gap_is_a_type_ii_cost": false,
+        "baseline_above_p0": true,
+        "n_eff": 36,
+        "ci95": [
+          0.3809767940893837,
+          0.7206458080331525
+        ],
+        "p_two_sided": 0.617719317029696,
+        "departs_from_p0_at_corrected_alpha": false
+      },
+      "B4": {
+        "neutral_sign_proportion": 0.4603174603174603,
+        "gap_to_p0": 0.03968253968253971,
+        "gap_is_a_type_ii_cost": true,
+        "baseline_above_p0": false,
+        "n_eff": 63,
+        "ci95": [
+          0.33391433796630243,
+          0.5905744727604421
+        ],
+        "p_two_sided": 0.6146550157654618,
+        "departs_from_p0_at_corrected_alpha": false
+      },
+      "L1": {
+        "neutral_sign_proportion": 0.4074074074074074,
+        "gap_to_p0": 0.09259259259259262,
+        "gap_is_a_type_ii_cost": true,
+        "baseline_above_p0": false,
+        "n_eff": 27,
+        "ci95": [
+          0.22389729135025838,
+          0.6120160697403175
+        ],
+        "p_two_sided": 0.44206833839416504,
+        "departs_from_p0_at_corrected_alpha": false
+      },
+      "L2": {
+        "neutral_sign_proportion": 0.4838709677419355,
+        "gap_to_p0": 0.016129032258064502,
+        "gap_is_a_type_ii_cost": true,
+        "baseline_above_p0": false,
+        "n_eff": 31,
+        "ci95": [
+          0.30154565071234124,
+          0.6693940269482439
+        ],
+        "p_two_sided": 1.0,
+        "departs_from_p0_at_corrected_alpha": false
+      },
+      "L3": {
+        "neutral_sign_proportion": 0.24242424242424243,
+        "gap_to_p0": 0.25757575757575757,
+        "gap_is_a_type_ii_cost": true,
+        "baseline_above_p0": false,
+        "n_eff": 33,
+        "ci95": [
+          0.11092329955883751,
+          0.4225893177117061
+        ],
+        "p_two_sided": 0.004551384132355452,
+        "departs_from_p0_at_corrected_alpha": false
+      },
+      "L4": {
+        "neutral_sign_proportion": 0.3023255813953488,
+        "gap_to_p0": 0.19767441860465118,
+        "gap_is_a_type_ii_cost": true,
+        "baseline_above_p0": false,
+        "n_eff": 43,
+        "ci95": [
+          0.17182499248521346,
+          0.46125330573440304
+        ],
+        "p_two_sided": 0.0137181850586785,
+        "departs_from_p0_at_corrected_alpha": false
+      }
+    },
+    "gap_range": [
+      -0.05555555555555558,
+      0.3048780487804878
+    ],
+    "models_with_baseline_above_p0": [
+      "B2"
+    ],
+    "b2_is_not_evidence_of_upward_drift": "B2 is 0.5556 on n_eff 36 with a two-sided p of 0.6177 and a 95% exact interval of [0.3810, 0.7206], which contains 0.5. The point estimate reverses the sign of the gap; the evidence does not establish the reversal. Both facts are reported, because reporting only the first overstates and only the second hides the exposure.",
+    "reported_with_the_verdict": "The signed gap is reported with every (c) verdict, and on B2 the Type I exposure is named beside it. That is P2-D14's own disclosure mechanism applied to the case P2-D14 did not have."
   },
   "d111_ruling": {
     "admissible": true,
@@ -78,6 +186,27 @@
     },
     "max_over_six": 0.5,
     "control_proportion": 0.24528301886792453,
-    "restated_if_inadmissible": "On the six ladder models alone the neutral sign proportion runs 0.2571 to 0.5000, still at or below 0.5 on every one, so p0 = 0.5 remains conservative and P2-D12's third rejected alternative stands either way."
+    "restated_if_inadmissible": "On the six ladder models alone the neutral sign proportion runs 0.2571 to 0.5000, still at or below 0.5 on every one, so p0 = 0.5 remains conservative and P2-D12's third rejected alternative stands either way.",
+    "restated_at_item_unit_p2d21": {
+      "holds": false,
+      "six_ladder_models": {
+        "B2": 0.5555555555555556,
+        "B4": 0.4603174603174603,
+        "L1": 0.4074074074074074,
+        "L2": 0.4838709677419355,
+        "L3": 0.24242424242424243,
+        "L4": 0.3023255813953488
+      },
+      "range": [
+        0.24242424242424243,
+        0.5555555555555556
+      ],
+      "models_above_p0": [
+        "B2"
+      ],
+      "control_proportion": 0.1951219512195122,
+      "why_it_fails": "B2 is above 0.5 at the item unit and B2 is a ladder model, so removing the control does not rescue the sentence. The control moves further below 0.5 at this unit, 0.2453 to 0.1951, so the D111 ruling is still not load-bearing for the direction P2-D15 was about. The ruling reads no proportion and is untouched; the restatement is a universal over six models and one exception breaks it.",
+      "replacement": "Six of seven models sit at or below 0.5 and the seventh, B2, is not distinguishable from it. Only CTRL departs at the corrected alpha and it departs downward, with or without the control admitted. p0 = 0.5 is retained on the structural ground in P2-D21, not on a universal claim about the seven."
+    }
   }
 }

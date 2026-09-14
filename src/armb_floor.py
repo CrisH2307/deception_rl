@@ -71,13 +71,18 @@ def floor_for_run(f0_disagreement_items):
 
 
 def type_ii_gap(path=CEILING):
-    """0.5 minus each model's content-neutral sign proportion.
+    """0.5 minus each model's content-neutral sign proportion, at the PAIR unit.
 
     P2-D6 fixes `p0 = 0.5` and P2-D12 declined to move it. That is conservative
     against Type I and costly in Type II, and this is the size of the cost: a
     real directional effect that lifts F1 above the neutral baseline but not
     above 0.5 is not detected. Reported so a reader can size it per model rather
     than being told it exists.
+
+    SUPERSEDED for live citation by `type_ii_gap_item` below, per P2-D21. This
+    reads the pair block, which P2-D20 superseded as quantity (c)'s unit, and it
+    keeps emitting unchanged because `v2.8` section 2.2 publishes its values.
+    Every gap here is non-negative; at the item unit one is not.
     """
     d = json.load(open(path))["diagnostic_c5_direction"]["per_model"]
     return {m: {"neutral_sign_proportion": v["sign_proportion"],
@@ -85,6 +90,34 @@ def type_ii_gap(path=CEILING):
                 "n_eff": v["n_eff"],
                 "below_p0_at_corrected_alpha":
                     v["significant_at_corrected_alpha"]}
+            for m, v in d.items()}
+
+
+def type_ii_gap_item(path=CEILING):
+    """The same gap at P2-D20's ITEM unit, which is the unit (c) runs on. P2-D21.
+
+    The gap is SIGNED and one of them is negative. P2-D14 calls this quantity a
+    Type II cost, and that reading holds only while the neutral baseline sits at
+    or below `p0`. On `B2` at the item unit it does not: the baseline is 0.5556,
+    the gap is -0.0556, and there is no gap for a real effect to fail to clear.
+    What there is instead is the reverse exposure, a `B2` result significant
+    against `p0 = 0.5` but at or below what a content-neutral insert does, which
+    is Type I and which P2-D14's licence box has no sentence for.
+
+    The sign is therefore not a detail of presentation. It says which of two
+    different statements the number supports, so it is emitted rather than
+    reported as a magnitude.
+    """
+    d = json.load(open(path))["diagnostic_c5_direction"]["per_model"]
+    return {m: {"neutral_sign_proportion": v["sign_proportion_item"],
+                "gap_to_p0": v["type_ii_gap_item"],
+                "gap_is_a_type_ii_cost": v["type_ii_gap_item"] >= 0,
+                "baseline_above_p0": v["type_ii_gap_item"] < 0,
+                "n_eff": v["n_eff_item"],
+                "ci95": v["ci95_item"],
+                "p_two_sided": v["p_two_sided_item"],
+                "departs_from_p0_at_corrected_alpha":
+                    v["significant_at_corrected_alpha_item"]}
             for m, v in d.items()}
 
 
@@ -131,11 +164,54 @@ def d111_verdict(path=CEILING):
             f"{min(six.values()):.4f} to {max(six.values()):.4f}, still at or "
             "below 0.5 on every one, so p0 = 0.5 remains conservative and "
             "P2-D12's third rejected alternative stands either way.",
+        # P2-D21. Everything above reads the PAIR block and is kept because
+        # v2.8 section 3.4 publishes it. At P2-D20's item unit the fallback
+        # restatement FAILS, and it fails on a ladder model rather than on the
+        # control, so it breaks where the ruling it exists to make optional does
+        # not. The ruling itself is untouched: it reads no proportion.
+        "restated_at_item_unit_p2d21": _six_ladder_at_item_unit(path),
+    }
+
+
+def _six_ladder_at_item_unit(path=CEILING):
+    """P2-D15's fallback restatement, re-evaluated at P2-D20's unit. P2-D21.
+
+    P2-D15 exists to show the D111 admissibility ruling is not load-bearing, by
+    restating the conclusion on the six ladder models with the control removed.
+    At the item unit that restatement is false, because `B2` is above 0.5 and
+    `B2` is a ladder model. The control moves the other way, 0.2453 to 0.1951,
+    so the ruling is still not load-bearing for the direction it was about. What
+    fails is a universally quantified sentence, not the ruling under it.
+    """
+    d = json.load(open(path))["diagnostic_c5_direction"]["per_model"]
+    six = {m: d[m]["sign_proportion_item"] for m in LADDER_SIX}
+    above = [m for m, v in six.items() if v > 0.5]
+    return {
+        "holds": max(six.values()) <= 0.5,
+        "six_ladder_models": six,
+        "range": [min(six.values()), max(six.values())],
+        "models_above_p0": above,
+        "control_proportion": d[CROSS_FAMILY]["sign_proportion_item"],
+        "why_it_fails":
+            "B2 is above 0.5 at the item unit and B2 is a ladder model, so "
+            "removing the control does not rescue the sentence. The control "
+            "moves further below 0.5 at this unit, 0.2453 to 0.1951, so the "
+            "D111 ruling is still not load-bearing for the direction P2-D15 "
+            "was about. The ruling reads no proportion and is untouched; the "
+            "restatement is a universal over six models and one exception "
+            "breaks it.",
+        "replacement":
+            "Six of seven models sit at or below 0.5 and the seventh, B2, is "
+            "not distinguishable from it. Only CTRL departs at the corrected "
+            "alpha and it departs downward, with or without the control "
+            "admitted. p0 = 0.5 is retained on the structural ground in P2-D21, "
+            "not on a universal claim about the seven.",
     }
 
 
 def main():
     gaps = type_ii_gap()
+    gaps_item = type_ii_gap_item()
     d111 = d111_verdict()
     out = {
         "purpose": "Quantity (a)'s floor on numerical grounds, the Type II cost "
@@ -185,6 +261,44 @@ def main():
             "per_model": gaps,
             "gap_range": [min(v["gap_to_p0"] for v in gaps.values()),
                           max(v["gap_to_p0"] for v in gaps.values())],
+            "unit_is":
+                "PAIR. SUPERSEDED for live citation by P2-D21: quantity (c)'s "
+                "unit is the item (P2-D20), and at the item unit one gap is "
+                "negative. Retained unchanged because v2.8 section 2.2 "
+                "publishes these values and a superseded document must still "
+                "reproduce. The live figures are in "
+                "type_ii_cost_of_p0_half_at_item_unit.",
+        },
+        # P2-D21. Additive beside the pair block, never in place of it.
+        "type_ii_cost_of_p0_half_at_item_unit": {
+            "statement":
+                "At P2-D20's item unit the gap is SIGNED and B2's is negative. "
+                "p0 = 0.5 is conservative against Type I on the six models whose "
+                "gap is positive, and costly in Type II there by the size of the "
+                "gap. On B2 the neutral baseline sits ABOVE p0, so there is no "
+                "gap for a real effect to fail to clear and the exposure runs "
+                "the other way: a B2 (c) result significant against p0 = 0.5 but "
+                "at or below 0.5556 is nominally positive while sitting at or "
+                "below what a content-neutral insert does. That is Type I and "
+                "P2-D14's licence box has no sentence for it.",
+            "p0": 0.5,
+            "p0_moved": False,
+            "per_model": gaps_item,
+            "gap_range": [min(v["gap_to_p0"] for v in gaps_item.values()),
+                          max(v["gap_to_p0"] for v in gaps_item.values())],
+            "models_with_baseline_above_p0":
+                [m for m, v in gaps_item.items() if v["baseline_above_p0"]],
+            "b2_is_not_evidence_of_upward_drift":
+                "B2 is 0.5556 on n_eff 36 with a two-sided p of 0.6177 and a 95% "
+                "exact interval of [0.3810, 0.7206], which contains 0.5. The "
+                "point estimate reverses the sign of the gap; the evidence does "
+                "not establish the reversal. Both facts are reported, because "
+                "reporting only the first overstates and only the second hides "
+                "the exposure.",
+            "reported_with_the_verdict":
+                "The signed gap is reported with every (c) verdict, and on B2 "
+                "the Type I exposure is named beside it. That is P2-D14's own "
+                "disclosure mechanism applied to the case P2-D14 did not have.",
         },
         "d111_ruling": d111,
     }
@@ -198,6 +312,17 @@ def main():
         assert abs(got - want) < 1e-12, (
             f"P2-D14 states a Type II gap of {want} for {m}; this run gives {got}")
     P2D.bind_armb_floor(floor_for_run(0), 0, floor_is_statistical=False)
+    # P2-D21. p0 does not move, the universal claim is withdrawn, and the signed
+    # item-unit gaps are bound. A run that re-asserts "at or below 0.5 on all
+    # seven models", or that reports B2's gap as a positive Type II cost, fails
+    # here rather than reproducing a claim the log has withdrawn.
+    P2D.bind_neutral_baseline(
+        out["type_ii_cost_of_p0_half_at_item_unit"]["p0"],
+        all_seven_holds=all(v["gap_to_p0"] >= 0 for v in gaps_item.values()),
+        six_ladder_holds=d111["restated_at_item_unit_p2d21"]["holds"],
+        above_p0=tuple(out["type_ii_cost_of_p0_half_at_item_unit"]
+                       ["models_with_baseline_above_p0"]),
+        gap_item={m: v["gap_to_p0"] for m, v in gaps_item.items()})
 
     os.makedirs("results", exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=2)
@@ -213,6 +338,20 @@ def main():
               f"{v['gap_to_p0']:11.4f} {v['n_eff']:6d}"
               + ("   below 0.5 at the corrected alpha"
                  if v["below_p0_at_corrected_alpha"] else ""))
+    print(f"\nP2-D21: the same gap at P2-D20's ITEM unit, which is (c)'s unit")
+    print(f"  {'model':6s} {'neutral':>8s} {'gap to 0.5':>11s} {'n_eff':>6s}")
+    for m, v in gaps_item.items():
+        print(f"  {m:6s} {v['neutral_sign_proportion']:8.4f} "
+              f"{v['gap_to_p0']:+11.4f} {v['n_eff']:6d}"
+              + ("   departs from 0.5 at the corrected alpha"
+                 if v["departs_from_p0_at_corrected_alpha"] else "")
+              + ("   BASELINE ABOVE p0: Type I exposure, not a Type II cost"
+                 if v["baseline_above_p0"] else ""))
+    r = d111["restated_at_item_unit_p2d21"]
+    print(f"  P2-D15's six-ladder restatement at this unit holds: {r['holds']}"
+          f"  (above p0: {r['models_above_p0']})")
+    print(f"  p0 retained at 0.5 on the structural ground; not moved")
+
     print(f"\nD111: sign(delta-A) for {CROSS_FAMILY} is "
           f"{'ADMISSIBLE' if d111['admissible'] else 'NOT ADMISSIBLE'}")
     print(f"      conclusion without the control: max over six ladder models = "
@@ -237,16 +376,56 @@ def demo():
     else:
         raise AssertionError("a negative disagreement count was accepted")
     d = d111_verdict()
+    # The PAIR unit. Kept because v2.8 sections 2.2 and 3.4 publish it and a
+    # superseded document must still reproduce.
     assert d["conclusion_holds_without_the_control"], (
-        "the neutral-baseline conclusion needs CTRL, so the D111 ruling is "
-        "load-bearing and the fallback restatement does not hold")
+        "the pair-unit fallback restatement no longer holds; v2.8 section 3.4 "
+        "publishes it and it must still reproduce")
     g = type_ii_gap()
     assert all(v["gap_to_p0"] >= 0 for v in g.values()), \
-        "a neutral baseline sits above p0 = 0.5; the Type II statement reverses"
+        "a pair-unit neutral baseline sits above p0 = 0.5; v2.8 section 2.2 " \
+        "publishes these gaps as non-negative and must still reproduce"
     assert abs(P2D.P2D12_INERTNESS_FLOOR_ITEMS - PROVISIONAL_FLOOR) == 0
+
+    # P2-D21, at P2-D20's unit, which is where the claim actually lives. These
+    # assert the CORRECTED finding, so they fail if it drifts back. The two
+    # asserts above encode the withdrawn wording and are retained only because
+    # they guard a published artifact; these are the live ones.
+    gi = type_ii_gap_item()
+    above = {m for m, v in gi.items() if v["baseline_above_p0"]}
+    assert above == set(P2D.P2D21_NEUTRAL_ABOVE_P0), (
+        f"P2-D21 records {P2D.P2D21_NEUTRAL_ABOVE_P0} as the models whose "
+        f"item-unit neutral baseline sits above p0; this run gives "
+        f"{sorted(above)}. The set decides whether the exposure on a model is "
+        "Type I or Type II, so it is not a presentational detail.")
+    assert not all(v["gap_to_p0"] >= 0 for v in gi.values()), (
+        "every item-unit gap is non-negative, so the withdrawn claim 'at or "
+        "below 0.5 on all seven models' would hold and P2-D21 would have "
+        "nothing to withdraw. Either the unit reverted to the pair or the "
+        "diagnostic changed; both are bugs.")
+    assert not d["restated_at_item_unit_p2d21"]["holds"], (
+        "P2-D15's six-ladder restatement holds at the item unit, which P2-D21 "
+        "records as false. The exception is a ladder model, so a run where the "
+        "restatement holds is reading the wrong unit.")
+    b2 = gi["B2"]
+    assert not b2["departs_from_p0_at_corrected_alpha"], (
+        "B2's item-unit baseline departs from 0.5 at the corrected alpha, so "
+        "0.5556 would be evidence of upward drift and P2-D21's ruling that p0 "
+        "stands on the structural ground alone would need revisiting")
+    assert b2["ci95"][0] < 0.5 < b2["ci95"][1], (
+        f"B2's 95% exact interval {b2['ci95']} no longer contains 0.5; P2-D21 "
+        "cites it as the reason 0.5556 is not evidence of drift")
+    assert gi["CTRL"]["departs_from_p0_at_corrected_alpha"] and \
+        gi["CTRL"]["gap_to_p0"] > 0, (
+        "CTRL no longer departs from 0.5 downward at the corrected alpha; "
+        "P2-D21's 'the conclusion survives' rests on the only significant "
+        "departure still being downward")
     print(f"ok: floor is upward-only and never below {PROVISIONAL_FLOOR} or the "
-          f"measured noise; D111 conclusion holds on the six ladder models "
-          f"(max {d['max_over_six']:.4f}); all Type II gaps non-negative")
+          f"measured noise; pair-unit figures still reproduce (max over six "
+          f"{d['max_over_six']:.4f}, all gaps non-negative); at P2-D20's item "
+          f"unit the baseline is above p0 on {sorted(above)}, the six-ladder "
+          f"restatement fails, and B2's 95% interval "
+          f"[{b2['ci95'][0]:.4f}, {b2['ci95'][1]:.4f}] contains 0.5")
     return 0
 
 
