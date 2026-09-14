@@ -64,7 +64,7 @@
     "unit_is": "PAIR. SUPERSEDED for live citation by P2-D21: quantity (c)'s unit is the item (P2-D20), and at the item unit one gap is negative. Retained unchanged because v2.8 section 2.2 publishes these values and a superseded document must still reproduce. The live figures are in type_ii_cost_of_p0_half_at_item_unit."
   },
   "type_ii_cost_of_p0_half_at_item_unit": {
-    "statement": "At P2-D20's item unit the gap is SIGNED and B2's is negative. p0 = 0.5 is conservative against Type I on the six models whose gap is positive, and costly in Type II there by the size of the gap. On B2 the neutral baseline sits ABOVE p0, so there is no gap for a real effect to fail to clear and the exposure runs the other way: a B2 (c) result significant against p0 = 0.5 but at or below 0.5556 is nominally positive while sitting at or below what a content-neutral insert does. That is Type I and P2-D14's licence box has no sentence for it.",
+    "statement": "At P2-D20's item unit the gap is SIGNED and B2's is negative. Where the gap is positive it is a Type II cost of that size, reported per model; P2-D22 withdraws 'conservative' as a way of saying it, because conservativeness is a per-model property. On B2 the neutral baseline sits ABOVE p0, so there is no gap for a real effect to fail to clear and the exposure runs the other way: a B2 (c) result significant against p0 = 0.5 but at or below 0.5556 is nominally positive while sitting at or below what a content-neutral insert does. That is Type I and P2-D14's licence box has no sentence for it.",
     "p0": 0.5,
     "p0_moved": false,
     "per_model": {
@@ -206,7 +206,7 @@
       ],
       "control_proportion": 0.1951219512195122,
       "why_it_fails": "B2 is above 0.5 at the item unit and B2 is a ladder model, so removing the control does not rescue the sentence. The control moves further below 0.5 at this unit, 0.2453 to 0.1951, so the D111 ruling is still not load-bearing for the direction P2-D15 was about. The ruling reads no proportion and is untouched; the restatement is a universal over six models and one exception breaks it.",
-      "replacement": "Six of seven models sit at or below 0.5 and the seventh, B2, is not distinguishable from it. Only CTRL departs at the corrected alpha and it departs downward, with or without the control admitted. p0 = 0.5 is retained on the structural ground in P2-D21, not on a universal claim about the seven."
+      "replacement": "Not a smaller tally, per P2-D22. The claim is that a content-neutral insertion does not drift toward the salience pole. The per-model proportion runs 0.1951 to 0.5556; only CTRL resolves at the corrected alpha and it resolves downward, with or without the control admitted; and B2 sits at the null, exactly 0.5000 under three of five aggregations of these rows. p0 = 0.5 is retained on the structural ground in P2-D21, not on any universal claim about the seven and not on conservativeness."
     }
   }
 }

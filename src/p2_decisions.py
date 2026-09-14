@@ -693,10 +693,12 @@ P2D21_TEXT = (
     "RETAINED, and not on the withdrawn claim. It is retained on the structural ground\n"
     "P2-D12 and P2-D14 both stated first and independently of any measurement: moving\n"
     "`p0` recalibrates a preregistered test against a different manipulation, on a\n"
-    "coordinate Paper 1 never used. The empirical gloss is restated per model rather\n"
-    "than universally: `p0 = 0.5` is conservative on six models, and on `B2` it is not\n"
-    "established either way, since 0.5556 on `n_eff` 36 carries `p = 0.6177` and a 95%\n"
-    "exact interval of [0.3810, 0.7206]. Two clauses that reverse on `B2` are withdrawn\n"
+    "coordinate Paper 1 never used. The empirical claim is stated directly and not as a\n"
+    "tally: the neutral baseline does not drift toward the salience pole, the per-model\n"
+    "proportion runs 0.1951 to 0.5556, only `CTRL` resolves at the corrected `alpha` and\n"
+    "it resolves downward, and `B2` sits at the null, since 0.5556 on `n_eff` 36 carries\n"
+    "`p = 0.6177` and a 95% exact interval of [0.3810, 0.7206]. Two clauses that reverse\n"
+    "on `B2` are withdrawn\n"
     "rather than patched. P2-D14's \"it would make a positive F1 result easier to obtain\"\n"
     "is true on six models and false on `B2`, where recalibration would raise `p0`. And\n"
     "P2-D14's Type II gap, `0.5` minus the proportion, is `-0.0556` on `B2`: a negative\n"
@@ -789,6 +791,82 @@ def bind_neutral_baseline(p0, all_seven_holds, six_ladder_holds, above_p0,
                 "exposure and not a Type II cost, so the set has to be right.")
 
 
+# ------------------- P2-D22, how the neutral-baseline claim is stated, and where B2 sits
+P2D22_TEXT = (
+    "The neutral-baseline claim is stated directly and never as a tally. \"At or below 0.5\n"
+    "on six of seven models\" is NOT the replacement for the withdrawn \"all seven\": it keeps\n"
+    "universality as the frame and leaves a reader an exception they cannot resolve. The\n"
+    "claim is: the content-neutral baseline does not drift toward the salience pole. It is\n"
+    "stated with the per-model distribution, 0.1951 to 0.5556 at P2-D20's item unit, with\n"
+    "the fact that only `CTRL` resolves at the corrected `alpha` and resolves downward, and\n"
+    "with `B2` at the null. `B2` IS AT THE NULL, and that is a measured claim rather than a\n"
+    "concession: across five aggregations of the same frozen rows its point estimate is\n"
+    "exactly 0.5000 under three and 0.5556 under two, `p` is 1.0000 under three and 0.6177\n"
+    "under two, every 95% exact interval contains 0.5, two votes of 36 return the item-unit\n"
+    "estimate to 0.5000, and `B2` is the only model whose point estimate changes side\n"
+    "between the pair unit and the item unit. It is therefore described as a model sitting\n"
+    "at the null whose point estimate falls either side depending on aggregation, and never\n"
+    "as a model that drifts upward. Separately, \"conservative\" is WITHDRAWN as a\n"
+    "justification for `p0 = 0.5` everywhere it is offered as one, because\n"
+    "conservativeness is a per-model property and the design is not conservative on `B2` at\n"
+    "the point estimate. `p0 = 0.5` stands on the structural ground, on the ordering\n"
+    "hazard, and on a single fixed null being the point of having one. Superseded\n"
+    "documents keep their wording and their emitted strings unchanged, because `v2.7`,\n"
+    "`v2.8` and the artifact fields they publish must still reproduce; this governs live\n"
+    "prose, live briefs and every figure emitted at P2-D20's unit."
+)
+P2D22_REJECTED = (
+    "Restate the claim as \"at or below 0.5 on six of seven models\".",
+    "Keep \"conservative\" for the six models whose gap is positive and qualify it.",
+    "Describe `B2` as a small upward departure that does not reach significance.",
+    "Edit the superseded documents so one sentence holds everywhere.")
+P2D22_TALLY_FRAME_PERMITTED = False
+P2D22_CONSERVATIVE_JUSTIFIES_P0 = False
+# B2's position, measured across five aggregations named before they were computed.
+# A pair/exact (v2.7 2.1), B pair/EPS, C item/mean/EPS (P2-D20, adopted),
+# D item/mean/exact, E item/majority-of-pair-signs. E and the others are NOT
+# candidate units: P2-D20 fixed the unit and this is a robustness probe on where
+# B2 sits, not a reopening of it.
+P2D22_B2_AGGREGATIONS = {"A": (21, 42), "B": (21, 42), "C": (20, 36),
+                         "D": (20, 36), "E": (15, 30)}
+P2D22_B2_EXACTLY_HALF_UNDER = ("A", "B", "E")
+P2D22_B2_ABOVE_HALF_UNDER = ("C", "D")
+P2D22_B2_AT_THE_NULL = True
+# The only model whose point estimate changes side between the pair and item units.
+P2D22_CHANGES_SIDE_BETWEEN_UNITS = ("B2",)
+
+
+def bind_neutral_claim_wording(tally_frame_used, conservative_justifies_p0,
+                               b2_described_as_drifting):
+    """Assert how a live statement of the neutral-baseline claim is framed. P2-D22.
+
+    Three separate failures. A tally frame keeps universality and hands the reader
+    an unresolved exception. "Conservative" as p0's justification asserts a
+    per-model property of the design that does not hold on B2. And describing B2
+    as an upward departure reports a direction the data does not carry: its point
+    estimate is exactly 0.5000 under three of five aggregations of the same rows.
+    """
+    checks = (("P2-D22 tally frame used", bool(tally_frame_used),
+               P2D22_TALLY_FRAME_PERMITTED),
+              ("P2-D22 conservative justifies p0",
+               bool(conservative_justifies_p0), P2D22_CONSERVATIVE_JUSTIFIES_P0),
+              ("P2-D22 B2 described as drifting",
+               bool(b2_described_as_drifting), False))
+    for label, actual, expected in checks:
+        try:
+            assert_verbatim(label, str(actual), str(expected))
+        except AssertionError as e:
+            raise AssertionError(
+                str(e).replace(".claude/rules/30-data-decisions.md",
+                               "docs/P2/DECISIONS.md")) from None
+    half = tuple(k for k, (p, n) in P2D22_B2_AGGREGATIONS.items() if p * 2 == n)
+    if half != P2D22_B2_EXACTLY_HALF_UNDER:
+        raise AssertionError(
+            f"P2-D22: B2 is exactly 0.5 under {half}, and the decision records "
+            f"{P2D22_B2_EXACTLY_HALF_UNDER}. The at-the-null reading rests on that "
+            "set, so it is not a presentational detail.")
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -861,7 +939,8 @@ def check_log(path=LOG):
                          ("P2-D15", P2D15_TEXT), ("P2-D16", P2D16_TEXT),
                          ("P2-D19", P2D19_TEXT),
                          ("P2-D20", P2D20_TEXT),
-                         ("P2-D21", P2D21_TEXT)):
+                         ("P2-D21", P2D21_TEXT),
+                         ("P2-D22", P2D22_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -881,7 +960,8 @@ def check_log(path=LOG):
                             ("P2-D16", P2D16_REJECTED),
                             ("P2-D19", P2D19_REJECTED),
                             ("P2-D20", P2D20_REJECTED),
-                            ("P2-D21", P2D21_REJECTED)):
+                            ("P2-D21", P2D21_REJECTED),
+                            ("P2-D22", P2D22_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -960,6 +1040,12 @@ def main():
     print(f"                baseline ABOVE p0 on {P2D21_NEUTRAL_ABOVE_P0} "
           f"(Type I exposure, not a Type II cost); departs at the corrected "
           f"alpha only on {P2D21_SIGNIFICANT_AT_CORRECTED_ALPHA}, downward")
+    print(f"claim wording    P2-D22: tally frame permitted="
+          f"{P2D22_TALLY_FRAME_PERMITTED}, 'conservative' justifies p0="
+          f"{P2D22_CONSERVATIVE_JUSTIFIES_P0}; B2 at the null="
+          f"{P2D22_B2_AT_THE_NULL}, exactly 0.5 under "
+          f"{P2D22_B2_EXACTLY_HALF_UNDER} and above under "
+          f"{P2D22_B2_ABOVE_HALF_UNDER}")
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
@@ -978,7 +1064,7 @@ def main():
              P2D11_REJECTED, P2D12_REJECTED, P2D13_REJECTED,
              P2D14_REJECTED, P2D15_REJECTED, P2D16_REJECTED), start=1))
           + f", {len(P2D19_REJECTED)} on P2-D19, {len(P2D20_REJECTED)} on P2-D20"
-          + f", {len(P2D21_REJECTED)} on P2-D21"
+          + f", {len(P2D21_REJECTED)} on P2-D21, {len(P2D22_REJECTED)} on P2-D22"
           + ", all present in the log")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0

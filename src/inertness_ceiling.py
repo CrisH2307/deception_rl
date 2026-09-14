@@ -35,14 +35,17 @@ This file emits three things.
      `p0` off 0.5 would recalibrate a preregistered test against a different
      manipulation, and P2-D6 fixed `p0 = 0.5`.
 
-     P2-D21 corrects what this diagnostic says. The PAIR block below, which
-     `v2.7` section 2.1 publishes, gives "at or below 0.5 on all seven models".
-     At P2-D20's ITEM unit, which is the unit quantity (c) actually runs on, it
-     is 0.1951 to 0.5556 and `B2` sits above 0.5. The conclusion survives on six
-     models and is unestablished on `B2`, whose 0.5556 on `n_eff` 36 carries
-     `p = 0.6177`; the wording does not. `p0 = 0.5` is retained on the
-     structural ground, not on the withdrawn universal claim. Both readings are
-     emitted, because the pair one is published and must still reproduce.
+     P2-D21 corrects what this diagnostic says and P2-D22 fixes how it is said.
+     The PAIR block below, which `v2.7` section 2.1 publishes, gives "at or below
+     0.5 on all seven models". That claim is withdrawn, and the replacement is
+     not a smaller tally. **The content-neutral baseline does not drift toward
+     the salience pole.** At P2-D20's ITEM unit, the unit quantity (c) runs on,
+     the per-model proportion is 0.1951 to 0.5556; only `CTRL` resolves at the
+     corrected `alpha` and it resolves downward; and `B2` sits at the null, at
+     0.5000 under three of five aggregations of these rows and 0.5556 under the
+     adopted one, never distinguishable from 0.5. `p0 = 0.5` is retained on the
+     structural ground. Both readings are emitted, because the pair one is
+     published and must still reproduce.
 
      `c5`'s tie rate minus its same-option rate is P2-D10's blind spot, measured
      on a real manipulation rather than bounded from the geometry.
@@ -223,13 +226,15 @@ def main():
         "ci95": {m: c5[m]["ci95_item"] for m in TR.LADDER},
         "p0_retained": 0.5,
         "what_survives":
-            "Only CTRL departs from 0.5 at the corrected alpha and it departs "
-            "DOWNWARD, at the item unit as at the pair unit. The one model above "
-            "0.5 is B2 at 0.5556 on n_eff 36, p = 0.6177, 95% exact interval "
-            "[0.3810, 0.7206], which contains 0.5. That is not evidence of upward "
-            "drift, so the conclusion that a content-neutral insertion does not "
-            "drift toward the salience pole survives on six models and is "
-            "unestablished on the seventh.",
+            "The claim itself, stated directly per P2-D22 and not as a tally: a "
+            "content-neutral insertion does not drift toward the salience pole. "
+            "The per-model proportion runs 0.1951 to 0.5556. Only CTRL resolves "
+            "at the corrected alpha and it resolves DOWNWARD, at the item unit "
+            "as at the pair unit. B2 sits AT the null: 0.5556 here on n_eff 36, "
+            "p = 0.6177, 95% exact [0.3810, 0.7206], and exactly 0.5000 under "
+            "three of five aggregations of these same rows, including one at "
+            "this unit. Two votes of 36 return it to 0.5000 and it is the only "
+            "model whose point estimate changes side between the two units.",
         "what_does_not_survive":
             "The claim as worded, on all seven models, and P2-D15's fallback "
             "restatement on the six ladder models, which fails for a different "
@@ -251,8 +256,11 @@ def main():
             "The structural ground, which uses no measurement: moving p0 "
             "recalibrates a preregistered test against a different manipulation, "
             "on a coordinate Paper 1 never used. P2-D12 and P2-D14 both state it "
-            "first and it is independently sufficient. The empirical gloss that "
-            "0.5 is conservative is restated per model, not universally.",
+            "first and it is independently sufficient. P2-D22 withdraws "
+            "'conservative' as a justification for p0: conservativeness is a "
+            "per-model property and the design is not conservative on B2 at the "
+            "point estimate. Where a Type II cost is real it is reported as a "
+            "signed per-model gap, which says more than the adjective did.",
         "preregistered_conditional_that_fired":
             "v2.7 section 5 wrote both answers before the number was seen: 'a "
             "proportion above 0.5 would have been a reason to keep a "
@@ -262,6 +270,8 @@ def main():
     }
     P2D.bind_neutral_baseline(0.5, neutral["all_seven_at_or_below_p0"],
                               neutral["six_ladder_at_or_below_p0"], above, gaps)
+    # P2-D22 governs how the above is worded wherever it is stated live.
+    P2D.bind_neutral_claim_wording(False, False, False)
 
     rows = {}
     for m, R in P2D.P2D8_C5_REFERENCE.items():

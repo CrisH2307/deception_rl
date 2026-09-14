@@ -373,6 +373,92 @@ def test_p2d21_pair_unit_figures_still_reproduce():
         assert v["n_eff"] == dec.P2D20_C5_N_EFF_PAIR_EXACT[m]
 
 
+def test_p2d22_b2_sits_at_the_null_across_the_five_aggregations():
+    """P2-D22's B2 reading, recomputed from frozen rows rather than quoted.
+
+    The ruling is that B2 is AT the null, not that it is an unresolved
+    exception, and that rests entirely on this table. The five aggregations were
+    named before any was computed and all five are asserted, including the two
+    that put B2 above 0.5, so the test cannot be satisfied by a subset that
+    happens to agree.
+    """
+    import numpy as np, pandas as pd
+    from scipy.stats import binomtest
+    from tiebreak import EPS
+    df, cols, A, ids, sets = TR.item_sets()
+    ch = TR.load_choices()
+    keep = set(int(i) for i in ids[sets["size_tile_confirmatory"]])
+    g = ch[(ch["model"] == "B2") & (ch["prompt_form"] == TR.FORM)
+           & (ch["rule"] == TR.RULE) & (ch["item_id"].isin(keep))
+           & ch["permutation_id"].notna()]
+    w = g.pivot_table(index=["item_id", "permutation_id"], columns="condition",
+                      values="chosen_option", aggfunc="first")
+    w = w.loc[w.notna().all(axis=1)]
+    it = w.index.get_level_values("item_id").values.astype(int)
+    d_ = np.array([A[i][int(b)] - A[i][int(a)]
+                   for i, a, b in zip(it, w["cond4"].values, w["cond5"].values)])
+    mean = pd.Series(d_).groupby(it).mean()
+    sgn = pd.Series(np.where(np.abs(d_) > EPS, np.sign(d_), 0)).groupby(it).sum()
+    got = {}
+    for k, nz, v in (("A", d_ != 0, d_), ("B", np.abs(d_) > EPS, d_),
+                     ("C", mean.abs() > EPS, mean), ("D", mean != 0, mean),
+                     ("E", sgn != 0, sgn)):
+        got[k] = (int(np.asarray(v)[np.asarray(nz)].__gt__(0).sum()), int(np.sum(nz)))
+    assert got == dec.P2D22_B2_AGGREGATIONS, (
+        f"B2's aggregation table moved: {got} against the recorded "
+        f"{dec.P2D22_B2_AGGREGATIONS}. P2-D22's at-the-null ruling rests on it.")
+
+    half = tuple(k for k, (p_, n) in got.items() if p_ * 2 == n)
+    above = tuple(k for k, (p_, n) in got.items() if p_ * 2 > n)
+    assert half == dec.P2D22_B2_EXACTLY_HALF_UNDER == ("A", "B", "E")
+    assert above == dec.P2D22_B2_ABOVE_HALF_UNDER == ("C", "D")
+    # Exactly 0.5 under an ITEM aggregation too, which is what makes this a
+    # disagreement between aggregations and not between units.
+    assert "E" in half and dec.P2D22_B2_AT_THE_NULL
+
+    for k, (p_, n) in got.items():
+        bt = binomtest(p_, n, 0.5)
+        lo, hi = bt.proportion_ci(confidence_level=0.95)
+        assert lo < 0.5 < hi, f"aggregation {k}: B2's interval no longer contains 0.5"
+        assert bt.pvalue > dec.P2D6_ALPHA, f"aggregation {k}: B2 resolves against p0"
+
+    # Two votes of 36 return the adopted aggregation to exactly 0.5.
+    pC, nC = got["C"]
+    assert pC - nC / 2 == 2.0
+
+
+def test_p2d22_wording_binding_and_no_tally_frame_in_live_strings():
+    """P2-D22 forbids the tally frame and "conservative" as p0's justification.
+
+    The artifact strings are checked directly, because the binding records an
+    intention and the emitted text is what a reader actually meets.
+    """
+    import json
+    dec.bind_neutral_claim_wording(False, False, False)
+    for bad in ((True, False, False), (False, True, False), (False, False, True)):
+        with pytest.raises(AssertionError):
+            dec.bind_neutral_claim_wording(*bad)
+    assert dec.P2D22_TALLY_FRAME_PERMITTED is False
+    assert dec.P2D22_CONSERVATIVE_JUSTIFIES_P0 is False
+
+    live = [json.load(open("results/T5_inertness_ceiling.json"))
+            ["diagnostic_c5_direction"]["answer_at_item_unit_p2d21"][k]
+            for k in ("what_survives", "p0_is_retained_on")]
+    af = json.load(open("results/T5_armb_floor.json"))
+    live.append(af["type_ii_cost_of_p0_half_at_item_unit"]["statement"])
+    live.append(af["d111_ruling"]["restated_at_item_unit_p2d21"]["replacement"])
+    for text in live:
+        assert "six of seven" not in text.lower(), f"tally frame in a live string: {text[:70]}"
+        assert "survives on six models" not in text
+        # "conservative" may appear only where it is being withdrawn.
+        for i, w in enumerate(text.lower().split("conservativ")[1:]):
+            ctx = text.lower().split("conservativ")[i] + "conservativ" + w[:60]
+            assert ("withdraw" in ctx or "not on conservativ" in ctx
+                    or "is a per-model property" in ctx
+                    or "not conservative on b2" in ctx), \
+                f"'conservative' used affirmatively in a live string: {ctx[-120:]}"
+
+
 def test_p2d17_and_p2d18_are_withdrawn_and_carry_no_text():
     """A withdrawn entry has no decision text, so nothing can bind to it.
 

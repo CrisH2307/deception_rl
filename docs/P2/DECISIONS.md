@@ -70,6 +70,40 @@ The countermeasure is not vigilance. It is two things.
    instruction" are different provenances, and only the second can be audited by
    asking what the instruction said.
 
+## The binding working, with a date on it
+
+The countermeasures above are easier to state than to show working. One instance is
+worth recording, because it is the only place so far where a binding caught something
+no one's reasoning did.
+
+`src/armb_floor.py` carried, from the session that wrote P2-D14 and long before
+P2-D20 changed quantity (c)'s unit:
+
+```python
+g = type_ii_gap()
+assert all(v["gap_to_p0"] >= 0 for v in g.values()), \
+    "a neutral baseline sits above p0 = 0.5; the Type II statement reverses"
+```
+
+When P2-D20 moved (c) to the item unit, `B2`'s neutral baseline crossed `p0` and its
+gap went to `-0.0556`. **That assertion had already named the consequence**: not that a
+number would be out of range, but that the Type II statement reverses, which is what
+P2-D21 then had to work out and record as a Type I exposure P2-D14's licence box has no
+sentence for. Nobody re-derived it. The assert had it written down, with its reason,
+before the event.
+
+**The general form, which is the part worth carrying forward.** An assertion that
+encodes WHY a quantity has the sign or shape it does is worth more than one that checks
+a value. A value check tells a later session that something moved. A reason check tells
+it what breaks, and it survives the change of unit, tolerance or estimator that makes
+the value check stale. `gap_to_p0 >= 0` is a range check; the message attached to it is
+the decision's mechanism, and the message is what did the work.
+
+Written this way, a binding is not only a tripwire against drift. It is the place a
+decision's reasoning goes so that the reasoning, and not just the number, is what a
+later session collides with. Prefer that form wherever a quantity's sign, direction or
+ordering carries an argument.
+
 ## Why the binding module is not called `decisions.py`
 
 Paper 1's frozen `decisions.py` is imported by bare name from Paper 1's `src/`, which
@@ -1543,10 +1577,12 @@ the content-neutral baseline or the Type II gap.
 > RETAINED, and not on the withdrawn claim. It is retained on the structural ground
 > P2-D12 and P2-D14 both stated first and independently of any measurement: moving
 > `p0` recalibrates a preregistered test against a different manipulation, on a
-> coordinate Paper 1 never used. The empirical gloss is restated per model rather
-> than universally: `p0 = 0.5` is conservative on six models, and on `B2` it is not
-> established either way, since 0.5556 on `n_eff` 36 carries `p = 0.6177` and a 95%
-> exact interval of [0.3810, 0.7206]. Two clauses that reverse on `B2` are withdrawn
+> coordinate Paper 1 never used. The empirical claim is stated directly and not as a
+> tally: the neutral baseline does not drift toward the salience pole, the per-model
+> proportion runs 0.1951 to 0.5556, only `CTRL` resolves at the corrected `alpha` and
+> it resolves downward, and `B2` sits at the null, since 0.5556 on `n_eff` 36 carries
+> `p = 0.6177` and a 95% exact interval of [0.3810, 0.7206]. Two clauses that reverse
+> on `B2` are withdrawn
 > rather than patched. P2-D14's "it would make a positive F1 result easier to obtain"
 > is true on six models and false on `B2`, where recalibration would raise `p0`. And
 > P2-D14's Type II gap, `0.5` minus the proportion, is `-0.0556` on `B2`: a negative
@@ -1669,6 +1705,13 @@ saying only that the exception is unresolved rather than that it is absent. Subs
 the aggregate claim for the per-model one would be patching the sentence and keeping a
 mechanism that no longer holds, which is the failure this entry exists to prevent.
 
+**Amended 2026-09-13 by P2-D22**, which goes further on two points this entry got half
+right. The "six of seven" tally is not the replacement wording and is forbidden outright,
+not merely declined as a justification. And reason 3's "the exception is unresolved rather
+than absent" understates what was measurable: `B2` is AT the null, measured across five
+aggregations, not an exception left open. This entry's ruling, that `p0 = 0.5` stands and
+that the two universal claims are withdrawn, is unchanged.
+
 **Alternatives offered and not chosen.**
 
 1. **Move `p0` to the measured content-neutral baseline, per model.** Rejected, on the
@@ -1717,6 +1760,150 @@ or `F2` statistic of any kind.
 
 ---
 
+## P2-D22. The neutral-baseline claim is stated directly, not as a tally; `B2` is at the null
+
+**Status:** adopted. Amends P2-D21's wording and its reason 3. Changes no ruling: `p0` is
+still 0.5, the two universal claims are still withdrawn, P2-D20's unit is untouched.
+**Decided:** 2026-09-13, by an **agent session acting on an author instruction**, in the
+session that merged P2-D21 to `main`. No `F1` or `F2` statistic was computed; every figure
+is the `c5` contrast on frozen Paper 1 rows. Full reasoning in
+`PREREGISTRATION_v2.13.md`.
+
+**The instruction it acted on**, per the countermeasure above, quoted:
+
+> Do not restate the claim as "at or below 0.5 on six of seven models". That keeps
+> universality as the frame and leaves an exception a reader cannot resolve. State the
+> central claim directly: the neutral baseline does not drift toward the salience pole,
+> with the per-model distribution given, only CTRL resolving and downward, and B2 not
+> distinguishable from the null.
+>
+> Drop "conservative" as a justification for p0 everywhere it appears, per your own
+> correction that conservativeness is a per-model property.
+
+and, on `B2`:
+
+> At the pair unit B2 was exactly 0.5000; at the item unit it is 0.5556. An exact 0.5
+> moving to 0.5556 under a unit change on identical data is more consistent with B2
+> sitting at the null than with anything drifting, and its interval [0.3810, 0.7206]
+> contains 0.5 comfortably. Verify that reading, do not assume it. If it holds, state it
+> wherever B2's exception appears: a model at the null whose point estimate falls either
+> side depending on aggregation, not a model that drifts upward. If it does not hold, say
+> so.
+
+**Binds:** `src/inertness_ceiling.py`, `src/armb_floor.py`, `docs/P2/tasks/T7.md`, and any
+live statement of the content-neutral baseline or of `p0`'s justification.
+**Constant:** `P2D22_TEXT`, `P2D22_TALLY_FRAME_PERMITTED`,
+`P2D22_CONSERVATIVE_JUSTIFIES_P0`, `P2D22_B2_AGGREGATIONS`,
+`P2D22_B2_EXACTLY_HALF_UNDER`, `P2D22_B2_ABOVE_HALF_UNDER`, `P2D22_B2_AT_THE_NULL`,
+`P2D22_CHANGES_SIDE_BETWEEN_UNITS`.
+
+**Decision text.**
+
+> The neutral-baseline claim is stated directly and never as a tally. "At or below 0.5
+> on six of seven models" is NOT the replacement for the withdrawn "all seven": it keeps
+> universality as the frame and leaves a reader an exception they cannot resolve. The
+> claim is: the content-neutral baseline does not drift toward the salience pole. It is
+> stated with the per-model distribution, 0.1951 to 0.5556 at P2-D20's item unit, with
+> the fact that only `CTRL` resolves at the corrected `alpha` and resolves downward, and
+> with `B2` at the null. `B2` IS AT THE NULL, and that is a measured claim rather than a
+> concession: across five aggregations of the same frozen rows its point estimate is
+> exactly 0.5000 under three and 0.5556 under two, `p` is 1.0000 under three and 0.6177
+> under two, every 95% exact interval contains 0.5, two votes of 36 return the item-unit
+> estimate to 0.5000, and `B2` is the only model whose point estimate changes side
+> between the pair unit and the item unit. It is therefore described as a model sitting
+> at the null whose point estimate falls either side depending on aggregation, and never
+> as a model that drifts upward. Separately, "conservative" is WITHDRAWN as a
+> justification for `p0 = 0.5` everywhere it is offered as one, because
+> conservativeness is a per-model property and the design is not conservative on `B2` at
+> the point estimate. `p0 = 0.5` stands on the structural ground, on the ordering
+> hazard, and on a single fixed null being the point of having one. Superseded
+> documents keep their wording and their emitted strings unchanged, because `v2.7`,
+> `v2.8` and the artifact fields they publish must still reproduce; this governs live
+> prose, live briefs and every figure emitted at P2-D20's unit.
+
+**The `B2` reading was checked, not assumed.** Five aggregations of the same frozen rows,
+named before any was computed, and all five reported. `A` is the pair unit with an exact
+zero test, which `v2.7` section 2.1 publishes. `B` is the pair unit at P2-D19's `EPS`. `C`
+is P2-D20's adopted rule, the item unit on the mean of pair `ΔA` at `EPS`. `D` is the item
+unit on the mean with an exact zero test. `E` is the item unit by majority of pair signs,
+with an item dropped when its two pairs split one and one.
+
+| aggregation | `B2` | proportion | `p` | 95% exact interval |
+|---|---:|---:|---:|---|
+| `A` pair, exact | 21/42 | **0.5000** | 1.0000 | [0.3419, 0.6581] |
+| `B` pair, `EPS` | 21/42 | **0.5000** | 1.0000 | [0.3419, 0.6581] |
+| `C` item, mean, `EPS` (adopted) | 20/36 | 0.5556 | 0.6177 | [0.3810, 0.7206] |
+| `D` item, mean, exact | 20/36 | 0.5556 | 0.6177 | [0.3810, 0.7206] |
+| `E` item, sign majority | 15/30 | **0.5000** | 1.0000 | [0.3130, 0.6870] |
+
+**The reading holds, and more sharply than the instruction put it.** `B2` is exactly
+0.5000 under three of the five, including `E`, which is an ITEM aggregation. So this is
+not the pair unit disagreeing with the item unit: two defensible aggregations at the SAME
+unit put `B2` on opposite sides of 0.5. Every interval contains 0.5. Two votes of 36
+return `C` to exactly 0.5000. And `B2` is **the only model of the seven whose point
+estimate changes side between the pair unit and the item unit**; the other six keep their
+side under every aggregation.
+
+A quantity that lands exactly on its null under three readings of the same data, is never
+distinguishable from it under any, and moves off it by two votes, is a quantity at the
+null. It is stated that way.
+
+**`E` is not a candidate unit and this does not reopen P2-D20.** P2-D20 fixed the unit and
+its reasoning is untouched. `E` is a robustness probe on where `B2` sits, run because the
+instruction asked for the reading to be verified rather than assumed. Reporting that two
+aggregations disagree on `B2`'s side is evidence about `B2`; it is not an argument for
+either aggregation, and no figure is taken from `B`, `D` or `E`.
+
+**Why the tally frame is forbidden rather than discouraged.** "At or below 0.5 on six of
+seven models" is a smaller universal. It tells a reader that six models satisfy a property
+and one does not, and it gives them no way to resolve the one. A reader who meets that
+sentence has to decide for themselves whether the seventh is a problem, and the honest
+answer, that it is a model sitting at the null, is exactly the thing the tally omits.
+Replacing a false universal with a true tally keeps the shape of the error, which is why
+P2-D21's own "six models" phrasing is amended here rather than left as the fix.
+
+**Why "conservative" goes.** P2-D21 established that conservativeness is a per-model
+property and that the design is not conservative on `B2` at the point estimate, then went
+on using the word for the six. That is the same half-measure. `p0 = 0.5` stands on the
+structural ground, the ordering hazard, and a single fixed null being the point of having
+one, and none of the three needs the word. Where a Type II cost is real it is reported as
+a signed gap per model, which says more than the adjective did.
+
+**What is NOT changed, and why.** Superseded documents keep their wording, and every
+pre-existing emitted string keeps its text. `v2.7` sections 2.1 and 5, `v2.8` sections 2.1
+and 2.2, `armb_floor.type_ii_gap`'s docstring and `type_ii_cost_of_p0_half.statement`, and
+`inertness_ceiling`'s pair-unit `answer` all publish wording that must still reproduce.
+Editing them so one sentence holds everywhere would break the reproduction guarantee to
+fix a sentence, which is a worse trade than a reader following a supersession note. This
+decision governs live prose, live briefs, and every string emitted at P2-D20's unit.
+
+**Alternatives offered and not chosen.**
+
+1. **Restate the claim as "at or below 0.5 on six of seven models".** Rejected. It is a
+   smaller universal, it hands the reader an exception with no resolution, and the
+   resolution exists and is measured.
+2. **Keep "conservative" for the six models whose gap is positive and qualify it.**
+   Rejected. It is P2-D21's half-measure restated. The qualification is doing the work, so
+   the qualification should be the sentence, and the signed per-model gap already is.
+3. **Describe `B2` as a small upward departure that does not reach significance.**
+   Rejected. It reports a direction the data does not carry. `B2`'s point estimate is
+   exactly 0.5000 under three of five aggregations of the same rows, so "upward" is a
+   property of the chosen aggregation and not of the model.
+4. **Edit the superseded documents so one sentence holds everywhere.** Rejected. It breaks
+   the reproduction guarantee that `v2.7` and `v2.8` still hold, to remove a supersession
+   note. D148 exists to stop exactly this.
+
+**Consequences.** `p2_decisions.bind_neutral_claim_wording` is called by
+`inertness_ceiling.main` and `armb_floor.main`. The live strings at P2-D20's unit are
+restated: `inertness_ceiling`'s `answer_at_item_unit_p2d21` block and module docstring,
+`armb_floor`'s `type_ii_cost_of_p0_half_at_item_unit` and `_six_ladder_at_item_unit`
+replacement text. `docs/P2/tasks/T7.md` step 0b is rewritten to the direct statement and
+to the signed item-unit gaps. P2-D21's decision text and its reason 3 are amended above.
+Every pre-existing value in `results/T5_inertness_ceiling.json` and
+`results/T5_armb_floor.json` stays byte-identical.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -1737,3 +1924,6 @@ or `F2` statistic of any kind.
 | The item-unit Type II gap is negative on exactly `B2` | `p2_decisions.bind_neutral_baseline` |
 | `B2`'s 95% interval still contains 0.5, so 0.5556 is not drift | `armb_floor.demo`, `tests/test_armb_binding.py` |
 | The pair-unit gaps and P2-D15's restatement still reproduce | `armb_floor.demo`, `tests/test_armb_binding.py` |
+| No live statement uses a tally frame or "conservative" for `p0` | `p2_decisions.bind_neutral_claim_wording` |
+| `B2` is exactly 0.5 under aggregations A, B and E | `p2_decisions.bind_neutral_claim_wording` |
+| An assert carries the reason a quantity has its sign, not just a range | the mechanism note above |

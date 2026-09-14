@@ -201,15 +201,19 @@ def _six_ladder_at_item_unit(path=CEILING):
             "restatement is a universal over six models and one exception "
             "breaks it.",
         "replacement":
-            "Six of seven models sit at or below 0.5 and the seventh, B2, is "
-            "not distinguishable from it. Only CTRL departs at the corrected "
-            "alpha and it departs downward, with or without the control "
-            "admitted. p0 = 0.5 is retained on the structural ground in P2-D21, "
-            "not on a universal claim about the seven.",
+            "Not a smaller tally, per P2-D22. The claim is that a "
+            "content-neutral insertion does not drift toward the salience pole. "
+            "The per-model proportion runs 0.1951 to 0.5556; only CTRL resolves "
+            "at the corrected alpha and it resolves downward, with or without "
+            "the control admitted; and B2 sits at the null, exactly 0.5000 "
+            "under three of five aggregations of these rows. p0 = 0.5 is "
+            "retained on the structural ground in P2-D21, not on any universal "
+            "claim about the seven and not on conservativeness.",
     }
 
 
 def main():
+    P2D.bind_neutral_claim_wording(False, False, False)   # P2-D22
     gaps = type_ii_gap()
     gaps_item = type_ii_gap_item()
     d111 = d111_verdict()
@@ -273,9 +277,10 @@ def main():
         "type_ii_cost_of_p0_half_at_item_unit": {
             "statement":
                 "At P2-D20's item unit the gap is SIGNED and B2's is negative. "
-                "p0 = 0.5 is conservative against Type I on the six models whose "
-                "gap is positive, and costly in Type II there by the size of the "
-                "gap. On B2 the neutral baseline sits ABOVE p0, so there is no "
+                "Where the gap is positive it is a Type II cost of that size, "
+                "reported per model; P2-D22 withdraws 'conservative' as a way of "
+                "saying it, because conservativeness is a per-model property. "
+                "On B2 the neutral baseline sits ABOVE p0, so there is no "
                 "gap for a real effect to fail to clear and the exposure runs "
                 "the other way: a B2 (c) result significant against p0 = 0.5 but "
                 "at or below 0.5556 is nominally positive while sitting at or "
