@@ -70,11 +70,15 @@ fewer.
 
 ## What this bears on, stated and not resolved
 
-**Two of the three concentrated models are resolving cells.** `CTRL`/F1, `L3`/F1 and
-`L3`/F2 all depart from `p0 = 0.5` at the corrected `alpha`, and all three sit in the
-concentrated group. Their `n_eff` is formed after the coordinate has discarded the
-switches it cannot see, and on those cells that discard is 2 to 5 times what P2-D19's
-bound anticipated.
+**Three of the five resolving cells sit in the concentrated group.** `CTRL`/F1, `L3`/F1
+and `L3`/F2 all depart from `p0 = 0.5` at the corrected `alpha` and all three are
+concentrated, at ratios of 4.09, 2.50 and 1.81. The other two resolving cells, `L4`/F1 and
+`L4`/F2, are not concentrated, at 0.30 and 0.21. Counted by model rather than by cell, two
+of the three concentrated models carry a resolving cell. On the three affected cells the
+`n_eff` is formed after the coordinate has discarded the switches it cannot see, and that
+discard is **1.81 to 4.09** times what P2-D19's bound anticipated. The wider 1.81 to 5.10
+is the range over all six concentrated cells, and its top end is `CTRL`/F2, which does not
+resolve.
 
 This does not say the departures are artifacts. It says the sign test on those cells runs
 on a subset of the movement selected by a property of the item geometry rather than at
@@ -84,6 +88,12 @@ the same direction as the retained ones.
 **No statistic is adjusted in response, and none should be without a ruling.** Reweighting,
 reselecting or excluding on this would be choosing a remedy with the affected counts on
 screen, which is the ordering hazard the log names repeatedly.
+
+**Ruled 2026-09-14 by P2-D24, and no statistic is adjusted there either.** The concentration
+is one of the three premises a direction claim on quantity (c) would need, and it is the
+premise that the discarded switches carry the direction of the retained ones. Nothing
+establishes it, so no direction claim is licensed on any cell. The ruling changes no number
+in this file.
 
 ## Structure, consistent with P2-D19
 

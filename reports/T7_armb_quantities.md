@@ -104,6 +104,20 @@ P2-D5 is adopted and binds any Arm B analysis or reporting script: every claim t
 
 Emitted anyway, because the numbers are not what is blocked: all three quantities, per-cell tie attrition and item denominators (P2-D16), the signed per-model Type II gap (P2-D14 as corrected by P2-D21 and P2-D22), the realized n_eff at the item unit and the realized power (P2-D6, P2-D12), the floor P2-D13 gives for this run, P2-D10's blind spot, and P2-D19's resolution figures. Reporting a blocked gate is a successful task outcome; the numbers are not withheld, the claim is.
 
+## 6b. Direction: no claim is licensed (P2-D24)
+
+The five resolving cells license NO claim about direction. Quantity (c) is reported as computed and nothing is withheld; what is blocked is the reading of its sign, not the statistic.
+
+Five of the fourteen cells depart from `p0` = 0.5 at the corrected `alpha`: `CTRL|F1`, `L3|F1`, `L4|F1`, `L3|F2`, `L4|F2`. All five departures are below 0.5. That arithmetic statement is what the section 2 tables carry and it stands. Reading it as movement away from `o*_infinity`, as evidence about adversary tracking, or as a property of a model does not. Such a reading needs three premises and none holds.
+
+1. **Excess over the marginal null.** P2-D5's second conjunct names A_null(m, F) = sum_o p_{m,F}(o) A_i(o), v2.0 section 3.3's object. P2-D12's three quantities contain no excess quantity, and neither a same-option rate nor p0 = 0.5 is that object. A_null and v2.0 section 4.4's attribution cap dA_null have never been computed for Paper 2. Computing them as specified would be preregistered; using either to license a direction claim on (c) would be post-hoc, because no rule maps a level excess onto a sign proportion.
+2. **The neutral baseline.** A content-neutral insert departs downward on the one model whose own diagnostic resolves at the corrected alpha, which is CTRL and only CTRL. Downward departure is therefore not established as a property of adversary content rather than of inserted text. Reading an F1 or F2 proportion against a non-resolving neutral point estimate, which is what four of the five resolving cells would require, is the recalibration P2-D12, P2-D14 and P2-D21 each declined, moved into the reporting where it has no alpha at all.
+3. **The discarded switches.** On three of the five resolving cells the coordinate discards the switches it cannot see at 1.81 to 4.09 times P2-D19's per-pair bound. That is selection, not measurement error, and nothing establishes that the discarded switches carry the direction of the retained ones. The affected cells are `CTRL|F1`, `L3|F1`, `L3|F2` (`reports/T7_switch_concentration.md`).
+
+The ruling holds under all three readings of P2-D5's blocker: premises 2 and 3 are untouched by how it goes. The blocker stays open and stays the author's.
+
+**What IS licensed.** Movement, at quantity (a): both framings changed the chosen option on every model, 30 to 77 items of 108 per cell, every cell clearing the floor of 7, every interval excluding zero, against an exact null of zero under P2-D9's deterministic scorer. Magnitude, per cell, at quantity (b): three cells resolve against `R_m` and eleven do not, and the three are reported as three rather than pooled into a magnitude word.
+
 ## 7. What the numbers above do not license
 
 Beyond the blocker, three limits stand on their own and compose.

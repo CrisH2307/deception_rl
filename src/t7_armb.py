@@ -240,6 +240,19 @@ def compute():
     _, _, _, ext = H.item_axis()
     P2D.bind_ext_floor(float(ext[sz].min()), int(sz.sum()), ())
     P2D.check_p1_ext_floor_source()
+    # P2-D24. The premises a direction claim on (c) would need, asserted as
+    # premises: no confirmatory quantity is an excess over the marginal null, the
+    # c5 neutral diagnostic resolves on CTRL alone, and the direction of the
+    # switches the A coordinate discards is not established. This run makes no
+    # direction claim and none is licensed.
+    P2D.bind_direction_claim(
+        direction_claim_made=False,
+        neutral_resolves_on=tuple(
+            m for m in LADDER
+            if json.load(open(CEILING))["diagnostic_c5_direction"][
+                "per_model"][m]["significant_at_corrected_alpha_item"]),
+        excess_over_marginal_null_quantities=(),
+        discarded_switch_direction_established=False)
 
     # P2-D8's reference is the preregistered table, not a recomputation. The
     # recomputation is the check that this read of the frozen artifact is of the
@@ -417,6 +430,52 @@ def compute():
         },
         "oracle_check": oracle,
         "cells": cells,
+        "direction_reading_P2D24": {
+            "ruling": "The five resolving cells license NO claim about direction. "
+                      "Quantity (c) is reported as computed and nothing is "
+                      "withheld; what is blocked is the reading of its sign, not "
+                      "the statistic.",
+            "direction_claim_licensed": P2D.P2D24_DIRECTION_CLAIM_LICENSED,
+            "movement_claim_licensed": P2D.P2D24_MOVEMENT_CLAIM_LICENSED,
+            "resolving_cells": list(P2D.P2D24_RESOLVING_CELLS),
+            "resolving_all_downward": P2D.P2D24_RESOLVING_ALL_DOWNWARD,
+            "premise_1_excess_over_the_marginal_null":
+                "P2-D5's second conjunct names A_null(m, F) = sum_o p_{m,F}(o) "
+                "A_i(o), v2.0 section 3.3's object. P2-D12's three quantities "
+                "contain no excess quantity, and neither a same-option rate nor "
+                "p0 = 0.5 is that object. A_null and v2.0 section 4.4's "
+                "attribution cap dA_null have never been computed for Paper 2. "
+                "Computing them as specified would be preregistered; using "
+                "either to license a direction claim on (c) would be post-hoc, "
+                "because no rule maps a level excess onto a sign proportion.",
+            "premise_2_the_neutral_baseline":
+                "A content-neutral insert departs downward on the one model "
+                "whose own diagnostic resolves at the corrected alpha, which is "
+                "CTRL and only CTRL. Downward departure is therefore not "
+                "established as a property of adversary content rather than of "
+                "inserted text. Reading an F1 or F2 proportion against a "
+                "non-resolving neutral point estimate, which is what four of the "
+                "five resolving cells would require, is the recalibration "
+                "P2-D12, P2-D14 and P2-D21 each declined, moved into the "
+                "reporting where it has no alpha at all.",
+            "premise_3_the_discarded_switches":
+                "On three of the five resolving cells the coordinate discards "
+                "the switches it cannot see at 1.81 to 4.09 times P2-D19's "
+                "per-pair bound. That is selection, not measurement error, and "
+                "nothing establishes that the discarded switches carry the "
+                "direction of the retained ones.",
+            "neutral_resolves_on": list(P2D.P2D24_NEUTRAL_RESOLVES_ON),
+            "concentrated_resolving_cells":
+                list(P2D.P2D24_CONCENTRATED_RESOLVING_CELLS),
+            "concentration_ratio_on_those_cells":
+                list(P2D.P2D24_CONCENTRATION_RATIO_RESOLVING),
+            "marginal_null_computed": P2D.P2D24_MARGINAL_NULL_COMPUTED,
+            "marginal_null_specified_in": P2D.P2D24_MARGINAL_NULL_SPEC,
+            "independent_of_the_blocker":
+                "The ruling holds under all three readings of P2-D5's blocker: "
+                "premises 2 and 3 are untouched by how it goes. The blocker "
+                "stays open and stays the author's.",
+        },
         "blocker": {
             "id": "P2-D5's second conjunct, excess over the marginal null",
             "status": "UNRULED",
@@ -623,6 +682,31 @@ def _write_report(out):
     W(bl["why"] + "\n")
     W(f"**Blocked:** {bl['what_it_blocks']}\n")
     W(bl["what_is_emitted_anyway"] + "\n")
+
+    W("## 6b. Direction: no claim is licensed (P2-D24)\n")
+    dr = out["direction_reading_P2D24"]
+    W(dr["ruling"] + "\n")
+    W("Five of the fourteen cells depart from `p0` = 0.5 at the corrected "
+      "`alpha`: " + ", ".join(f"`{c}`" for c in dr["resolving_cells"]) +
+      ". All five departures are below 0.5. That arithmetic statement is what "
+      "the section 2 tables carry and it stands. Reading it as movement away "
+      "from `o*_infinity`, as evidence about adversary tracking, or as a "
+      "property of a model does not. Such a reading needs three premises and "
+      "none holds.\n")
+    W(f"1. **Excess over the marginal null.** {dr['premise_1_excess_over_the_marginal_null']}")
+    W(f"2. **The neutral baseline.** {dr['premise_2_the_neutral_baseline']}")
+    W(f"3. **The discarded switches.** {dr['premise_3_the_discarded_switches']} "
+      "The affected cells are " +
+      ", ".join(f"`{c}`" for c in dr["concentrated_resolving_cells"]) +
+      " (`reports/T7_switch_concentration.md`).\n")
+    W(dr["independent_of_the_blocker"] + "\n")
+    W("**What IS licensed.** Movement, at quantity (a): both framings changed "
+      "the chosen option on every model, 30 to 77 items of 108 per cell, every "
+      "cell clearing the floor of 7, every interval excluding zero, against an "
+      "exact null of zero under P2-D9's deterministic scorer. Magnitude, per "
+      "cell, at quantity (b): three cells resolve against `R_m` and eleven do "
+      "not, and the three are reported as three rather than pooled into a "
+      "magnitude word.\n")
 
     W("## 7. What the numbers above do not license\n")
     W("Beyond the blocker, three limits stand on their own and compose.\n")

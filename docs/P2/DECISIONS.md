@@ -143,6 +143,36 @@ same verdict and ruling one without the other would license a claim the other fo
 coordinate's blind spot is concentrated on `CTRL`, `L1` and `L3` at 1.8 to 5.1 times
 P2-D19's per-pair bound, and two of the five resolving cells sit in that group.
 
+### Ruled 2026-09-14 by P2-D24, with three corrections to the note above
+
+**The second open question is closed and the P2-D5 blocker is not.** P2-D24 rules that the
+five departures license no claim about direction, under every one of the three readings of
+the blocker, so the blocker stays open and stays the author's. Reading the F1 and F2
+proportions against the measured neutral figure is rejected, not deferred. What the note
+above got right is that the two questions travel together; what it assumed is that ruling
+them required ruling the blocker first, and it does not, because inputs 2 and 3 are
+independent of how the blocker goes.
+
+**Three numbers in the note do not survive recomputation.** They are corrected here and
+not edited above, so the record of what was believed on 2026-09-14 stays readable.
+
+1. **`L3` does not resolve on the `c5` diagnostic.** `results/T5_inertness_ceiling.json`
+   gives `L3` a two-sided `p` of 0.004551 at the item unit against `alpha` = 0.002381, and
+   `significant_at_corrected_alpha_item` is false. P2-D21's adopted decision text already
+   says "only `CTRL` resolves at the corrected `alpha` and it resolves downward". The
+   sentence above should read `CTRL` 0.1951 and nothing else. The error propagated into the
+   author instruction that produced P2-D24 and was caught by recomputation, which is the
+   pattern `v2.10` section 3.6 records.
+2. **"The framings move choices substantially" overstates what quantity (b) resolves.**
+   (b) resolves on 3 of 14 cells, `L3`/F1 at -0.1065, `B2`/F2 at -0.1481 and `L3`/F2 at
+   -0.1620, all in the direction of the framing moving choices more than `c5` does. On the
+   other eleven the comparison does not resolve. The licensed sentence names the three and
+   the eleven; "substantially" reports them as one thing.
+3. **Three of the five resolving cells sit in the concentrated group, not two, and the
+   ratio on them is 1.81 to 4.09.** The three are `CTRL`/F1 at 4.09, `L3`/F1 at 2.50 and
+   `L3`/F2 at 1.81. "1.8 to 5.1" is the range over all six concentrated cells, and 5.10 is
+   `CTRL`/F2, which does not resolve.
+
 The third case is the same failure class pointed at the log itself. A decision entry
 is the governing record, so nothing downstream of it checks its provenance; the entry
 IS the check. That makes a fabricated entry cheaper to write than a real one and
@@ -2195,6 +2225,182 @@ record. No artifact value changes.
 
 ---
 
+## P2-D24. The five downward departures license no claim about direction
+
+**Status:** adopted. Rules what Arm B may conclude from quantity (c)'s resolving cells.
+Changes no statistic, no unit, no tolerance and no null. `p0` is 0.5. P2-D5's blocker
+stays open.
+**Decided:** 2026-09-14, by an **agent session acting on an author instruction**, in the
+session following the one that recorded P2-D23 and ran T7's switch-concentration check. No
+new statistic was computed; every figure below is re-read from an existing artifact and
+recomputed against it rather than transcribed. Full reasoning in
+`PREREGISTRATION_v2.15.md`.
+
+**The instruction it acted on**, per the countermeasure in `v2.10` section 2.4, quoted in
+the parts that bear on the ruling:
+
+> Quantity (a) clears P2-D13's floor on all 14 cells, 30 to 77 items of 108. Five cells
+> resolve on (c) at the corrected alpha, all downward, meaning away from `o*_infinity`.
+> Three inputs stand against reading those five as a result, and **none can be ruled
+> alone**: P2-D5's blocker; the neutral baseline; the concentration.
+>
+> **What does the design license concluding from the five downward departures, given all
+> three at once?** Ruling any one alone licenses a reading the other two forbid, which is
+> why they come together.
+
+with three readings offered **to evaluate, not to adopt**, listed under the alternatives
+below, and the constraints: compute no new statistic; treat every number in the
+instruction as unverified; do not move `p0`; do not reopen P2-D6, P2-D12, P2-D14, P2-D19,
+P2-D20 or P2-D21; name any quantity a reading needs that was never computed and say
+whether computing it now would be preregistered or post-hoc; and **if the design licenses
+nothing about direction, say so**. All were followed.
+
+**Binds:** `src/t7_armb.py`, and any Arm B report or paper passage stating what quantity
+(c)'s departures mean.
+**Constant:** `P2D24_TEXT`, `P2D24_DIRECTION_CLAIM_LICENSED`,
+`P2D24_MOVEMENT_CLAIM_LICENSED`, `P2D24_RESOLVING_CELLS`,
+`P2D24_RESOLVING_ALL_DOWNWARD`, `P2D24_NEUTRAL_RESOLVES_ON`,
+`P2D24_CONCENTRATED_RESOLVING_CELLS`, `P2D24_CONCENTRATION_RATIO_RESOLVING`,
+`P2D24_MARGINAL_NULL_COMPUTED`, `P2D24_MARGINAL_NULL_SPEC`.
+
+**Decision text.**
+
+> The five downward departures license NO claim about direction. Quantity (c) is
+> reported as computed, nothing is withheld, and the five cells that resolve at the
+> corrected `alpha` are reported as what they are: a sign proportion below `p0 = 0.5`
+> on `CTRL`/F1, `L3`/F1, `L4`/F1, `L3`/F2 and `L4`/F2. No sentence reads that as
+> movement away from `o*_infinity`, as evidence about adversary tracking, or as a
+> property of a model. A direction claim needs three premises and none holds. First,
+> P2-D5's second conjunct names a quantity the confirmatory family does not contain:
+> `A_null(m, F) = sum_o p_{m,F}(o) A_i(o)` is `v2.0` section 3.3's object, and neither
+> a same-option rate nor `p0 = 0.5` is that object. Second, a content-neutral insert
+> departs downward too, on the one model whose own diagnostic resolves at the corrected
+> `alpha`, which is `CTRL` and only `CTRL`, so downward departure is not established as
+> a property of adversary content rather than of inserted text. Third, on three of the
+> five resolving cells the coordinate discards the switches it cannot see at 1.81 to
+> 4.09 times P2-D19's per-pair bound, and nothing establishes that the discarded
+> switches carry the direction of the retained ones. The ruling does not depend on how
+> P2-D5's blocker is later ruled: under all three readings in circulation the second
+> and third premises still fail, so the blocker stays open and stays the author's. What
+> IS licensed is movement. Quantity (a) reads chosen options only, carries no claim
+> about adversary-relevant content, and clears P2-D13's floor of 7 on all 14 cells at
+> 30 to 77 items of 108 against an exact null of zero. Quantity (b) resolves on three
+> cells, all in the direction of the framing moving choices more than `c5` does, and on
+> eleven it does not. Both are reported per cell, never as one magnitude word.
+
+**Why it needed deciding.** T7's confirmatory run put a resolved, signed, one-directional
+result on the table: five of fourteen cells depart from `p0` at the corrected `alpha` and
+every one departs downward. That is the shape of a finding, and three separate records say
+it cannot be read as one. Left unruled, the session writing the paper meets five
+significant cells and three caveats scattered across a decision log, a preregistration
+version and a diagnostic report, and the caveats lose, because a resolved `p` of 7.7e-06
+is a louder object than a paragraph. The ruling exists to make the absence of a licence as
+concrete as the presence of a `p` value.
+
+**The three inputs are three views of one absence, which is why none could be ruled
+alone.** `v2.0` section 4.4 preregistered the design's defence against the reading that
+the movement is a generic inserted-text shift in option preference: the attribution cap
+`dA_null(m, F)`, computed by reweighting the confirmatory set with the option-frequency
+shift measured on the `beta_c = infinity` control set, where nothing adversary-relevant
+can change. P2-D6 replaced the mean with a sign test and P2-D12 fixed three quantities,
+and no successor to that cap was written. Input 1 is that absence stated as a rule, since
+P2-D5 makes the excess conjunct binding and the confirmatory family contains no excess
+quantity. Input 2 is the same absence with a measurement in it, since a content-neutral
+insert in the same slot departs downward on the model where its diagnostic resolves. Input
+3 is the same absence in the geometry, since 54 of the 62 discarded switches fall on one
+option-index pair at the end of the option order, which is the signature a generic
+option-position shift would have. Ruling any one alone licenses a reading the other two
+forbid: retire the conjunct and input 2 makes the claim false on its face; read against the
+neutral baseline and input 3 denies that the retained subset is representative; call the
+concentration a limitation and inputs 1 and 2 still stand on the two cells it does not
+touch.
+
+**Three numbers in the instruction did not survive recomputation, and they are recorded
+rather than adopted**, per `v2.10` section 3.6.
+
+| carried | recomputed | verdict |
+|---|---|---|
+| `c5` departs downward where it resolves, `CTRL` 0.1951 and `L3` 0.2424 | `CTRL` resolves at `p` = 0.000112; **`L3` does not**, at `p` = 0.004551 against `alpha` = 0.002381 | **fails on `L3`** |
+| **two** of the five resolving cells are concentrated | **three**: `CTRL`/F1, `L3`/F1, `L3`/F2. The parenthetical names three and calls them two | **fails as a count** |
+| at **2 to 5** times the anticipated rate | **1.81 to 4.09** on those three cells; 1.81 to 5.10 is the range over all six concentrated cells, and 5.10 is `CTRL`/F2, which does not resolve | **fails as a range** |
+
+The `L3` error is also in this file's own open-question note of 2026-09-14, which is where
+the instruction's wording came from, and it is corrected there. It cuts both ways: the
+evidence that inserted text departs downward is one model rather than two, and reading 2
+is weaker still, because four of the five resolving cells are `L3` or `L4` and neither
+model's neutral figure resolves. A resolved departure read against an unresolved point
+estimate is the comparison P2-D22 refused in the tally case.
+
+**Why this does not pre-empt P2-D5's blocker, which is the part that makes the ruling
+possible.** Three readings of the blocker are in circulation. Under the first, the conjunct
+travels and needs an operational form, which does not exist. Under the second, it expired
+with the mean, which leaves the framing contrast but touches neither input 2 nor input 3.
+Under the third, (a), (b) and (c) already satisfy it, which is false as stated, since
+`A_null` is a marginal over canonical option ids weighted by `A` and a same-option rate is
+a rate of unchanged choices. The direction claim fails under all three, so the blocker
+stays open and stays the author's.
+
+**The quantity a rejected reading needed, and its status.** `A_null(m, F)` is specified in
+`v2.0` section 3.3 and `dA_null(m, F)` in `v2.0` section 4.4. Neither has ever been
+computed for Paper 2: no module emits either, and `tv_option_marginal` in
+`src/c5_effect.py` is a total variation distance between two option marginals, which is a
+different object. Computing them as `v2.0` specifies them would be **preregistered**: both
+formulas predate all Paper 2 data, both are named as required steps in
+`docs/P2/tasks/T7.md`, and neither has a free parameter. Using either to license a
+direction claim on quantity (c) would be **post-hoc**: no preregistered rule maps a level
+excess in `A` units onto a sign-test proportion, P2-D5's conjunct and `v2.0` section 4's
+criterion were both written against the mean P2-D6 demoted, and the mapping would be
+written with the five cells and their directions already on the table. This entry
+authorizes neither.
+
+**Alternatives offered and not chosen.**
+
+1. **H-B's null half is refuted by (a), and the paper reports movement without direction.** Partly adopted and rejected as stated. Its second and third
+   clauses are the ruling. "Refuted" is declined on two grounds: it is a verdict on H-B,
+   which the blocker blocks, and H-B is a conjunction whose second half is the direction
+   half, so (a) resolves one half and reporting the whole as refuted invites the reader to
+   complete it. "(c) says nothing interpretable" is declined in the other direction: (c) is
+   exact, reproducible and reported in full, and what is unlicensed is one reading of its
+   sign, not the statistic.
+2. **Read the five departures against the measured neutral baseline, and state the concentration as a limitation on the affected cells.** Rejected on four grounds. The neutral figure resolves on
+   `CTRL` alone and on none of the four `L3` or `L4` resolving cells, so on four of five
+   cells it would read a resolved departure against an unresolved point estimate. It is
+   the recalibration P2-D12 alternative 3, P2-D14 alternative 1 and P2-D21 alternative 1
+   all declined, moved into the reporting, which is worse rather than better: moving `p0`
+   would at least be a stated null at a stated `alpha`, and a reporting-level comparison
+   has neither, while the ordering hazard is unchanged because it would be adopted with
+   the resolving cells on screen. It miscounts the concentration as two cells and mislabels
+   selection as a limitation, where `reports/T7_switch_concentration.md` says plainly that
+   nothing establishes the discarded switches carry the direction of the retained ones. And
+   it leaves input 1 unanswered, since it substitutes a different comparison object for
+   `A_null` without saying why the substitution is valid.
+3. **Withhold quantity (c)'s numbers until P2-D5's blocker is ruled.** Rejected. The numbers are not what is blocked, and
+   `reports/T7_armb_quantities.md` section 6 already says so. Withholding a reproducible
+   statistic because its interpretation is unsettled makes the record depend on a later
+   ruling, which is the opposite of what a preregistration is for.
+
+**Consequences.** `src/p2_decisions.py` carries `bind_direction_claim`, called by
+`src/t7_armb.py`, which asserts the three premises a direction claim would need rather
+than any range a proportion or ratio occupies: that no confirmatory quantity is an excess
+over the marginal null, that the `c5` neutral diagnostic resolves on `CTRL` alone, and that
+the direction of the discarded switches is not established. Each fires when a premise
+becomes established, not when a value drifts, so the ruling is re-read rather than
+inherited. `src/t7_armb.py` emits a `direction_reading_P2D24` block into
+`results/T7_armb_quantities.json` and a section into `reports/T7_armb_quantities.md`, both
+additive: every pre-existing key and value in the artifact is byte-identical, verified key
+by key. `reports/T7_switch_concentration.md` replaces "2 to 5 times" with the range its own
+table carries. `tests/test_p2d24_direction.py` fails if a resolving cell enters or leaves,
+if a departure turns upward, if the neutral diagnostic resolves on a second model, if the
+concentrated subset of resolving cells changes, or if a caller reports a direction claim.
+
+**What this entry does not do.** It does not rule P2-D5's blocker, move `p0`, change a
+unit, a tolerance, a null or a floor, or reopen P2-D6, P2-D12, P2-D14, P2-D19, P2-D20 or
+P2-D21. It does not compute `A_null` or `dA_null` and does not authorize computing them
+for this purpose. It does not touch the human-behaviour gap claim, whose wording
+`docs/P2/tasks/T4.md` fixes and which is independent of everything Arm B measures.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -2219,6 +2425,10 @@ record. No artifact value changes.
 | `B2` is exactly 0.5 under aggregations A, B and E | `p2_decisions.bind_neutral_claim_wording` |
 | An assert carries the reason a quantity has its sign, not just a range | the mechanism note above |
 | `ext_i > 0` on every confirmatory item, and no confirmatory quantity reads it | `p2_decisions.bind_ext_floor` |
+| No caller reports a direction claim on quantity (c) | `p2_decisions.bind_direction_claim` |
+| No confirmatory quantity is an excess over the marginal null | `p2_decisions.bind_direction_claim` |
+| The `c5` neutral diagnostic still resolves on `CTRL` alone | `p2_decisions.bind_direction_claim`, `tests/test_p2d24_direction.py` |
+| The five resolving cells and their downward sign still reproduce | `tests/test_p2d24_direction.py` |
 | Paper 1's `span > 0.02` is still the floor's governing record | `p2_decisions.check_p1_ext_floor_source` |
 | No prereg passage is scoped to a replaced quantity without a ruling | `p2_decisions.scope_audit` |
 | A binding asserts a premise, not a range the quantity occupies | the binding note above |

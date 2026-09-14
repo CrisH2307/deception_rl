@@ -1325,6 +1325,37 @@
       }
     }
   },
+  "direction_reading_P2D24": {
+    "ruling": "The five resolving cells license NO claim about direction. Quantity (c) is reported as computed and nothing is withheld; what is blocked is the reading of its sign, not the statistic.",
+    "direction_claim_licensed": false,
+    "movement_claim_licensed": true,
+    "resolving_cells": [
+      "CTRL|F1",
+      "L3|F1",
+      "L4|F1",
+      "L3|F2",
+      "L4|F2"
+    ],
+    "resolving_all_downward": true,
+    "premise_1_excess_over_the_marginal_null": "P2-D5's second conjunct names A_null(m, F) = sum_o p_{m,F}(o) A_i(o), v2.0 section 3.3's object. P2-D12's three quantities contain no excess quantity, and neither a same-option rate nor p0 = 0.5 is that object. A_null and v2.0 section 4.4's attribution cap dA_null have never been computed for Paper 2. Computing them as specified would be preregistered; using either to license a direction claim on (c) would be post-hoc, because no rule maps a level excess onto a sign proportion.",
+    "premise_2_the_neutral_baseline": "A content-neutral insert departs downward on the one model whose own diagnostic resolves at the corrected alpha, which is CTRL and only CTRL. Downward departure is therefore not established as a property of adversary content rather than of inserted text. Reading an F1 or F2 proportion against a non-resolving neutral point estimate, which is what four of the five resolving cells would require, is the recalibration P2-D12, P2-D14 and P2-D21 each declined, moved into the reporting where it has no alpha at all.",
+    "premise_3_the_discarded_switches": "On three of the five resolving cells the coordinate discards the switches it cannot see at 1.81 to 4.09 times P2-D19's per-pair bound. That is selection, not measurement error, and nothing establishes that the discarded switches carry the direction of the retained ones.",
+    "neutral_resolves_on": [
+      "CTRL"
+    ],
+    "concentrated_resolving_cells": [
+      "CTRL|F1",
+      "L3|F1",
+      "L3|F2"
+    ],
+    "concentration_ratio_on_those_cells": [
+      1.81,
+      4.09
+    ],
+    "marginal_null_computed": false,
+    "marginal_null_specified_in": "v2.0 section 3.3 (A_null), v2.0 section 4.4 (dA_null)",
+    "independent_of_the_blocker": "The ruling holds under all three readings of P2-D5's blocker: premises 2 and 3 are untouched by how it goes. The blocker stays open and stays the author's."
+  },
   "blocker": {
     "id": "P2-D5's second conjunct, excess over the marginal null",
     "status": "UNRULED",

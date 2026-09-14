@@ -969,6 +969,123 @@ def check_p1_ext_floor_source(p1_root=None):
     return True
 
 
+# ------------------- P2-D24, the five downward departures license no direction claim
+P2D24_TEXT = (
+    "The five downward departures license NO claim about direction. Quantity (c) is\n"
+    "reported as computed, nothing is withheld, and the five cells that resolve at the\n"
+    "corrected `alpha` are reported as what they are: a sign proportion below `p0 = 0.5`\n"
+    "on `CTRL`/F1, `L3`/F1, `L4`/F1, `L3`/F2 and `L4`/F2. No sentence reads that as\n"
+    "movement away from `o*_infinity`, as evidence about adversary tracking, or as a\n"
+    "property of a model. A direction claim needs three premises and none holds. First,\n"
+    "P2-D5's second conjunct names a quantity the confirmatory family does not contain:\n"
+    "`A_null(m, F) = sum_o p_{m,F}(o) A_i(o)` is `v2.0` section 3.3's object, and neither\n"
+    "a same-option rate nor `p0 = 0.5` is that object. Second, a content-neutral insert\n"
+    "departs downward too, on the one model whose own diagnostic resolves at the corrected\n"
+    "`alpha`, which is `CTRL` and only `CTRL`, so downward departure is not established as\n"
+    "a property of adversary content rather than of inserted text. Third, on three of the\n"
+    "five resolving cells the coordinate discards the switches it cannot see at 1.81 to\n"
+    "4.09 times P2-D19's per-pair bound, and nothing establishes that the discarded\n"
+    "switches carry the direction of the retained ones. The ruling does not depend on how\n"
+    "P2-D5's blocker is later ruled: under all three readings in circulation the second\n"
+    "and third premises still fail, so the blocker stays open and stays the author's. What\n"
+    "IS licensed is movement. Quantity (a) reads chosen options only, carries no claim\n"
+    "about adversary-relevant content, and clears P2-D13's floor of 7 on all 14 cells at\n"
+    "30 to 77 items of 108 against an exact null of zero. Quantity (b) resolves on three\n"
+    "cells, all in the direction of the framing moving choices more than `c5` does, and on\n"
+    "eleven it does not. Both are reported per cell, never as one magnitude word."
+)
+P2D24_REJECTED = (
+    "H-B's null half is refuted by (a), and the paper reports movement without direction.",
+    "Read the five departures against the measured neutral baseline, and state the "
+    "concentration as a limitation on the affected cells.",
+    "Withhold quantity (c)'s numbers until P2-D5's blocker is ruled.")
+P2D24_DIRECTION_CLAIM_LICENSED = False
+P2D24_MOVEMENT_CLAIM_LICENSED = True
+# The five (c) cells resolving at the corrected alpha, all below p0. Recomputed
+# 2026-09-14 from results/T7_armb_quantities.json, not transcribed.
+P2D24_RESOLVING_CELLS = ("CTRL|F1", "L3|F1", "L4|F1", "L3|F2", "L4|F2")
+P2D24_RESOLVING_ALL_DOWNWARD = True
+# Premise 2. The c5 neutral diagnostic at P2-D20's item unit resolves at the
+# corrected alpha on CTRL alone (P2-D21's adopted text says so; the instruction
+# that prompted this ruling named L3 as well and L3's p is 0.004551, above alpha).
+P2D24_NEUTRAL_RESOLVES_ON = ("CTRL",)
+# Premise 3. Resolving cells whose switches concentrate on A-tied option pairs.
+P2D24_CONCENTRATED_RESOLVING_CELLS = ("CTRL|F1", "L3|F1", "L3|F2")
+P2D24_CONCENTRATION_RATIO_RESOLVING = (1.81, 4.09)
+# Premise 1. v2.0 section 3.3's A_null and section 4.4's dA_null are preregistered
+# and have never been computed for Paper 2. Computing them as specified would be
+# preregistered work; using either to license a direction claim on (c) would be
+# post-hoc, because no rule maps a level excess onto a sign proportion.
+P2D24_MARGINAL_NULL_COMPUTED = False
+P2D24_MARGINAL_NULL_SPEC = ("v2.0 section 3.3 (A_null), v2.0 section 4.4 (dA_null)")
+
+
+def bind_direction_claim(direction_claim_made, neutral_resolves_on,
+                         excess_over_marginal_null_quantities,
+                         discarded_switch_direction_established):
+    """Assert the premises a direction claim on quantity (c) would need. P2-D24.
+
+    Per the binding-form note in `docs/P2/DECISIONS.md`: this asserts the premises
+    that would make a direction claim well formed, not a range any proportion,
+    `p` value or concentration ratio happens to occupy. Every one of those numbers
+    may move on a re-run without touching the ruling; what the ruling rests on is
+    that three specific things are NOT established, and each assert fires when one
+    of them becomes established rather than when a value drifts.
+
+    `neutral_resolves_on` is the set of models whose `c5` item-unit sign diagnostic
+    resolves at the corrected `alpha`. Reading an F1 or F2 proportion against a
+    neutral figure needs a neutral figure that resolves, and it resolves on `CTRL`
+    alone, on none of the four `L3` or `L4` resolving cells. If a later run resolves
+    it on a second model, the second premise has moved and P2-D24 is re-read rather
+    than assumed.
+
+    `excess_over_marginal_null_quantities` is the run's list of confirmatory
+    quantities that are an excess over the marginal null. It must be empty. P2-D5's
+    second conjunct names exactly that quantity and P2-D12's three do not contain
+    one; a run that adds one has changed what the conjunct reaches, which is the
+    first premise moving.
+
+    `discarded_switch_direction_established` says whether the run establishes the
+    direction of the switches the `A` coordinate discards. It must be false. The
+    premise a direction claim needs on a cell whose coordinate discards switches is
+    that the discarded ones carry the direction of the retained ones; that is
+    selection rather than measurement error, and nothing in the design establishes
+    it.
+    """
+    if bool(direction_claim_made) != P2D24_DIRECTION_CLAIM_LICENSED:
+        raise AssertionError(
+            "P2-D24: this caller reports a direction claim on quantity (c). None is "
+            "licensed: the three premises such a claim needs are asserted below and "
+            "none holds. The numbers are not blocked, the reading is. "
+            "docs/P2/DECISIONS.md is the source.")
+    if tuple(excess_over_marginal_null_quantities):
+        raise AssertionError(
+            f"P2-D24 premise 1: confirmatory quantities that are an excess over the "
+            f"marginal null: {tuple(excess_over_marginal_null_quantities)}. P2-D24 "
+            "rules no direction claim partly because P2-D12's three quantities "
+            f"contain none, and {P2D24_MARGINAL_NULL_SPEC} specify the object they "
+            "would have to be. A run that adds one has moved the premise, and the "
+            "ruling is re-read rather than inherited.")
+    if tuple(neutral_resolves_on) != P2D24_NEUTRAL_RESOLVES_ON:
+        raise AssertionError(
+            f"P2-D24 premise 2: the c5 neutral diagnostic resolves on "
+            f"{tuple(neutral_resolves_on)}, and P2-D24 rests on it resolving on "
+            f"{P2D24_NEUTRAL_RESOLVES_ON}. Reading an F1 or F2 proportion against a "
+            "neutral figure needs a neutral figure that resolves; on one model of "
+            "seven it does not reach four of the five resolving cells. If that has "
+            "changed, the reading P2-D24 rejected may now be available and the "
+            "ruling is re-read, not patched.")
+    if discarded_switch_direction_established:
+        raise AssertionError(
+            "P2-D24 premise 3: this run claims the direction of the switches the A "
+            "coordinate discards is established. P2-D24 rests on it not being: on "
+            f"{P2D24_CONCENTRATED_RESOLVING_CELLS} the discard runs "
+            f"{P2D24_CONCENTRATION_RATIO_RESOLVING[0]} to "
+            f"{P2D24_CONCENTRATION_RATIO_RESOLVING[1]} times P2-D19's per-pair "
+            "bound, which is selection and not measurement error. If the direction "
+            "is now established, say by what, and re-read the ruling.")
+
+
 # ------------------- the scope registry (DECISIONS.md, case 4: the expired scope)
 # A decision that scopes itself to another decision's QUANTITY names that decision
 # here. Superseding a quantity then surfaces every dependent scope, because the
@@ -1101,7 +1218,8 @@ def check_log(path=LOG):
                          ("P2-D20", P2D20_TEXT),
                          ("P2-D21", P2D21_TEXT),
                          ("P2-D22", P2D22_TEXT),
-                         ("P2-D23", P2D23_TEXT)):
+                         ("P2-D23", P2D23_TEXT),
+                         ("P2-D24", P2D24_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -1123,7 +1241,8 @@ def check_log(path=LOG):
                             ("P2-D20", P2D20_REJECTED),
                             ("P2-D21", P2D21_REJECTED),
                             ("P2-D22", P2D22_REJECTED),
-                            ("P2-D23", P2D23_REJECTED)):
+                            ("P2-D23", P2D23_REJECTED),
+                            ("P2-D24", P2D24_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -1238,7 +1357,14 @@ def main():
           + f", {len(P2D19_REJECTED)} on P2-D19, {len(P2D20_REJECTED)} on P2-D20"
           + f", {len(P2D21_REJECTED)} on P2-D21, {len(P2D22_REJECTED)} on P2-D22"
           + f", {len(P2D23_REJECTED)} on P2-D23"
+          + f", {len(P2D24_REJECTED)} on P2-D24"
           + ", all present in the log")
+    print(f"direction       P2-D24: licensed={P2D24_DIRECTION_CLAIM_LICENSED}; "
+          f"movement licensed={P2D24_MOVEMENT_CLAIM_LICENSED}; resolving cells "
+          f"{P2D24_RESOLVING_CELLS}, all downward="
+          f"{P2D24_RESOLVING_ALL_DOWNWARD}; neutral resolves on "
+          f"{P2D24_NEUTRAL_RESOLVES_ON}; marginal null computed="
+          f"{P2D24_MARGINAL_NULL_COMPUTED}")
     print(f"constants match {os.path.relpath(LOG)}")
     return 0
 
