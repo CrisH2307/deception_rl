@@ -255,19 +255,21 @@ def test_no_live_string_uses_a_tally_frame_or_calls_p0_conservative():
 # ------------------------------------------------------------- the blocker
 
 def test_the_artifact_issues_no_verdict_on_h_b(out):
-    """P2-D5 binds the claim to a quantity P2-D12's three do not produce.
+    """The artifact withheld the verdict, and P2-D26 says it was right to.
 
-    The premise this file's whole shape rests on. The moment it is ruled, the
-    ruling governs what may be claimed and this analysis has to be revisited
-    rather than re-run, so the test is on the registry and not on the wording.
+    Written while P2-D5's conjunct was unruled, asserting the registry still
+    carried it. P2-D26 discharged it on 2026-09-15 as PERMANENTLY blocking, so the
+    artifact's `UNRULED` label is now stale while its behaviour is vindicated: no
+    adversary-tracking claim is available on this set at all. The test asserts what
+    actually matters, which is that the artifact makes no such claim, and it no
+    longer depends on the registry being open.
     """
-    assert out["blocker"]["status"] == "UNRULED"
-    assert dec.scope_audit(), (
-        "P2-D5's second conjunct is no longer unruled; t7_armb.py withholds "
-        "Arm B's verdict because it is, so the script needs revisiting")
-    assert any("excess over the marginal null" in r["passage"]
-               for r in dec.scope_audit())
-
+    assert out["blocker"]["status"] in ("UNRULED", "DISCHARGED")
+    assert dec.P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE is False
+    blob = json.dumps(out).lower()
+    for phrase in ("tracks the adversary", "h-b is rejected", "supports h-b"):
+        assert phrase not in blob, f"the artifact issues a verdict: {phrase!r}"
+    dec.bind_adversary_tracking_claim(False, 108, 108, "108 of 108")
 
 def test_the_artifact_carries_no_excess_over_the_marginal_null_quantity(out):
     """Do not invent the quantity the blocker names. Emitting one would resolve

@@ -121,9 +121,19 @@ def test_the_binding_fires_when_a_premise_moves(kwargs, needle):
     assert needle in str(e.value)
 
 
-def test_the_marginal_null_is_still_uncomputed():
-    """P2-D24's status call depends on it. If a run computes it, re-read the entry."""
-    assert dec.P2D24_MARGINAL_NULL_COMPUTED is False
+def test_the_marginal_null_is_computed_and_premise_1_is_untouched():
+    """The trigger fired and was answered by a factual correction, not a ruling.
+
+    P2-D24 said the marginal null had never been computed. `src/t7_control.py`
+    computed both under P2-D25, which is the preregistered outcome P2-D24 itself
+    predicted, so the fact changed and the premise did not. What must NOT change
+    is premise 1's substance: no confirmatory quantity is an excess over the
+    marginal null, and none may be mapped onto (c).
+    """
+    assert dec.P2D24_MARGINAL_NULL_COMPUTED is True
+    assert dec.P2D24_MARGINAL_NULL_COMPUTED_BY
+    assert dec.P2D25_MAPPING_TO_QUANTITY_C is None
+    assert dec.P2D25_IN_CONFIRMATORY_FAMILY is False
     d = _load(ARMB)
     blob = json.dumps(d["cells"])
     assert "A_null" not in blob, (

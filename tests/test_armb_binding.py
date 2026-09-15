@@ -534,14 +534,18 @@ def test_scope_registry_ruled_entries_stay_ruled_and_open_ones_are_triaged():
             "a scope must name the DECISION owning its quantity; that is the "
             f"whole countermeasure. Got {r['quantity_owned_by']!r}")
 
+    # P2-D26 discharged the last open entry on 2026-09-15. An entry ARRIVING here
+    # is a quantity superseded with a dependent scope untriaged; an entry LEAVING
+    # is a ruling, and the registry must name what ruled it.
     open_now = {r["passage"] for r in dec.scope_audit()}
-    assert open_now == {
-        "v2.0 section 4.4's attribution cap dA_null(m, F), v2.0 section 4's "
-        "movement criterion, and P2-D5's second conjunct, 'excess over the "
-        "marginal null'"}, (
-        f"the unruled scope set changed: {sorted(open_now)}. A new entry is a "
-        "question to answer, not a test to update; an entry leaving means it was "
-        "ruled and the registry should say by what.")
+    assert open_now == set(), (
+        f"the unruled scope set is no longer empty: {sorted(open_now)}. A new "
+        "entry is a question to answer, not a test to update.")
+    assert dec.undefended() == [], (
+        f"a defence is undefended again: "
+        f"{[r['passage'] for r in dec.undefended()]}")
+    for r in dec.SCOPE_REGISTRY:
+        assert r["ruled_by"], f"unruled entry without a ruling: {r['passage']}"
 
     # The open one is real: P2-D5 is adopted and names the quantity, and P2-D12's
     # three quantities do not include it. Checked against the constants so the
@@ -552,11 +556,6 @@ def test_scope_registry_ruled_entries_stay_ruled_and_open_ones_are_triaged():
     # ruling while an expired defence leaves a hypothesis the design cannot rule
     # out. Emptying this set means the cap got a successor or was retired; either
     # is a decision and the registry should name it.
-    und = dec.undefended()
-    assert len(und) == 1 and und[0]["defends_against"], (
-        f"the undefended set changed: {[r['passage'] for r in und]}. A defence "
-        "leaving it is a ruling; one arriving is a hypothesis newly undefended.")
-    assert "generic" in und[0]["defends_against"]
     assert all(("defends_against" in r) for r in dec.SCOPE_REGISTRY), (
         "a registry entry without defends_against cannot say whether its expiry "
         "cost anything, which is the whole content of the second instance")

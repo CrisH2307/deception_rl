@@ -93,7 +93,9 @@ wrong.
 The cap's expiry **removed the design's only preregistered defence against the hypothesis
 the data now points at**. Neither of its inputs exists: `TV(m, F)` on the
 `beta_c = infinity` control set is T7 step 4 and has not been run, and `ΔA_null(m, F)` has
-never been computed. It went unnoticed through P2-D6, P2-D12, P2-D19, P2-D20, P2-D21 and
+never been computed at the time this was recorded; both were computed on 2026-09-15 by
+`src/t7_control.py` under P2-D25, descriptively, which is the outcome P2-D25 authorized. It
+went unnoticed through P2-D6, P2-D12, P2-D19, P2-D20, P2-D21 and
 T7's confirmatory run, and surfaced only when three independent inputs converged on its
 absence: P2-D5's blocker naming a quantity that does not exist, the neutral baseline
 departing downward too, and the discarded-switch geometry carrying the signature the cap
@@ -170,7 +172,8 @@ it constrains the same verdict.
 (`results/T7_armb_quantities.json`) resolves quantity (c) against `p0 = 0.5` at the
 corrected `alpha` on five cells: `CTRL`/F1, `L3`/F1, `L4`/F1, `L3`/F2, `L4`/F2. **All five
 depart downward.** Under `p0 = 0.5` a downward departure is movement away from
-`o*_infinity`, which is Paper 1's salience pole on 452 of 460 divergent items. Quantity (a)
+`o*_infinity`, which is Paper 1's salience pole on **all 108** confirmatory items (P2-D26;
+452 of 460 is the divergence-set figure and understates this set). Quantity (a)
 clears P2-D13's floor on all 14 cells, 30 to 77 items moved of 108.
 
 So: **the framings move choices substantially, and the resolving movement runs away from
@@ -543,7 +546,10 @@ than a replacement, so adopting the frozen set now forecloses nothing.
 
 ## P2-D5. The `A` level confound is handled in interpretation, not in the item set
 
-**Status:** adopted.
+**Status:** adopted. **The blocker this entry raised is discharged by P2-D26 (2026-09-15),
+structurally and not pending measurement.** This entry's text is unchanged and its
+"452 of 460" is correct about the divergence set it describes. On the `size` confirmatory
+set the figure is **108 of 108**, and that is the one that governs Arm B; see P2-D26.
 **Decided:** 2026-09-10, during the T5 session. Full reasoning in
 `PREREGISTRATION_v2.4.md` section 1.
 **Binds:** any Arm B analysis or reporting script. **Constant:** `P2D5_TEXT`.
@@ -2694,6 +2700,135 @@ does not touch the human-behaviour gap claim, whose wording `docs/P2/tasks/T4.md
 
 ---
 
+## P2-D26. P2-D5's blocker is discharged as permanently blocking, on a structural ground
+
+**Status:** adopted. Discharges the blocker P2-D5 raised and every prior entry left open,
+including the one the scope registry carried. Changes no statistic and no item set.
+**Decided:** 2026-09-15, **by the author**, in writing, after `src/t7_control.py` measured
+the coincidence under P2-D25. This session recorded the ruling; it did not make it. The
+author's words are quoted below in full and the decision text is drawn from them, which is
+the distinction P2-D16's correction exists to keep visible.
+
+**The ruling, as the author wrote it:**
+
+> On the size-tile confirmatory set, o*_infinity == o_fit on all 108 items. The 8 items
+> where they differ are 3 on manmade and 5 on moves, none on size. So the adversary-aware
+> optimum and the salience pole are the same option throughout the confirmatory set, and
+> section 3.3's four references collapse to three there.
+>
+> P2-D5's blocker is discharged as permanently blocking, on a structural ground, not
+> pending further measurement. No Arm B quantity computed on the confirmatory set can
+> support a claim about adversary tracking, because the coordinate cannot distinguish
+> adversary-aware behaviour from salience-driven behaviour when the two targets are the
+> same point. No successor measure on size can, either.
+>
+> This is not a caveat to attach to a result. It is why the direction question was never
+> answerable on this set, and it explains P2-D24's conclusion from the other side: P2-D24
+> found the design licenses nothing about direction; this says why.
+>
+> The tile is not revisitable: D49 and D108 fixed size on measured grounds before this was
+> known, and the 8 separating items sit on tiles those decisions excluded.
+
+**Binds:** any Arm B analysis or reporting script, and any prose stating the confound.
+**Constant:** `P2D26_TEXT`, `P2D26_BLOCKER_DISCHARGED`, `P2D26_DISCHARGE_IS_STRUCTURAL`,
+`P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE`, `P2D26_TILE_REVISITABLE`,
+`P2D26_CONFIRMATORY_COINCIDENCE`, `P2D26_DIVERGENCE_COINCIDENCE`,
+`P2D26_SEPARATING_ITEMS_BY_TILE`, `P2D26_CONFOUND_FIGURE_FOR_CONFIRMATORY`.
+
+**Decision text.**
+
+> P2-D5's blocker is DISCHARGED as permanently blocking, on a structural ground, and
+> not pending further measurement. On the `size` confirmatory set `o*_infinity` equals
+> `o_fit` on all 108 items: of the 8 divergent items where the two differ, 3 are on
+> `manmade` and 5 on `moves`, and none is on `size`. The adversary-aware optimum and
+> the salience pole are therefore the SAME OPTION throughout the confirmatory set, and
+> `v2.0` section 3.3's four references collapse to three there. **No Arm B quantity
+> computed on that set can support a claim about adversary tracking**, because the
+> coordinate cannot distinguish adversary-aware behaviour from salience-driven
+> behaviour when the two targets are one point, and no successor measure on `size` can
+> either. This is not a caveat to attach to a result. It is why the direction question
+> was never answerable on this set, and it explains P2-D24 from the other side: P2-D24
+> found that the design licenses nothing about direction, and this says why. The tile
+> is not revisitable: Paper 1's D49 and D108 fixed `size` on measured grounds before
+> any of this was known, and the 8 separating items sit on tiles those decisions
+> excluded. The confirmatory confound is stated as **108 of 108** and never as 452 of
+> 460, which is a divergence-set figure and understates the confirmatory case.
+
+**The measurement it rests on.** Emitted by `src/t7_control.py` and reproduced
+independently from `df["o_fit"]` and `t6_arm_a.arm_a_columns`, the path that produced
+`results/T6_F0_headroom.json`'s `n_o_star_inf_equals_o_fit`:
+
+| tile | divergent items | `o*_infinity == o_fit` | separating |
+|---|---:|---:|---:|
+| `hold` | 116 | 116 | 0 |
+| `manmade` | 114 | 111 | **3** |
+| `moves` | 122 | 117 | **5** |
+| **`size`** | **108** | **108** | **0** |
+| pooled | 460 | 452 | 8 |
+
+**Discharged, not satisfied, and not still pending.** Those three are different states and
+the log has used all three, so the difference is worth stating. P2-D5's conjunct is not
+met: no Arm B quantity is an excess over the marginal null, and P2-D25 confirmed none may
+be made into one. It is not pending either: nothing further could meet it, because the
+obstacle is not in the measure. It is discharged, because **the claim the conjunct gated
+is unavailable for a reason that precedes the conjunct.** A rule about how to support a
+claim stops governing when the claim cannot be made at all.
+
+**Why no successor measure on `size` helps, which is the part that makes this permanent.**
+The confound is not a property of `A`. `A` pins `o*_0` at 0 and `o*_infinity` at 1, and on
+this set `o*_infinity` IS `o_fit`, so a model at `A = 1` is at the salience pole and at the
+adversary-aware optimum with one choice. Any measure built on the confirmatory item set
+inherits that, because the two targets are the same option there and no function of a
+chosen option can separate two labels attached to the same option. **The separation is
+absent from the item set, not from the coordinate.**
+
+**What P2-D24 and this entry say to each other.** P2-D24 ruled, from three inputs, that the
+design licenses nothing about direction. This gives the reason: the direction question was
+never answerable on this set. Neither supersedes the other, and P2-D24 is not weakened by
+being explained. Its three premises were each independently sufficient and each remains
+true; what changes is that a reader no longer has to hold three separate limits in mind to
+see why the answer is what it is.
+
+**What survives, and it is not nothing.** P2-D9's exact zero makes the movement claim
+strong: quantity (a) clears P2-D13's floor on all 14 cells, 30 to 77 items of 108, against
+a no-effect rate of exactly 1.0. **The framings changed the chosen option.** That claim
+reads chosen options only, needs no direction, and is untouched by this entry. What Arm B
+cannot say on this set is what the movement was toward.
+
+**The confirmatory figure is 108 of 108, and never 452 of 460.** The latter is a
+divergence-set figure. On the confirmatory set the confound is not overwhelming but total,
+and citing the divergence-set number where the confirmatory set governs understates it.
+`bind_adversary_tracking_claim` refuses a caller that cites it.
+
+**Alternatives the record left open, and what closes them.** None was offered to the
+author; these are the readings the record itself carried and the ruling forecloses.
+
+1. **Discharge the blocker as satisfied, by treating a framing contrast as an excess.**
+   Closed, and now moot. It was the reading P2-D24 declined and P2-D25 refused to
+   authorize. Even had it been adopted, a satisfied conjunct would not make a tracking
+   claim available when the two targets are one option, so the question it answers is no
+   longer live.
+2. **Hold the blocker open pending a successor measure on `size`.** Closed. The obstacle
+   is in the item set and not in the measure, so no successor on `size` can lift it.
+   Holding it open would promise a resolution the design cannot deliver, which is worse
+   than a blocker because it reads as temporary.
+3. **Revisit the tile so the 8 separating items enter the confirmatory set.** Closed on
+   three independent grounds. D49 selected `size` on `fit_cost` coverage and D108 confirmed
+   the curve rests on it alone, both before this was known. The 8 separating items are on
+   `manmade` and `moves`, the tiles D108 found carry approximately nothing. And it would be
+   a frozen-artifact change, which `CLAUDE.md` forbids.
+
+**Consequences.** `p2_decisions.bind_adversary_tracking_claim` asserts the premise the
+discharge rests on rather than a range: that `o*_infinity == o_fit` on ALL 108 confirmatory
+items. If an item set ever separates them the assert fires and P2-D26 is re-read, because a
+partial coincidence is a different case this ruling does not cover. It also refuses a caller
+that cites 452 of 460 as the confirmatory confound. The scope registry entry that carried
+P2-D5's conjunct is now `ruled_by` P2-D25 and P2-D26, so `scope_audit()` and `undefended()`
+both return empty; the `defends_against` hypothesis is discharged with it, **not because the
+defence was restored but because the claim it protected is unavailable.**
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -2723,6 +2858,8 @@ does not touch the human-behaviour gap claim, whose wording `docs/P2/tasks/T4.md
 | The `c5` neutral diagnostic still resolves on `CTRL` alone | `p2_decisions.bind_direction_claim`, `tests/test_p2d24_direction.py` |
 | The five resolving cells and their downward sign still reproduce | `tests/test_p2d24_direction.py` |
 | Paper 1's `span > 0.02` is still the floor's governing record | `p2_decisions.check_p1_ext_floor_source` |
+| `o*_infinity == o_fit` on all 108 confirmatory items, the premise P2-D26 rests on | `p2_decisions.bind_adversary_tracking_claim` |
+| No caller reports an adversary-tracking claim, or cites 452 of 460 for the confirmatory set | `p2_decisions.bind_adversary_tracking_claim` |
 | No prereg passage is scoped to a replaced quantity without a ruling | `p2_decisions.scope_audit` |
 | A binding asserts a premise, not a range the quantity occupies | the binding note above |
 | `A_null` and `ΔA_null` are descriptive; the family stays 21 at 0.05/21 | `p2_decisions.bind_marginal_null_use` |

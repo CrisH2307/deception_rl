@@ -29,7 +29,9 @@ This file emits three things.
 
      `c5`'s own `ΔA` sign proportion answers the one thing a magnitude gate might
      have been reaching for: whether a content-neutral insertion drifts toward
-     `o*_infinity`, which is P1's salience pole on 452 of 460 divergent items. If
+     `o*_infinity`, which is P1's salience pole on ALL 108 items of the
+     confirmatory set this diagnostic runs on (P2-D26; 452 of 460 is the
+     divergence-set figure and understates this set). If
      it did, a positive F1 sign test would be explicable without adversary
      tracking. **This is reported, and it is NOT adopted as a null.** Moving
      `p0` off 0.5 would recalibrate a preregistered test against a different

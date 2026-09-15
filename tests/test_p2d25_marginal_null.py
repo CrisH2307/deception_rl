@@ -74,21 +74,25 @@ def test_the_constants_say_what_the_ruling_says():
     assert dec.P2D24_DIRECTION_CLAIM_LICENSED is False
 
 
-def test_the_undefended_entry_is_not_cleared():
-    """P2-D25 answered the cap half. P2-D5's conjunct is the author's and is open.
+def test_the_undefended_entry_was_cleared_by_p2d26_and_not_by_silence():
+    """P2-D25 answered the cap half; P2-D26 discharged P2-D5's conjunct.
 
-    Clearing `ruled_by` would silence `undefended()`, and the hypothesis IS still
-    undefended in the confirmatory family. The louder half of the audit has to keep
-    saying so, which is the whole point of the field.
+    This test previously asserted the entry stay open, which was right while the
+    conjunct was the author's. P2-D26 closed it structurally on 2026-09-15, so the
+    assertion is inverted rather than deleted: the entry must be ruled, and it must
+    NAME what ruled it. Clearing `ruled_by` without a name would silence
+    `undefended()` by omission, which is the failure the field exists to prevent,
+    and that is still caught here.
     """
-    open_scopes = dec.scope_audit()
-    und = dec.undefended()
-    assert len(und) == 1, und
-    entry = und[0]
-    assert entry["ruled_by"] is None
+    entry = [r for r in dec.SCOPE_REGISTRY if "attribution cap" in r["passage"]][0]
+    assert entry["ruled_by"], "the entry was cleared without naming a ruling"
+    assert "P2-D25" in entry["ruled_by"] and "P2-D26" in entry["ruled_by"]
     assert "P2-D25" in entry["partly_ruled_by"]
-    assert "P2-D5" in entry["partly_ruled_by"]
-    assert entry in open_scopes
+    assert dec.scope_audit() == [] and dec.undefended() == []
+    # Discharged because the claim it protected is unavailable, not because the
+    # defence came back. P2-D26 is what makes that true.
+    assert dec.P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE is False
+    assert dec.P2D26_DISCHARGE_IS_STRUCTURAL is True
 
 
 def test_canonical_option_ids_are_not_menu_positions():

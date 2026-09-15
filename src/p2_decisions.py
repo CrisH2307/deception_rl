@@ -1012,11 +1012,17 @@ P2D24_NEUTRAL_RESOLVES_ON = ("CTRL",)
 # Premise 3. Resolving cells whose switches concentrate on A-tied option pairs.
 P2D24_CONCENTRATED_RESOLVING_CELLS = ("CTRL|F1", "L3|F1", "L3|F2")
 P2D24_CONCENTRATION_RATIO_RESOLVING = (1.81, 4.09)
-# Premise 1. v2.0 section 3.3's A_null and section 4.4's dA_null are preregistered
-# and have never been computed for Paper 2. Computing them as specified would be
-# preregistered work; using either to license a direction claim on (c) would be
-# post-hoc, because no rule maps a level excess onto a sign proportion.
-P2D24_MARGINAL_NULL_COMPUTED = False
+# Premise 1. v2.0 section 3.3's A_null and section 4.4's dA_null are preregistered.
+# Using either to license a direction claim on (c) would be post-hoc, because no
+# rule maps a level excess onto a sign proportion. That is premise 1's substance
+# and it is untouched.
+# FACTUAL CORRECTION, 2026-09-15, not a ruling. This said "have never been
+# computed", true when P2-D24 was written and false once `src/t7_control.py`
+# computed both under P2-D25. Computing them was preregistered work, exactly as
+# P2-D24 said it would be, so the fact changing is the entry working rather than
+# failing. Nothing about what they may LICENSE moves with it.
+P2D24_MARGINAL_NULL_COMPUTED = True
+P2D24_MARGINAL_NULL_COMPUTED_BY = "src/t7_control.py, under P2-D25"
 P2D24_MARGINAL_NULL_SPEC = ("v2.0 section 3.3 (A_null), v2.0 section 4.4 (dA_null)")
 
 
@@ -1333,20 +1339,28 @@ SCOPE_REGISTRY = (
      # option preference already explains is reported as prompt sensitivity and
      # named as such." No successor was written. Neither of the cap's inputs
      # exists: TV(m, F) on the beta_c = infinity control set is T7 step 4 and has
-     # not been run, and dA_null(m, F) has never been computed.
+     # not been run, and dA_null(m, F) has never been computed. BOTH WERE COMPUTED
+     # on 2026-09-15 by src/t7_control.py under P2-D25, descriptively; this comment
+     # records the state while the entry was open.
      "defends_against": "the hypothesis that the movement is a generic "
                         "prompt-induced shift in option preference rather than "
                         "adversary tracking",
      # P2-D25 answered the cap half on 2026-09-14: both quantities are
      # descriptive, no mapping onto quantity (c) is authorized, and no successor
      # cap is authorized because the cap's object, mean dA, still exists at
-     # descriptive standing. `ruled_by` stays None ON PURPOSE. The passage also
-     # covers P2-D5's second conjunct, which is the author's and is still open,
-     # and the hypothesis is still undefended in the confirmatory family, which
-     # is what `undefended()` exists to keep saying out loud.
+     # descriptive standing. `ruled_by` stayed None then ON PURPOSE, because the
+     # passage also covers P2-D5's second conjunct, which was the author's and was
+     # still open. P2-D26 closed that half on 2026-09-15; see below.
      "partly_ruled_by": "P2-D25 (v2.0 section 4.4's cap and section 4's movement "
                         "criterion; P2-D5's second conjunct stays the author's)",
-     "ruled_by": None},
+     # DISCHARGED by P2-D26. The conjunct is not satisfied and it is not still
+     # pending: no adversary-tracking claim is available on the confirmatory set at
+     # all, so the conjunct gates nothing there. `defends_against` goes with it, for
+     # the same reason and NOT because the defence was restored: the generic-shift
+     # hypothesis mattered because a tracking claim had to rule it out, and there is
+     # no such claim left to protect.
+     "ruled_by": "P2-D25 (the cap and the criterion), P2-D26 (P2-D5's conjunct, "
+                 "discharged structurally)"},
 )
 
 
@@ -1374,6 +1388,75 @@ def undefended(registry=SCOPE_REGISTRY):
     defence. See `docs/P2/DECISIONS.md`, the two instances recorded together.
     """
     return [r for r in scope_audit(registry) if r.get("defends_against")]
+
+
+# ------------------- P2-D26, P2-D5's blocker is discharged as permanently blocking
+P2D26_TEXT = (
+    "P2-D5's blocker is DISCHARGED as permanently blocking, on a structural ground, and\n"
+    "not pending further measurement. On the `size` confirmatory set `o*_infinity` equals\n"
+    "`o_fit` on all 108 items: of the 8 divergent items where the two differ, 3 are on\n"
+    "`manmade` and 5 on `moves`, and none is on `size`. The adversary-aware optimum and\n"
+    "the salience pole are therefore the SAME OPTION throughout the confirmatory set, and\n"
+    "`v2.0` section 3.3's four references collapse to three there. **No Arm B quantity\n"
+    "computed on that set can support a claim about adversary tracking**, because the\n"
+    "coordinate cannot distinguish adversary-aware behaviour from salience-driven\n"
+    "behaviour when the two targets are one point, and no successor measure on `size` can\n"
+    "either. This is not a caveat to attach to a result. It is why the direction question\n"
+    "was never answerable on this set, and it explains P2-D24 from the other side: P2-D24\n"
+    "found that the design licenses nothing about direction, and this says why. The tile\n"
+    "is not revisitable: Paper 1's D49 and D108 fixed `size` on measured grounds before\n"
+    "any of this was known, and the 8 separating items sit on tiles those decisions\n"
+    "excluded. The confirmatory confound is stated as **108 of 108** and never as 452 of\n"
+    "460, which is a divergence-set figure and understates the confirmatory case."
+)
+P2D26_REJECTED = (
+    "Discharge the blocker as satisfied, by treating a framing contrast as an excess.",
+    "Hold the blocker open pending a successor measure on `size`.",
+    "Revisit the tile so the 8 separating items enter the confirmatory set.")
+P2D26_BLOCKER_DISCHARGED = True
+P2D26_DISCHARGE_IS_STRUCTURAL = True      # not pending measurement
+P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE = False
+P2D26_TILE_REVISITABLE = False
+# The premise the discharge rests on, and the one thing that could undo it.
+P2D26_CONFIRMATORY_COINCIDENCE = (108, 108)   # o*_infinity == o_fit, size tile
+P2D26_DIVERGENCE_COINCIDENCE = (452, 460)     # divergence set; NOT the confirmatory figure
+P2D26_SEPARATING_ITEMS_BY_TILE = {"hold": 0, "manmade": 3, "moves": 5, "size": 0}
+P2D26_CONFOUND_FIGURE_FOR_CONFIRMATORY = "108 of 108"
+
+
+def bind_adversary_tracking_claim(tracking_claim_made, coincidence_count,
+                                  confirmatory_n, confound_figure_cited):
+    """Assert the premise P2-D26's discharge rests on. Call where Arm B reports.
+
+    Per the binding-form note in `docs/P2/DECISIONS.md`, this asserts the premise
+    that makes the discharge well founded, not a range any statistic occupies. The
+    premise is that the adversary-aware optimum and the salience pole are the SAME
+    option on every confirmatory item. If an item set ever separates them, the
+    coordinate can distinguish the two behaviours again, this assert fires, and
+    P2-D26 is re-read rather than assumed. A partial coincidence is not a weaker
+    version of the discharge; it is a different case the ruling does not cover.
+    """
+    if bool(tracking_claim_made) != P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE:
+        raise AssertionError(
+            "P2-D26: this caller reports a claim about adversary tracking. None is "
+            "available on the confirmatory set: the adversary-aware optimum and the "
+            "salience pole are the same option on all 108 items, so no quantity "
+            "computed there can separate the two behaviours. "
+            "docs/P2/DECISIONS.md is the source.")
+    want_c, want_n = P2D26_CONFIRMATORY_COINCIDENCE
+    if (int(coincidence_count), int(confirmatory_n)) != (want_c, want_n):
+        raise AssertionError(
+            f"P2-D26: the discharge rests on o*_infinity == o_fit on ALL "
+            f"{want_n} confirmatory items; this run gives {int(coincidence_count)} "
+            f"of {int(confirmatory_n)}. If the two targets separate anywhere in the "
+            "set, the coordinate can tell the two behaviours apart on those items "
+            "and P2-D26 does not cover that case.")
+    if "452" in str(confound_figure_cited):
+        raise AssertionError(
+            f"P2-D26: the confirmatory confound is cited as "
+            f"{confound_figure_cited!r}. 452 of 460 is a DIVERGENCE-set figure and "
+            f"understates the confirmatory case, which is "
+            f"{P2D26_CONFOUND_FIGURE_FOR_CONFIRMATORY}.")
 
 
 # ------------------------------------------------- what P2-D1 makes structural
@@ -1452,7 +1535,8 @@ def check_log(path=LOG):
                          ("P2-D22", P2D22_TEXT),
                          ("P2-D23", P2D23_TEXT),
                          ("P2-D24", P2D24_TEXT),
-                         ("P2-D25", P2D25_TEXT)):
+                         ("P2-D25", P2D25_TEXT),
+                         ("P2-D26", P2D26_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -1476,7 +1560,8 @@ def check_log(path=LOG):
                             ("P2-D22", P2D22_REJECTED),
                             ("P2-D23", P2D23_REJECTED),
                             ("P2-D24", P2D24_REJECTED),
-                            ("P2-D25", P2D25_REJECTED)):
+                            ("P2-D25", P2D25_REJECTED),
+                            ("P2-D26", P2D26_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
@@ -1574,6 +1659,11 @@ def main():
               f"{_r['replaced_by']}")
         if _r.get("defends_against"):
             print(f"                         UNDEFENDED: {_r['defends_against']}")
+    print(f"P2-D5 blocker   P2-D26: DISCHARGED structurally; adversary-tracking "
+          f"claim available={P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE}; "
+          f"o*_inf == o_fit on {P2D26_CONFIRMATORY_COINCIDENCE[0]} of "
+          f"{P2D26_CONFIRMATORY_COINCIDENCE[1]} confirmatory items; confound is "
+          f"{P2D26_CONFOUND_FIGURE_FOR_CONFIRMATORY}, never 452 of 460")
     print(f"WITHDRAWN       P2-D17, P2-D18: never decisions, numbers retired")
     print(f"D111 on CTRL    P2-D15: sign(delta-A) admissible="
           f"{P2D15_SIGN_IS_ADMISSIBLE}; still inadmissible "
