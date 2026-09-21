@@ -2829,6 +2829,206 @@ defence was restored but because the claim it protected is unavailable.**
 
 ---
 
+## P2-D27. A control-set change rate is a new quantity, authorized now as exploratory, side by side with (a) and nothing beyond
+
+**Status:** adopted. Rules the standing of one quantity **before it has been computed**.
+Changes no statistic, no unit, no tolerance, no null, no floor and no family. `p0` is 0.5.
+The confirmatory family is 21 tests at `alpha = 0.05/21`. The confirmatory `n` is 108.
+**Decided:** 2026-09-21, by an **agent session acting on an author instruction**, in its
+own worktree, after P2-D26 and the results outline were on `main` at `17a7f41`. **No
+statistic was computed.** The session ran no analysis `main()`, did not call `c5_movement`
+on the control set, and read nothing on `data/raw_t7/`. Full reasoning in
+`PREREGISTRATION_v2.19.md`.
+
+**The instruction it acted on**, per the countermeasure in `v2.10` section 2.4, quoted in
+the parts that bear on the ruling:
+
+> You rule. **You compute nothing.**
+>
+> Quantity (a) is a change rate: the share of rendering pairs whose chosen option differs
+> between a framing and `F0`, on the 108 confirmatory items, formed by
+> `c5_effect.c5_movement` with P2-D16's pairwise exclusion and P2-D8's cluster bootstrap.
+> The 142-item `beta_c = infinity` control on the `size` tile is reported in **TV** under
+> P2-D25, in `results/T7_control_marginal_null.json`. The two are in different units, so a
+> reader cannot compare them, and the control is what bounds what (a) means.
+>
+> **Rule: is a change rate on the 142-item control set, formed with quantity (a)'s own
+> instrument, preregistered work under T7 step 4, or is it a new quantity P2-D25 did not
+> authorize?**
+>
+> The author's read is that it is preregistered. **Evaluate that, do not adopt it.** Rule it
+> on the record.
+>
+> It is not adversary-relevant in any way P2-D26 blocks: `A` is undefined on the control set
+> and (a)'s instrument never reads `A`. Say whether you agree with that too, rather than
+> taking it.
+
+with the constraints: compute nothing, and in particular not the control change rate; do
+not reopen P2-D5, P2-D6, P2-D12, P2-D24, P2-D25 or P2-D26; do not edit
+`docs/P2/RESULTS_OUTLINE.md` or anything in `results/`; treat every claim in the
+instruction as unverified. All were followed. The author's read was evaluated and **is not
+adopted**; the second claim is agreed, with a refinement.
+
+**Binds:** any script computing a change rate on the `beta_c = infinity` control set, and
+any report or paper passage placing it beside quantity (a).
+**Constant:** `P2D27_TEXT`, `P2D27_PREREGISTERED`, `P2D27_P2D25_ADDRESSED`,
+`P2D27_AUTHORIZED`, `P2D27_STANDING`, `P2D27_IN_CONFIRMATORY_FAMILY`, `P2D27_INSTRUMENT`,
+`P2D27_CONTRAST`, `P2D27_ARMS`, `P2D27_CONTROL_TILE`, `P2D27_CONTROL_N`,
+`P2D27_ALL_TILES_AUTHORIZED`, `P2D27_FLOOR_APPLIED`, `P2D27_FIELDS`,
+`P2D27_COMPARISON`, `P2D27_DERIVED_AUTHORIZED`.
+
+**Decision text.**
+
+> A change rate on the `beta_c = infinity` control set is NOT preregistered work under
+> T7 step 4. Step 4 names movement and its role and names no instrument and no unit, and
+> it was written on 2026-09-09, before P2-D12 made quantity (a) a change rate, so its
+> word "movement" cannot carry (a)'s instrument. The preregistration that operationalizes
+> step 4 is `v2.0` section 4.4, and it names one control measure, `TV`. P2-D12 scopes (a)
+> to the confirmatory `n`. P2-D25 authorized `TV` and is SILENT on a change rate: it
+> neither declined nor authorized one, and `steps_not_run` in
+> `results/T7_control_marginal_null.json` records the computing session's reading of that
+> silence under its own instruction, not a ruling. The control change rate is therefore a
+> NEW quantity. It is AUTHORIZED NOW, as EXPLORATORY under `v2.0` section 10 and
+> descriptive, because its instrument is fixed by existing decisions and by matching (a)
+> cell for cell, and leaves no choice that could be fitted to its value:
+> `c5_effect.c5_movement` with `col = "framing"` and `base = "F0"`, per model, for `F1`
+> and `F2`, on the `size` tile's 142 adversary-robust items only, with P2-D16's pairwise
+> exclusion, and with P2-D8's cluster bootstrap interval emitted as (a) emits it and
+> carrying no inferential role, as P2-D13 left it in (a). The rate is reported with its
+> item count beside it, as (a) is. P2-D13's floor is not applied and no verdict flag is
+> emitted, because the floor exists for (a)'s inertness verdict and no verdict on the
+> control is authorized. It does not enter the confirmatory family, which stays 21 tests
+> at `alpha = 0.05/21`. The comparison it licenses is SIDE BY SIDE, per cell, in the same
+> units, and nothing beyond: no difference, ratio, attributable share or test of (a)
+> against the control rate is authorized. Each would be a new quantity written with (a)
+> published and with the control's `TV`, which bounds its rate from below, in view, so it
+> would be post-hoc; each would need a rule transferring a rate across two disjoint item
+> sets that differ by construction, which no version writes; and a share of (a) read as
+> adversary-attributable is a claim about adversary content on the confirmatory set, which
+> P2-D26 makes unavailable.
+
+**Why the author's read does not survive the record.** It has one strong form: after
+P2-D12, "movement" in Arm B means quantity (a), since P2-D12 says H-B's no-movement half
+"resolves on (a)", so step 4's "there should be NO movement there" names (a)'s instrument
+applied to the control. Three things defeat it.
+
+1. **Step 4 predates the vocabulary it would need.** The sentence "caps how much of the
+   divergence-set effect you can attribute" entered `docs/P2/tasks/T7.md` in `13bb803` on
+   2026-09-09. P2-D12 was decided on 2026-09-10 (`3233c02`). Reading "movement" as (a)'s
+   instrument reads a later decision back into an earlier sentence, which is the scope
+   expiry of cases 4 and 5 run in reverse: not a scope left behind by a moving quantity,
+   but a scope extended to a quantity that did not exist when it was written.
+2. **The preregistration that operationalized step 4 chose, and chose one.** `v2.0`
+   section 4.4: "Because `A` is undefined on the control set, the control measure is the
+   total variation distance". Singular, with its reason. A task brief's generic word does
+   not preregister an instrument when the preregistration names a different one.
+3. **P2-D12 is scoped to the confirmatory set**: "(a) INERTNESS: the same-option change
+   rate against zero, per model, on the full confirmatory `n`". Nothing in P2-D8, P2-D12,
+   P2-D13 or P2-D16 names the control set.
+
+What the author's read gets right, and it is why this entry authorizes rather than
+declines: `v2.0` section 4.4's **reason** for a separate control measure was that the
+confirmatory measure, mean `ΔA`, needs `A` and `A` is undefined on the control. P2-D12
+replaced the confirmatory measure with one that reads chosen options only, so that reason
+no longer excludes running the confirmatory instrument on the control. That makes the
+change rate admissible and motivated **by the record rather than by the values**. It does
+not make it preregistered.
+
+**What P2-D25 actually said about a control change rate: nothing.** Its decision text, its
+four rejected alternatives, `v2.16` in full and `P2D25_TEXT` contain no mention of a change
+rate or a same-option rate on the control. It did not decline one, it did not authorize
+one, it did not address one. The `steps_not_run.step_4_control_change_rate` field reads
+"P2-D25 does not authorize it ... Compute no quantity P2-D25 did not authorize", and
+`v2.17` sections 3.6 and 7.1 give its provenance: the computing session applied **its own
+instruction** to P2-D25's silence and flagged the gap as the author's. That was the
+correct reading of silence under that instruction, and it is not a ruling in P2-D25's text.
+The results outline's "not computed, under P2-D25" compresses the two; the outline session
+should re-cite to this entry.
+
+**The second claim in the instruction, agreed with a refinement.** `c5_movement` reads
+`chosen_option` through `tie_reference.pair_frame` and nothing else; `A`, `ext_i` and
+`marg_norm` appear in neither function, which P2-D23's first verified claim already
+recorded. And `A` is undefined on the control set by `v2.0` section 3.2. So the rate
+carries nothing P2-D26 blocks. The refinement is that P2-D26 is scoped to quantities
+"computed on that set", the confirmatory set, and the control set is outside it entirely;
+the rate does not need P2-D26's permission. **What P2-D26 does reach is the derived
+quantities**: a difference or share of (a) read as the part the adversary explains is an
+adversary-tracking claim about the confirmatory set, and P2-D26 makes that unavailable on
+a ground no successor measure lifts.
+
+**Ordering, disclosed**, as P2-D23 disclosed what it knew before its ruling. Known to this
+session when it ruled, because it is on `main`: all fourteen cells of quantities (a), (b)
+and (c), including (a) at 30 to 77 items of 108; the control `TV` on the 142 at 0.0176 to
+0.2782 and on the 540; the cap, `A_null`, and P2-D26. Read in this session beyond the
+documents: the key list, the `control_bases` block and the `steps_not_run` block of
+`results/T7_control_marginal_null.json`, the set names in `results/T5_c5_effect.json`, and
+`CTRL|F1`'s control rendering counts, 284 and 284.
+**Not known: the control change rate on any cell.** One thing about it IS known, and it is
+disclosed because it means this ruling is not fully blind: for paired renderings, the total
+variation between the two empirical marginals is at most the share of pairs whose choice
+differs, so on every cell whose `TV` was formed on the same surviving renderings the pairs
+use, the control's rendering-level change rate is **at least** that cell's `TV`. The
+session did not compute an upper bound, a value, or any item-level figure. The ruling does
+not turn on the value anywhere: nothing it authorizes reads the value, no derived quantity
+is authorized, and no verdict is attached.
+
+**What this session wanted a number for.** Whether the control rate sits near (a)'s or far
+below it. Near would make a share look like the natural summary; far would make the
+side-by-side look like support for (a). Both are the pull toward a derived quantity chosen
+with its value in view, and the ruling forbids every derived quantity for that reason.
+
+**Why it needed deciding.** The outline carries (a) as a change rate and the control as a
+`TV`, and a reader cannot put them side by side. Left unruled, a computing session either
+computes the rate on the strength of step 4's word "movement", which the record does not
+support, or declines it on the strength of P2-D25's silence, which is not a ruling either.
+Both would be resolving an ambiguity by choosing.
+
+**Alternatives offered and not chosen.**
+
+1. **Rule the control change rate preregistered under T7 step 4.** Rejected on the three
+   grounds above: step 4 names no instrument and predates the one it would need, `v2.0`
+   section 4.4 names `TV` and only `TV`, and P2-D12 is scoped to the confirmatory `n`.
+   Calling it preregistered would also license confirmatory-register language about it,
+   which `v2.0` section 10 forbids for a quantity requested after the data.
+2. **Leave it uncomputed and state the control in `TV` only.** Rejected. It leaves the
+   outline with two numbers a reader cannot compare, and it leaves open the gap `v2.17`
+   section 7.1 recorded: `TV` near zero is consistent with heavy churn, so `TV` alone
+   understates control movement in the one sentence step 4 exists to support. The
+   quantity has no free parameter once matched to (a), so declining it buys no protection
+   that the side-by-side restriction does not already buy.
+3. **Authorize the rate together with a difference, ratio or attributable share against quantity (a).** Rejected. Each is a new quantity written with (a) published and a lower
+   bound on the control rate in view; each needs an unwritten rule transferring a rate
+   between two disjoint item sets that differ by construction in whether the adversary can
+   move the optimum; `v2.16` section 5.4 already rules that the control "can show that
+   generic movement exists" and "cannot adjudicate whether the confirmatory movement is
+   that movement"; and a share read as adversary-attributable is what P2-D26 makes
+   unavailable.
+4. **Apply P2-D13's floor to the control and emit a verdict flag.** Rejected. P2-D13's
+   floor is the numerical convention for (a)'s inertness verdict on the confirmatory set.
+   The control has its own preregistered expectation, step 4's "NO movement", and `v2.17`
+   already reports it failed on `TV`. A floor verdict on the change rate would be a second
+   verdict on the same expectation in a new instrument, chosen after the first was seen.
+5. **Report the change rate on the 540-item all-tile base beside the 142.** Rejected. The
+   side-by-side target is (a) on the `size` tile, and the 142 share its tile, arity and
+   menus. A 540-item rate mixes arities 3, 3, 4 and 6, whose chance switching rates differ,
+   so it is comparable to (a) in neither direction. P2-D25's 540 was a reporting
+   requirement on `TV`, and it does not travel.
+
+**Consequences.** The computing session calls `p2_decisions.bind_control_change_rate`
+before emitting anything, and forms the rate exactly as `PREREGISTRATION_v2.19.md` section
+5 specifies, into a NEW artifact, `results/T7_control_change_rate.json`, so every existing
+`results/*.json` stays byte-identical. `results/T7_control_marginal_null.json`, including
+its `steps_not_run` text, is not edited: it records truthfully what P2-D25 authorized.
+`tests/test_p2d27_control_change_rate.py` fails if a caller crosses any premise. The
+outline's "Needed and absent" entry for this quantity is updated by the outline session
+after merge, with the sentence in `v2.19` section 7.
+
+**What this entry does not do.** It computes no statistic. It does not reopen P2-D5,
+P2-D6, P2-D12, P2-D24, P2-D25 or P2-D26, change `p0`, the family, `alpha`, the floor or
+`n`, or license any claim about direction or adversary tracking.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -2867,3 +3067,6 @@ defence was restored but because the claim it protected is unavailable.**
 | The control marginal and the set the cap reweights share an option arity | `p2_decisions.bind_marginal_null_use` |
 | No caller reads the cap as adjudicating a menu-position hypothesis | `p2_decisions.bind_marginal_null_use` |
 | Canonical options 4 and 5 are not at the end of the rendered menu | `tests/test_p2d25_marginal_null.py` |
+| A control change rate runs (a)'s instrument, on the 142, for `F1` and `F2` only | `p2_decisions.bind_control_change_rate` |
+| No verdict flag, floor or derived quantity is emitted beside it | `p2_decisions.bind_control_change_rate` |
+| `c5_movement` reads chosen options only, never `A` | `tests/test_p2d27_control_change_rate.py` |

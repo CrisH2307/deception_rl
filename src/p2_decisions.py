@@ -19,6 +19,7 @@ import raised nothing. See `docs/P2/DECISIONS.md`.
 
 Run: python3 src/p2_decisions.py     (checks the constants against the log)
 """
+import math
 import os
 import sys
 
@@ -1459,6 +1460,156 @@ def bind_adversary_tracking_claim(tracking_claim_made, coincidence_count,
             f"{P2D26_CONFOUND_FIGURE_FOR_CONFIRMATORY}.")
 
 
+# ------------- P2-D27, a change rate on the control set: new, exploratory, side by side
+P2D27_TEXT = (
+    "A change rate on the `beta_c = infinity` control set is NOT preregistered work under\n"
+    "T7 step 4. Step 4 names movement and its role and names no instrument and no unit, and\n"
+    "it was written on 2026-09-09, before P2-D12 made quantity (a) a change rate, so its\n"
+    "word \"movement\" cannot carry (a)'s instrument. The preregistration that operationalizes\n"
+    "step 4 is `v2.0` section 4.4, and it names one control measure, `TV`. P2-D12 scopes (a)\n"
+    "to the confirmatory `n`. P2-D25 authorized `TV` and is SILENT on a change rate: it\n"
+    "neither declined nor authorized one, and `steps_not_run` in\n"
+    "`results/T7_control_marginal_null.json` records the computing session's reading of that\n"
+    "silence under its own instruction, not a ruling. The control change rate is therefore a\n"
+    "NEW quantity. It is AUTHORIZED NOW, as EXPLORATORY under `v2.0` section 10 and\n"
+    "descriptive, because its instrument is fixed by existing decisions and by matching (a)\n"
+    "cell for cell, and leaves no choice that could be fitted to its value:\n"
+    "`c5_effect.c5_movement` with `col = \"framing\"` and `base = \"F0\"`, per model, for `F1`\n"
+    "and `F2`, on the `size` tile's 142 adversary-robust items only, with P2-D16's pairwise\n"
+    "exclusion, and with P2-D8's cluster bootstrap interval emitted as (a) emits it and\n"
+    "carrying no inferential role, as P2-D13 left it in (a). The rate is reported with its\n"
+    "item count beside it, as (a) is. P2-D13's floor is not applied and no verdict flag is\n"
+    "emitted, because the floor exists for (a)'s inertness verdict and no verdict on the\n"
+    "control is authorized. It does not enter the confirmatory family, which stays 21 tests\n"
+    "at `alpha = 0.05/21`. The comparison it licenses is SIDE BY SIDE, per cell, in the same\n"
+    "units, and nothing beyond: no difference, ratio, attributable share or test of (a)\n"
+    "against the control rate is authorized. Each would be a new quantity written with (a)\n"
+    "published and with the control's `TV`, which bounds its rate from below, in view, so it\n"
+    "would be post-hoc; each would need a rule transferring a rate across two disjoint item\n"
+    "sets that differ by construction, which no version writes; and a share of (a) read as\n"
+    "adversary-attributable is a claim about adversary content on the confirmatory set, which\n"
+    "P2-D26 makes unavailable."
+)
+P2D27_REJECTED = (
+    "Rule the control change rate preregistered under T7 step 4.",
+    "Leave it uncomputed and state the control in `TV` only.",
+    "Authorize the rate together with a difference, ratio or attributable share against "
+    "quantity (a).",
+    "Apply P2-D13's floor to the control and emit a verdict flag.",
+    "Report the change rate on the 540-item all-tile base beside the 142.")
+# The answer to the question asked. Step 4 names no instrument; v2.0 section 4.4
+# names TV; P2-D12 is scoped to the confirmatory n; P2-D25 never mentions a rate.
+P2D27_PREREGISTERED = False
+P2D27_P2D25_ADDRESSED = False      # silence: neither declined nor authorized
+P2D27_AUTHORIZED = True
+P2D27_STANDING = "exploratory"     # v2.0 section 10: requested after the data
+P2D27_IN_CONFIRMATORY_FAMILY = False
+# Quantity (a)'s own instrument and contrast, so the side-by-side is like for like.
+P2D27_INSTRUMENT = ("c5_effect", "c5_movement")
+P2D27_CONTRAST = ("framing", "F0")
+P2D27_ARMS = ("F1", "F2")          # (a)'s two contrasts; (a) has no F2-F1 cell
+P2D27_CONTROL_TILE = P2D25_CONTROL_TILE
+P2D27_CONTROL_N = P2D25_CONTROL_N  # 142, the tile, arity and menus (a) is on
+P2D27_ALL_TILES_AUTHORIZED = False
+P2D27_FLOOR_APPLIED = False
+# Exactly what is emitted per cell: (a)'s a_inertness block in t7_armb, minus its
+# verdict flags (`interval_excludes_zero`, `clears_the_floor`), its floor and null,
+# and its `tv_option_marginal`, since the control TV of record is P2-D25's.
+P2D27_FIELDS = ("change_rate_renderings", "change_rate_item_mean", "n_changed_pairs",
+                "n_pairs", "ci_lo", "ci_hi", "alpha", "n_items_with_a_changed_pair",
+                "item_denominator")
+P2D27_COMPARISON = "side_by_side"
+P2D27_DERIVED_AUTHORIZED = ()      # no difference, ratio, share or test
+
+
+def bind_control_change_rate(instrument, contrast, arms, control_beta_c, control_tiles,
+                             reads_A, in_confirmatory_family, alpha, emitted_fields,
+                             derived_quantities, floor_applied):
+    """Assert the premises that make a control change rate well formed. P2-D27.
+
+    Call before emitting anything. Per the binding-form note in
+    `docs/P2/DECISIONS.md`, every check is a premise the ruling rests on, and no
+    value of the rate appears here: the ruling was made before any existed, and it
+    must not become re-readable only once one does.
+
+    `instrument`, `contrast`, `arms`: the rate is placed beside quantity (a), so it
+    must BE (a)'s instrument on (a)'s contrasts. A different function, base or arm
+    set makes the side-by-side compare two instruments rather than two item sets.
+
+    `control_beta_c`, `control_tiles`: every item has `beta_c = infinity`, so
+    `o*_0 = o*_infinity` and nothing adversary-relevant can move there (`v2.0`
+    section 4.4), and every item is on the `size` tile, so the menus and arity are
+    (a)'s. The count is P2-D25's base.
+
+    `reads_A`: must be False. `A` is undefined on the control set (`v2.0` section
+    3.2), and the rate's standing outside P2-D26 rests on reading chosen options
+    only.
+
+    `emitted_fields`, `derived_quantities`, `floor_applied`: the ruling authorizes a
+    descriptive rate with its item count, side by side with (a). A verdict flag, a
+    floor, or any difference, ratio, share or test against (a) is a quantity no
+    version writes, chosen with (a) published and the control's TV in view.
+    """
+    got = (getattr(instrument, "__module__", None), getattr(instrument, "__name__", None))
+    if got != P2D27_INSTRUMENT:
+        raise AssertionError(
+            f"P2-D27: the control rate is formed by {got!r}. It must be quantity (a)'s "
+            f"own instrument, {'.'.join(P2D27_INSTRUMENT)}, or the side-by-side "
+            "compares two instruments and not two item sets. "
+            "docs/P2/DECISIONS.md is the source.")
+    if tuple(contrast) != P2D27_CONTRAST or tuple(arms) != P2D27_ARMS:
+        raise AssertionError(
+            f"P2-D27: contrast {tuple(contrast)!r} with arms {tuple(arms)!r}. Quantity "
+            f"(a) is {P2D27_CONTRAST!r} against {P2D27_ARMS!r}; any other contrast has "
+            "no (a) cell to sit beside.")
+    beta = [float(b) for b in control_beta_c]
+    if any(math.isfinite(b) for b in beta):
+        raise AssertionError(
+            "P2-D27: an item in the control set has finite beta_c. The control's "
+            "reading as prompt sensitivity rests on o*_0 = o*_infinity on EVERY item, "
+            "and on an item with finite beta_c the adversary does move the optimum.")
+    tiles = set(control_tiles)
+    if tiles != {P2D27_CONTROL_TILE} or len(beta) != P2D27_CONTROL_N:
+        raise AssertionError(
+            f"P2-D27: the control base is {len(beta)} items on {sorted(tiles)!r}. The "
+            f"side-by-side needs (a)'s tile, arity and menus: the "
+            f"{P2D27_CONTROL_N} adversary-robust items of '{P2D27_CONTROL_TILE}'. "
+            "A base mixing arities is comparable to (a) in neither direction.")
+    if bool(reads_A):
+        raise AssertionError(
+            "P2-D27: this run reads A on the control set. A is undefined there "
+            "(v2.0 section 3.2), and the rate stands outside P2-D26 only because it "
+            "reads chosen options and nothing else.")
+    if bool(in_confirmatory_family) != P2D27_IN_CONFIRMATORY_FAMILY:
+        raise AssertionError(
+            "P2-D27: the control rate is placed in the confirmatory family. It was "
+            "requested after the data and is exploratory under v2.0 section 10; the "
+            "family stays 21 tests.")
+    if abs(float(alpha) - P2D6_ALPHA) > 1e-12:
+        raise AssertionError(
+            f"P2-D27: the interval's alpha is {float(alpha)!r}. It is emitted as (a) "
+            f"emits it, at {P2D6_ALPHA!r}, and carries no inferential role.")
+    fields = set(emitted_fields)
+    if fields != set(P2D27_FIELDS):
+        raise AssertionError(
+            f"P2-D27: emitted fields differ from the ruling's. Extra "
+            f"{sorted(fields - set(P2D27_FIELDS))!r}, missing "
+            f"{sorted(set(P2D27_FIELDS) - fields)!r}. A verdict flag or floor is a "
+            "verdict no decision authorizes on the control; a second TV duplicates "
+            "P2-D25's; the item count must sit beside the rate as it does for (a).")
+    if tuple(derived_quantities) != P2D27_DERIVED_AUTHORIZED:
+        raise AssertionError(
+            f"P2-D27: derived quantities {tuple(derived_quantities)!r}. None is "
+            "authorized: each is written with (a) published, needs an unwritten rule "
+            "transferring a rate across disjoint item sets, and a share of (a) read "
+            "as adversary-attributable is what P2-D26 makes unavailable.")
+    if bool(floor_applied) != P2D27_FLOOR_APPLIED:
+        raise AssertionError(
+            "P2-D27: P2-D13's floor is applied to the control. It is the convention "
+            "for (a)'s inertness verdict on the confirmatory set, and no verdict on "
+            "the control is authorized.")
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -1536,7 +1687,8 @@ def check_log(path=LOG):
                          ("P2-D23", P2D23_TEXT),
                          ("P2-D24", P2D24_TEXT),
                          ("P2-D25", P2D25_TEXT),
-                         ("P2-D26", P2D26_TEXT)):
+                         ("P2-D26", P2D26_TEXT),
+                         ("P2-D27", P2D27_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -1561,7 +1713,8 @@ def check_log(path=LOG):
                             ("P2-D23", P2D23_REJECTED),
                             ("P2-D24", P2D24_REJECTED),
                             ("P2-D25", P2D25_REJECTED),
-                            ("P2-D26", P2D26_REJECTED)):
+                            ("P2-D26", P2D26_REJECTED),
+                            ("P2-D27", P2D27_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(
