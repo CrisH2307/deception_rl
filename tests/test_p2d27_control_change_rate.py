@@ -7,6 +7,11 @@ rather than trusted: that P2-D25's text is silent on a change rate, that the con
 base is the 142 adversary-robust `size` items and disjoint from the confirmatory set,
 and that (a)'s instrument reads chosen options and nothing else.
 
+The tests after the divider read the rate computed later under the ruling
+(`PREREGISTRATION_v2.20.md`). They pin no value either: they check that the artifact
+reproduces from its script, carries exactly the ruled fields, and respects the TV
+bound P2-D27 disclosed.
+
 Run: python3.11 -m pytest tests/test_p2d27_control_change_rate.py -q
 """
 import json
@@ -125,3 +130,60 @@ def test_the_instrument_reads_chosen_options_only():
     assert out["n_pairs"] == 4 and out["n_changed"] == 1
     assert out["n_items_with_a_changed_pair"] == 1
     assert abs(out["change_rate_item_mean"] - 0.25) < 1e-12
+
+
+# ------------------------------------------ the computed rate, under P2-D27 (v2.20)
+RATE = os.path.join(ROOT, "results/T7_control_change_rate.json")
+RECORD = os.path.join(ROOT, "results/T7_control_marginal_null.json")
+
+
+@pytest.fixture(scope="module")
+def rate():
+    if not os.path.exists(RATE):
+        pytest.skip("run python3 src/t7_control.py --change-rate")
+    return json.load(open(RATE))
+
+
+def test_the_artifact_reproduces_from_its_script(rate):
+    """Every emitted number is script-emitted: a rerun gives the committed artifact."""
+    import t7_control as TC
+    assert json.loads(json.dumps(TC.change_rate())) == rate
+
+
+def test_each_cell_emits_exactly_the_ruled_fields_and_no_verdict(rate):
+    assert set(rate["cells"]) == {f"{m}|{a}" for a in dec.P2D27_ARMS
+                                  for m in TR.LADDER}
+    for cell, c in rate["cells"].items():
+        assert set(c["control_change_rate"]) == set(dec.P2D27_FIELDS), cell
+        assert set(c["attrition_P2D16"]) >= set(dec.P2D16_ATTRITION_FIELDS), cell
+        assert (c["attrition_P2D16"]["item_denominator"]
+                == c["control_change_rate"]["item_denominator"]), cell
+    text = json.dumps(rate["cells"])
+    for banned in ("interval_excludes_zero", "excludes_no_effect", "clears_the_floor",
+                   "tv_option_marginal", '"null"', "difference", "ratio", "share"):
+        assert banned not in text, banned
+    assert rate["control_base"]["n_items"] == dec.P2D27_CONTROL_N
+    assert rate["in_confirmatory_family"] is False
+
+
+def test_premise_needs_identical_renderings_not_just_a_pair_count():
+    import t7_control as TC
+    assert TC.tv_bound_premise({"n_renderings_base": 284, "n_renderings_arm": 284}, 284)
+    assert not TC.tv_bound_premise({"n_renderings_base": 284, "n_renderings_arm": 283},
+                                   283)
+
+
+def test_tv_of_record_never_exceeds_the_rate_on_identical_renderings(rate):
+    """P2-D27's disclosed bound: each changed pair moves at most one unit of mass.
+
+    Re-derived here from both artifacts rather than trusted from the emitted list.
+    """
+    import t7_control as TC
+    rec = json.load(open(RECORD))["cells"]
+    holds = []
+    for cell, c in rate["cells"].items():
+        r, tv = c["control_change_rate"], rec[cell]["control_TV"]
+        if TC.tv_bound_premise(tv, r["n_pairs"]):
+            holds.append(cell)
+            assert tv["value"] <= r["change_rate_renderings"] + 1e-12, cell
+    assert holds == rate["tv_bound_check"]["premise_holds_on"]

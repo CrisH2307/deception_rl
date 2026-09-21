@@ -46,9 +46,9 @@ WHAT THIS DOES NOT EMIT, AND WHY EACH ABSENCE IS DELIBERATE.
     these are levels in `A` units, and a bridge written now is written with all
     fourteen of (c)'s cells published.
   * NO successor cap, and no direction claim of any kind (P2-D24).
-  * NO control-set same-option or change rate. It would be the natural companion
-    to quantity (a) and P2-D25 does not authorize it; `v2.0` section 4.4's control
-    measure is `TV` and `TV` is what is computed.
+  * NO control-set same-option or change rate from `main()`. P2-D25 did not
+    address one; P2-D27 later authorized it as exploratory, and it is emitted only
+    by `--change-rate` into its own artifact, so `main()`'s output is unchanged.
   * NO marginal over rendered menu POSITIONS. P2-D25 rejected one: it is a new
     quantity chosen after the (4,5) signature was seen, and the signature is on
     canonical option ids, which P1's Format V permutes per item and per
@@ -66,6 +66,9 @@ control set, so a floor applied there would delete the control set itself.
 Run: python3 src/t7_control.py          (writes results/T7_control_marginal_null.json
                                          and reports/T7_control_marginal_null.md)
      python3 src/t7_control.py --demo   (self-checks that do not need the write)
+     python3 src/t7_control.py --change-rate   (P2-D27: writes
+                                         results/T7_control_change_rate.json and
+                                         reports/T7_control_change_rate.md)
 """
 import json
 import os
@@ -694,6 +697,204 @@ def main():
     return 0
 
 
+# ------------------------------------------------ P2-D27, the control change rate
+CHANGE_RATE_OUT = "results/T7_control_change_rate.json"
+CHANGE_RATE_REPORT = "reports/T7_control_change_rate.md"
+# (emitted name, c5_movement key): exactly P2D27_FIELDS, named as (a)'s
+# a_inertness block in t7_armb names them. The emitted names are what the binding
+# checks, so the check is on what is written, not on a restatement of it.
+CHANGE_RATE_FIELDS = (("change_rate_renderings", "change_rate"),
+                      ("change_rate_item_mean", "change_rate_item_mean"),
+                      ("n_changed_pairs", "n_changed"),
+                      ("n_pairs", "n_pairs"),
+                      ("ci_lo", "ci_lo"), ("ci_hi", "ci_hi"), ("alpha", "alpha"),
+                      ("n_items_with_a_changed_pair", "n_items_with_a_changed_pair"),
+                      ("item_denominator", "n_items"))
+COMPARABILITY = (
+    "The control change rate and quantity (a) are reported side by side in the same "
+    "units and are not comparable as an attribution: they are taken on disjoint item "
+    "sets that differ by construction in whether the adversary can move the optimum, "
+    "no preregistered rule transfers a rate from one to the other, and no difference, "
+    "ratio or share of the two is reported.")
+
+
+def tv_bound_premise(tv_cell, n_pairs):
+    """Whether the TV of record was formed on exactly the renderings the pairs use.
+
+    Pair renderings are a subset of the renderings `control_cell` forms `TV` from
+    (both come from `load_t7`'s `kept`; `pair_frame` only drops a rendering whose
+    partner is missing). So equal counts on both sides means identical renderings,
+    and only then does `TV <= change rate` have to hold: each changed pair moves at
+    most one unit of mass between the two marginals (P2-D27's disclosed bound).
+    """
+    return (tv_cell["n_renderings_base"] == n_pairs
+            and tv_cell["n_renderings_arm"] == n_pairs)
+
+
+def change_rate():
+    """P2-D27: quantity (a)'s instrument on the 142, per `v2.19` section 5. No verdict."""
+    G = geometry()
+    ctrl = G["robust_by_tile"]["size"]
+    keep = set(int(i) for i in G["ids"][ctrl])
+    kept, raw = T7.load_t7()
+
+    P2D.bind_control_change_rate(
+        instrument=CE.c5_movement, contrast=("framing", "F0"), arms=("F1", "F2"),
+        control_beta_c=G["cols"]["beta_c"][ctrl], control_tiles=G["tiles"][ctrl],
+        reads_A=False, in_confirmatory_family=False, alpha=P2D.P2D6_ALPHA,
+        emitted_fields=tuple(k for k, _ in CHANGE_RATE_FIELDS),
+        derived_quantities=(), floor_applied=False)
+    P2D.bind_tie_exclusion(P2D.P2D16_EXCLUSION_UNIT, imputed_as_non_mover=False,
+                           dropped_whole_item=False,
+                           attrition_fields=P2D.P2D16_ATTRITION_FIELDS)
+
+    record = json.load(open(OUT))
+    assert record["choices_sha256"] == p1.artifact_hash(T7.CHOICES), (
+        f"{OUT} was formed on a different choices file; its TV cannot be read "
+        "against rates formed on this one")
+
+    cells, holds, fails = {}, [], []
+    for arm in P2D.P2D27_ARMS:
+        for m in TR.LADDER:
+            mv = CE.c5_movement(kept, m, keep, "framing", "F0", arm)
+            cell = f"{m}|{arm}"
+            rate = {k: mv[src] for k, src in CHANGE_RATE_FIELDS}
+            cells[cell] = {
+                "model": m, "framing": arm, "contrast": f"{arm} - {BASE}",
+                "control_change_rate": rate,
+                "attrition_P2D16": T7.attrition(raw, kept, m, keep, arm),
+                "quantity_a_same_cell":
+                    f"results/T7_armb_quantities.json:cells.{cell}.a_inertness",
+            }
+            tv_cell = record["cells"][cell]["control_TV"]
+            if tv_bound_premise(tv_cell, rate["n_pairs"]):
+                holds.append(cell)
+                # A violation is a bug in one of the two computations, never a
+                # result (P2-D27's disclosed bound).
+                assert tv_cell["value"] <= rate["change_rate_renderings"] + 1e-12, (
+                    f"{cell}: TV of record {tv_cell['value']!r} exceeds the change "
+                    f"rate {rate['change_rate_renderings']!r} on identical renderings")
+            else:
+                fails.append(cell)
+
+    return {
+        "purpose":
+            "A change rate on the 142-item beta_c = infinity control set, formed by "
+            "quantity (a)'s own instrument, reported side by side with (a) and "
+            "nothing beyond (P2-D27).",
+        "standing": "exploratory (v2.0 section 10), P2-D27",
+        "emitted_by": "python3 src/t7_control.py --change-rate",
+        "ruled_by": "P2-D27 / PREREGISTRATION_v2.19.md section 5, recorded in "
+                    "PREREGISTRATION_v2.20.md",
+        "instrument": "c5_effect.c5_movement, unmodified, col = 'framing', "
+                      "base = 'F0'",
+        "rule": TR.RULE, "prompt_form": TR.FORM, "base_framing": BASE,
+        "choices_sha256": p1.artifact_hash(T7.CHOICES),
+        "items_sha256": p1.artifact_hash(p1.ITEMS_FINAL),
+        "control_base": {
+            "tile": P2D.P2D27_CONTROL_TILE, "n_items": int(ctrl.sum()),
+            "arity": int(len(G["A"][int(G["ids"][ctrl][0])])),
+            "definition": "~isfinite(beta_c) and tile == 'size' "
+                          "(t7_control.geometry()['robust_by_tile']['size'])",
+            "all_tile_base": "not computed (P2-D27 rejected alternative 5)",
+        },
+        "interval": "emitted as c5_movement computes it, as quantity (a) emits it: "
+                    f"cluster bootstrap over items, {TR.BOOT_N:,} resamples, seed "
+                    f"{TR.BOOT_SEED}, alpha = {TR.ALPHA_TIE:.6f} (P2-D8). No "
+                    "inferential role under a deterministic scorer (P2-D13).",
+        "confirmatory_family_size": P2D.P2D25_CONFIRMATORY_FAMILY_SIZE,
+        "in_confirmatory_family": P2D.P2D27_IN_CONFIRMATORY_FAMILY,
+        "not_emitted":
+            "No P2-D13 floor, no verdict flag (interval_excludes_zero, "
+            "excludes_no_effect, null), no tv_option_marginal (the control TV of "
+            f"record is P2-D25's, in {OUT}), no difference, ratio, share or test "
+            "against quantity (a) (P2-D27).",
+        "comparison_licensed": P2D.P2D27_COMPARISON,
+        "comparison_sentence": COMPARABILITY,
+        "cells": cells,
+        "tv_bound_check": {
+            "what":
+                "Verification, not a quantity. For paired renderings TV between the "
+                "two marginals is at most the share of pairs whose choice changed. "
+                f"Checked against the TV of record in {OUT} on every cell where that "
+                "TV was formed on exactly the renderings the pairs use (equal "
+                "rendering counts on both arms and the pair count); a violation "
+                "there stops the run as a bug.",
+            "premise_holds_on": holds,
+            "premise_does_not_hold_on": fails,
+            "violations_where_premise_holds": 0,
+        },
+    }
+
+
+def change_rate_report(out):
+    """Markdown report; every number from `out` or read from (a)'s artifact by key."""
+    a = json.load(open(T7.OUT))["cells"]
+    cb = out["control_base"]
+    L = [f"# T7: the control change rate (P2-D27), side by side with quantity (a)\n",
+         f"Generated by `{out['emitted_by']}`. **EXPLORATORY** under `v2.0` section "
+         "10 (P2-D27). Descriptive; not in the confirmatory family, which stays "
+         f"{out['confirmatory_family_size']} tests.\n",
+         f"Control base: `{cb['tile']}` tile, `beta_c = infinity`, **n = "
+         f"{cb['n_items']}** items, `|O|` = {cb['arity']}. Quantity (a): the "
+         f"{json.load(open(T7.OUT))['n_confirmatory']} confirmatory items. Instrument "
+         f"for both: {out['instrument']}. Interval: {out['interval']}\n",
+         f"**{out['comparison_sentence']}**\n",
+         "(a)'s columns are read from `results/T7_armb_quantities.json:cells.<cell>"
+         ".a_inertness` at report time and are not stored in the control artifact.\n",
+         "| model | framing | control rate (renderings) | control rate (item mean) | control "
+         "changed/pairs | control items moved / denominator | control interval | "
+         "(a) rate (renderings) | (a) rate (item mean) | (a) changed/pairs | (a) "
+         "items moved / denominator |",
+         "|---|---|---:|---:|---:|---:|---|---:|---:|---:|---:|"]
+    for cell, c in out["cells"].items():
+        r, q = c["control_change_rate"], a[cell]["a_inertness"]
+        L.append(f"| `{c['model']}` | `{c['framing']}` | "
+                 f"{_fmt(r['change_rate_renderings'])} | "
+                 f"{_fmt(r['change_rate_item_mean'])} | {r['n_changed_pairs']}/"
+                 f"{r['n_pairs']} | {r['n_items_with_a_changed_pair']}/"
+                 f"{r['item_denominator']} | [{_fmt(r['ci_lo'])}, {_fmt(r['ci_hi'])}] | "
+                 f"{_fmt(q['change_rate_renderings'])} | "
+                 f"{_fmt(q['change_rate_item_mean'])} | {q['n_changed_pairs']}/"
+                 f"{q['n_pairs']} | {q['n_items_with_a_changed_pair']}/"
+                 f"{q['item_denominator']} |")
+    L += ["", "## P2-D16 attrition on the control\n",
+          "| model | framing | pairs surviving / expected | excluded for a tie | items with one "
+          "pair | items with no pair | item denominator | tied `F0` | tied arm | "
+          "unscored |", "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for cell, c in out["cells"].items():
+        t = c["attrition_P2D16"]
+        L.append(f"| `{c['model']}` | `{c['framing']}` | {t['pairs_surviving']}/{t['pairs_expected']} | "
+                 f"{t['pairs_excluded_for_a_tie']} | "
+                 f"{t['items_with_one_surviving_pair']} | "
+                 f"{t['items_with_no_surviving_pair']} | {t['item_denominator']} | "
+                 f"{t['tied_renderings_on_the_baseline_F0']} | "
+                 f"{t['tied_renderings_on_the_arm']} | {t['unscored_renderings']} |")
+    b = out["tv_bound_check"]
+    L += ["", "## The TV bound, checked\n", b["what"] + "\n",
+          f"Premise holds on {len(b['premise_holds_on'])} cells: "
+          + ", ".join(f"`{c}`" for c in b["premise_holds_on"]) + ". Does not hold on "
+          f"{len(b['premise_does_not_hold_on'])}: "
+          + (", ".join(f"`{c}`" for c in b["premise_does_not_hold_on"]) or "none")
+          + f". Violations where it holds: {b['violations_where_premise_holds']}.\n",
+          "## Not emitted\n", out["not_emitted"] + "\n"]
+    return "\n".join(L)
+
+
+def change_rate_main():
+    out = change_rate()
+    os.makedirs("reports", exist_ok=True)
+    json.dump(out, open(CHANGE_RATE_OUT, "w"), indent=2)
+    open(CHANGE_RATE_REPORT, "w").write(change_rate_report(out))
+    for cell, c in out["cells"].items():
+        r = c["control_change_rate"]
+        print(f"{cell:8s} {r['change_rate_renderings']:.4f} "
+              f"{r['n_changed_pairs']}/{r['n_pairs']}  items "
+              f"{r['n_items_with_a_changed_pair']}/{r['item_denominator']}")
+    print(f"written: {CHANGE_RATE_OUT}\n         {CHANGE_RATE_REPORT}")
+    return 0
+
+
 def demo():
     """The premises the numbers rest on, checked without writing anything."""
     G = geometry()
@@ -715,4 +916,5 @@ def demo():
 
 
 if __name__ == "__main__":
-    sys.exit(demo() if "--demo" in sys.argv else main())
+    sys.exit(demo() if "--demo" in sys.argv else
+             change_rate_main() if "--change-rate" in sys.argv else main())

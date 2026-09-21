@@ -466,6 +466,33 @@ to move toward and any change in the choice distribution is prompt sensitivity. 
 bounds attribution qualitatively. It does not size how much of the confirmatory
 movement it explains, and no quantity in the design does.
 
+**The control change rate, beside quantity (a), in the same units. EXPLORATORY
+(P2-D27):** `results/T7_control_change_rate.json:standing`. Same instrument as (a),
+`results/T7_control_change_rate.json:instrument`, on the 142:
+`results/T7_control_change_rate.json:control_base.n_items`. Per cell, the control rate
+`results/T7_control_change_rate.json:cells.*.control_change_rate.change_rate_renderings`
+and `results/T7_control_change_rate.json:cells.*.control_change_rate.change_rate_item_mean`
+beside (a)'s `results/T7_armb_quantities.json:cells.*.a_inertness.change_rate_renderings`
+and `results/T7_armb_quantities.json:cells.*.a_inertness.change_rate_item_mean`; the
+item counts
+`results/T7_control_change_rate.json:cells.*.control_change_rate.n_items_with_a_changed_pair`
+of `results/T7_control_change_rate.json:cells.*.control_change_rate.item_denominator`
+beside (a)'s `results/T7_armb_quantities.json:cells.*.a_inertness.n_items_with_a_changed_pair`
+of `results/T7_armb_quantities.json:cells.*.a_inertness.item_denominator`; control
+attrition at `results/T7_control_change_rate.json:cells.*.attrition_P2D16`. Each cell
+names its (a) counterpart: `results/T7_control_change_rate.json:cells.*.quantity_a_same_cell`.
+The interval is emitted as (a)'s is and carries no inferential role; no floor and no
+verdict flag is attached: `results/T7_control_change_rate.json:not_emitted`.
+**The comparability sentence, verbatim wherever the two appear together**
+(`results/T7_control_change_rate.json:comparison_sentence`): the control change rate
+and quantity (a) are reported side by side in the same units and are not comparable as
+an attribution: they are taken on disjoint item sets that differ by construction in
+whether the adversary can move the optimum, no preregistered rule transfers a rate from
+one to the other, and no difference, ratio or share of the two is reported. The TV of
+record never exceeds the change rate on the cells where both were formed on identical
+renderings, `results/T7_control_change_rate.json:tv_bound_check.premise_holds_on`, and
+that premise fails on `results/T7_control_change_rate.json:tv_bound_check.premise_does_not_hold_on`.
+
 4.7 **The oracle check, reported because beating the oracle would be a bug.**
 `results/T7_armb_quantities.json:oracle_check.n_chosen_options_above_the_adversary_oracle`
 over `results/T7_armb_quantities.json:oracle_check.renderings_checked`, with
@@ -474,12 +501,14 @@ the bound is structural, `results/T7_armb_quantities.json:oracle_check.bound_is`
 check on the control artifact:
 `results/T7_control_marginal_null.json:oracle_check.n_chosen_options_above_the_adversary_oracle`.
 
-**Needed and absent.** A **change rate on the 142-item control set**, the direct
-companion to quantity (a) in quantity (a)'s own units, is **not in `results/` and was
-not computed**, under P2-D25: `results/T7_control_marginal_null.json:steps_not_run.step_4_control_change_rate`.
-`v2.0` section 4.4's control measure is TV and TV is what exists. Section 4.6 therefore
-states the control in TV and does not state it as a share of quantity (a). **Not
-computed here.**
+**Needed and absent.** Nothing for the control. The **change rate on the 142-item
+control set**, in quantity (a)'s units and from its instrument, is authorized by P2-D27
+as exploratory and descriptive and is now computed, `results/T7_control_change_rate.json:cells.*.control_change_rate`,
+and is placed beside (a) in section 4.6. P2-D25 did not address it; it neither declined
+nor authorized one. `results/T7_control_marginal_null.json:steps_not_run.step_4_control_change_rate`
+records the computing session's reading of that silence under its own instruction, not
+a ruling (P2-D27). No difference, ratio or share of the control rate and (a) exists or
+is authorized, and section 4.6 states neither as a share of the other.
 
 ---
 
