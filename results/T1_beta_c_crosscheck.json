@@ -1,0 +1,114 @@
+{
+  "purpose": "Spec section 6.3's recommended cross-check of bisected beta_c against the closed-form root, emitted so it is citable.",
+  "emitted_by": "src/beta_c_crosscheck.py, via adversary.bisection_vs_closed_form",
+  "tau": 1.0,
+  "value_of_record": "the bisected beta_c (spec section 9); unchanged here",
+  "what_agreement_means": "identical robustness classification, the closed-form root an exact root, and the bisected value within one P1 D51 tie band. The beta gap is reported, not thresholded: the spec's '~1e-6' is an expectation.",
+  "tie_band_TAU_MAIN": 1e-09,
+  "bases": {
+    "frozen_1000": {
+      "hold": {
+        "n_items": 250,
+        "n_finite_beta_c": 116,
+        "n_robust_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 2.176639053885765e-06,
+        "max_rel_top_two_gap_at_closed_form": 8.881784197001252e-16,
+        "max_rel_top_two_gap_at_bisected": 1.0009992834625336e-09
+      },
+      "manmade": {
+        "n_items": 250,
+        "n_finite_beta_c": 114,
+        "n_robust_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 8.883551911864629e-07,
+        "max_rel_top_two_gap_at_closed_form": 8.881784197001252e-16,
+        "max_rel_top_two_gap_at_bisected": 1.0209673106942319e-09
+      },
+      "moves": {
+        "n_items": 250,
+        "n_finite_beta_c": 122,
+        "n_robust_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 3.0661868405390535e-07,
+        "max_rel_top_two_gap_at_closed_form": 8.881784197001252e-16,
+        "max_rel_top_two_gap_at_bisected": 1.0162057861862195e-09
+      },
+      "size": {
+        "n_items": 250,
+        "n_finite_beta_c": 108,
+        "n_robust_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 5.377260778871573e-07,
+        "max_rel_top_two_gap_at_closed_form": 8.881784197001252e-16,
+        "max_rel_top_two_gap_at_bisected": 1.0009038042824159e-09
+      },
+      "all": {
+        "n_items": 1000,
+        "n_finite_beta_c": 460,
+        "n_robust_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 2.176639053885765e-06,
+        "max_rel_top_two_gap_at_closed_form": 8.881784197001252e-16,
+        "max_rel_top_two_gap_at_bisected": 1.0209673106942319e-09
+      }
+    },
+    "pool_200000": {
+      "hold": {
+        "n_items": 49817,
+        "n_finite_beta_c": 8842,
+        "n_robust_classification_disagree": 10,
+        "n_bisection_finite_closed_form_inf": 5,
+        "n_bisection_inf_closed_form_finite": 5,
+        "max_abs_beta_gap": 15.894948970092678,
+        "max_rel_top_two_gap_at_closed_form": 3.552713678800501e-15,
+        "max_rel_top_two_gap_at_bisected": 1.007063765712246e-09
+      },
+      "manmade": {
+        "n_items": 50036,
+        "n_finite_beta_c": 1935,
+        "n_robust_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 4.6311131759679824e-05,
+        "max_rel_top_two_gap_at_closed_form": 3.552713678800501e-15,
+        "max_rel_top_two_gap_at_bisected": 1.0119709514810893e-09
+      },
+      "moves": {
+        "n_items": 49989,
+        "n_finite_beta_c": 8946,
+        "n_robust_classification_disagree": 1,
+        "n_bisection_finite_closed_form_inf": 1,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_beta_gap": 0.00018803144876855526,
+        "max_rel_top_two_gap_at_closed_form": 1.7763568394002505e-15,
+        "max_rel_top_two_gap_at_bisected": 1.0154268537121425e-09
+      },
+      "size": {
+        "n_items": 50158,
+        "n_finite_beta_c": 16741,
+        "n_robust_classification_disagree": 150,
+        "n_bisection_finite_closed_form_inf": 93,
+        "n_bisection_inf_closed_form_finite": 57,
+        "max_abs_beta_gap": 15.956240282731095,
+        "max_rel_top_two_gap_at_closed_form": 7.105427357601002e-15,
+        "max_rel_top_two_gap_at_bisected": 1.0046123932738737e-09
+      },
+      "all": {
+        "n_items": 200000,
+        "n_finite_beta_c": 36464,
+        "n_robust_classification_disagree": 161,
+        "n_bisection_finite_closed_form_inf": 99,
+        "n_bisection_inf_closed_form_finite": 62,
+        "max_abs_beta_gap": 15.956240282731095,
+        "max_rel_top_two_gap_at_closed_form": 7.105427357601002e-15,
+        "max_rel_top_two_gap_at_bisected": 1.0154268537121425e-09
+      }
+    }
+  }
+}

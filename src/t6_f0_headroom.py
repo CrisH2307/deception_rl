@@ -490,7 +490,36 @@ def main():
             np.median(cloud[np.abs(cloud["sb"] - 1) < 1e-9]["A"])),
         "median_A_off_pole": float(np.median(
             cloud[(np.abs(cloud["sb"]) >= 1e-9) & (np.abs(cloud["sb"] - 1) >= 1e-9)]["A"])),
+        # The three-way mixture P2-D6's reasoning cites, emitted so it is cited by
+        # key rather than from prose. TWO partitions of the same cloud, and they are
+        # not the same partition. The recorded figures, 470 / 439 / 841, are the
+        # split by P1's sb POLES, the same split the three medians above use, so
+        # they share a base with `median_A_off_pole`. Split by A's own value the
+        # counts differ. Both are emitted and neither is preferred here.
+        "n_option_cells_by_p1_pole": {
+            "definition": "option-level cells of the divergence set with P1's sb "
+                          "defined, split by sb: sb = 1 is P1's Bayes pole, sb = 0 "
+                          "its salience pole, else off-pole (tolerance 1e-9, as "
+                          "the medians above)",
+            "bayes_pole_sb_1": int((np.abs(cloud["sb"] - 1) < 1e-9).sum()),
+            "salience_pole_sb_0": int((np.abs(cloud["sb"]) < 1e-9).sum()),
+            "off_pole": int(((np.abs(cloud["sb"]) >= 1e-9)
+                             & (np.abs(cloud["sb"] - 1) >= 1e-9)).sum()),
+        },
+        "n_option_cells_by_A_value": {
+            "definition": "the same cells, split by A itself: exactly 0, exactly "
+                          "1, else",
+            "A_exactly_0": int((cloud["A"] == 0).sum()),
+            "A_exactly_1": int((cloud["A"] == 1).sum()),
+            "other": int(((cloud["A"] != 0) & (cloud["A"] != 1)).sum()),
+        },
     }
+    # The two partitions are asserted to cover the same base, which is the only
+    # thing that must hold. Their difference is a fact about ties, not an error.
+    _cg = num["coordinate_geometry"]
+    assert (sum(v for k, v in _cg["n_option_cells_by_p1_pole"].items() if k != "definition")
+            == sum(v for k, v in _cg["n_option_cells_by_A_value"].items() if k != "definition")
+            == _cg["n_option_level_pairs"]), "the mixture partitions do not cover the cloud"
 
     # Leave-one-item-out bin medians and the within-bin alternative sets, both
     # precomputed: the Monte Carlo below evaluates them 2,000 times per model.

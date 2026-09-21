@@ -267,6 +267,47 @@ def beta_critical_batch(batch, tau=1.0, *, appendix=False):
     return np.where(live, hi, np.inf)
 
 
+def bisection_vs_closed_form(batch):
+    """Spec section 6.3's cross-check on one batch, at tau = 1. Returns counts
+    and worst-case gaps; asserts nothing, so a caller can emit or test it.
+
+    The closed form solves V_o = V_o' exactly; bisection fires when the two
+    options separate by one P1 D51 tie band. They are not equal and must not be
+    forced to be (spec section 9, beta_critical). What agreement means is the
+    causal account: identical robustness classification, the closed-form root
+    an exact root, and the bisected value within one tie band. The beta gap is
+    reported as a number, not thresholded, because the spec's "up to ~1e-6" is an
+    expectation, not a tolerance.
+
+    `tests/test_adversary.py` asserts on this; `src/beta_c_crosscheck.py` emits
+    it. One implementation, so the artifact and the test cannot disagree.
+    """
+    bis = beta_critical_batch(batch)
+    x = _crossings(batch, 1.0).min(axis=1)
+    cf = np.where(np.isfinite(x), np.log(x), np.inf)
+    fb, fc = np.isfinite(bis), np.isfinite(cf)
+    # Gaps are over items where BOTH are finite. A classification disagreement is
+    # counted separately and by direction, not folded into the maxima as inf/nan,
+    # where it would hide the other numbers. The spec names such a disagreement as
+    # what would be a bug; it is reported here, not resolved.
+    f = fb & fc
+    out = {"n_items": int(len(bis)), "n_finite_beta_c": int(fb.sum()),
+           "n_robust_classification_disagree": int((fb != fc).sum()),
+           "n_bisection_finite_closed_form_inf": int((fb & ~fc).sum()),
+           "n_bisection_inf_closed_form_finite": int((~fb & fc).sum()),
+           "max_abs_beta_gap": 0.0, "max_rel_top_two_gap_at_closed_form": 0.0,
+           "max_rel_top_two_gap_at_bisected": 0.0}
+    if f.any():
+        out["max_abs_beta_gap"] = float(np.abs(bis[f] - cf[f]).max())
+        c, log_a, lb = _curve(batch, 1.0)
+        for beta, key in ((cf, "max_rel_top_two_gap_at_closed_form"),
+                          (bis, "max_rel_top_two_gap_at_bisected")):
+            lv = c - np.logaddexp(log_a, lb + np.where(f, beta, 0.0)[:, None])
+            t2 = np.sort(lv, axis=1)
+            out[key] = float((1.0 - np.exp(t2[:, -2] - t2[:, -1]))[f].max())
+    return out
+
+
 def _check(beta, tau, appendix):
     if beta < 0:
         raise ValueError(f"beta must be >= 0, got {beta}")

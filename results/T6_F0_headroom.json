@@ -3903,7 +3903,19 @@
     "n_option_level_pairs": 1750,
     "median_A_at_salience_pole": 1.0,
     "median_A_at_bayes_pole": 0.0,
-    "median_A_off_pole": -3.329298194229566
+    "median_A_off_pole": -3.329298194229566,
+    "n_option_cells_by_p1_pole": {
+      "definition": "option-level cells of the divergence set with P1's sb defined, split by sb: sb = 1 is P1's Bayes pole, sb = 0 its salience pole, else off-pole (tolerance 1e-9, as the medians above)",
+      "bayes_pole_sb_1": 470,
+      "salience_pole_sb_0": 439,
+      "off_pole": 841
+    },
+    "n_option_cells_by_A_value": {
+      "definition": "the same cells, split by A itself: exactly 0, exactly 1, else",
+      "A_exactly_0": 464,
+      "A_exactly_1": 439,
+      "other": 847
+    }
   },
   "pole_decomposition": {
     "CTRL": {

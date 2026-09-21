@@ -28,8 +28,9 @@ governs, and the same discipline binds prose.
 
 **Claim.** The game has an exact solution. The adversary's best response is fixed by
 the signal alone, the Scientist's objective moves continuously in `beta` from Paper 1's
-oracle to the margin-maximizing signal, and the switch point is a closed form rather
-than a fitted quantity. This is what makes the paper's optimum computable at every
+oracle to the margin-maximizing signal (**required condition: `tau = 1`, inherited from
+Paper 1; see 1.3**), and the switch point is a closed form rather than a fitted
+quantity. This is what makes the paper's optimum computable at every
 adversary strength, which is the whole basis on which it differs from work that can
 report win rates but not distance from optimal.
 
@@ -42,18 +43,49 @@ Derivation and verification: `docs/spec/adversary-game-v1.md` section 4. No numb
 `docs/spec/adversary-game-v1.md` section 5. The `beta -> infinity` clause holds for
 every `tau > 0` (section 5.3). No number.
 
-1.3 **P1's oracle is the exact `beta = 0` case, and only at `tau = 1`.**
-`argmax_o V_0(o) = o*_0` exactly at `tau = 1`; the claim is false for `tau != 1` and
-the spec records that the original derivation assumed `tau = 1` without stating it:
-`docs/spec/adversary-game-v1.md` section 5.1. This is the sentence that ties Paper 2's
-`beta = 0` point to Paper 1's published oracle, so it is stated with its `tau`
-condition and not without. No number.
+1.3 **P1's oracle is the exact `beta = 0` case. Required condition: `tau = 1`, inherited
+from Paper 1 and not chosen by Paper 2.** This condition goes in the paper text wherever
+the nesting claim appears, not only in the spec: it is the paper's central framing
+sentence, it is false without the condition, and a reviewer checking the algebra finds
+that in one line.
+
+The claim as it must be stated. At `beta = 0`,
+`V_0(o) = L(h*|o)^{1/tau} / sum_h L(h|o)^{1/tau}`. `L(.|o)` is a posterior over `H`, so
+`sum_h L(h|o) = 1` for every `o`, and at `tau = 1` the normalizer is therefore
+identically 1: `V_0(o) = L(h*|o)`, hence `argmax_o V_0(o) = argmax_o L(h*|o) = o*_0`,
+Paper 1's oracle, exactly. At any `tau != 1` the normalizer is the `1/tau`-power sum of
+the posterior, which depends on the shape of `L(.|o)` and not only on `L(h*|o)`, so the
+identity fails and the spec constructs a counterexample.
+Source: `docs/spec/adversary-game-v1.md` section 5.1. No number.
+
+**Why it reads as inherited.** Paper 1's oracle `argmax_o L(h*|o)` is the optimal signal
+for a `tau = 1` quantal-response listener. So `tau = 1` is not a parameter Paper 2 sets:
+it is the temperature at which Paper 1's frozen oracle is the optimum at all. Any other
+`tau` changes which option is the no-adversary optimum, which would be modifying a frozen
+Paper 1 artifact. The spec records the resolution fixing `tau` at 1 on exactly this
+ground (section 5.1, "Resolution").
+
+**Precision the drafter must keep.** Write "the identity holds only at `tau = 1`", and not
+"Paper 1's oracle is suboptimal at every other `tau`". On a given item the two argmaxes
+can coincide at `tau != 1` by accident; what fails is the identity, and a counterexample
+exists. A reviewer can produce an item where they coincide, so the stronger wording is
+falsifiable and the precise one is not.
+
+**Provenance, stated plainly.** The spec records that the original derivation of R2 was
+written as general and assumed `tau = 1` without stating it. The condition was found by
+re-derivation, not added to rescue a result.
+
+**What `tau != 1` content is permitted.** The spec preregisters one appendix robustness
+check at `tau in {0.5, 2}`, against the `tau`-local optimum rather than `o*_0`. It has not
+been run and nothing here depends on it. The paper may not claim robustness to `tau`.
 
 1.4 **`beta_c` in closed form.** The pairwise crossing equation is linear in
 `x = exp(beta/tau)`, so each rival crosses at most once and
 `beta_c(i) = min_{o' != o*_0} beta*_{o'}`: `docs/spec/adversary-game-v1.md` section 6.3.
 Monotone nesting of `D(beta)` follows and is what makes bisection valid (section 6.3,
-consequence 2). No number.
+consequence 2). No number. **Required condition: `tau = 1` (1.3), for the tie to Paper 1
+only.** The single-crossing argument holds at any `tau`; what needs `tau = 1` is that
+`beta_c` is measured from `o*_0` and `o*_0` is Paper 1's oracle only there.
 
 1.5 **The effect exists, at the population base.** Any claim of the form "X% of items
 diverge" uses the pool figure, per the emitted rule
@@ -90,11 +122,38 @@ at `results/T6_arm_a_numbers.json:step4.identity_check.headroom_max_among_robust
 is a methods sentence, not a finding, and it belongs here because it is the reason
 `A`'s domain is taken from `np.isfinite(beta_c)`.
 
-**Needed and absent.** If the paper states that the implementation computed `beta_c`
-from the closed form and that it agrees with bisection to the spec's tolerance, that
-agreement residual is **not in `results/`**. The spec (section 6.3, note for T1)
-recommends the comparison; no artifact carries its result. Either drop the claim or
-cite the spec's recommendation without a number. **Not computed here.**
+**The closed-form-versus-bisection cross-check (spec section 6.3, note for T1), now
+emitted.** One function, `adversary.bisection_vs_closed_form`, is what
+`tests/test_adversary.py` asserts on and what `src/beta_c_crosscheck.py` emits, so the
+artifact and the test cannot disagree. The bisected value remains the value of record
+(`results/T1_beta_c_crosscheck.json:value_of_record`), with the tie band at
+`results/T1_beta_c_crosscheck.json:tie_band_TAU_MAIN`.
+
+- **Frozen 1,000, clean.** Robustness classification disagreements:
+  `results/T1_beta_c_crosscheck.json:bases.frozen_1000.all.n_robust_classification_disagree`.
+  Largest `beta` gap `results/T1_beta_c_crosscheck.json:bases.frozen_1000.all.max_abs_beta_gap`;
+  closed-form root exact to
+  `results/T1_beta_c_crosscheck.json:bases.frozen_1000.all.max_rel_top_two_gap_at_closed_form`;
+  bisection fires within one tie band,
+  `results/T1_beta_c_crosscheck.json:bases.frozen_1000.all.max_rel_top_two_gap_at_bisected`.
+  Every Arm A figure at the frozen base, and all of Arm B, sits on this base.
+- **200k pool, NOT clean, reported and not resolved.** Classification disagreements:
+  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_robust_classification_disagree`,
+  of which bisection-finite and closed-form-infinite
+  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_bisection_finite_closed_form_inf`
+  and the reverse
+  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_bisection_inf_closed_form_finite`;
+  concentrated on `size`,
+  `results/T1_beta_c_crosscheck.json:bases.pool_200000.size.n_robust_classification_disagree`.
+  Among items both call finite the `beta` gap reaches
+  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.max_abs_beta_gap`, far past the
+  spec's expected ~1e-6. **The spec names a robustness disagreement as what would be a
+  bug.** The pre-existing test ran on the frozen 1,000 only, so this is the first time the
+  pool was checked. Figures computed at the pool base on the bisected value, section
+  1.5's existence rate and section 3's 2,748 among them, stand as emitted under the value
+  of record; whether the disagreement touches them is **not established here**.
+  **Needed before drafting any pool-base sentence: a ruling on this.** Not diagnosed, not
+  fixed.
 
 ---
 
@@ -690,12 +749,25 @@ range `results/T5_inertness_ceiling.json:diagnostic_blind_spot_measured.range`, 
 `results/T5_inertness_ceiling.json:diagnostic_blind_spot_measured.per_model.*`, and per
 Arm B cell `results/T7_armb_quantities.json:cells.*.blind_spot_P2D10.gap`.
 
-**Needed and absent.** 6.4's three-way mixture is stated in the decision log as option
-cell counts, 470 at exactly 0, 439 at exactly 1 and 841 off-pole. **Those three counts
-are not in `results/`.** What is emitted is the leverage distribution and the pole
-medians cited above, which carry the same argument on an emitted base. Either state the
-mixture through the leverage figures, or emit the counts in a later pass. **Not
-computed here.**
+**6.4's three-way mixture, now emitted, and it is two partitions, not one.** On the
+same `results/T6_F0_headroom.json:coordinate_geometry.n_option_level_pairs` option cells:
+
+- **By P1's `sb` poles**, which is where the recorded figures come from and the split the
+  pole medians above use:
+  `results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_p1_pole.bayes_pole_sb_1`,
+  `results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_p1_pole.salience_pole_sb_0`,
+  `results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_p1_pole.off_pole`,
+  with the off-pole median `results/T6_F0_headroom.json:coordinate_geometry.median_A_off_pole`.
+- **By `A`'s own value**:
+  `results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_A_value.A_exactly_0`,
+  `results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_A_value.A_exactly_1`,
+  `results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_A_value.other`.
+
+**The drafter must name which partition a sentence uses.** P2-D6's reasoning and `T7.md`
+describe the recorded figures as cells "at exactly 0" and "exactly 1" of `A`, but they
+are the `sb`-pole split; split by `A` itself the counts differ. The near-trichotomy the
+argument rests on holds under both, so no conclusion moves; the wording does. The
+recorded prose is not edited here.
 
 ---
 

@@ -244,24 +244,12 @@ def test_v3_bisection_matches_closed_form():
     from p1 import TAU_MAIN
     worst_beta = worst_cf = worst_bis = 0.0
     for tile, sub, b in batches():
-        bis = adv.beta_critical_batch(b)
-        x = adv._crossings(b, 1.0).min(axis=1)
-        cf = np.where(np.isfinite(x), np.log(x), np.inf)
-        assert (np.isfinite(bis) == np.isfinite(cf)).all(), \
+        r = adv.bisection_vs_closed_form(b)
+        assert r["n_robust_classification_disagree"] == 0, \
             f"{tile}: closed form and bisection disagree on which items are robust"
-        f = np.isfinite(bis)
-        if not f.any():
-            continue
-        worst_beta = max(worst_beta, float(np.abs(bis[f] - cf[f]).max()))
-        c, log_a, lb = adv._curve(b, 1.0)
-        for beta, keep in ((cf, "cf"), (bis, "bis")):
-            lv = c - np.logaddexp(log_a, lb + np.where(f, beta, 0.0)[:, None])
-            t2 = np.sort(lv, axis=1)
-            rel = (1.0 - np.exp(t2[:, -2] - t2[:, -1]))[f]
-            if keep == "cf":
-                worst_cf = max(worst_cf, float(rel.max()))
-            else:
-                worst_bis = max(worst_bis, float(rel.max()))
+        worst_beta = max(worst_beta, r["max_abs_beta_gap"])
+        worst_cf = max(worst_cf, r["max_rel_top_two_gap_at_closed_form"])
+        worst_bis = max(worst_bis, r["max_rel_top_two_gap_at_bisected"])
     assert worst_cf < 1e-12, \
         f"closed-form root is not a root: top-two gap {worst_cf:.3e}"
     assert worst_bis < 2 * TAU_MAIN, \
