@@ -1,0 +1,102 @@
+{
+  "purpose": "Direct V_beta evaluation of the pool closed-form/bisection disagreements.",
+  "emitted_by": "src/beta_c_disagreement.py",
+  "status": "VERIFICATION ONLY. No fix applied; value of record unchanged.",
+  "d51_band": 1.0010000000000002e-09,
+  "identity_beta_c_finite_iff_o0_ne_oinf": {
+    "hold": {
+      "bisection_violations": 0,
+      "closed_form_violations": 10
+    },
+    "manmade": {
+      "bisection_violations": 0,
+      "closed_form_violations": 0
+    },
+    "moves": {
+      "bisection_violations": 0,
+      "closed_form_violations": 1
+    },
+    "size": {
+      "bisection_violations": 0,
+      "closed_form_violations": 150
+    },
+    "all": {
+      "bisection_violations": 0,
+      "closed_form_violations": 161
+    }
+  },
+  "identity_note": "bisection returns inf iff optimal_option(inf) == o*_0, so its violation count is 0 by construction and is not evidence.",
+  "n_disagreeing": 161,
+  "separating_count_bisection": 2748,
+  "separating_count_closed_form": 2777,
+  "separating_that_enter_under_closed_form": 29,
+  "separating_that_enter_are_all_in_group_A": true,
+  "all_separating_inside_span_guard_bisection": true,
+  "group_A_closed_form_finite_bisection_inf": {
+    "n": 62,
+    "max_abs_num": 9.992007221626409e-16,
+    "max_abs_den": 2.0816681711721685e-17,
+    "max_rel_num": 5.12267091068295e-16,
+    "max_rel_den": 3.0244452000137525e-16,
+    "n_both_coeffs_below_eps_tie": 62,
+    "max_lead_over_o0": 2.2737367544323206e-13,
+    "n_o0_loses": 0,
+    "n_o0_regains": 0,
+    "n_live": 0,
+    "pairs": {
+      "size:4,5": 40,
+      "size:0,1": 16,
+      "hold:0,1": 5,
+      "size:3,5": 1
+    }
+  },
+  "group_A_search_ceiling": {
+    "n_live": 0,
+    "max_closed_form_beta": 5.662960480135946,
+    "note": "bisection never searches a non-live item, so its ceiling cannot explain any group A item"
+  },
+  "group_B_bisection_finite_closed_form_inf": {
+    "n": 99,
+    "n_winner_inside_d51_band": 99,
+    "n_winner_higher_fit": 99,
+    "n_margins_equal_1e9": 99,
+    "max_winner_lead_over_o0": 9.094947017729282e-13,
+    "n_o0_regains": 0,
+    "bisection_beta_c_range": [
+      17.345426459098235,
+      23.445765160722658
+    ]
+  },
+  "both_finite_closed_form_earlier": {
+    "n": 60,
+    "max_abs_num": 8.881784197001252e-16,
+    "max_abs_den": 3.469446951953614e-17,
+    "max_rel_num": 4.545322201131061e-16,
+    "max_rel_den": 4.666782163125199e-16,
+    "n_both_coeffs_below_eps_tie": 60,
+    "max_lead_over_o0": 2.842170943040401e-14,
+    "n_o0_loses": 60,
+    "n_o0_regains": 0,
+    "n_live": 60,
+    "pairs": {
+      "size:4,5": 38,
+      "size:0,1": 17,
+      "hold:0,1": 3,
+      "size:3,4": 1,
+      "size:3,5": 1
+    }
+  },
+  "both_finite_closed_form_later": {
+    "n": 37,
+    "n_winner_inside_d51_band": 37,
+    "n_winner_higher_fit": 37,
+    "n_margins_equal_1e9": 37,
+    "max_winner_lead_over_o0": 9.094947017729282e-13,
+    "n_o0_regains": 0,
+    "bisection_beta_c_range": [
+      19.003891389817,
+      23.414229821413755
+    ]
+  },
+  "max_abs_gap_both_finite": 15.956240282731095
+}
