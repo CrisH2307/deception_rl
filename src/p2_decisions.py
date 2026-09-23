@@ -1610,6 +1610,103 @@ def bind_control_change_rate(instrument, contrast, arms, control_beta_c, control
             "the control is authorized.")
 
 
+# ------------- P2-D28, tolerance-determined divergent items: kept, and disclosed
+P2D28_TEXT = (
+    "Spec section 6.2's tie-broken argmax stays the definition of divergence, and the pool\n"
+    "items whose `beta_c` is set by D51's band stay in `D(infinity)`. They are 136 pool items,\n"
+    "and all 136 are divergent only by tie-break: the tie-broken winner never leads `o*_0`\n"
+    "beyond the band at any `beta`, and no other rival does either. They are disclosed beside\n"
+    "the pool existence rate, never omitted, with four facts: the count; that every one has\n"
+    "`beta_c` between 17.35 and 23.45, above the reporting grid's endpoint of 8, so `|D(8)|`\n"
+    "and every grid-rate figure are unaffected and only `|D(infinity)|` includes them; that\n"
+    "none of the 2,748 separating items is among them; and that the frozen 1,000 contains\n"
+    "none, so no confirmatory claim is touched."
+)
+P2D28_REJECTED = (
+    "Exclude the tolerance-determined items from the divergence set.",
+    "Report the pool existence rate without the disclosure.")
+P2D28_EXCLUDED = False                      # spec 6.2's tie-broken argmax is the definition
+P2D28_N_TOLERANCE_DETERMINED = 136
+P2D28_N_DIVERGENT_ONLY_BY_TIE_BREAK = 136   # not 99: v2.22 section 2 corrects v2.21 section 8
+P2D28_N_SEPARATING_AMONG = 0
+P2D28_N_FROZEN = 0
+P2D28_DISCLOSURE_FIELDS = ("n_tolerance_determined", "n_divergent_only_by_tie_break",
+                           "tolerance_determined_beta_c_range",
+                           "n_separating_tolerance_determined")
+
+
+def bind_tolerance_determined_disclosure(record):
+    """Assert P2-D28's premises from `results/T1_crossing_tolerance.json` and return
+    the fields every pool existence-rate statement carries beside it.
+
+    Premises, not ranges: the items are still counted in D(infinity) (the pool's
+    divergent count is its finite-beta_c count); every one lies above the grid
+    endpoint, which is WHY |D(8)| is unaffected; none separates; the frozen base has
+    none, which is WHY no confirmatory claim is touched.
+    """
+    pool, frozen = record["bases"]["pool_200000"], record["bases"]["frozen_1000"]
+    if P2D28_EXCLUDED or pool["n_divergent"] != pool["n_finite_beta_c"]:
+        raise AssertionError("P2-D28: tolerance-determined items stay in D(infinity); "
+                             "a caller excluding them redefines divergence after the data.")
+    if not pool["tolerance_determined_all_above_grid_endpoint"]:
+        raise AssertionError("P2-D28: a tolerance-determined beta_c reached the grid; "
+                             "'|D(8)| is unaffected' no longer holds.")
+    if pool["n_separating_tolerance_determined"] != P2D28_N_SEPARATING_AMONG:
+        raise AssertionError("P2-D28: a separating item is tolerance-determined; the "
+                             "2,748 sentence needs the author.")
+    if frozen["n_tolerance_determined"] != P2D28_N_FROZEN:
+        raise AssertionError("P2-D28: the frozen 1,000 carries a tolerance-determined "
+                             "item; 'no confirmatory claim is touched' no longer holds.")
+    got = (pool["n_tolerance_determined"], pool["n_divergent_only_by_tie_break"])
+    if got != (P2D28_N_TOLERANCE_DETERMINED, P2D28_N_DIVERGENT_ONLY_BY_TIE_BREAK):
+        raise AssertionError(f"P2-D28: counts {got} are not the ruled "
+                             f"{(P2D28_N_TOLERANCE_DETERMINED, P2D28_N_DIVERGENT_ONLY_BY_TIE_BREAK)}.")
+    return {k: pool[k] for k in P2D28_DISCLOSURE_FIELDS}
+
+
+# ------------- P2-D29, the closed form's parallel case read at EPS_TIE
+P2D29_TEXT = (
+    "`adversary._crossings` treats a rival as never overtaking when the coefficient of `x`\n"
+    "in its crossing equation has magnitude at most `PARALLEL_TOL = 1e-12`, which is\n"
+    "`EPS_TIE`, the spec's inherited absolute tie tolerance, not a new constant. The test\n"
+    "is on the coefficient of `x` alone, because spec section 6.3's degenerate case is that\n"
+    "coefficient being zero, in both its parallel and its identical form. On the 200,000\n"
+    "pool every root pair whose curves are identical or only converge has that coefficient\n"
+    "at most 3.5e-17, and every pair that crosses strictly has it at least 7.3e-8, so every\n"
+    "tolerance inside that interval classifies identically. With it, the closed form\n"
+    "disagrees with bisection on exactly the 136 tolerance-determined items of P2-D28 and on\n"
+    "no other item. That residual is the cross-check's expected state, because the closed\n"
+    "form tests strict crossing and cannot see a tie-break flip, and it is asserted as an\n"
+    "invariant."
+)
+P2D29_REJECTED = (
+    "Both-coefficients rule, as `v2.21` section 7 proposed.",
+    "Keep the exact `den != 0` test and report the disagreement as unresolved.")
+P2D29_PARALLEL_TOL = 1e-12                  # spec 8.2's EPS_TIE, inherited
+P2D29_TESTED_COEFFICIENT = "den"            # the coefficient of x, spec 6.3
+
+
+def bind_parallel_tol(parallel_tol, record):
+    """Assert the closed form's tolerance against P2-D29, from the caller's own value.
+
+    The premise is the empty gap, on both bases, and the residual invariant: after the
+    fix the cross-check disagrees on exactly the tolerance-determined set. A geometry
+    that puts a coefficient inside the gap fails here, not in a cross-check count.
+    """
+    if parallel_tol != P2D29_PARALLEL_TOL or record["parallel_tol"] != P2D29_PARALLEL_TOL:
+        raise AssertionError(f"P2-D29: parallel_tol is {parallel_tol!r}, ruled "
+                             f"{P2D29_PARALLEL_TOL!r}.")
+    for name, base in record["bases"].items():
+        lo, hi = base["coefficients"]["den_gap"]
+        if not lo < parallel_tol < hi:
+            raise AssertionError(f"P2-D29: {name}: {parallel_tol} is not inside the "
+                                 f"empty gap ({lo}, {hi}); the tolerance became a choice.")
+        if not base["cross_check_adopted_parallel_tol"]["residual_equals_tol_set"]:
+            raise AssertionError(f"P2-D29: {name}: the cross-check disagrees off the "
+                                 "tolerance-determined set. That is a bug, not a residual.")
+    return True
+
+
 # ------------------------------------------------- what P2-D1 makes structural
 P2_FRAMING_IDS = ("F0", "F1", "F2")
 P2_RENDERING_AXES = ("item", "permutation", "framing")
@@ -1688,7 +1785,9 @@ def check_log(path=LOG):
                          ("P2-D24", P2D24_TEXT),
                          ("P2-D25", P2D25_TEXT),
                          ("P2-D26", P2D26_TEXT),
-                         ("P2-D27", P2D27_TEXT)):
+                         ("P2-D27", P2D27_TEXT),
+                         ("P2-D28", P2D28_TEXT),
+                         ("P2-D29", P2D29_TEXT)):
         quoted = "\n".join("> " + ln for ln in const.split("\n"))
         if quoted not in text:
             raise AssertionError(
@@ -1714,7 +1813,9 @@ def check_log(path=LOG):
                             ("P2-D24", P2D24_REJECTED),
                             ("P2-D25", P2D25_REJECTED),
                             ("P2-D26", P2D26_REJECTED),
-                            ("P2-D27", P2D27_REJECTED)):
+                            ("P2-D27", P2D27_REJECTED),
+                            ("P2-D28", P2D28_REJECTED),
+                            ("P2-D29", P2D29_REJECTED)):
         for alt in rejected:
             if f"**{alt}**" not in text:
                 raise AssertionError(

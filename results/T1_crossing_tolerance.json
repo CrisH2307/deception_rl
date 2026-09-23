@@ -1,0 +1,167 @@
+{
+  "purpose": "Crossing-coefficient distribution on genuinely crossing pairs, the parallel-case tolerance, and the cross-check's expected residual.",
+  "emitted_by": "src/crossing_tolerance.py",
+  "d51_band": 1.0010000000000002e-09,
+  "eps_tie": 1e-12,
+  "parallel_tol": 1e-12,
+  "gap_edge": 0.001,
+  "class_definition": "root pair = rival with a closed-form root x >= 1 under the exact den != 0 test. INDISTINGUISHABLE: its lead over o*_0 is inside the D51 band at beta = 0 and at beta = infinity, hence everywhere (the ratio is monotone in x). GENUINE: otherwise.",
+  "tolerance_determined_definition": "finite bisected beta_c whose tie-broken winner just past beta_c never leads o*_0 beyond the band (margin-difference lead <= band at infinity).",
+  "tiebreak_only_definition": "finite bisected beta_c and no rival ever leads o*_0 beyond the band.",
+  "bases": {
+    "frozen_1000": {
+      "n_items": 1000,
+      "n_finite_beta_c": 460,
+      "coefficients": {
+        "n_root_pairs_indistinguishable": 0,
+        "n_root_pairs_genuine": 473,
+        "indistinguishable_max_abs_num": null,
+        "indistinguishable_max_abs_den": null,
+        "indistinguishable_max_of_larger_coeff": null,
+        "genuine_min_abs_num": 0.003291282239541782,
+        "genuine_min_abs_den": 1.107077431247716e-05,
+        "genuine_min_of_larger_coeff": 0.003291282239541782,
+        "n_genuine_with_larger_coeff_below_1e-9": 0,
+        "empty_gap": [
+          0.0,
+          0.003291282239541782
+        ],
+        "empty_gap_exists": true,
+        "eps_tie_inside_gap": true,
+        "n_root_pairs_converging": 0,
+        "converging_min_abs_num": null,
+        "converging_min_abs_den": null,
+        "converging_max_abs_den": null,
+        "n_root_pairs_strict": 473,
+        "strict_min_abs_num": 0.003291282239541782,
+        "strict_min_abs_den": 1.107077431247716e-05,
+        "strict_max_abs_den": 0.0329573066387394,
+        "den_gap": [
+          0.0,
+          1.107077431247716e-05
+        ],
+        "den_gap_exists": true,
+        "parallel_tol_inside_den_gap": true,
+        "genuine_log10_larger_coeff_quantiles": {
+          "0": -2.4826348737616004,
+          "0.001": -2.4212620326450236,
+          "0.01": -2.119438291007895,
+          "0.5": -0.7825471489936697
+        }
+      },
+      "n_tolerance_determined": 0,
+      "n_divergent_only_by_tie_break": 0,
+      "tiebreak_only_subset_of_tolerance_determined": true,
+      "tolerance_determined_beta_c_range": null,
+      "tolerance_determined_all_above_grid_endpoint": true,
+      "cross_check_exact_den_test": {
+        "n_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_gap_both_finite_outside_tol_set": 2.176639053885765e-06,
+        "min_abs_gap_both_finite_inside_tol_set": null,
+        "n_residual": 0,
+        "residual_equals_tol_set": true
+      },
+      "cross_check_adopted_parallel_tol": {
+        "n_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_gap_both_finite_outside_tol_set": 2.176639053885765e-06,
+        "min_abs_gap_both_finite_inside_tol_set": null,
+        "n_residual": 0,
+        "residual_equals_tol_set": true
+      },
+      "cross_check_both_below_not_adopted": {
+        "n_classification_disagree": 0,
+        "n_bisection_finite_closed_form_inf": 0,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_gap_both_finite_outside_tol_set": 2.176639053885765e-06,
+        "min_abs_gap_both_finite_inside_tol_set": null,
+        "n_residual": 0,
+        "residual_equals_tol_set": true
+      }
+    },
+    "pool_200000": {
+      "n_items": 200000,
+      "n_finite_beta_c": 36464,
+      "coefficients": {
+        "n_root_pairs_indistinguishable": 166,
+        "n_root_pairs_genuine": 37371,
+        "indistinguishable_max_abs_num": 9.992007221626409e-16,
+        "indistinguishable_max_abs_den": 3.469446951953614e-17,
+        "indistinguishable_max_of_larger_coeff": 9.992007221626409e-16,
+        "genuine_min_abs_num": 0.00047755020305073614,
+        "genuine_min_abs_den": 3.469446951953614e-18,
+        "genuine_min_of_larger_coeff": 0.00047755020305073614,
+        "n_genuine_with_larger_coeff_below_1e-9": 0,
+        "empty_gap": [
+          9.992007221626409e-16,
+          0.00047755020305073614
+        ],
+        "empty_gap_exists": true,
+        "eps_tie_inside_gap": true,
+        "n_root_pairs_converging": 37,
+        "converging_min_abs_num": 0.003364773014474687,
+        "converging_min_abs_den": 3.469446951953614e-18,
+        "converging_max_abs_den": 2.0816681711721685e-17,
+        "n_root_pairs_strict": 37334,
+        "strict_min_abs_num": 0.00047755020305073614,
+        "strict_min_abs_den": 7.30533198153166e-08,
+        "strict_max_abs_den": 0.06056142225405485,
+        "den_gap": [
+          3.469446951953614e-17,
+          7.30533198153166e-08
+        ],
+        "den_gap_exists": true,
+        "parallel_tol_inside_den_gap": true,
+        "genuine_log10_larger_coeff_quantiles": {
+          "0": -3.3209809659402545,
+          "0.001": -2.5882541915685597,
+          "0.01": -2.005028367028889,
+          "0.5": -0.7482113710620849
+        }
+      },
+      "n_tolerance_determined": 136,
+      "n_divergent_only_by_tie_break": 136,
+      "tiebreak_only_subset_of_tolerance_determined": true,
+      "tolerance_determined_beta_c_range": [
+        17.345426459098235,
+        23.445765160722658
+      ],
+      "tolerance_determined_all_above_grid_endpoint": true,
+      "cross_check_exact_den_test": {
+        "n_classification_disagree": 161,
+        "n_bisection_finite_closed_form_inf": 99,
+        "n_bisection_inf_closed_form_finite": 62,
+        "max_abs_gap_both_finite_outside_tol_set": 4.662803444728477,
+        "min_abs_gap_both_finite_inside_tol_set": 14.232716850214423,
+        "n_residual": 258,
+        "residual_equals_tol_set": false
+      },
+      "cross_check_adopted_parallel_tol": {
+        "n_classification_disagree": 136,
+        "n_bisection_finite_closed_form_inf": 136,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_gap_both_finite_outside_tol_set": 0.00018803144876855526,
+        "min_abs_gap_both_finite_inside_tol_set": null,
+        "n_residual": 136,
+        "residual_equals_tol_set": true
+      },
+      "cross_check_both_below_not_adopted": {
+        "n_classification_disagree": 99,
+        "n_bisection_finite_closed_form_inf": 99,
+        "n_bisection_inf_closed_form_finite": 0,
+        "max_abs_gap_both_finite_outside_tol_set": 0.00018803144876855526,
+        "min_abs_gap_both_finite_inside_tol_set": 14.232716850214423,
+        "n_residual": 136,
+        "residual_equals_tol_set": true
+      },
+      "n_divergent": 36464,
+      "n_separating": 2748,
+      "all_separating_inside_span_guard": true,
+      "n_separating_tolerance_determined": 0,
+      "n_separating_divergent_only_by_tie_break": 0
+    }
+  }
+}

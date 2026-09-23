@@ -607,9 +607,18 @@ no enlargement fixes it.
 > quantity. The median of per-item `ΔA` and the value computed from the means are both
 > retained. The `size`-tile analysis set, the 21-test family and `alpha` are unchanged.
 
-**Why it needed deciding.** `A` is near-trichotomous: 470 option-cells at exactly 0,
-439 at exactly 1, and 841 off-pole at median `-3.329`, unbounded below because `A`
-divides by `ext_i`. Off-pole is the common case, not a tail. Over the 6,048 admissible
+**Why it needed deciding.** `A` is near-trichotomous: 470 option-cells at Paper 1's
+Bayes pole (`sb = 1`, where `A`'s median is 0), 439 at its salience pole (`sb = 0`,
+where `A`'s median is 1), and 841 off-pole at median `-3.329`, unbounded below because
+`A` divides by `ext_i`. Off-pole is the common case, not a tail.
+
+*Corrected 2026-09-22, words only, nothing recomputed (`PREREGISTRATION_v2.22.md`
+section 5).* This sentence first read "470 option-cells at exactly 0, 439 at exactly 1".
+The three counts are the split by Paper 1's `sb` poles
+(`results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_p1_pole`), not by
+`A`'s value; split by `A` itself they are 464, 439 and 847
+(`results/T6_F0_headroom.json:coordinate_geometry.n_option_cells_by_A_value`). The
+near-trichotomy the decision rests on holds under both, so the decision does not move. Over the 6,048 admissible
 ordered option pairs, 0.7004 exceed the target move of `ΔA = +1` in magnitude and
 0.1518 exceed it tenfold, so one item moving to a far off-pole option outweighs ten
 items making the exact move Arm B exists to detect. H-B predicts a null, so a
@@ -3029,6 +3038,149 @@ P2-D6, P2-D12, P2-D24, P2-D25 or P2-D26, change `p0`, the family, `alpha`, the f
 
 ---
 
+## P2-D28. Tolerance-determined divergent items stay in `D(infinity)` and are disclosed beside the pool existence rate
+
+**Status:** adopted. **Author ruling.** Changes no statistic, no item set, no `n`, no
+`beta_c` value of record, and no definition.
+**Decided:** 2026-09-22, by the author, after `PREREGISTRATION_v2.21.md` recorded the
+items for the author and did not rule them. Recorded by an agent session. The counts
+below are the ones `src/crossing_tolerance.py` emits, not the ones in the instruction
+(section "Corrections" below). Full record in `PREREGISTRATION_v2.22.md` section 2.
+
+**The instruction it acted on**, per the countermeasure in `v2.10` section 2.4, quoted in
+the parts that bear on the ruling:
+
+> Keep section 6.2's tie-broken argmax as the definition of divergence. It is
+> preregistered and predates all data; excluding these items would redefine divergence
+> after seeing where the definition bites. Disclose instead: count the 136 pool items
+> whose beta_c is set by the D51 band, and the 99 that are divergent only by tie-break,
+> beside the pool existence rate; state that all have beta_c between 17.3 and 23.4, above
+> the grid endpoint, so |D(8)| and every grid-rate figure is unaffected and only
+> |D(infinity)| includes them; report how many of the 2,748 separating items fall among
+> them; state that the frozen 1,000 contains none, so no confirmatory claim is touched.
+
+**Binds:** any pool-base figure that includes `D(infinity)`, and any report or paper
+passage stating the pool existence rate.
+**Constant:** `P2D28_TEXT`, `P2D28_EXCLUDED`, `P2D28_N_TOLERANCE_DETERMINED`,
+`P2D28_N_DIVERGENT_ONLY_BY_TIE_BREAK`, `P2D28_N_SEPARATING_AMONG`,
+`P2D28_N_FROZEN`, `P2D28_DISCLOSURE_FIELDS`.
+
+**Decision text.**
+
+> Spec section 6.2's tie-broken argmax stays the definition of divergence, and the pool
+> items whose `beta_c` is set by D51's band stay in `D(infinity)`. They are 136 pool items,
+> and all 136 are divergent only by tie-break: the tie-broken winner never leads `o*_0`
+> beyond the band at any `beta`, and no other rival does either. They are disclosed beside
+> the pool existence rate, never omitted, with four facts: the count; that every one has
+> `beta_c` between 17.35 and 23.45, above the reporting grid's endpoint of 8, so `|D(8)|`
+> and every grid-rate figure are unaffected and only `|D(infinity)|` includes them; that
+> none of the 2,748 separating items is among them; and that the frozen 1,000 contains
+> none, so no confirmatory claim is touched.
+
+**Why.** The definition is preregistered and predates all data. Excluding the items would
+redefine divergence after seeing where the definition bites, which is the move `CLAUDE.md`
+names as tuning toward a result. Disclosure leaves the definition fixed and lets a reader
+see how much of `|D(infinity)|` rests on the tolerance: 136 of 36,464.
+
+**Corrections to the instruction, none of which changes the ruling.** The instruction's
+"99 that are divergent only by tie-break" repeats `PREREGISTRATION_v2.21.md` section 8,
+which was wrong. The 99 is the number the exact-test closed form classed robust. The other
+37 had a closed-form root, but `src/crossing_tolerance.py` shows each is a parallel pair
+with a rounding-size coefficient of `x` (at most 2.1e-17) and a real numerator, so the
+root is spurious and no rival strictly overtakes on those 37 either. All 136 are divergent
+only by tie-break. The instruction's range "17.3 and 23.4" is the emitted range truncated.
+
+**Alternatives offered and not chosen.**
+
+1. **Exclude the tolerance-determined items from the divergence set.** Rejected by the
+   author: it redefines divergence after the data showed where the definition bites.
+2. **Report the pool existence rate without the disclosure.** Rejected: the rate would
+   then carry 136 items whose membership is a property of D51's tolerance, and a reader
+   could not see it.
+
+**Consequences.** `p2_decisions.bind_tolerance_determined_disclosure` asserts the
+premises from `results/T1_crossing_tolerance.json`. It checks that the items are still in
+`D(infinity)`, lie above the grid endpoint, include no separating item, and do not occur
+in the frozen 1,000. It returns the four disclosure fields, and
+`tests/test_crossing_tolerance.py` calls it. `docs/P2/RESULTS_OUTLINE.md` section 1.5
+carries the disclosure.
+
+**What this entry does not do.** It does not change section 6.2, `beta_c`'s value of
+record, any grid rate, any confirmatory figure, or Arm C's standing.
+
+---
+
+## P2-D29. The closed form reads spec 6.3's zero coefficient of `x` at `EPS_TIE`, set inside an empty gap
+
+**Status:** adopted. Changes the closed-form cross-check only. The bisected `beta_c`
+remains the value of record, and no statistic, item set or `n` moves.
+**Decided:** 2026-09-22, by an **agent session acting on an author instruction**. The
+instruction was conditional: it said to set the threshold only if an empty gap exists.
+Full record in `PREREGISTRATION_v2.22.md` section 3.
+
+**The instruction it acted on**, quoted in the parts that bear on the decision:
+
+> Measure the crossing coefficients on genuinely crossing pairs. If an empty gap
+> separates them from the noise-level coefficients (at most 1e-15 on the numerator,
+> 2.1e-17 on the denominator), set the parallel-case threshold inside it, by the same
+> method P2-D19 used. If no empty gap exists, do not set one and report that. Then record
+> the cross-check's expected residual. [...] Assert that the residual disagreement set
+> equals that set.
+
+**Binds:** `src/adversary.py:_crossings` and `bisection_vs_closed_form`, through
+`adversary.PARALLEL_TOL`.
+**Constant:** `P2D29_TEXT`, `P2D29_PARALLEL_TOL`, `P2D29_TESTED_COEFFICIENT`.
+
+**Decision text.**
+
+> `adversary._crossings` treats a rival as never overtaking when the coefficient of `x`
+> in its crossing equation has magnitude at most `PARALLEL_TOL = 1e-12`, which is
+> `EPS_TIE`, the spec's inherited absolute tie tolerance, not a new constant. The test
+> is on the coefficient of `x` alone, because spec section 6.3's degenerate case is that
+> coefficient being zero, in both its parallel and its identical form. On the 200,000
+> pool every root pair whose curves are identical or only converge has that coefficient
+> at most 3.5e-17, and every pair that crosses strictly has it at least 7.3e-8, so every
+> tolerance inside that interval classifies identically. With it, the closed form
+> disagrees with bisection on exactly the 136 tolerance-determined items of P2-D28 and on
+> no other item. That residual is the cross-check's expected state, because the closed
+> form tests strict crossing and cannot see a tie-break flip, and it is asserted as an
+> invariant.
+
+**Why the coefficient of `x` and not both coefficients.** `v2.21` section 7 proposed
+treating a pair as identical when both coefficients are small, and the instruction quotes
+both noise levels. Measured, that rule removes the 62 spurious roots on identical curves.
+It leaves 37 spurious roots on parallel curves, where the numerator is real (at least
+3.4e-3) and only the coefficient of `x` is rounding residue. Those 37 are tolerance-
+determined items too, so the residual invariant would hold under either rule. But the
+both-coefficients rule would leave the closed form reporting 37 roots that are not roots.
+The spec's degenerate test names the coefficient of `x`, and the measured gap on it is
+nine orders wide.
+
+**Why `EPS_TIE`, by P2-D19's method.** The gap from 3.5e-17 to 7.3e-8 contains `1e-12`.
+Writing down the inherited constant inside the gap is the choice P2-D19 made for `A`'s
+tolerance. On the numerator the gap runs from 1.0e-15 to 4.8e-4, and on the larger of the
+two coefficients it is the same interval. The frozen 1,000 has no pair below either gap,
+so the fix changes nothing there.
+
+**Alternatives offered and not chosen.**
+
+1. **Both-coefficients rule, as `v2.21` section 7 proposed.** Rejected: it leaves 37
+   spurious parallel-case roots in place.
+2. **Keep the exact `den != 0` test and report the disagreement as unresolved.** Rejected:
+   the empty gap exists, and the instruction said to set the threshold when it does.
+
+**Consequences.** `src/beta_c_crosscheck.py` and `src/beta_c_disagreement.py` pass
+`parallel_tol=0.0` explicitly, so `results/T1_beta_c_crosscheck.json` and
+`results/T1_beta_c_disagreement.json` reproduce byte-identical as the pre-fix record.
+`results/T1_crossing_tolerance.json` is the new artifact. `p2_decisions.bind_parallel_tol`
+asserts that the constant still sits in the gap on both bases and that the residual still
+equals the tolerance-determined set.
+
+**What this entry does not do.** It does not change bisection, `beta_c`'s value of record,
+D51's band, or any figure computed from the bisected value.
+
+---
+
 ## Standing checks
 
 | check | where |
@@ -3070,3 +3222,6 @@ P2-D6, P2-D12, P2-D24, P2-D25 or P2-D26, change `p0`, the family, `alpha`, the f
 | A control change rate runs (a)'s instrument, on the 142, for `F1` and `F2` only | `p2_decisions.bind_control_change_rate` |
 | No verdict flag, floor or derived quantity is emitted beside it | `p2_decisions.bind_control_change_rate` |
 | `c5_movement` reads chosen options only, never `A` | `tests/test_p2d27_control_change_rate.py` |
+| Tolerance-determined items stay in `D(infinity)`, above the grid, none separating, none frozen | `p2_decisions.bind_tolerance_determined_disclosure` |
+| The parallel-case tolerance still sits in the empty gap on both bases | `p2_decisions.bind_parallel_tol` |
+| After the fix, the cross-check disagrees on exactly the tolerance-determined set | `p2_decisions.bind_parallel_tol`, `tests/test_crossing_tolerance.py` |

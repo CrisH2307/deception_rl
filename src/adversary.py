@@ -30,6 +30,7 @@ SPEC_VERSION = "v3.1"   # docs/spec/adversary-game-v1.md; asserted by the test s
 EPS_BETA = 1e-9    # spec section 8.2, bisection tolerance on beta
 EPS_TIE = 1e-12    # spec section 8.2, absolute tie tolerance
 BETA_GRID = (0.0, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0)   # spec section 8.2
+PARALLEL_TOL = EPS_TIE   # P2-D29: spec 6.3's zero coefficient of x, read in float64
 
 
 # --------------------------------------------------------------------- batch
@@ -184,11 +185,16 @@ def _abc(batch, tau):
     return z - b, b, c
 
 
-def _crossings(batch, tau, appendix=False):
+def _crossings(batch, tau, appendix=False, parallel_tol=PARALLEL_TOL):
     """(n, |O|) the x >= 1 at which each rival overtakes o*_0, else inf.
 
     Closed form of spec section 6.3: the pairwise equality is linear in
-    x = exp(beta/tau), so each rival has at most one root.
+    x = exp(beta/tau), so each rival has at most one root, and none when the
+    coefficient of x is zero (parallel or identical curves). In float64 that
+    coefficient is rounding residue, not zero, so it is read at `parallel_tol`
+    (P2-D29: every rounding-size |den| on the pool is <= 3.5e-17, every strictly
+    crossing pair's >= 7.3e-8). `parallel_tol=0.0` is the exact test that
+    `results/T1_beta_c_crosscheck.json` and `T1_beta_c_disagreement.json` record.
     """
     a, b, c = _abc(batch, tau)
     o0 = optimal_option(batch, 0.0, tau, appendix=appendix)
@@ -197,7 +203,7 @@ def _crossings(batch, tau, appendix=False):
     num = c * a0 - c0 * a
     den = c0 * b - c * b0
     with np.errstate(divide="ignore", invalid="ignore"):
-        x = np.where(den != 0, num / den, np.inf)
+        x = np.where(np.abs(den) > parallel_tol, num / den, np.inf)
     x[r, o0] = np.inf                                   # o*_0 never overtakes itself
     return np.where(np.isfinite(x) & (x >= 1.0), x, np.inf)
 
@@ -267,7 +273,7 @@ def beta_critical_batch(batch, tau=1.0, *, appendix=False):
     return np.where(live, hi, np.inf)
 
 
-def bisection_vs_closed_form(batch):
+def bisection_vs_closed_form(batch, parallel_tol=PARALLEL_TOL):
     """Spec section 6.3's cross-check on one batch, at tau = 1. Returns counts
     and worst-case gaps; asserts nothing, so a caller can emit or test it.
 
@@ -283,7 +289,7 @@ def bisection_vs_closed_form(batch):
     it. One implementation, so the artifact and the test cannot disagree.
     """
     bis = beta_critical_batch(batch)
-    x = _crossings(batch, 1.0).min(axis=1)
+    x = _crossings(batch, 1.0, parallel_tol=parallel_tol).min(axis=1)
     cf = np.where(np.isfinite(x), np.log(x), np.inf)
     fb, fc = np.isfinite(bis), np.isfinite(cf)
     # Gaps are over items where BOTH are finite. A classification disagreement is

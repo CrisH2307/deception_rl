@@ -66,7 +66,7 @@ def main():
         ix = np.where(tiles == t)[0]
         sub = df.iloc[ix].reset_index(drop=True); xs, ag = [], []
         for b in adv.build_batch(sub, chunk=K.CHUNK):
-            x = adv._crossings(b, 1.0); xs.append(x.min(axis=1)); ag.append(x.argmin(axis=1))
+            x = adv._crossings(b, 1.0, parallel_tol=0.0); xs.append(x.min(axis=1)); ag.append(x.argmin(axis=1))
         xx = np.concatenate(xs)
         cf[ix] = np.where(np.isfinite(xx), np.log(xx), np.inf); cfarg[ix] = np.concatenate(ag)
 

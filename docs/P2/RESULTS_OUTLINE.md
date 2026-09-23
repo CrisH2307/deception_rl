@@ -95,6 +95,23 @@ diverge" uses the pool figure, per the emitted rule
   on `results/T6_gate_record.json:N` candidates, against
   `results/T6_gate_record.json:threshold`.
 - Grid rate `|D(8)|/N` = `results/T6_gate_record.json:pooled_grid_rate`.
+- **Disclosed beside the existence rate, per P2-D28, never omitted:**
+  `results/T1_crossing_tolerance.json:bases.pool_200000.n_tolerance_determined` pool items
+  have a `beta_c` set by D51's band rather than by a strict crossing, and
+  `results/T1_crossing_tolerance.json:bases.pool_200000.n_divergent_only_by_tie_break` of
+  them are divergent only by tie-break (no rival ever leads `o*_0` beyond the band). All
+  have `beta_c` in
+  `results/T1_crossing_tolerance.json:bases.pool_200000.tolerance_determined_beta_c_range`,
+  above the grid endpoint
+  (`results/T1_crossing_tolerance.json:bases.pool_200000.tolerance_determined_all_above_grid_endpoint`),
+  so `|D(8)|` and every grid-rate figure are unaffected and only `|D(infinity)|` includes
+  them. Separating items among them:
+  `results/T1_crossing_tolerance.json:bases.pool_200000.n_separating_tolerance_determined`.
+  The frozen 1,000 carries
+  `results/T1_crossing_tolerance.json:bases.frozen_1000.n_tolerance_determined`, so no
+  confirmatory claim is touched. They stay in `D(infinity)`: section 6.2's tie-broken
+  argmax is the preregistered definition, and excluding them would redefine divergence
+  after seeing where it bites.
 - K1 outcome: `results/T6_gate_record.json:outcome_text`, reproduction bitwise identical
   to T2's pool table: `results/T6_gate_record.json:reproduction.bitwise_identical_to_T2_pool_table`.
 - Per tile: `results/T6_gate_record.json:per_tile_existence_rate.*` and
@@ -137,23 +154,33 @@ artifact and the test cannot disagree. The bisected value remains the value of r
   bisection fires within one tie band,
   `results/T1_beta_c_crosscheck.json:bases.frozen_1000.all.max_rel_top_two_gap_at_bisected`.
   Every Arm A figure at the frozen base, and all of Arm B, sits on this base.
-- **200k pool, NOT clean, reported and not resolved.** Classification disagreements:
-  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_robust_classification_disagree`,
-  of which bisection-finite and closed-form-infinite
-  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_bisection_finite_closed_form_inf`
-  and the reverse
-  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_bisection_inf_closed_form_finite`;
-  concentrated on `size`,
-  `results/T1_beta_c_crosscheck.json:bases.pool_200000.size.n_robust_classification_disagree`.
-  Among items both call finite the `beta` gap reaches
-  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.max_abs_beta_gap`, far past the
-  spec's expected ~1e-6. **The spec names a robustness disagreement as what would be a
-  bug.** The pre-existing test ran on the frozen 1,000 only, so this is the first time the
-  pool was checked. Figures computed at the pool base on the bisected value, section
-  1.5's existence rate and section 3's 2,748 among them, stand as emitted under the value
-  of record; whether the disagreement touches them is **not established here**.
-  **Needed before drafting any pool-base sentence: a ruling on this.** Not diagnosed, not
-  fixed.
+- **200k pool, verified: the closed form was wrong, bisection stands** (`PREREGISTRATION_v2.21.md`,
+  `PREREGISTRATION_v2.22.md`). Under the exact `den != 0` test the closed form disagreed on
+  `results/T1_beta_c_crosscheck.json:bases.pool_200000.all.n_robust_classification_disagree`
+  items. Direct `V_beta` evaluation of every disagreement, not the identity check, is the
+  evidence: bisection's zero identity violations,
+  `results/T1_beta_c_disagreement.json:identity_beta_c_finite_iff_o0_ne_oinf.all.bisection_violations`,
+  hold by construction (`results/T1_beta_c_disagreement.json:identity_note`). Where the
+  closed form found a root and bisection did not, both coefficients are rounding residue
+  on numerically identical curves,
+  `results/T1_beta_c_disagreement.json:group_A_closed_form_finite_bisection_inf.n_both_coeffs_below_eps_tie`
+  of `results/T1_beta_c_disagreement.json:group_A_closed_form_finite_bisection_inf.n`,
+  and the tie-broken argmax never leaves `o*_0`,
+  `results/T1_beta_c_disagreement.json:group_A_closed_form_finite_bisection_inf.n_o0_loses`.
+  Single-crossing is intact: `o*_0` never regains,
+  `results/T1_beta_c_disagreement.json:group_B_bisection_finite_closed_form_inf.n_o0_regains`.
+  **The fix is applied (P2-D29).** The parallel-case test reads the coefficient of `x` at
+  `results/T1_crossing_tolerance.json:parallel_tol`, inside the empty interval from
+  `results/T1_crossing_tolerance.json:bases.pool_200000.coefficients.den_gap`, as P2-D19's
+  tolerance sits in its gap. After it, the cross-check disagrees on
+  `results/T1_crossing_tolerance.json:bases.pool_200000.cross_check_adopted_parallel_tol.n_classification_disagree`
+  items, and that set **is** the tolerance-determined set,
+  `results/T1_crossing_tolerance.json:bases.pool_200000.cross_check_adopted_parallel_tol.residual_equals_tol_set`:
+  the closed form tests strict crossing and cannot see a tie-break flip, by design. The
+  residual is an invariant, asserted by `tests/test_crossing_tolerance.py`, not an alarm.
+  Both-finite gaps elsewhere reach
+  `results/T1_crossing_tolerance.json:bases.pool_200000.cross_check_adopted_parallel_tol.max_abs_gap_both_finite_outside_tol_set`.
+  Section 1.5's existence rate and section 3's 2,748 stand as emitted.
 
 ---
 
@@ -347,6 +374,12 @@ items where the coordinate is defined, the price is exactly 1 on all of them, to
 `results/T6_arm_a_numbers.json:step3.pool_robustness_check.conventions.o_star_infinity_is_o_fit.sb_price_max_shortfall_from_one`.
 Guard reach on the pool:
 `results/T6_arm_a_numbers.json:step3.pool_robustness_check.conventions.degeneracies.n_salience_span_at_or_below_guard`.
+The 2,748 is verified against both `beta_c` methods
+(`results/T1_beta_c_disagreement.json:separating_count_bisection`,
+`results/T1_beta_c_disagreement.json:all_separating_inside_span_guard_bisection`), and
+none of them is tolerance-determined
+(`results/T1_crossing_tolerance.json:bases.pool_200000.n_separating_tolerance_determined`).
+The tolerance-determined items are disclosed in an appendix under P2-D28, beside 1.5.
 
 3.4 **What the coincidence is and is not.** These are different functions and the
 coincidence is not an identity; the exceptions exist and are counted. The record of
@@ -443,6 +476,16 @@ resolution, stated in advance rather than discovered:
 `results/T7_armb_quantities.json:detection_limits_P2D11.quantity_b_half_width_range`,
 `results/T7_armb_quantities.json:detection_limits_P2D11.statement`.
 **Do not compress the three and the eleven into one magnitude word.**
+
+**May not say, forbidden rather than discouraged: no sentence may imply that quantity
+(a)'s movement is caused by adversary content.** Two grounds, both on the record.
+P2-D26 makes no adversary-tracking claim available on the confirmatory set,
+`p2_decisions.P2D26_ADVERSARY_TRACKING_CLAIM_AVAILABLE`. And quantity (b) does not
+resolve on 11 of the 14 cells (4.5): on those cells the framing's change rate cannot be
+told apart from that of `c5`'s content-neutral insertion. "The adversary framings changed
+the chosen option" names the manipulation and is allowed. "The models responded to the
+adversary", "tracked it", or "moved because of the adversary" is not, and neither is any
+sentence that lets (a)'s rate stand in for a content effect.
 
 4.6 **The 142-item control, bounding attribution.** Base and why it is that base:
 `results/T7_control_marginal_null.json:control_bases.primary.n_items`,
@@ -796,7 +839,9 @@ same `results/T6_F0_headroom.json:coordinate_geometry.n_option_level_pairs` opti
 describe the recorded figures as cells "at exactly 0" and "exactly 1" of `A`, but they
 are the `sb`-pole split; split by `A` itself the counts differ. The near-trichotomy the
 argument rests on holds under both, so no conclusion moves; the wording does. The
-recorded prose is not edited here.
+wording in P2-D6's reasoning and `T7.md` was corrected on 2026-09-22 with a dated note
+beside each (`PREREGISTRATION_v2.22.md` section 5); superseded versions and emitted
+artifacts carrying the old words stay byte-identical.
 
 ---
 

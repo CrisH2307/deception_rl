@@ -30,7 +30,7 @@ def by_tile(df, chunk=None):
         sub = df[df["tile"] == t].reset_index(drop=True)
         parts = ([adv.build_batch(sub)] if chunk is None
                  else list(adv.build_batch(sub, chunk=chunk)))
-        rs = [adv.bisection_vs_closed_form(b) for b in parts]
+        rs = [adv.bisection_vs_closed_form(b, parallel_tol=0.0) for b in parts]   # pre-P2-D29 record
         out[t] = {k: (sum(r[k] for r in rs) if k.startswith("n_")
                       else max(r[k] for r in rs)) for k in rs[0]}
     return out
